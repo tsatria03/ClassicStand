@@ -1,7 +1,0 @@
-#include"dlgplayer.bgt"
-#include"lemonaid.bgt"
-#include"menu.bgt"
-#include"m_pro.bgt"
-#include"sound_pool.bgt"
-#include "text_input.bgt"
-typedef uint8 usmall; typedef int8 small;

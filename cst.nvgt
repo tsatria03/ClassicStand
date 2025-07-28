@@ -1,0 +1,141 @@
+#include"bgt_compat.nvgt"
+#include"sound_pool.nvgt"
+#include"includes/dlg.nvgt"
+#include"includes/form.nvgt"
+#include"includes/form_menu.nvgt"
+#include"includes/speech.nvgt"
+#include"includes/virtual_dialogs.nvgt"
+double cash=50, level=1, cups=0, lemons=0, sugar=0, cupcost=1, lemoncost=3, sugarcost=5;
+int day=1, clockface=1, temprature=60;
+menu m;
+virtual_dialogs vd;
+sound_pool pool, temp;
+void main()
+{
+show_window("game");
+game();
+}
+void game()
+{
+while(true)
+{
+wait(5);
+setupmenu();
+m.add_item("day"+day);
+m.add_item("level"+level);
+m.add_item("time,"+clockface+"aclock");
+m.add_item("temprature,"+temprature+"degrees farenheight");
+m.add_item("cash,"+cash+"dollars");
+m.add_item("buy cups,"+"you have;"+cups, "cps");
+m.add_item("buy lemons,"+"you have;"+lemons, "lms");
+m.add_item("buy sugar,"+"you have;"+sugar, "sgr");
+m.add_item("make lemonaid", "mlm");
+m.add_item("sell lemonaid", "slm");
+m.intro_text="Lemonaid manager. What would you like to do?";
+int mres=m.run();
+string main = m.get_selected_item_id();
+if(mres==-1)
+{
+speak("thanks for playing");
+exit();
+}
+if(main=="cps")
+{
+string cup=vd.input_box("", "How many cups would you like to buy?");
+if(cash<=cupcost)
+{
+dlg("Error. You don't have enough cash to purchis this item.");
+}
+else if(cash>=cupcost)
+{
+if(cups=="")
+return;
+pool.play_stationary("sounds/buy"+random(1,4)+".ogg",false);
+speak("Purchis complete.");
+cups=string_to_number(cup);
+cash-=cupcost;
+}
+}
+if(main=="lms")
+{
+string lemon=vd.input_box("", "How many lemons would you like to buy?");
+if(cash<=lemoncost)
+{
+dlg("Error. You don't have enough cash to purchis this item.");
+}
+else if(cash>=lemoncost)
+{
+if(lemons=="")
+return;
+pool.play_stationary("sounds/buy"+random(1,4)+".ogg",false);
+speak("Purchis complete.");
+lemons=string_to_number(lemon);
+cash-=lemoncost;
+}
+}
+if(main=="sgr")
+{
+string sugars=vd.input_box("", "How many packets of sugar would you like to buy?");
+if(cash<=sugarcost)
+{
+dlg("Error. You don't have enough cash to purchis this item.");
+}
+else if(cash>=sugarcost)
+{
+if(sugar=="")
+return;
+pool.play_stationary("sounds/buy"+random(1,4)+".ogg",false);
+speak("Purchis complete.");
+sugar=string_to_number(sugars);
+cash-=sugarcost;
+}
+}
+if(main=="mlm")
+{
+if(cups<=0)
+{
+dlg("Error. You need at least one cup to mix ingredients for the pitcher of lemonaid.");
+}
+if(lemons>=1 and sugar<=0)
+{
+dlg("Error. You need at least 1 of every ingredient to make this pitcher of lemonaid.");
+}
+if(lemons<=0 and sugar>=1)
+{
+dlg("Error. You need at least 1 of every ingredient to make this pitcher of lemonaid.");
+}
+if(lemons<=0 and sugar<=0)
+{
+dlg("Error. You need at least 1 of every ingredient to make this pitcher of lemonaid.");
+}
+}
+if(main=="slm")
+{
+if(cups<=0)
+{
+dlg("Error. You need at least one cup of lemonaid made in order to sel it for cash.");
+}
+else if(cups>=1)
+{
+string price=vd.input_box("", "What price would you like to sell your lemonaid at?");
+if(cash=="")
+return;
+dlg("Congradulations! You've earned"+cash+"dollars for selling"+cups+"cups of lemonade. Well done!");
+pool.play_stationary("sounds/buy"+random(1,4)+".ogg",false);
+level+=1;
+temprature=random(20, 120);
+clockface=random(1,12);
+day=1*level;
+cupcost=1*level;
+lemoncost=3*level;
+sugarcost=5*level;
+cash=string_to_number(price);
+}
+}
+if(main=="ex")
+{
+speak("thanks for playing");
+exit();
+}
+}
+}
