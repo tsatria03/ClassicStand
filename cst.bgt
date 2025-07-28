@@ -1,0 +1,28 @@
+#include"includes/includes.bgt"
+string[] dock, dock2;
+string docksplit, changesplit;
+file docks, docks2;
+dynamic_menu_pro m;
+sound_pool pool;
+text_input input;
+void main()
+{
+if(!screen_reader_set_library_path(NVDA,"lib/nvdaControllerClient32.dll"))
+{
+alert("Error", "There was a problem interacting with the NVDA screen reader.");
+exit();
+}
+show_game_window("game");
+mainmenu();
+}
+void restart()
+{
+if(SCRIPT_COMPILED)
+{
+run("game.exe","",false,false);
+}
+else
+{
+run("C:\\Program Files (x86)\\BGT\\bgt.exe","game.bgt",false,false);
+}
+}
