@@ -1,4 +1,5 @@
 new in 1.0
+Added the ability to pore lemonade from the piture into cups for selling.
 Fixed some bugs with selling cups of lemonade.
 Reduced the cost of all items to make the game more fairer in earlier levels.
 Made it so buying items now adds to your inventory instead of replacing it.

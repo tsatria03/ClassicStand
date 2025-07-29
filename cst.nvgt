@@ -5,14 +5,15 @@
 #include"includes/form_menu.nvgt"
 #include"includes/speech.nvgt"
 #include"includes/virtual_dialogs.nvgt"
-double cash=2100000000, fullcups=0, piture=0, level=1, cups=1, lemons=0, salts=0, sugars=0, waters=0, cupcost=1, lemoncost=2, saltcost=3, sugarcost=4, watercost=5;
-int day=1, clocktime=12, temprature=60;
+double cash=50, fullcups=0, piturestat=0, level=1, cups=0, lemons=0, salts=0, sugars=0, waters=0, cupcost=1, lemoncost=2, saltcost=3, sugarcost=4, watercost=5;
+int day=1, piture=0, clocktime=12, temprature=60;
 menu m;
 virtual_dialogs vd;
 sound_pool pool, temp;
 void main()
 {
 show_window("ClassicStand, version 1.0.");
+wait(500);
 game();
 }
 void game()
@@ -137,31 +138,41 @@ if(main == "swr")
     pool.play_stationary("sounds/buy" + random(1, 4) + ".ogg", false);
     dlg("Purchase complete. You bought " + qty + " liter" + (qty == 1 ? "" : "s") + " of water.");
 }
-if(main=="mlm")
+if(main == "mlm")
 {
-if(cups<=0)
-{
-dlg("Error. You need at least one cup to mix ingredients for the pitcher of lemonaid.");
+    if(cups < 1 || lemons < 1 || sugars < 1 || salts < 1 || waters < 1)
+    {
+        dlg("Error. You need at least one of every ingredient and a cup to make lemonade.");
+        game();
+    }
+    cups -= 1;
+    lemons -= 1;
+    sugars -= 1;
+    salts -= 1;
+    waters -= 1;
+    piture = 1;
+    pool.play_stationary("sounds/buy" + random(1, 4) + ".ogg", false);
+    dlg("You mixed the ingredients and made a fresh pitcher of lemonade.");
 }
-if(lemons>=1 and sugars<=0)
+if(main == "plm")
 {
-dlg("Error. You need at least 1 of every ingredient to make this pitcher of lemonaid.");
-}
-if(lemons<=0 and sugars>=1)
-{
-dlg("Error. You need at least 1 of every ingredient to make this pitcher of lemonaid.");
-}
-if(lemons<=0 and sugars<=0)
-{
-dlg("Error. You need at least 1 of every ingredient to make this pitcher of lemonaid.");
-}
+    if(piture < 1)
+    {
+        dlg("Error. You need to make a pitcher of lemonade before you can pour it into cups.");
+        game();
+    }
+    double poured = 6; // number of cups produced from a pitcher
+    fullcups += poured;
+    piture = 0;
+    pool.play_stationary("sounds/buy" + random(1, 4) + ".ogg", false);
+    dlg("You poured " + poured + " cup" + (poured == 1 ? "" : "s") + " of lemonade from the pitcher.");
 }
 if(main == "slm")
 {
     if(fullcups <= 0)
     {
         dlg("Error. You need at least one cup of lemonade made in order to sell it for cash.");
-        return;
+game();
     }
     string price = vd.input_box("", "What price would you like to sell each cup of lemonade for?");
     if(price == "")
