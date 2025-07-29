@@ -8,8 +8,8 @@
 #include"includes/form_menu.nvgt"
 #include"includes/speech.nvgt"
 #include"includes/virtual_dialogs.nvgt"
-double cash=50, fullcups=0, pitcherstat=0, level=1, cups=0, lemons=0, salts=0, sugars=0, waters=0, cupcost=1, lemoncost=2, saltcost=3, sugarcost=4, watercost=5;
-int day=1, pitcher=0, clocktime=12, temprature=60;
+double cash=50, fullcups=0, pitcherstat=0, cups=0, lemons=0, salts=0, sugars=0, waters=0, cupcost=1, lemoncost=2, saltcost=3, sugarcost=4, watercost=5;
+int day=1, level=1, pitcher=0, clocktime=0, temprature=20;
 instance gamstence("cst");
 menu m;
 virtual_dialogs vd;
@@ -27,8 +27,7 @@ exit();
 else
 {
 wait(500);
-cash=random(50, 100);
-    clocktime = random(1, 12);
+cash=random(50, 150);
     temprature = random(20, 120);
 game();
 }
@@ -40,7 +39,11 @@ while(true)
 wait(5);
 setupmenu();
 m.add_item("day "+day+": level "+level);
-m.add_item("Time: "+clocktime+" aclock.");
+int hour = clocktime % 24;
+string hour_period = (hour >= 12 && hour < 24) ? "PM" : "AM";
+int display_hour = hour % 12;
+if(display_hour == 0) display_hour = 12;
+m.add_item("Time: " + display_hour + hour_period + ".");
 m.add_item("Temprature, "+temprature+" degrees farenheight.");
 m.add_item("Cash: " + cash + " dollar" + (cash == 1 ? "" : "s."));
 m.add_item("filled cups: " + fullcups);
@@ -285,13 +288,14 @@ vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@
     pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
     dlg("Congratulations! You earned " + total + " dollar" + (total == 1 ? "" : "s") + " for selling " + fullcups + " cup" + (fullcups == 1 ? "" : "s") + " of lemonade.");
     fullcups = 0;
+    clocktime += 4;
     level += 1;
-    if(level > 4)
+    if(level > 5)
     {
         level = 1;
         day += 1;
+clocktime = 12;
     }
-    clocktime = random(1, 12);
     temprature = random(20, 120);
 cupcost   = 1 * level * day;
 lemoncost = 2 * level * day;
