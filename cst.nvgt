@@ -1,20 +1,36 @@
+#pragma embed "data/assets.clm"
 #include"bgt_compat.nvgt"
+#include"instance.nvgt"
 #include"sound_pool.nvgt"
 #include"includes/dlg.nvgt"
 #include"includes/form.nvgt"
 #include"includes/form_menu.nvgt"
 #include"includes/speech.nvgt"
 #include"includes/virtual_dialogs.nvgt"
-double cash=50, fullcups=0, piturestat=0, level=1, cups=0, lemons=0, salts=0, sugars=0, waters=0, cupcost=1, lemoncost=2, saltcost=3, sugarcost=4, watercost=5;
-int day=1, piture=0, clocktime=12, temprature=60;
+double cash=50, fullcups=0, pitcherstat=0, level=1, cups=0, lemons=0, salts=0, sugars=0, waters=0, cupcost=1, lemoncost=2, saltcost=3, sugarcost=4, watercost=5;
+int day=1, pitcher=0, clocktime=12, temprature=60;
+instance gamstence("cst");
 menu m;
 virtual_dialogs vd;
 sound_pool pool, temp;
 void main()
 {
+set_sound_storage("*");
+set_sound_decryption_key("Y3KuIRoUehwlqoQwzdAYtchD0ZGd7Far84PGFhaISYDy41EaPFJ2fCfmCqOyIjWEVuI9OrGc6O8snpWfzxKZHL3VJNpubYBGEdN4CIAPbweVgL2pugjK79Kthps1bK8N47qkMslu5KZqjNkATIUik4b7u0xJBpgMzBTlAKc1nFv2bGHDaY2N0zcdw8YKkMeBknxiur",true);
 show_window("ClassicStand, version 1.0.");
+if(gamstence.is_already_running)
+{
+alert("error", "You can only have one instence of this game running!");
+exit();
+}
+else
+{
 wait(500);
+cash=random(20, 200);
+    clocktime = random(1, 12);
+    temprature = random(20, 120);
 game();
+}
 }
 void game()
 {
@@ -24,21 +40,21 @@ wait(5);
 setupmenu();
 m.add_item("day"+day);
 m.add_item("level"+level);
-m.add_item("time, "+clocktime+" aclock");
-m.add_item("temprature, "+temprature+" degrees farenheight");
-m.add_item("cash, " + cash + " dollar" + (cash == 1 ? "" : "s"));
+m.add_item("Time: "+clocktime+" aclock.");
+m.add_item("Temprature, "+temprature+" degrees farenheight.");
+m.add_item("Cash: " + cash + " dollar" + (cash == 1 ? "" : "s."));
 m.add_item("filled cups: " + fullcups);
-if(piturestat <= 0)
-    m.add_item("pitcher: empty");
-else if(piturestat <= 1)
-    m.add_item("pitcher: 1 liter of lemonade");
+if(pitcherstat <= 0)
+    m.add_item("Pitcher: 0 liters of lemonade.");
+else if(pitcherstat <= 1)
+    m.add_item("Pitcher: 1 liter of lemonade.");
 else
-    m.add_item("pitcher: " + ceil(piturestat) + " liters of lemonade");
-m.add_item("buy cups, you have " + cups + " cup" + (cups == 1 ? "" : "s"), "cps");
-m.add_item("buy lemons, you have " + lemons + " lemon" + (lemons == 1 ? "" : "s"), "lms");
-m.add_item("buy salts, you have " + salts + " packet" + (salts == 1 ? "" : "s") + " of salt", "slt");
-m.add_item("buy sugars, you have " + sugars + " packet" + (sugars == 1 ? "" : "s") + " of sugar", "sgr");
-m.add_item("buy waters, you have " + waters + " liter" + (waters == 1 ? "" : "s") + " of water", "swr");
+    m.add_item("Pitcher: " + ceil(pitcherstat) + " liters of lemonade.");
+m.add_item("Buy cup. You have " + cups + " cup" + (cups == 1 ? "" : "s"), "cps");
+m.add_item("Buy lemon. You have " + lemons + " lemon" + (lemons == 1 ? "" : "s"), "lms");
+m.add_item("Buy salt. You have " + salts + " packet" + (salts == 1 ? "" : "s") + " of salt", "slt");
+m.add_item("Buy sugar. You have " + sugars + " packet" + (sugars == 1 ? "" : "s") + " of sugar", "sgr");
+m.add_item("Buy water. You have " + waters + " liter" + (waters == 1 ? "" : "s") + " of water", "swr");
 m.add_item("make lemonaid", "mlm");
 m.add_item("pour lemonaid", "plm");
 m.add_item("sell lemonaid", "slm");
@@ -52,7 +68,7 @@ exit();
 }
 if(main == "cps")
 {
-    string cup = vd.input_box("", "How many cups would you like to buy? Cost: " + cupcost + " dollar" + (cupcost == 1 ? "" : "s") + " each.");
+    string cup = vd.input_box("", "How many cups would you like to buy? Each one costs " + cupcost + " dollar" + (cupcost == 1 ? "" : "s."));
     if(cup == "")
         game();
     double qty = string_to_number(cup);
@@ -66,12 +82,12 @@ if(main == "cps")
     }
     cups += qty;
     cash -= total;
-    pool.play_stationary("sounds/buy" + random(1, 4) + ".ogg", false);
+    pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
     dlg("Purchase complete. You bought " + qty + " cup" + (qty == 1 ? "" : "s") + ".");
 }
 if(main == "lms")
 {
-    string lemon = vd.input_box("", "How many lemons would you like to buy? Cost: " + lemoncost + " dollar" + (lemoncost == 1 ? "" : "s") + " each.");
+string lemon = vd.input_box("", "How many lemons would you like to buy? Each one costs " + lemoncost + " dollar" + (lemoncost == 1 ? "" : "s."));
     if(lemon == "")
         game();
     double qty = string_to_number(lemon);
@@ -85,12 +101,12 @@ if(main == "lms")
     }
     lemons += qty;
     cash -= total;
-    pool.play_stationary("sounds/buy" + random(1, 4) + ".ogg", false);
+    pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
     dlg("Purchase complete. You bought " + qty + " lemon" + (qty == 1 ? "" : "s") + ".");
 }
 if(main == "slt")
 {
-    string salt = vd.input_box("", "How many salt packets would you like to buy? Cost: " + saltcost + " dollar" + (saltcost == 1 ? "" : "s") + " each.");
+string salt = vd.input_box("", "How many salt packets would you like to buy? Each one costs " + saltcost + " dollar" + (saltcost == 1 ? "" : "s."));
     if(salt == "")
         game();
     double qty = string_to_number(salt);
@@ -104,12 +120,12 @@ if(main == "slt")
     }
     salts += qty;
     cash -= total;
-    pool.play_stationary("sounds/buy" + random(1, 4) + ".ogg", false);
+    pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
     dlg("Purchase complete. You bought " + qty + " packet" + (qty == 1 ? "" : "s") + " of salt.");
 }
 if(main == "sgr")
 {
-    string sugar = vd.input_box("", "How many packets of sugar would you like to buy? Cost: " + sugarcost + " dollar" + (sugarcost == 1 ? "" : "s") + " each.");
+string sugar = vd.input_box("", "How many sugar packets would you like to buy? Each one costs " + sugarcost + " dollar" + (sugarcost == 1 ? "" : "s."));
     if(sugar == "")
         game();
     double qty = string_to_number(sugar);
@@ -123,12 +139,12 @@ if(main == "sgr")
     }
     sugars += qty;
     cash -= total;
-    pool.play_stationary("sounds/buy" + random(1, 4) + ".ogg", false);
+    pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
     dlg("Purchase complete. You bought " + qty + " packet" + (qty == 1 ? "" : "s") + " of sugar.");
 }
 if(main == "swr")
 {
-    string water = vd.input_box("", "How many liters of water would you like to buy? Cost: " + watercost + " dollar" + (watercost == 1 ? "" : "s") + " each.");
+string water = vd.input_box("", "How many liters of water would you like to buy? Each one costs " + watercost + " dollar" + (watercost == 1 ? "" : "s."));
     if(water == "")
         game();
     double qty = string_to_number(water);
@@ -142,7 +158,7 @@ if(main == "swr")
     }
     waters += qty;
     cash -= total;
-    pool.play_stationary("sounds/buy" + random(1, 4) + ".ogg", false);
+    pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
     dlg("Purchase complete. You bought " + qty + " liter" + (qty == 1 ? "" : "s") + " of water.");
 }
 if(main == "mlm")
@@ -159,12 +175,12 @@ if(main == "mlm")
         game();
     if(cupcount > cups)
     {
-        dlg("You don't have enough cups. You only have " + cups + ".");
+        dlg("Error. You don't have enough cups. You only have " + cups + ".");
         game();
     }
     if(lemons < cupcount || sugars < cupcount || salts < cupcount || waters < cupcount)
     {
-        dlg("You don't have enough ingredients to make that much lemonade.");
+        dlg("Error. You don't have enough ingredients to make that much lemonade.");
         game();
     }
     cups -= cupcount;
@@ -172,22 +188,24 @@ if(main == "mlm")
     sugars -= cupcount;
     salts -= cupcount;
     waters -= cupcount;
-    piture = 1;
-    piturestat += cupcount * 0.25;
-    pool.play_stationary("sounds/buy" + random(1, 4) + ".ogg", false);
-    dlg("You made " + cupcount + " cup" + (cupcount == 1 ? "" : "s") + " of lemonade and added it to the pitcher.");
+    pitcher = 1;
+    pitcherstat += cupcount * 0.25;
+    pool.play_stationary("makestart.ogg", false);
+dlgplay("makeloop.ogg");
+pool.play_stationary("makestop.ogg", false);
+    dlg("Success. You made " + cupcount + " cup" + (cupcount == 1 ? "" : "s") + " of lemonade and added it to the pitcher.");
 }
 if(main == "plm")
 {
-    if(piture < 1 || piturestat <= 0)
+    if(pitcher < 1 || pitcherstat <= 0)
     {
-        dlg("Error. The pitcher is empty. Make some lemonade first.");
+        dlg("Error. The pitcher is currently empty. Please make some lemonade to pour into a cup.");
         game();
     }
-    double maxcups = floor(piturestat / 0.25);
+    double maxcups = floor(pitcherstat / 0.25);
     if(maxcups < 1)
     {
-        dlg("The pitcher doesn't have enough lemonade to pour a single cup.");
+        dlg("Error. The pitcher doesn't have enough lemonade to pour a single cup.");
         game();
     }
     string input = vd.input_box("", "How many cups would you like to pour from the pitcher? You can pour up to " + maxcups + ".");
@@ -196,18 +214,18 @@ if(main == "plm")
     if(pourcount <= 0) game();
     if(pourcount > maxcups)
     {
-        dlg("You can't pour more than " + maxcups + " cup" + (maxcups == 1 ? "" : "s") + ".");
+        dlg("Error. You can't pour more than " + maxcups + " cup" + (maxcups == 1 ? "" : "s") + ".");
         game();
     }
-    piturestat -= pourcount * 0.25;
+    pitcherstat -= pourcount * 0.25;
     fullcups += pourcount;
-    if(piturestat <= 0)
+    if(pitcherstat <= 0)
     {
-        piturestat = 0;
-        piture = 0;
+        pitcherstat = 0;
+        pitcher = 0;
     }
-    pool.play_stationary("sounds/buy" + random(1, 4) + ".ogg", false);
-    dlg("You poured " + pourcount + " cup" + (pourcount == 1 ? "" : "s") + " of lemonade into serving cups.");
+pool.play_stationary("pourcup.ogg", false);
+    dlg("Success. You poured " + pourcount + " cup" + (pourcount == 1 ? "" : "s") + " of lemonade into sellable serving cups.");
 }
 if(main == "slm")
 {
@@ -222,13 +240,13 @@ game();
     double percup = string_to_number(price);
     if(percup <= 0)
     {
-        dlg("Invalid price entered.");
+        dlg("Error. Invalid price entered.");
         game();
     }
     double total = percup * fullcups;
     cash += total;
+    pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
     dlg("Congratulations! You've earned " + total + " dollar" + (total == 1 ? "" : "s") + " for selling " + fullcups + " cup" + (fullcups == 1 ? "" : "s") + " of lemonade.");
-    pool.play_stationary("sounds/buy" + random(1, 4) + ".ogg", false);
     fullcups = 0;
     level += 1;
     clocktime = random(1, 12);

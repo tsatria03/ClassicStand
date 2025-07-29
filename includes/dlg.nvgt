@@ -1,6 +1,7 @@
 void dlg(string message, bool dlgcoppy=true, int timeout=-1)
 {
 timer timeouter;
+temp.play_stationary("dlgscroll.ogg", false);
 speak(message);
 while(true)
 {
@@ -40,7 +41,7 @@ dlg(d[i]);
 }
 temp.play_stationary("dlgclose.ogg", false);
 }
-void dlgplay(string dlgsound, bool skippable=true, bool fadeable=true, int fadetime=30)
+void dlgplay(string dlgsound, bool skippable=false, bool fadeable=false, int fadetime=30)
 {
 sound dlgaudio;
 dlgaudio.load(dlgsound);

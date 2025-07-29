@@ -298,12 +298,12 @@ m.reset();
 m.automatic_intro = true;
 m.focus_first_item = false;
 m.wrap = false;
-m.click_sound = "sounds/menuclick.ogg";
-m.close_sound = "sounds/menuclose.ogg";
-m.edge_sound = "sounds/menuedge.ogg";
-m.enter_sound = "sounds/menuenter.ogg";
-m.open_sound = "sounds/menuopen.ogg";
-m.wrap_sound = "sounds/menuwrap.ogg";
+m.click_sound = "menuclick.ogg";
+m.close_sound = "menuclose.ogg";
+m.edge_sound = "menuedge.ogg";
+m.enter_sound = "menuenter.ogg";
+m.open_sound = "menuopen.ogg";
+m.wrap_sound = "menuwrap.ogg";
 }
 // yes_no: A simple yes no menu that returns true if the user clicked yes, false if they clicked no or pressed escape. The prompt is inserted as the first item in the menu so that users can repeat it.
 bool yes_no(const string&in prompt, menu@ m = null) {
