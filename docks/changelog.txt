@@ -1,4 +1,6 @@
 new in 1.0
-You can now buy salt and water to make pitures of lemonaid.
+Made it so buying items now adds to your inventory instead of replacing it.
+Made it so cash is correctly deducted based on the quantity times the price of the item.
+You can now buy salt and water to make pitures of lemonade.
 Added some menu related sounds to the game.
 Converted the entire game to nvgt.
