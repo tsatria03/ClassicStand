@@ -27,18 +27,20 @@ m.add_item("level"+level);
 m.add_item("time, "+clocktime+" aclock");
 m.add_item("temprature, "+temprature+" degrees farenheight");
 m.add_item("cash, " + cash + " dollar" + (cash == 1 ? "" : "s"));
-if(piture == 1)
-    m.add_item("pitcher: " + piturestat + "% full");
-else
+m.add_item("filled cups: " + fullcups);
+if(piturestat <= 0)
     m.add_item("pitcher: empty");
-m.add_item("ready to sell: " + fullcups + " cup" + (fullcups == 1 ? "" : "s"));
+else if(piturestat <= 1)
+    m.add_item("pitcher: 1 liter of lemonade");
+else
+    m.add_item("pitcher: " + ceil(piturestat) + " liters of lemonade");
 m.add_item("buy cups, you have " + cups + " cup" + (cups == 1 ? "" : "s"), "cps");
 m.add_item("buy lemons, you have " + lemons + " lemon" + (lemons == 1 ? "" : "s"), "lms");
 m.add_item("buy salts, you have " + salts + " packet" + (salts == 1 ? "" : "s") + " of salt", "slt");
 m.add_item("buy sugars, you have " + sugars + " packet" + (sugars == 1 ? "" : "s") + " of sugar", "sgr");
 m.add_item("buy waters, you have " + waters + " liter" + (waters == 1 ? "" : "s") + " of water", "swr");
 m.add_item("make lemonaid", "mlm");
-m.add_item("pore lemonaid", "plm");
+m.add_item("pour lemonaid", "plm");
 m.add_item("sell lemonaid", "slm");
 m.intro_text="Lemonaid manager. What would you like to do?";
 int mres=m.run();
@@ -150,50 +152,62 @@ if(main == "mlm")
         dlg("Error. You need at least one of every ingredient and a cup to make lemonade.");
         game();
     }
-    cups -= 1;
-    lemons -= 1;
-    sugars -= 1;
-    salts -= 1;
-    waters -= 1;
+    string input = vd.input_box("", "How many cups of lemonade would you like to make?");
+    if(input == "") game();
+    double cupcount = string_to_number(input);
+    if(cupcount <= 0)
+        game();
+    if(cupcount > cups)
+    {
+        dlg("You don't have enough cups. You only have " + cups + ".");
+        game();
+    }
+    if(lemons < cupcount || sugars < cupcount || salts < cupcount || waters < cupcount)
+    {
+        dlg("You don't have enough ingredients to make that much lemonade.");
+        game();
+    }
+    cups -= cupcount;
+    lemons -= cupcount;
+    sugars -= cupcount;
+    salts -= cupcount;
+    waters -= cupcount;
     piture = 1;
-    piturestat = 100;
+    piturestat += cupcount * 0.25;
     pool.play_stationary("sounds/buy" + random(1, 4) + ".ogg", false);
-    dlg("You mixed the ingredients and made a fresh pitcher of lemonade.");
+    dlg("You made " + cupcount + " cup" + (cupcount == 1 ? "" : "s") + " of lemonade and added it to the pitcher.");
 }
 if(main == "plm")
 {
     if(piture < 1 || piturestat <= 0)
     {
-        dlg("Error. You need to make a pitcher of lemonade before you can pour it into cups.");
+        dlg("Error. The pitcher is empty. Make some lemonade first.");
         game();
     }
-    double maxcups = floor(piturestat / (100.0 / 6));
+    double maxcups = floor(piturestat / 0.25);
     if(maxcups < 1)
     {
-        dlg("The pitcher is too empty to pour a single cup.");
+        dlg("The pitcher doesn't have enough lemonade to pour a single cup.");
         game();
     }
-    string prompt = "How many cups would you like to pour? You can pour up to " + maxcups + " cup" + (maxcups == 1 ? "" : "s") + ".";
-    string input = vd.input_box("", prompt);
+    string input = vd.input_box("", "How many cups would you like to pour from the pitcher? You can pour up to " + maxcups + ".");
     if(input == "") game();
     double pourcount = string_to_number(input);
-    if(pourcount <= 0)
-        game();
+    if(pourcount <= 0) game();
     if(pourcount > maxcups)
     {
         dlg("You can't pour more than " + maxcups + " cup" + (maxcups == 1 ? "" : "s") + ".");
         game();
     }
-    double percent_per_cup = 100.0 / 6;
+    piturestat -= pourcount * 0.25;
     fullcups += pourcount;
-    piturestat -= pourcount * percent_per_cup;
     if(piturestat <= 0)
     {
         piturestat = 0;
         piture = 0;
     }
     pool.play_stationary("sounds/buy" + random(1, 4) + ".ogg", false);
-    dlg("You poured " + pourcount + " cup" + (pourcount == 1 ? "" : "s") + " of lemonade from the pitcher.");
+    dlg("You poured " + pourcount + " cup" + (pourcount == 1 ? "" : "s") + " of lemonade into serving cups.");
 }
 if(main == "slm")
 {

@@ -1,10 +1,11 @@
 new in 1.0
+Changed the way pitures work for making lemonade. You can now see how many liters of lemonade has been added to it, rather than it just saying empty or full.
 Made it so you are able to type how many cups of lemonade you'd like to pour from the piture.
 Added the ability to pour lemonade from the piture into cups for selling.
 Fixed some bugs with selling cups of lemonade.
-Reduced the cost of all items to make the game more fairer in earlier levels.
+Reduced the cost of all items to make the game easier to play in earlier levels.
 Made it so buying items now adds to your inventory instead of replacing it.
-Made it so cash is correctly deducted based on the quantity times the price of the item.
+Made it so cash is correctly deducted based on the price quantity of the item.
 You can now buy salt and water to make pitures of lemonade.
 Added some menu related sounds to the game.
 Converted the entire game to nvgt.
