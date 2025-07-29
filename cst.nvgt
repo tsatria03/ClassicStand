@@ -5,8 +5,8 @@
 #include"includes/form_menu.nvgt"
 #include"includes/speech.nvgt"
 #include"includes/virtual_dialogs.nvgt"
-double cash=50, fullcups=0, piture=0, level=1, cups=0, lemons=0, salts=0, sugars=0, waters=0, cupcost=1, lemoncost=2, saltcost=3, sugarcost=4, watercost=5;
-int day=1, clocktime=1, temprature=60;
+double cash=2100000000, fullcups=0, piture=0, level=1, cups=1, lemons=0, salts=0, sugars=0, waters=0, cupcost=1, lemoncost=2, saltcost=3, sugarcost=4, watercost=5;
+int day=1, clocktime=12, temprature=60;
 menu m;
 virtual_dialogs vd;
 sound_pool pool, temp;
@@ -156,28 +156,36 @@ if(lemons<=0 and sugars<=0)
 dlg("Error. You need at least 1 of every ingredient to make this pitcher of lemonaid.");
 }
 }
-if(main=="slm")
+if(main == "slm")
 {
-if(cups<=0)
-{
-dlg("Error. You need at least one cup of lemonaid made in order to sel it for cash.");
-}
-else if(cups>=1)
-{
-string price=vd.input_box("", "What price would you like to sell your lemonaid at?");
-if(cash=="")
-return;
-dlg("Congradulations! You've earned"+cash+"dollars for selling"+cups+"cups of lemonade. Well done!");
-pool.play_stationary("sounds/buy"+random(1,4)+".ogg",false);
-level+=1;
-temprature=random(20, 120);
-clocktime=random(1,12);
-day=1*level;
-cupcost=1*level;
-lemoncost=3*level;
-sugarcost=5*level;
-cash=string_to_number(price);
-}
+    if(fullcups <= 0)
+    {
+        dlg("Error. You need at least one cup of lemonade made in order to sell it for cash.");
+        return;
+    }
+    string price = vd.input_box("", "What price would you like to sell each cup of lemonade for?");
+    if(price == "")
+        game();
+    double percup = string_to_number(price);
+    if(percup <= 0)
+    {
+        dlg("Invalid price entered.");
+        game();
+    }
+    double total = percup * fullcups;
+    cash += total;
+    dlg("Congratulations! You've earned " + total + " dollar" + (total == 1 ? "" : "s") + " for selling " + fullcups + " cup" + (fullcups == 1 ? "" : "s") + " of lemonade.");
+    pool.play_stationary("sounds/buy" + random(1, 4) + ".ogg", false);
+    fullcups = 0;
+    level += 1;
+    clocktime = random(1, 12);
+    temprature = random(20, 120);
+    day = level;
+    cupcost = 1 * level;
+    lemoncost = 2 * level;
+    saltcost = 3 * level;
+    sugarcost = 4 * level;
+    watercost = 5 * level;
 }
 if(main=="ex")
 {
