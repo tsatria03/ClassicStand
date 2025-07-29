@@ -4,6 +4,7 @@
 #include"instance.nvgt"
 #include"sound_pool.nvgt"
 #include"includes/dlg.nvgt"
+#include"includes/extrafuncts.nvgt"
 #include"includes/form.nvgt"
 #include"includes/form_menu.nvgt"
 #include"includes/speech.nvgt"
@@ -27,8 +28,6 @@ exit();
 else
 {
 wait(500);
-cash=random(50, 150);
-    temprature = random(20, 120);
 game();
 }
 }
@@ -294,9 +293,20 @@ vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@
     {
         level = 1;
         day += 1;
-clocktime = 12;
+clocktime = 0;
     }
-    temprature = random(20, 120);
+int daily_min = clamp(20 + day * 1, 20, 90);
+int daily_max = clamp(70 + day * 2, 70, 120);
+if(level == 1)
+    temprature = random(daily_min, daily_min + 5);
+else if(level == 2)
+    temprature = random(daily_min + 10, daily_min + 20);
+else if(level == 3)
+    temprature = random(daily_max - 10, daily_max);
+else if(level == 4)
+    temprature = random(daily_max - 20, daily_max - 5);
+else
+    temprature = random(daily_min + 5, daily_min + 15);
 cupcost   = 1 * level * day;
 lemoncost = 2 * level * day;
 saltcost  = 3 * level * day;
