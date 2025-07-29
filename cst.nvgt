@@ -64,8 +64,23 @@ int mres=m.run();
 string main = m.get_selected_item_id();
 if(mres==-1)
 {
-speak("thanks for playing");
+        setupmenu(false);
+        m.add_item("Yes", "yes");
+        m.add_item("No", "no");
+        m.intro_text = "Are you sure you want to quit the game? You will lose all progress for this current game session.";
+        int res = m.run();
+        string confirm = m.get_selected_item_id();
+        if (res == -1 or confirm == "no")
+        {
+            speak("canceled");
+game();
+        }
+        if (confirm == "yes")
+        {
+            speak("exiting");
+wait(500);
 exit();
+        }
 }
 if(main == "cps")
 {
