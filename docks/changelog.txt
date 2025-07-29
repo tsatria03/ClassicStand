@@ -1,2 +1,4 @@
 new in 1.0
+You can now buy salt and water to make pitures of lemonaid.
+Added some menu related sounds to the game.
 Converted the entire game to nvgt.

@@ -5,14 +5,14 @@
 #include"includes/form_menu.nvgt"
 #include"includes/speech.nvgt"
 #include"includes/virtual_dialogs.nvgt"
-double cash=50, level=1, cups=0, lemons=0, sugar=0, cupcost=1, lemoncost=3, sugarcost=5;
-int day=1, clockface=1, temprature=60;
+double cash=50, level=1, cups=0, lemons=0, salts=0, sugars=0, waters=0, cupcost=1, lemoncost=3, saltcost=5, sugarcost=7, watercost=9;
+int day=1, clocktime=1, temprature=60;
 menu m;
 virtual_dialogs vd;
 sound_pool pool, temp;
 void main()
 {
-show_window("game");
+show_window("ClassicStand, version 1.0.");
 game();
 }
 void game()
@@ -23,13 +23,16 @@ wait(5);
 setupmenu();
 m.add_item("day"+day);
 m.add_item("level"+level);
-m.add_item("time,"+clockface+"aclock");
-m.add_item("temprature,"+temprature+"degrees farenheight");
-m.add_item("cash,"+cash+"dollars");
-m.add_item("buy cups,"+"you have;"+cups, "cps");
-m.add_item("buy lemons,"+"you have;"+lemons, "lms");
-m.add_item("buy sugar,"+"you have;"+sugar, "sgr");
+m.add_item("time, "+clocktime+" aclock");
+m.add_item("temprature, "+temprature+" degrees farenheight");
+m.add_item("cash, "+cash+" dollars");
+m.add_item("buy cups, you have "+cups, "cps");
+m.add_item("buy lemons, you have "+lemons, "lms");
+m.add_item("buy salts, you have "+salts, "slt");
+m.add_item("buy sugars, you have "+sugars, "sgr");
+m.add_item("buy waters, you have "+waters, "swr");
 m.add_item("make lemonaid", "mlm");
+m.add_item("pore lemonaid", "plm");
 m.add_item("sell lemonaid", "slm");
 m.intro_text="Lemonaid manager. What would you like to do?";
 int mres=m.run();
@@ -41,7 +44,7 @@ exit();
 }
 if(main=="cps")
 {
-string cup=vd.input_box("", "How many cups would you like to buy?");
+string cup=vd.input_box("", "How many cups would you like to buy? Costs, "+cupcost+" dollars");
 if(cash<=cupcost)
 {
 dlg("Error. You don't have enough cash to purchis this item.");
@@ -58,7 +61,7 @@ cash-=cupcost;
 }
 if(main=="lms")
 {
-string lemon=vd.input_box("", "How many lemons would you like to buy?");
+string lemon=vd.input_box("", "How many lemons would you like to buy? Costs, "+lemoncost+" dollars");
 if(cash<=lemoncost)
 {
 dlg("Error. You don't have enough cash to purchis this item.");
@@ -73,21 +76,55 @@ lemons=string_to_number(lemon);
 cash-=lemoncost;
 }
 }
+if(main=="slt")
+{
+string salt=vd.input_box("", "How many salt packets would you like to buy? Costs, "+saltcost+" dollars");
+if(cash<=saltcost)
+{
+dlg("Error. You don't have enough cash to purchis this item.");
+}
+else if(cash>=saltcost)
+{
+if(salts=="")
+return;
+pool.play_stationary("sounds/buy"+random(1,4)+".ogg",false);
+speak("Purchis complete.");
+salts=string_to_number(salt);
+cash-=saltcost;
+}
+}
 if(main=="sgr")
 {
-string sugars=vd.input_box("", "How many packets of sugar would you like to buy?");
+string sugar=vd.input_box("", "How many packets of sugar would you like to buy? Costs, "+sugarcost+" dollars");
 if(cash<=sugarcost)
 {
 dlg("Error. You don't have enough cash to purchis this item.");
 }
 else if(cash>=sugarcost)
 {
-if(sugar=="")
+if(sugars=="")
 return;
 pool.play_stationary("sounds/buy"+random(1,4)+".ogg",false);
 speak("Purchis complete.");
-sugar=string_to_number(sugars);
+sugars=string_to_number(sugar);
 cash-=sugarcost;
+}
+}
+if(main=="swr")
+{
+string water=vd.input_box("", "How many leaters of water would you like to buy? Costs, "+watercost+" dollars");
+if(cash<=watercost)
+{
+dlg("Error. You don't have enough cash to purchis this item.");
+}
+else if(cash>=watercost)
+{
+if(waters=="")
+return;
+pool.play_stationary("sounds/buy"+random(1,4)+".ogg",false);
+speak("Purchis complete.");
+waters=string_to_number(water);
+cash-=watercost;
 }
 }
 if(main=="mlm")
@@ -96,15 +133,15 @@ if(cups<=0)
 {
 dlg("Error. You need at least one cup to mix ingredients for the pitcher of lemonaid.");
 }
-if(lemons>=1 and sugar<=0)
+if(lemons>=1 and sugars<=0)
 {
 dlg("Error. You need at least 1 of every ingredient to make this pitcher of lemonaid.");
 }
-if(lemons<=0 and sugar>=1)
+if(lemons<=0 and sugars>=1)
 {
 dlg("Error. You need at least 1 of every ingredient to make this pitcher of lemonaid.");
 }
-if(lemons<=0 and sugar<=0)
+if(lemons<=0 and sugars<=0)
 {
 dlg("Error. You need at least 1 of every ingredient to make this pitcher of lemonaid.");
 }
@@ -124,7 +161,7 @@ dlg("Congradulations! You've earned"+cash+"dollars for selling"+cups+"cups of le
 pool.play_stationary("sounds/buy"+random(1,4)+".ogg",false);
 level+=1;
 temprature=random(20, 120);
-clockface=random(1,12);
+clocktime=random(1,12);
 day=1*level;
 cupcost=1*level;
 lemoncost=3*level;
