@@ -27,6 +27,11 @@ m.add_item("level"+level);
 m.add_item("time, "+clocktime+" aclock");
 m.add_item("temprature, "+temprature+" degrees farenheight");
 m.add_item("cash, " + cash + " dollar" + (cash == 1 ? "" : "s"));
+if(piture == 1)
+    m.add_item("pitcher: " + piturestat + "% full");
+else
+    m.add_item("pitcher: empty");
+m.add_item("ready to sell: " + fullcups + " cup" + (fullcups == 1 ? "" : "s"));
 m.add_item("buy cups, you have " + cups + " cup" + (cups == 1 ? "" : "s"), "cps");
 m.add_item("buy lemons, you have " + lemons + " lemon" + (lemons == 1 ? "" : "s"), "lms");
 m.add_item("buy salts, you have " + salts + " packet" + (salts == 1 ? "" : "s") + " of salt", "slt");
@@ -151,21 +156,44 @@ if(main == "mlm")
     salts -= 1;
     waters -= 1;
     piture = 1;
+    piturestat = 100;
     pool.play_stationary("sounds/buy" + random(1, 4) + ".ogg", false);
     dlg("You mixed the ingredients and made a fresh pitcher of lemonade.");
 }
 if(main == "plm")
 {
-    if(piture < 1)
+    if(piture < 1 || piturestat <= 0)
     {
         dlg("Error. You need to make a pitcher of lemonade before you can pour it into cups.");
         game();
     }
-    double poured = 6; // number of cups produced from a pitcher
-    fullcups += poured;
-    piture = 0;
+    double maxcups = floor(piturestat / (100.0 / 6));
+    if(maxcups < 1)
+    {
+        dlg("The pitcher is too empty to pour a single cup.");
+        game();
+    }
+    string prompt = "How many cups would you like to pour? You can pour up to " + maxcups + " cup" + (maxcups == 1 ? "" : "s") + ".";
+    string input = vd.input_box("", prompt);
+    if(input == "") game();
+    double pourcount = string_to_number(input);
+    if(pourcount <= 0)
+        game();
+    if(pourcount > maxcups)
+    {
+        dlg("You can't pour more than " + maxcups + " cup" + (maxcups == 1 ? "" : "s") + ".");
+        game();
+    }
+    double percent_per_cup = 100.0 / 6;
+    fullcups += pourcount;
+    piturestat -= pourcount * percent_per_cup;
+    if(piturestat <= 0)
+    {
+        piturestat = 0;
+        piture = 0;
+    }
     pool.play_stationary("sounds/buy" + random(1, 4) + ".ogg", false);
-    dlg("You poured " + poured + " cup" + (poured == 1 ? "" : "s") + " of lemonade from the pitcher.");
+    dlg("You poured " + pourcount + " cup" + (pourcount == 1 ? "" : "s") + " of lemonade from the pitcher.");
 }
 if(main == "slm")
 {
