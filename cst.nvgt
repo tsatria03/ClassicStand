@@ -5,7 +5,7 @@
 #include"includes/form_menu.nvgt"
 #include"includes/speech.nvgt"
 #include"includes/virtual_dialogs.nvgt"
-double cash=50, fullcups=0, piture=0, level=1, cups=0, lemons=0, salts=0, sugars=0, waters=0, cupcost=1, lemoncost=3, saltcost=5, sugarcost=7, watercost=9;
+double cash=50, fullcups=0, piture=0, level=1, cups=0, lemons=0, salts=0, sugars=0, waters=0, cupcost=1, lemoncost=2, saltcost=3, sugarcost=4, watercost=5;
 int day=1, clocktime=1, temprature=60;
 menu m;
 virtual_dialogs vd;
