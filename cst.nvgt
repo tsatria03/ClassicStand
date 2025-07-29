@@ -90,9 +90,9 @@ vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@
     if(cup == "")
         game();
     double qty = string_to_number(cup);
-    double total = qty * cupcost;
     if(qty <= 0)
         game();
+    double total = qty * cupcost;
     if(cash < total)
     {
         dlg("Error. You don't have enough cash to purchase " + qty + " cup" + (qty == 1 ? "" : "s") + ".");
@@ -101,18 +101,18 @@ vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@
     cups += qty;
     cash -= total;
     pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
-    dlg("Purchase complete. You bought " + qty + " cup" + (qty == 1 ? "" : "s") + ".");
+dlg("Purchase complete. You bought " + qty + " cup" + (qty == 1 ? "" : "s") + " for " + total + " dollar" + (total == 1 ? "" : "s") + ". " + "You now have " + cash + " dollar" + (cash == 1 ? "" : "s") + " remaining.");
 }
 if(main == "lms")
 {
 vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>?/+-=`~", false, "");
-string lemon = vd.input_box("", "How many lemons would you like to buy? Each one costs " + lemoncost + " dollar" + (lemoncost == 1 ? "" : "s."));
+    string lemon = vd.input_box("", "How many lemons would you like to buy? Each one costs " + lemoncost + " dollar" + (lemoncost == 1 ? "" : "s."));
     if(lemon == "")
         game();
     double qty = string_to_number(lemon);
-    double total = qty * lemoncost;
     if(qty <= 0)
         game();
+    double total = qty * lemoncost;
     if(cash < total)
     {
         dlg("Error. You don't have enough cash to purchase " + qty + " lemon" + (qty == 1 ? "" : "s") + ".");
@@ -121,67 +121,67 @@ string lemon = vd.input_box("", "How many lemons would you like to buy? Each one
     lemons += qty;
     cash -= total;
     pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
-    dlg("Purchase complete. You bought " + qty + " lemon" + (qty == 1 ? "" : "s") + ".");
+dlg("Purchase complete. You bought " + qty + " lemon" + (qty == 1 ? "" : "s") + " for " + total + " dollar" + (total == 1 ? "" : "s") + ". " + "You now have " + cash + " dollar" + (cash == 1 ? "" : "s") + " remaining.");
 }
 if(main == "slt")
 {
 vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>?/+-=`~", false, "");
-string salt = vd.input_box("", "How many salt packets would you like to buy? Each one costs " + saltcost + " dollar" + (saltcost == 1 ? "" : "s."));
+    string salt = vd.input_box("", "How many packets of salt would you like to buy? Each one costs " + saltcost + " dollar" + (saltcost == 1 ? "" : "s."));
     if(salt == "")
         game();
     double qty = string_to_number(salt);
-    double total = qty * saltcost;
     if(qty <= 0)
         game();
+    double total = qty * saltcost;
     if(cash < total)
     {
-        dlg("Error. You don't have enough cash to purchase " + qty + " packet" + (qty == 1 ? "" : "s") + " of salt.");
+dlg("Error. You don't have enough cash to purchase " + qty + " packet" + (qty == 1 ? "" : "s") + " of salt.");
         game();
     }
     salts += qty;
     cash -= total;
     pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
-    dlg("Purchase complete. You bought " + qty + " packet" + (qty == 1 ? "" : "s") + " of salt.");
+dlg("Purchase complete. You bought " + qty + " packet" + (qty == 1 ? "" : "s") + " of salt for " + total + " dollar" + (total == 1 ? "" : "s") + ". You now have " + cash + " dollar" + (cash == 1 ? "" : "s") + " remaining.");
 }
 if(main == "sgr")
 {
 vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>?/+-=`~", false, "");
-string sugar = vd.input_box("", "How many sugar packets would you like to buy? Each one costs " + sugarcost + " dollar" + (sugarcost == 1 ? "" : "s."));
+    string sugar = vd.input_box("", "How many packets of sugar would you like to buy? Each one costs " + sugarcost + " dollar" + (sugarcost == 1 ? "" : "s."));
     if(sugar == "")
         game();
     double qty = string_to_number(sugar);
-    double total = qty * sugarcost;
     if(qty <= 0)
         game();
+    double total = qty * sugarcost;
     if(cash < total)
     {
-        dlg("Error. You don't have enough cash to purchase " + qty + " packet" + (qty == 1 ? "" : "s") + " of sugar.");
+dlg("Error. You don't have enough cash to purchase " + qty + " packet" + (qty == 1 ? "" : "s") + " of sugar.");
         game();
     }
     sugars += qty;
     cash -= total;
     pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
-    dlg("Purchase complete. You bought " + qty + " packet" + (qty == 1 ? "" : "s") + " of sugar.");
+dlg("Purchase complete. You bought " + qty + " packet" + (qty == 1 ? "" : "s") + " of sugar for " + total + " dollar" + (total == 1 ? "" : "s") + ". You now have " + cash + " dollar" + (cash == 1 ? "" : "s") + " remaining.");
 }
 if(main == "swr")
 {
 vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>?/+-=`~", false, "");
-string water = vd.input_box("", "How many liters of water would you like to buy? Each one costs " + watercost + " dollar" + (watercost == 1 ? "" : "s."));
+    string water = vd.input_box("", "How many liters of water would you like to buy? Each one costs " + watercost + " dollar" + (watercost == 1 ? "" : "s."));
     if(water == "")
         game();
     double qty = string_to_number(water);
-    double total = qty * watercost;
     if(qty <= 0)
         game();
+    double total = qty * watercost;
     if(cash < total)
     {
-        dlg("Error. You don't have enough cash to purchase " + qty + " liter" + (qty == 1 ? "" : "s") + " of water.");
+dlg("Error. You don't have enough cash to purchase " + qty + " liter" + (qty == 1 ? "" : "s") + " of water.");
         game();
     }
     waters += qty;
     cash -= total;
     pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
-    dlg("Purchase complete. You bought " + qty + " liter" + (qty == 1 ? "" : "s") + " of water.");
+dlg("Purchase complete. You bought " + qty + " liter" + (qty == 1 ? "" : "s") + " of water for " + total + " dollar" + (total == 1 ? "" : "s") + ". You now have " + cash + " dollar" + (cash == 1 ? "" : "s") + " remaining.");
 }
 if(main == "dlm")
 {

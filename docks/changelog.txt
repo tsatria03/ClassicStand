@@ -1,4 +1,5 @@
 new in 1.0
+Enhanced all purchase dialogs to now include the quantity bought, the total cost of the purchase, and the remaining cash after the transaction.
 Added the ability to drink the lemonade you made and poured into a cup.
 Added some sounds for making and pouring lemonade in the game.
 Changed the way pitchers work for making lemonade. You can now see how many liters of lemonade has been added to it, rather than it just saying empty or full.
