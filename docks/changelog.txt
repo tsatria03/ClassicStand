@@ -1,4 +1,6 @@
 new in 1.0
+Made it so the day and level systems are now separated. Each day contains 4 levels, representing time blocks, such as morning, afternoon, evening, and night. After reaching level 4, the level resets back to 1 and the day increases by 1.
+Made it so the pricing system has been reworked to scale with both the current day and level. This allows for gradual and realistic economic inflation. This system encourages long-term strategy, high-stakes resource management, and optimized pricing.
 Enhanced all purchase dialogs to now include the quantity bought, the total cost of the purchase, and the remaining cash after the transaction.
 Added the ability to drink the lemonade you made and poured into a cup.
 Added some sounds for making and pouring lemonade in the game.

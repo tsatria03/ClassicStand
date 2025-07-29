@@ -39,8 +39,7 @@ while(true)
 {
 wait(5);
 setupmenu();
-m.add_item("day"+day);
-m.add_item("level"+level);
+m.add_item("day "+day+": level "+level);
 m.add_item("Time: "+clocktime+" aclock.");
 m.add_item("Temprature, "+temprature+" degrees farenheight.");
 m.add_item("Cash: " + cash + " dollar" + (cash == 1 ? "" : "s."));
@@ -60,7 +59,7 @@ m.add_item("drink lemonaid", "dlm");
 m.add_item("make lemonaid", "mlm");
 m.add_item("pour lemonaid", "plm");
 m.add_item("sell lemonaid", "slm");
-m.intro_text="Lemonaid manager. What would you like to do?";
+m.intro_text="Lemonaid manager.";
 int mres=m.run();
 string main = m.get_selected_item_id();
 if(mres==-1)
@@ -191,8 +190,9 @@ if(main == "dlm")
         game();
     }
     fullcups -= 1;
+speak("Please wait.");
     dlgplay("drinkcup.ogg");
-    dlg("Success. You drank a refreshing cup of lemonade. Yum!");
+    dlg("Success. You drank a refreshing cup of lemonade.");
 }
 if(main == "mlm")
 {
@@ -234,7 +234,7 @@ if(main == "plm")
 {
     if(pitcher < 1 || pitcherstat <= 0)
     {
-        dlg("Error. The pitcher is currently empty. Please make some lemonade to pour into a cup.");
+        dlg("Error. The pitcher is currently empty. Please make some lemonade first to pour into a cup.");
         game();
     }
     double maxcups = floor(pitcherstat / 0.25);
@@ -250,7 +250,7 @@ vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@
     if(pourcount <= 0) game();
     if(pourcount > maxcups)
     {
-        dlg("Error. You can't pour more than " + maxcups + " cup" + (maxcups == 1 ? "" : "s") + ".");
+        dlg("Error. You can't pour more than " + maxcups + " cup" + (maxcups == 1 ? "" : "s") + " of lemonade out of the pitcher.");
         game();
     }
     pitcherstat -= pourcount * 0.25;
@@ -283,17 +283,21 @@ vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@
     double total = percup * fullcups;
     cash += total;
     pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
-    dlg("Congratulations! You've earned " + total + " dollar" + (total == 1 ? "" : "s") + " for selling " + fullcups + " cup" + (fullcups == 1 ? "" : "s") + " of lemonade.");
+    dlg("Congratulations! You earned " + total + " dollar" + (total == 1 ? "" : "s") + " for selling " + fullcups + " cup" + (fullcups == 1 ? "" : "s") + " of lemonade.");
     fullcups = 0;
     level += 1;
+    if(level > 4)
+    {
+        level = 1;
+        day += 1;
+    }
     clocktime = random(1, 12);
     temprature = random(20, 120);
-    day = level;
-    cupcost = 1 * level;
-    lemoncost = 2 * level;
-    saltcost = 3 * level;
-    sugarcost = 4 * level;
-    watercost = 5 * level;
+cupcost   = 1 * level * day;
+lemoncost = 2 * level * day;
+saltcost  = 3 * level * day;
+sugarcost = 4 * level * day;
+watercost = 5 * level * day;
 }
 if(main=="ex")
 {
