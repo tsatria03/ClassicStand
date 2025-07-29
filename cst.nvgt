@@ -1,3 +1,4 @@
+#pragma document docks
 #pragma embed "data/assets.clm"
 #include"bgt_compat.nvgt"
 #include"instance.nvgt"
