@@ -1,4 +1,5 @@
 new in 1.0
+Added the ability to drink the lemonade you made and poured into a cup.
 Added some sounds for making and pouring lemonade in the game.
 Changed the way pitchers work for making lemonade. You can now see how many liters of lemonade has been added to it, rather than it just saying empty or full.
 Made it so you are able to type how many cups of lemonade you'd like to pour from the pitcher.
@@ -9,3 +10,4 @@ Made it so buying items now adds to your inventory instead of replacing it.
 Made it so cash is correctly deducted based on the price quantity of the item.
 You can now buy salt and water to make pitchers of lemonade.
 Added some menu related sounds to the game.
+Converted the entire game to nvgt.

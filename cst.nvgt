@@ -27,7 +27,7 @@ exit();
 else
 {
 wait(500);
-cash=random(20, 200);
+cash=random(50, 100);
     clocktime = random(1, 12);
     temprature = random(20, 120);
 game();
@@ -56,6 +56,7 @@ m.add_item("Buy lemon. You have " + lemons + " lemon" + (lemons == 1 ? "" : "s")
 m.add_item("Buy salt. You have " + salts + " packet" + (salts == 1 ? "" : "s") + " of salt", "slt");
 m.add_item("Buy sugar. You have " + sugars + " packet" + (sugars == 1 ? "" : "s") + " of sugar", "sgr");
 m.add_item("Buy water. You have " + waters + " liter" + (waters == 1 ? "" : "s") + " of water", "swr");
+m.add_item("drink lemonaid", "dlm");
 m.add_item("make lemonaid", "mlm");
 m.add_item("pour lemonaid", "plm");
 m.add_item("sell lemonaid", "slm");
@@ -67,7 +68,7 @@ if(mres==-1)
         setupmenu(false);
         m.add_item("Yes", "yes");
         m.add_item("No", "no");
-        m.intro_text = "Are you sure you want to quit the game? You will lose all progress for this current game session.";
+        m.intro_text = "Are you sure you want to quit? You will lose all progress for this current game session.";
         int res = m.run();
         string confirm = m.get_selected_item_id();
         if (res == -1 or confirm == "no")
@@ -182,6 +183,17 @@ string water = vd.input_box("", "How many liters of water would you like to buy?
     pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
     dlg("Purchase complete. You bought " + qty + " liter" + (qty == 1 ? "" : "s") + " of water.");
 }
+if(main == "dlm")
+{
+    if(fullcups < 1)
+    {
+        dlg("Error. You don’t have any lemonade to drink. Please make and pour some first.");
+        game();
+    }
+    fullcups -= 1;
+    dlgplay("drinkcup.ogg");
+    dlg("Success. You drank a refreshing cup of lemonade. Yum!");
+}
 if(main == "mlm")
 {
     if(cups < 1 || lemons < 1 || sugars < 1 || salts < 1 || waters < 1)
@@ -202,7 +214,7 @@ vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@
     }
     if(lemons < cupcount || sugars < cupcount || salts < cupcount || waters < cupcount)
     {
-        dlg("Error. You don't have enough ingredients to make that much lemonade.");
+        dlg("Error. You don't have enough ingredients to make "+cupcount+" cups of lemonade.");
         game();
     }
     cups -= cupcount;
@@ -212,6 +224,7 @@ vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@
     waters -= cupcount;
     pitcher = 1;
     pitcherstat += cupcount * 0.25;
+speak("Please wait.");
     pool.play_stationary("makestart.ogg", false);
 dlgplay("makeloop.ogg");
 pool.play_stationary("makestop.ogg", false);
