@@ -1,5 +1,5 @@
 #pragma document docks
-#pragma embed "data/assets.clm"
+#pragma embed "data/res/assets.clm"
 #include"bgt_compat.nvgt"
 #include"instance.nvgt"
 #include"sound_pool.nvgt"

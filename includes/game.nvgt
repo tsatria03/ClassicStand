@@ -180,7 +180,7 @@ if(main == "dlm")
         game();
     }
     fullcups -= 1;
-speak("Please wait.");
+speak("Drinking... Please wait.");
     dlgplay("drinkcup.ogg");
     dlg("Success. You drank a refreshing cup of lemonade.");
 }
@@ -215,7 +215,7 @@ ices -= cupcount;
     waters -= cupcount;
     pitcher = 1;
     pitcherstat += cupcount * 0.25;
-speak("Please wait.");
+speak("Mixing... Please wait.");
     pool.play_stationary("makestart.ogg", false);
 dlgplay("makeloop.ogg");
 pool.play_stationary("makestop.ogg", false);
@@ -251,7 +251,8 @@ vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@
         pitcherstat = 0;
         pitcher = 0;
     }
-pool.play_stationary("pourcup.ogg", false);
+speak("Pouring... Please wait.");
+dlgplay("pourcup.ogg");
     dlg("Success. You poured " + pourcount + " cup" + (pourcount == 1 ? "" : "s") + " of lemonade into sellable serving cups.");
 }
 if(main == "slm")
@@ -290,15 +291,40 @@ report += "- Packets of salt: " + salts + "\r\n";
 report += "- Packets of sugar: " + sugars + "\r\n";
 report += "- Liters of water: " + waters + "\r\n";
 if(pitcherstat > 0)
-    report += "You also have " + ceil(pitcherstat) + " liters of lemonade in your pitcher.";
+    report += "You also have " + ceil(pitcherstat) + " liters of lemonade in your pitcher."+"\r\n";
 else
-    report += "Your pitcher is currently empty.";
+    report += "Your pitcher is currently empty."+"\r\n";
 dlgmessage(report);
         level = 1;
         day += 1;
 clocktime = 0;
+        setupmenu();
+        m.add_item("Copy daily summery to clipboard", "copy");
+        m.add_item("Export daily summery to file", "export");
+        m.add_item("Return to the game.", "cancel");
+        m.intro_text = "What would you like to do with the current daily summery for this game session?";
+        int res = m.run();
+        string choice = m.get_selected_item_id();
+        if (res != -1)
+        {
+            if (choice == "copy")
+            {
+                clipboard_copy_text(report);
+                dlg("Your daily summery has been copied to your clipboard.");
+                game();
+            }
+            else if (choice == "export")
+            {
+                file poastfile;
+                poastfile.open("data/stats/daily_summeries.txt", "a");
+                poastfile.write(report);
+                poastfile.close();
+                dlg("Your daily summery has been exported to data/stats/daily_summeries.txt.");
+                game();
+            }
+        }
     }
-int daily_min = clamp(20 + day * 1, 20, 90);
+    int daily_min = clamp(20 + day * 1, 20, 90);
 int daily_max = clamp(70 + day * 2, 70, 120);
 if(level == 1)
     temprature = random(daily_min, daily_min + 5);

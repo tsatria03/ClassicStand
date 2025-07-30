@@ -1,0 +1,10 @@
+Daily Summary for Day 1.
+You ended the day with 11032 dollars.
+Your inventory:
+- Empty cups: 0
+- Bags of ice: 0
+- Ripe lemons: 0
+- Packets of salt: 0
+- Packets of sugar: 0
+- Liters of water: 0
+Your pitcher is currently empty.
