@@ -73,9 +73,9 @@ watercost = sd.read_double("watercost");
 {
 clocktime = sd.read_int("clocktime");
 }
-    if (sd.d.exists("day"))
+    if (sd.d.exists("daynumber"))
 {
-day = sd.read_int("day");
+daynumber = sd.read_int("daynumber");
 }
     if (sd.d.exists("pitcher"))
 {
@@ -106,7 +106,7 @@ void writedata()
     sd.add("sugarcost", sugarcost);
     sd.add("watercost", watercost);
     sd.add("clocktime", clocktime);
-    sd.add("day", day);
+    sd.add("daynumber", daynumber);
     sd.add("pitcher", pitcher);
     sd.add("temprature", temprature);
     sd.save();

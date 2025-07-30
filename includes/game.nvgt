@@ -4,7 +4,7 @@ while(true)
 {
 wait(5);
 setupmenu();
-m.add_item("day "+day+": level "+level+" of "+maxlevel);
+m.add_item("day "+daynumber+": level "+level+" of "+maxlevel);
 int hour = clocktime % 24;
 string hour_period = (hour >= 12 && hour < 24) ? "PM" : "AM";
 int display_hour = hour % 12;
@@ -30,8 +30,9 @@ m.add_item("make lemonaid", "mlm");
 m.add_item("pour lemonaid", "plm");
 m.add_item("sell lemonaid", "slm");
 m.add_item("exit game", "ex");
+m.add_item("reset game", "rgm");
 m.add_item("save game", "sgm");
-m.intro_text="Lemonaid manager.";
+m.intro_text = "Lemonaid manager. What would you like to do?";
 int mres=m.run();
 string main = m.get_selected_item_id();
 if(mres==-1)
@@ -299,8 +300,8 @@ vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@
     level += 1;
     if(level > 6)
     {
-string report = "Daily Summary for Day " + day + ".\r\n";
-report += "You ended the day with " + cash + " dollar" + (cash == 1 ? "" : "s") + ".\r\n";
+string report = "Daily Summary for day " + daynumber + ".\r\n";
+report += "You ended the day with " + cash + " dollar" + (cash == 1 ? "" : "s") + " in cash.\r\n";
 report += "Your inventory:\r\n";
 report += "- Empty cups: " + cups + "\r\n";
 report += "- Bags of ice: " + ices + "\r\n";
@@ -309,12 +310,12 @@ report += "- Packets of salt: " + salts + "\r\n";
 report += "- Packets of sugar: " + sugars + "\r\n";
 report += "- Liters of water: " + waters + "\r\n";
 if(pitcherstat > 0)
-    report += "You also have " + ceil(pitcherstat) + " liters of lemonade in your pitcher."+"\r\n\r\n";
+    report += "You also have " + ceil(pitcherstat) + " liters of lemonade in your pitcher.";
 else
-    report += "Your pitcher is currently empty."+"\r\n\r\n";
+    report += "Your pitcher is currently empty.";
 dlgmessage(report);
         level = 1;
-        day += 1;
+        daynumber += 1;
 clocktime = 0;
         setupmenu();
         m.add_item("Copy daily summery to clipboard", "copy");
@@ -329,8 +330,8 @@ clocktime = 0;
             {
                 clipboard_copy_text(report);
                 dlg("Your daily summery has been copied to your clipboard.");
-    int daily_min = clamp(20 + day * 1, 20, 90);
-int daily_max = clamp(70 + day * 2, 70, 120);
+    int daily_min = clamp(20 + daynumber * 1, 20, 90);
+int daily_max = clamp(70 + daynumber * 2, 70, 120);
 if(level == 1)
     temprature = random(daily_min, daily_min + 5);
 else if(level == 2)
@@ -343,23 +344,23 @@ else if(level == 5)
     temprature = random(daily_max - 20, daily_max - 5);
 else
     temprature = random(daily_min + 5, daily_min + 15);
-cupcost   = 1 * level * day;
-icecost   = 2 * level * day;
-lemoncost = 3 * level * day;
-saltcost  = 4 * level * day;
-sugarcost = 5 * level * day;
-watercost = 6 * level * day;
+cupcost   = 1 * level * daynumber;
+icecost   = 2 * level * daynumber;
+lemoncost = 3 * level * daynumber;
+saltcost  = 4 * level * daynumber;
+sugarcost = 5 * level * daynumber;
+watercost = 6 * level * daynumber;
                 game();
             }
             else if (choice == "export")
             {
                 file poastfile;
                 poastfile.open("data/stats/daily_summeries.txt", "a");
-                poastfile.write(report);
+                poastfile.write("\r\n\r\n"+report);
                 poastfile.close();
                 dlg("Your daily summery has been exported to data/stats/daily_summeries.txt.");
-    int daily_min = clamp(20 + day * 1, 20, 90);
-int daily_max = clamp(70 + day * 2, 70, 120);
+    int daily_min = clamp(20 + daynumber * 1, 20, 90);
+int daily_max = clamp(70 + daynumber * 2, 70, 120);
 if(level == 1)
     temprature = random(daily_min, daily_min + 5);
 else if(level == 2)
@@ -372,18 +373,18 @@ else if(level == 5)
     temprature = random(daily_max - 20, daily_max - 5);
 else
     temprature = random(daily_min + 5, daily_min + 15);
-cupcost   = 1 * level * day;
-icecost   = 2 * level * day;
-lemoncost = 3 * level * day;
-saltcost  = 4 * level * day;
-sugarcost = 5 * level * day;
-watercost = 6 * level * day;
+cupcost   = 1 * level * daynumber;
+icecost   = 2 * level * daynumber;
+lemoncost = 3 * level * daynumber;
+saltcost  = 4 * level * daynumber;
+sugarcost = 5 * level * daynumber;
+watercost = 6 * level * daynumber;
                 game();
             }
         }
     }
-    int daily_min = clamp(20 + day * 1, 20, 90);
-int daily_max = clamp(70 + day * 2, 70, 120);
+    int daily_min = clamp(20 + daynumber * 1, 20, 90);
+int daily_max = clamp(70 + daynumber * 2, 70, 120);
 if(level == 1)
     temprature = random(daily_min, daily_min + 5);
 else if(level == 2)
@@ -396,12 +397,12 @@ else if(level == 5)
     temprature = random(daily_max - 20, daily_max - 5);
 else
     temprature = random(daily_min + 5, daily_min + 15);
-cupcost   = 1 * level * day;
-icecost   = 2 * level * day;
-lemoncost = 3 * level * day;
-saltcost  = 4 * level * day;
-sugarcost = 5 * level * day;
-watercost = 6 * level * day;
+cupcost   = 1 * level * daynumber;
+icecost   = 2 * level * daynumber;
+lemoncost = 3 * level * daynumber;
+saltcost  = 4 * level * daynumber;
+sugarcost = 5 * level * daynumber;
+watercost = 6 * level * daynumber;
 }
 if(main=="ex")
 {
@@ -438,6 +439,27 @@ if (m.get_selected_item_id() == "save_continue")
         writedata();
 game();
     }
+}
+if(main=="rgm")
+{
+setupmenu();
+    m.add_item("Yes", "yes");
+    m.add_item("No", "no");
+m.intro_text="Are you sure you want to reset all of your game's progress?";
+int mres=m.run();
+string confirm = m.get_selected_item_id();
+    if (mres == -1 or confirm == "no")
+    {
+        game();
+    }
+if(confirm=="yes")
+{
+if(file_exists("data/saves/game.clm")) file_delete("data/saves/game.clm");
+resetgame();
+writedata();
+dlg("Success. Your game progress has been reset.");
+game();
+}
 }
 if(main=="sgm")
 {
