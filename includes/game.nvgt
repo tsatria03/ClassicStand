@@ -4,21 +4,21 @@ while(true)
 {
 wait(5);
 setupmenu();
-m.add_item("day "+day+": level "+level);
+m.add_item("day "+day+": level "+level+" of "+maxlevel);
 int hour = clocktime % 24;
 string hour_period = (hour >= 12 && hour < 24) ? "PM" : "AM";
 int display_hour = hour % 12;
 if(display_hour == 0) display_hour = 12;
 m.add_item("Time: " + display_hour + hour_period + ".");
-m.add_item("Temprature, "+temprature+" degrees farenheight.");
+m.add_item("Temprature: "+temprature+" degrees farenheight.");
 m.add_item("Cash: " + cash + " dollar" + (cash == 1 ? "" : "s."));
 m.add_item("filled cups: " + fullcups);
 if(pitcherstat <= 0)
-    m.add_item("Pitcher: 0 liters of lemonade.");
+    m.add_item("Pitcher status: 0 liters of lemonade.");
 else if(pitcherstat <= 1)
-    m.add_item("Pitcher: 1 liter of lemonade.");
+    m.add_item("Pitcher status: 1 liter of lemonade.");
 else
-    m.add_item("Pitcher: " + ceil(pitcherstat) + " liters of lemonade.");
+    m.add_item("Pitcher status: " + ceil(pitcherstat) + " liters of lemonade.");
 m.add_item("Buy cup. You have " + cups + " empty cup" + (cups == 1 ? "" : "s"), "cps");
 m.add_item("Buy ice. You have " + ices + " bag" + (ices == 1 ? "" : "s") + " of ice", "ics");
 m.add_item("Buy lemon. You have " + lemons + " ripe lemon" + (lemons == 1 ? "" : "s"), "lms");
