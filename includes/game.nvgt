@@ -291,9 +291,9 @@ report += "- Packets of salt: " + salts + "\r\n";
 report += "- Packets of sugar: " + sugars + "\r\n";
 report += "- Liters of water: " + waters + "\r\n";
 if(pitcherstat > 0)
-    report += "You also have " + ceil(pitcherstat) + " liters of lemonade in your pitcher."+"\r\n";
+    report += "You also have " + ceil(pitcherstat) + " liters of lemonade in your pitcher."+"\r\n\r\n";
 else
-    report += "Your pitcher is currently empty."+"\r\n";
+    report += "Your pitcher is currently empty."+"\r\n\r\n";
 dlgmessage(report);
         level = 1;
         day += 1;

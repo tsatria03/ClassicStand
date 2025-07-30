@@ -1,3 +1,5 @@
+new in 1.1.
+Fixed a bug where costs of items wouldn't update properly upon starting a new day after copying or exporting a daily summery.
 new in 1.0
 Added the ability to copy and export your daily summeries to a file that show up at the end of each day.
 Added the ability to view the daily summary of your business at the end of each day. This includes things like your overall balance, your current inventory, and how much lemonade is left in the pitcher.
