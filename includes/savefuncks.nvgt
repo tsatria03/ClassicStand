@@ -1,0 +1,113 @@
+void readdata()
+{
+    sd.load();
+    if (sd.d.exists("cash"))
+{
+cash = sd.read_double("cash");
+}
+    if (sd.d.exists("fullcups"))
+{
+fullcups = sd.read_double("fullcups");
+}
+    if (sd.d.exists("level"))
+{
+level = sd.read_double("level");
+}
+    if (sd.d.exists("maxlevel"))
+{
+maxlevel = sd.read_double("maxlevel");
+}
+    if (sd.d.exists("pitcherstat"))
+{
+pitcherstat = sd.read_double("pitcherstat");
+}
+    if (sd.d.exists("cups"))
+{
+cups = sd.read_double("cups");
+}
+    if (sd.d.exists("ices"))
+{
+ices = sd.read_double("ices");
+}
+    if (sd.d.exists("lemons"))
+{
+lemons = sd.read_double("lemons");
+}
+    if (sd.d.exists("salts"))
+{
+salts = sd.read_double("salts");
+}
+    if (sd.d.exists("sugars"))
+{
+sugars = sd.read_double("sugars");
+}
+    if (sd.d.exists("waters"))
+{
+waters = sd.read_double("waters");
+}
+    if (sd.d.exists("cupcost"))
+{
+cupcost = sd.read_double("cupcost");
+}
+    if (sd.d.exists("icecost"))
+{
+icecost = sd.read_double("icecost");
+}
+    if (sd.d.exists("lemoncost"))
+{
+lemoncost = sd.read_double("lemoncost");
+}
+    if (sd.d.exists("saltcost"))
+{
+saltcost = sd.read_double("saltcost");
+}
+    if (sd.d.exists("sugarcost"))
+{
+sugarcost = sd.read_double("sugarcost");
+}
+    if (sd.d.exists("watercost"))
+{
+watercost = sd.read_double("watercost");
+}
+    if (sd.d.exists("clocktime"))
+{
+clocktime = sd.read_int("clocktime");
+}
+    if (sd.d.exists("day"))
+{
+day = sd.read_int("day");
+}
+    if (sd.d.exists("pitcher"))
+{
+pitcher = sd.read_int("pitcher");
+}
+    if (sd.d.exists("temprature"))
+{
+temprature = sd.read_int("temprature");
+}
+}
+void writedata()
+{
+    sd.add("cash", cash);
+    sd.add("fullcups", fullcups);
+    sd.add("level", level);
+    sd.add("maxlevel", maxlevel);
+    sd.add("pitcherstat", pitcherstat);
+    sd.add("cups", cups);
+    sd.add("ices", ices);
+    sd.add("lemons", lemons);
+    sd.add("salts", salts);
+    sd.add("sugars", sugars);
+    sd.add("waters", waters);
+    sd.add("cupcost", cupcost);
+    sd.add("icecost", icecost);
+    sd.add("lemoncost", lemoncost);
+    sd.add("saltcost", saltcost);
+    sd.add("sugarcost", sugarcost);
+    sd.add("watercost", watercost);
+    sd.add("clocktime", clocktime);
+    sd.add("day", day);
+    sd.add("pitcher", pitcher);
+    sd.add("temprature", temprature);
+    sd.save();
+}

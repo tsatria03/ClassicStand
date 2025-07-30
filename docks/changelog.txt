@@ -1,11 +1,13 @@
 new in 1.1.
+Added the ability to quickly save your game's progress by pressing the save game option in the game's main menu.
+Added the ability to save your game's progress when pressing escape. The escape key will now bring up Additional menu options for what to do when it asks you if you want to quit the game or not.
 Fixed a bug where costs of items wouldn't update properly upon starting a new day after copying or exporting a daily summery.
 new in 1.0
 Added the ability to copy and export your daily summeries to a file that show up at the end of each day.
 Added the ability to view the daily summary of your business at the end of each day. This includes things like your overall balance, your current inventory, and how much lemonade is left in the pitcher.
 You can now buy ice to make a pitcher of lemonade.
 Made it so temperatures are no longer randomized throughout the day. The game now uses a dynamic temperature system that scales based on the current day, and time of day. Each day defines a temperature range, which increases the more the game progresses.
-Made it so the game's clock time folows the day time pattern, instead of randomizing the time each day. It will also denote weather the time is set to A-M or P-M when reading the time in the main interface.
+Made it so the game's clock time folows the day time pattern, instead of randomizing the time each day. It will also denote weather the time is set to A-M or P-M when reading the time in the game's main menu.
 Made it so the day and level systems are now separated. Each day contains 6 levels, representing time blocks, such as early morning, early afternoon, mid afternoon, early evening, midnight, and late night. After reaching level 6, the level resets back to 1, and the day increases by 1.
 Made it so the pricing system has been reworked to scale with both the current day and level. This allows for gradual and realistic economic inflation. This system encourages long-term strategy, high-stakes resource management, and optimized pricing.
 Enhanced all purchase dialogs to now include the quantity bought, the total cost of the purchase, and the remaining cash after the transaction.
