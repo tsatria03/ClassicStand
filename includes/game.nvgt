@@ -280,6 +280,20 @@ vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@
     level += 1;
     if(level > 6)
     {
+string report = "Daily Summary for Day " + day + ".\r\n";
+report += "You ended the day with " + cash + " dollar" + (cash == 1 ? "" : "s") + ".\r\n";
+report += "Your inventory:\r\n";
+report += "- Empty cups: " + cups + "\r\n";
+report += "- Bags of ice: " + ices + "\r\n";
+report += "- Ripe lemons: " + lemons + "\r\n";
+report += "- Packets of salt: " + salts + "\r\n";
+report += "- Packets of sugar: " + sugars + "\r\n";
+report += "- Liters of water: " + waters + "\r\n";
+if(pitcherstat > 0)
+    report += "You also have " + ceil(pitcherstat) + " liters of lemonade in your pitcher.";
+else
+    report += "Your pitcher is currently empty.";
+dlgmessage(report);
         level = 1;
         day += 1;
 clocktime = 0;
@@ -304,11 +318,6 @@ lemoncost = 3 * level * day;
 saltcost  = 4 * level * day;
 sugarcost = 5 * level * day;
 watercost = 6 * level * day;
-}
-if(main=="ex")
-{
-speak("thanks for playing");
-exit();
 }
 }
 }

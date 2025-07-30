@@ -1,7 +1,7 @@
-void dlg(string message, bool dlgcoppy=true, int timeout=-1)
+void dlg(string message, bool dlgcoppy=true, bool dlgsound=true, int timeout=-1)
 {
 timer timeouter;
-temp.play_stationary("dlgscroll.ogg", false);
+if(dlgsound==true) temp.play_stationary("dlgscroll.ogg", false);
 speak(message);
 while(true)
 {
@@ -30,13 +30,13 @@ void dlgmessage(string messages)
 {
 temp.play_stationary("dlgopen.ogg", false);
 string[] d=string_split(messages,"\r\n",true);
-dlg(d[0]);
+dlg(d[0], dlgsound:false);
 if (d.length()>1)
 {
 for (uint i=1; i<d.length(); i++)
 {
 temp.play_stationary("dlgscroll.ogg", false);
-dlg(d[i]);
+dlg(d[i], dlgsound:false);
 }
 }
 temp.play_stationary("dlgclose.ogg", false);

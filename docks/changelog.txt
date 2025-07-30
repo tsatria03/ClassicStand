@@ -1,4 +1,5 @@
 new in 1.0
+Added the ability to view the daily summary of your business at the end of each day. This includes things like your overall balance, your current inventory, and how much lemonade is left in the pitcher.
 You can now buy ice to make a pitcher of lemonade.
 Made it so temperatures are no longer randomized throughout the day. The game now uses a dynamic temperature system that scales based on the current day, and time of day. Each day defines a temperature range, which increases the more the game progresses.
 Made it so the game's clock time folows the day time pattern, instead of randomizing the time each day. It will also denote weather the time is set to A-M or P-M when reading the time in the main interface.
