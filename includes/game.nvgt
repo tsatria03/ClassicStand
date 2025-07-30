@@ -311,6 +311,26 @@ clocktime = 0;
             {
                 clipboard_copy_text(report);
                 dlg("Your daily summery has been copied to your clipboard.");
+    int daily_min = clamp(20 + day * 1, 20, 90);
+int daily_max = clamp(70 + day * 2, 70, 120);
+if(level == 1)
+    temprature = random(daily_min, daily_min + 5);
+else if(level == 2)
+    temprature = random(daily_min + 5, daily_min + 15);
+else if(level == 3)
+    temprature = random(daily_min + 15, daily_max - 15);
+else if(level == 4)
+    temprature = random(daily_max - 10, daily_max);
+else if(level == 5)
+    temprature = random(daily_max - 20, daily_max - 5);
+else
+    temprature = random(daily_min + 5, daily_min + 15);
+cupcost   = 1 * level * day;
+icecost   = 2 * level * day;
+lemoncost = 3 * level * day;
+saltcost  = 4 * level * day;
+sugarcost = 5 * level * day;
+watercost = 6 * level * day;
                 game();
             }
             else if (choice == "export")
@@ -320,6 +340,26 @@ clocktime = 0;
                 poastfile.write(report);
                 poastfile.close();
                 dlg("Your daily summery has been exported to data/stats/daily_summeries.txt.");
+    int daily_min = clamp(20 + day * 1, 20, 90);
+int daily_max = clamp(70 + day * 2, 70, 120);
+if(level == 1)
+    temprature = random(daily_min, daily_min + 5);
+else if(level == 2)
+    temprature = random(daily_min + 5, daily_min + 15);
+else if(level == 3)
+    temprature = random(daily_min + 15, daily_max - 15);
+else if(level == 4)
+    temprature = random(daily_max - 10, daily_max);
+else if(level == 5)
+    temprature = random(daily_max - 20, daily_max - 5);
+else
+    temprature = random(daily_min + 5, daily_min + 15);
+cupcost   = 1 * level * day;
+icecost   = 2 * level * day;
+lemoncost = 3 * level * day;
+saltcost  = 4 * level * day;
+sugarcost = 5 * level * day;
+watercost = 6 * level * day;
                 game();
             }
         }
