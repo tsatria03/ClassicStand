@@ -1,4 +1,5 @@
 new in 1.2.
+Made it so the temprature stat also shows up in celsius as well, not just in fahrenheit.
 Made it so the hydration stat now includes a descriptive label that changes based on how hydrated you are.
 Reversed the thurst system's lojic to decrease your hydration level instead of increasing it. From now on, your hydration level will start at 100 percent, and every time the temprature changes throughout the day, it will steadily drop to denote having to drink more to keep it up.
 new in 1.1.
