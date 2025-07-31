@@ -5,6 +5,7 @@ while(true)
 wait(5);
 setupmenu();
 m.add_item("day "+daynumber+": level "+level+" of "+maxlevel);
+m.add_item("Thurstyness: "+round(thurst / maxthurst * 100, 0)+" percent.");
 int hour = clocktime % 24;
 string hour_period = (hour >= 12 && hour < 24) ? "PM" : "AM";
 int display_hour = hour % 12;
@@ -131,6 +132,7 @@ vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@
     }
     lemons += qty;
     cash -= total;
+pool.play_stationary("buyfruit" + random(1, 2) + ".ogg", false);
     pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
 dlg("Purchase complete. You bought " + qty + " ripe lemon" + (qty == 1 ? "" : "s") + " for " + total + " dollar" + (total == 1 ? "" : "s") + ". " + "You now have " + cash + " dollar" + (cash == 1 ? "" : "s") + " remaining.");
 }
@@ -199,15 +201,54 @@ dlg("Purchase complete. You bought " + qty + " liter" + (qty == 1 ? "" : "s") + 
 }
 if(main == "dlm")
 {
-    if(fullcups < 1)
-    {
-        dlg("Error. You don’t have any lemonade to drink. Please make and pour some first.");
-        game();
-    }
-    fullcups -= 1;
-speak("Drinking... Please wait.");
-    dlgplay("drinkcup"+random(1 ,2)+".ogg");
-    dlg("Success. You drank a refreshing cup of lemonade.");
+if(fullcups <= 0)
+{
+dlg("Error. You don’t have any lemonade to drink. Please make and pour some first.");
+game();
+}
+double maxdrink = min(fullcups, ceil(thurst / 100.0));
+if(maxdrink <= 0)
+{
+dlg("Error. You're already fully hydrated. You don't need to drink anything right now.");
+game();
+}
+vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>?/+-=`~", false, "");
+string cupsinput = vd.input_box("", "How many cups of lemonade would you like to drink? Each cup of lemonade will reduce your thirst by 1 to 5 percent.");
+if(cupsinput == "")
+game();
+double drinkcount = string_to_number(cupsinput);
+if(drinkcount <= 0)
+{
+dlg("Error. Invalid number of cups entered.");
+game();
+}
+if(drinkcount > maxdrink)
+{
+dlg("Error. You can't drink that many cups of lemonade.");
+game();
+}
+fullcups -= drinkcount;
+double min_reduction = 100.0;
+double max_reduction = 500.0;
+double total_reduction = 0;
+double tmpcount = drinkcount;
+while (tmpcount > 0)
+{
+double single = random(min_reduction, max_reduction);
+if (total_reduction + single > thurst)
+{
+single = thurst - total_reduction;
+if(single < 0) single = 0;
+}
+total_reduction += single;
+tmpcount -= 1;
+}
+thurst -= total_reduction;
+if(thurst < 0) thurst = 0;
+double percent_reduction = round((total_reduction / maxthurst) * 100, 0);
+speak("Drinking " + drinkcount + " cup" + (drinkcount == 1 ? "" : "s") + " of lemonade. Please wait.");
+dlgplay("drinkcup" + random(1, 2) + ".ogg");
+dlg("Success. You drank " + drinkcount + " cup" + (drinkcount == 1 ? "" : "s") + " of lemonade. Your thirst has dropped by " + percent_reduction + " percent.");
 }
 if(main == "mlm")
 {

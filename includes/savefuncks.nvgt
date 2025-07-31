@@ -17,6 +17,14 @@ level = sd.read_double("level");
 {
 maxlevel = sd.read_double("maxlevel");
 }
+    if (sd.d.exists("thurst"))
+{
+thurst = sd.read_double("thurst");
+}
+    if (sd.d.exists("maxthurst"))
+{
+maxthurst = sd.read_double("maxthurst");
+}
     if (sd.d.exists("pitcherstat"))
 {
 pitcherstat = sd.read_double("pitcherstat");
@@ -92,6 +100,8 @@ void writedata()
     sd.add("fullcups", fullcups);
     sd.add("level", level);
     sd.add("maxlevel", maxlevel);
+    sd.add("thurst", thurst);
+    sd.add("maxthurst", maxthurst);
     sd.add("pitcherstat", pitcherstat);
     sd.add("cups", cups);
     sd.add("ices", ices);
