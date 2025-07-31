@@ -30,6 +30,7 @@ m.add_item("make lemonaid", "mlm");
 m.add_item("pour lemonaid", "plm");
 m.add_item("sell lemonaid", "slm");
 m.add_item("exit game", "ex");
+m.add_item("reload game", "rgl");
 m.add_item("reset game", "rgm");
 m.add_item("save game", "sgm");
 m.intro_text = "Lemonaid manager. What would you like to do?";
@@ -276,7 +277,7 @@ vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@
         pitcher = 0;
     }
 speak("Pouring... Please wait.");
-dlgplay("pourcup"+random(1 ,2)+".ogg");
+dlgplay("pourcup"+random(1 ,4)+".ogg");
     dlg("Success. You poured " + pourcount + " cup" + (pourcount == 1 ? "" : "s") + " of lemonade into sellable serving cups.");
 }
 if(main == "slm")
@@ -444,6 +445,13 @@ if (m.get_selected_item_id() == "save_continue")
         writedata();
 game();
     }
+}
+if(main=="rgl")
+{
+readdata();
+speak("game reloaded");
+wait(500);
+game();
 }
 if(main=="rgm")
 {
