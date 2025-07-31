@@ -5,13 +5,13 @@ while(true)
 wait(5);
 setupmenu();
 m.add_item("day "+daynumber+": level "+level+" of "+maxlevel);
-m.add_item("Thurstyness: "+round(thurst / maxthurst * 100, 0)+" percent.");
 int hour = clocktime % 24;
 string hour_period = (hour >= 12 && hour < 24) ? "PM" : "AM";
 int display_hour = hour % 12;
 if(display_hour == 0) display_hour = 12;
 m.add_item("Time: " + display_hour + hour_period + ".");
 m.add_item("Temprature: "+temprature+" degrees farenheight.");
+m.add_item("Thurstyness: "+round(thurst / maxthurst * 100, 0)+" percent.");
 m.add_item("Cash: " + cash + " dollar" + (cash == 1 ? "" : "s."));
 m.add_item("filled cups: " + fullcups);
 if(pitcherstat <= 0)
@@ -209,7 +209,7 @@ game();
 double maxdrink = min(fullcups, ceil(thurst / 100.0));
 if(maxdrink <= 0)
 {
-dlg("Error. You're already fully hydrated. You don't need to drink anything right now.");
+dlg("Error. You're already fully hydrated. You don't need to drink any lemonade right now.");
 game();
 }
 vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>?/+-=`~", false, "");
@@ -391,12 +391,19 @@ else if(level == 5)
     temprature = random(daily_max - 20, daily_max - 5);
 else
     temprature = random(daily_min + 5, daily_min + 15);
+double daily_base = temprature - 60;
+double percent = daily_base * 0.005 + level * 0.01 + daynumber * 0.005;
+percent = clamp(percent, 0.01, 0.1);
+double rounded_percent = round(percent * 100, 0);
+double increase_thurst = (rounded_percent / 100.0) * maxthurst;
+thurst = min(thurst + increase_thurst, maxthurst);
 cupcost   = 1 * level * daynumber;
 icecost   = 2 * level * daynumber;
 lemoncost = 3 * level * daynumber;
 saltcost  = 4 * level * daynumber;
 sugarcost = 5 * level * daynumber;
 watercost = 6 * level * daynumber;
+thurst+=100*level*daynumber;
                 game();
             }
             else if (choice == "export")
@@ -420,6 +427,12 @@ else if(level == 5)
     temprature = random(daily_max - 20, daily_max - 5);
 else
     temprature = random(daily_min + 5, daily_min + 15);
+double daily_base = temprature - 60;
+double percent = daily_base * 0.005 + level * 0.01 + daynumber * 0.005;
+percent = clamp(percent, 0.01, 0.1);
+double rounded_percent = round(percent * 100, 0);
+double increase_thurst = (rounded_percent / 100.0) * maxthurst;
+thurst = min(thurst + increase_thurst, maxthurst);
 cupcost   = 1 * level * daynumber;
 icecost   = 2 * level * daynumber;
 lemoncost = 3 * level * daynumber;
@@ -444,6 +457,12 @@ else if(level == 5)
     temprature = random(daily_max - 20, daily_max - 5);
 else
     temprature = random(daily_min + 5, daily_min + 15);
+double daily_base = temprature - 60;
+double percent = daily_base * 0.005 + level * 0.01 + daynumber * 0.005;
+percent = clamp(percent, 0.01, 0.1);
+double rounded_percent = round(percent * 100, 0);
+double increase_thurst = (rounded_percent / 100.0) * maxthurst;
+thurst = min(thurst + increase_thurst, maxthurst);
 cupcost   = 1 * level * daynumber;
 icecost   = 2 * level * daynumber;
 lemoncost = 3 * level * daynumber;
@@ -509,6 +528,7 @@ string confirm = m.get_selected_item_id();
 if(confirm=="yes")
 {
 if(file_exists("data/saves/game.clm")) file_delete("data/saves/game.clm");
+if(file_exists("data/stats/daily_summeries.txt")) file_delete("data/stats/daily_summeries.txt");
 resetgame();
 writedata();
 dlg("Success. Your game progress has been reset.");

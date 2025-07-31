@@ -1,4 +1,5 @@
 new in 1.1.
+Fixed a bug where drinking multiple cups of lemonade displayed incorrect thirst reduction percentages. The game now correctly calculates and reports the total thirst dropped based on your current thirst level.
 Made it so drinking a cup of lemonade drops your thurst by a random amount, between 1 to 5 percent.
 Made it so you are able to type how many cups of lemonade you'd like to drink from the already poured cups of lemonade you currently have.
 Added a new Thirst mechanic that keeps track of how hydrated you are in the game. Therefore, you can now view your thurst stat in the game's main menu.
