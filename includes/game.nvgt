@@ -530,7 +530,6 @@ if(confirm=="yes")
 if(file_exists("data/saves/game.clm")) file_delete("data/saves/game.clm");
 if(file_exists("data/stats/daily_summeries.txt")) file_delete("data/stats/daily_summeries.txt");
 resetgame();
-writedata();
 dlg("Success. Your game progress has been reset.");
 game();
 }
