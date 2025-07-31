@@ -4,7 +4,7 @@ while(true)
 {
 wait(5);
 setupmenu();
-m.add_item("day "+daynumber+": level "+level+" of "+maxlevel);
+m.add_item("date: "+dayname+", "+monthname+daynumber+": level "+level+" of "+maxlevel);
 int hour = clocktime % 24;
 string hour_period = (hour >= 12 && hour < 24) ? "PM" : "AM";
 int display_hour = hour % 12;
@@ -377,7 +377,17 @@ else
     report += "Your pitcher is currently empty.";
 dlgmessage(report);
         level = 1;
-        daynumber += 1;
+daynumber += 1;
+current_day_index = (current_day_index + 1) % daynames.length();
+dayname = daynames[current_day_index];
+bool month_has_31 = (current_month_index == 0 || current_month_index == 2 || current_month_index == 4 || current_month_index == 6 || current_month_index == 7 || current_month_index == 9 || current_month_index == 11);
+int max_days = month_has_31 ? 31 : 30;
+if(daynumber > max_days)
+{
+daynumber = 1;
+current_month_index = (current_month_index + 1) % monthnames.length();
+monthname = monthnames[current_month_index];
+}
 clocktime = 0;
         setupmenu();
         m.add_item("Copy daily summery to clipboard", "copy");

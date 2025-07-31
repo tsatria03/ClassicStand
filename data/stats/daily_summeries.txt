@@ -1,0 +1,12 @@
+
+
+Daily Summary for day 1.
+You ended the day with 5160000008 dollars in cash.
+Your inventory:
+- Empty cups: 16000000
+- Bags of ice: 16000000
+- Ripe lemons: 16000000
+- Packets of salt: 16000000
+- Packets of sugar: 16000000
+- Liters of water: 16000000
+You also have 975000 liters of lemonade in your pitcher.

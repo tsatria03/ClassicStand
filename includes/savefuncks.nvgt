@@ -81,6 +81,14 @@ watercost = sd.read_double("watercost");
 {
 clocktime = sd.read_int("clocktime");
 }
+    if (sd.d.exists("current_day_index"))
+{
+current_day_index = sd.read_int("current_day_index");
+}
+    if (sd.d.exists("current_month_index"))
+{
+current_month_index = sd.read_int("current_month_index");
+}
     if (sd.d.exists("daynumber"))
 {
 daynumber = sd.read_int("daynumber");
@@ -92,6 +100,14 @@ pitcher = sd.read_int("pitcher");
     if (sd.d.exists("temprature"))
 {
 temprature = sd.read_int("temprature");
+}
+if (sd.d.exists("dayname"))
+{
+dayname = sd.read_string("dayname");
+}
+if (sd.d.exists("monthname"))
+{
+monthname = sd.read_string("monthname");
 }
 }
 void writedata()
@@ -116,8 +132,12 @@ void writedata()
     sd.add("sugarcost", sugarcost);
     sd.add("watercost", watercost);
     sd.add("clocktime", clocktime);
+sd.add("current_day_index", current_day_index);
+sd.add("current_month_index", current_month_index);
     sd.add("daynumber", daynumber);
     sd.add("pitcher", pitcher);
     sd.add("temprature", temprature);
+sd.add("dayname", dayname);
+sd.add("monthname", monthname);
     sd.save();
 }
