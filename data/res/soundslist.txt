@@ -8,6 +8,8 @@ buybag3.ogg
 buybag4.ogg
 buycup1.ogg
 buycup2.ogg
+buyfruit1.ogg
+buyfruit2.ogg
 buypack1.ogg
 buypack2.ogg
 buywater1.ogg
@@ -32,4 +34,4 @@ pourcup1.ogg
 pourcup2.ogg
 pourcup3.ogg
 pourcup4.ogg
-total files: 34
+total files: 36
