@@ -5,7 +5,6 @@ while(true)
 wait(5);
 setupmenu();
 m.add_item("day "+daynumber+": level "+level+" of "+maxlevel);
-m.add_item("Hydration status: "+round(hydration / maxhydration * 100, 0)+" percent.");
 int hour = clocktime % 24;
 string hour_period = (hour >= 12 && hour < 24) ? "PM" : "AM";
 int display_hour = hour % 12;
@@ -14,6 +13,19 @@ m.add_item("Time: " + display_hour + hour_period + ".");
 m.add_item("Temprature: "+temprature+" degrees farenheight.");
 m.add_item("Cash: " + cash + " dollar" + (cash == 1 ? "" : "s."));
 m.add_item("filled cups: " + fullcups);
+double hydration_percent = round(hydration / maxhydration * 100, 0);
+string status;
+if(hydration_percent >= 100)
+	status = "Fully hydrated.";
+else if(hydration_percent >= 75)
+	status = "Slightly thirsty.";
+else if(hydration_percent >= 50)
+	status = "Thirsty.";
+else if(hydration_percent >= 25)
+	status = "Very thirsty.";
+else
+	status = "Critically dehydrated!";
+m.add_item("Hydration status: " + hydration_percent + " percent. " + status);
 if(pitcherstat <= 0)
     m.add_item("Pitcher status: 0 liters of lemonade.");
 else if(pitcherstat <= 1)
