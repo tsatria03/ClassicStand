@@ -1,3 +1,5 @@
+new in 1.2.
+Reversed the thurst system's lojic to decrease your hydration level instead of increasing it. From now on, your hydration level will start at 100 percent, and every time the temprature changes throughout the day, it will steadily drop to denote having to drink to keep it up.
 new in 1.1.
 Fixed a bug where drinking multiple cups of lemonade displayed incorrect thirst reduction percentages. The game now correctly calculates and reports the total thirst dropped based on your current thirst level.
 Made it so drinking a cup of lemonade drops your thurst by a random amount, between 1 to 5 percent.

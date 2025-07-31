@@ -9,6 +9,14 @@ cash = sd.read_double("cash");
 {
 fullcups = sd.read_double("fullcups");
 }
+    if (sd.d.exists("hydration"))
+{
+hydration = sd.read_double("hydration");
+}
+    if (sd.d.exists("maxhydration"))
+{
+maxhydration = sd.read_double("maxhydration");
+}
     if (sd.d.exists("level"))
 {
 level = sd.read_double("level");
@@ -16,14 +24,6 @@ level = sd.read_double("level");
     if (sd.d.exists("maxlevel"))
 {
 maxlevel = sd.read_double("maxlevel");
-}
-    if (sd.d.exists("thurst"))
-{
-thurst = sd.read_double("thurst");
-}
-    if (sd.d.exists("maxthurst"))
-{
-maxthurst = sd.read_double("maxthurst");
 }
     if (sd.d.exists("pitcherstat"))
 {
@@ -98,10 +98,10 @@ void writedata()
 {
     sd.add("cash", cash);
     sd.add("fullcups", fullcups);
+    sd.add("hydration", hydration);
+    sd.add("maxhydration", maxhydration);
     sd.add("level", level);
     sd.add("maxlevel", maxlevel);
-    sd.add("thurst", thurst);
-    sd.add("maxthurst", maxthurst);
     sd.add("pitcherstat", pitcherstat);
     sd.add("cups", cups);
     sd.add("ices", ices);
