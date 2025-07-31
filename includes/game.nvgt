@@ -88,6 +88,7 @@ vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@
     }
     cups += qty;
     cash -= total;
+pool.play_stationary("buycup" + random(1, 2) + ".ogg", false);
     pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
 dlg("Purchase complete. You bought " + qty + " empty cup" + (qty == 1 ? "" : "s") + " for " + total + " dollar" + (total == 1 ? "" : "s") + ". " + "You now have " + cash + " dollar" + (cash == 1 ? "" : "s") + " remaining.");
 }
@@ -108,6 +109,7 @@ dlg("Error. You don't have enough cash to purchase " + qty + " bag" + (qty == 1 
     }
     ices += qty;
     cash -= total;
+pool.play_stationary("buybag" + random(1, 4) + ".ogg", false);
     pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
 dlg("Purchase complete. You bought " + qty + " bag" + (qty == 1 ? "" : "s") + " of ice for " + total + " dollar" + (total == 1 ? "" : "s") + ". You now have " + cash + " dollar" + (cash == 1 ? "" : "s") + " remaining.");
 }
@@ -148,6 +150,7 @@ dlg("Error. You don't have enough cash to purchase " + qty + " packet" + (qty ==
     }
     salts += qty;
     cash -= total;
+pool.play_stationary("buypack" + random(1, 2) + ".ogg", false);
     pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
 dlg("Purchase complete. You bought " + qty + " packet" + (qty == 1 ? "" : "s") + " of salt for " + total + " dollar" + (total == 1 ? "" : "s") + ". You now have " + cash + " dollar" + (cash == 1 ? "" : "s") + " remaining.");
 }
@@ -168,6 +171,7 @@ dlg("Error. You don't have enough cash to purchase " + qty + " packet" + (qty ==
     }
     sugars += qty;
     cash -= total;
+pool.play_stationary("buypack" + random(1, 2) + ".ogg", false);
     pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
 dlg("Purchase complete. You bought " + qty + " packet" + (qty == 1 ? "" : "s") + " of sugar for " + total + " dollar" + (total == 1 ? "" : "s") + ". You now have " + cash + " dollar" + (cash == 1 ? "" : "s") + " remaining.");
 }
@@ -188,6 +192,7 @@ dlg("Error. You don't have enough cash to purchase " + qty + " liter" + (qty == 
     }
     waters += qty;
     cash -= total;
+pool.play_stationary("buywater" + random(1, 2) + ".ogg", false);
     pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
 dlg("Purchase complete. You bought " + qty + " liter" + (qty == 1 ? "" : "s") + " of water for " + total + " dollar" + (total == 1 ? "" : "s") + ". You now have " + cash + " dollar" + (cash == 1 ? "" : "s") + " remaining.");
 }
@@ -200,7 +205,7 @@ if(main == "dlm")
     }
     fullcups -= 1;
 speak("Drinking... Please wait.");
-    dlgplay("drinkcup.ogg");
+    dlgplay("drinkcup"+random(1 ,2)+".ogg");
     dlg("Success. You drank a refreshing cup of lemonade.");
 }
 if(main == "mlm")
@@ -271,7 +276,7 @@ vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@
         pitcher = 0;
     }
 speak("Pouring... Please wait.");
-dlgplay("pourcup.ogg");
+dlgplay("pourcup"+random(1 ,2)+".ogg");
     dlg("Success. You poured " + pourcount + " cup" + (pourcount == 1 ? "" : "s") + " of lemonade into sellable serving cups.");
 }
 if(main == "slm")

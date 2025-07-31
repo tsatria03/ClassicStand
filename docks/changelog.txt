@@ -1,4 +1,5 @@
 new in 1.1.
+Added some sounds for buying ingredients for making lemonade in the game.
 Added the ability to reset your game's progress by pressing the reset game option in the game's main menu.
 Added the ability to quickly save your game's progress by pressing the save game option in the game's main menu.
 Added the ability to save your game's progress when pressing escape. The escape key will now bring up Additional menu options for what to do when it asks you if you want to quit the game or not.
