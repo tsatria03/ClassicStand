@@ -271,6 +271,7 @@ double percent_increase = round((total_increase / maxhydration) * 100, 0);
     speak("Drinking " + drinkcount + " cup" + (drinkcount == 1 ? "" : "s") + " of lemonade. Please wait.");
     dlgplay("drinkcup" + random(1, 2) + ".ogg");
     dlg("Success. You drank " + drinkcount + " cup" + (drinkcount == 1 ? "" : "s") + " of lemonade. Your hydration has been increased by " + percent_increase + " percent.");
+last_menu_index=0;
 }
 if(main == "mlm")
 {
@@ -308,6 +309,7 @@ speak("Mixing... Please wait.");
 dlgplay("makeloop.ogg");
 pool.play_stationary("makestop.ogg", false);
     dlg("Success. You made " + cupcount + " cup" + (cupcount == 1 ? "" : "s") + " of lemonade and added it to the pitcher.");
+last_menu_index=0;
 }
 if(main == "plm")
 {
@@ -342,6 +344,7 @@ vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@
 speak("Pouring... Please wait.");
 dlgplay("pourcup"+random(1 ,4)+".ogg");
     dlg("Success. You poured " + pourcount + " cup" + (pourcount == 1 ? "" : "s") + " of lemonade into sellable serving cups.");
+last_menu_index=0;
 }
 if(main == "slm")
 {
@@ -377,6 +380,7 @@ pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
 dlg("Success. You sold " + qty + " cup" + (qty == 1 ? "" : "s") + " of lemonade for " + total + " dollar" + (total == 1 ? "" : "s") + ".");
     clocktime += 4;
     level += 1;
+last_menu_index=0;
     if(level > 6)
     {
 string report = "Daily summary for " + business_name + ".\r\n";
@@ -581,11 +585,11 @@ if(confirm=="yes")
 {
 if(file_exists("data/saves/game.clm")) file_delete("data/saves/game.clm");
 if(file_exists("data/stats/daily_summeries.txt")) file_delete("data/stats/daily_summeries.txt");
-last_menu_index=0;
 resetgame();
 dlgmessage("Success. Your game progress has been reset. Press enter to restart the game.");
 speak("restarting");
 wait(500);
+last_menu_index=0;
 restart_game();
 }
 }
