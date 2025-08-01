@@ -224,7 +224,7 @@ if(main == "dlm")
     double maxdrink = min(fullcups, ceil((maxhydration - hydration) / 100.0));
     if(maxdrink <= 0)
     {
-        dlg("Error. You're already fully hydrated. You don't need to drink any lemonade right now.");
+        dlg("Error. You're already fully hydrated. You don't need to drink any more lemonade.");
         game();
     }
     vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>?/+-=`~", false, "");
@@ -243,24 +243,21 @@ if(main == "dlm")
         game();
     }
     fullcups -= drinkcount;
-    double min_increase = 100.0;
-    double max_increase = 500.0;
-    double total_increase = 0;
-    double tmpcount = drinkcount;
-    while (tmpcount > 0)
-    {
-        double single = random(min_increase, max_increase);
-        if (hydration + single > maxhydration)
-        {
-            single = maxhydration - hydration - total_increase;
-            if(single < 0) single = 0;
-        }
-        total_increase += single;
-        tmpcount -= 1;
-    }
-    hydration += total_increase;
-    if(hydration > maxhydration) hydration = maxhydration;
-    double percent_increase = round((total_increase / maxhydration) * 100, 0);
+double min_increase = 100.0;
+double max_increase = 500.0;
+double total_increase = 0;
+double tmpcount = drinkcount;
+while (tmpcount > 0)
+{
+double single = random(min_increase, max_increase);
+total_increase += single;
+tmpcount -= 1;
+}
+if (hydration + total_increase > maxhydration)
+total_increase = maxhydration - hydration;
+if (total_increase < 0) total_increase = 0;
+hydration += total_increase;
+double percent_increase = round((total_increase / maxhydration) * 100, 0);
     speak("Drinking " + drinkcount + " cup" + (drinkcount == 1 ? "" : "s") + " of lemonade. Please wait.");
     dlgplay("drinkcup" + random(1, 2) + ".ogg");
     dlg("Success. You drank " + drinkcount + " cup" + (drinkcount == 1 ? "" : "s") + " of lemonade. Your hydration has been increased by " + percent_increase + " percent.");
@@ -338,31 +335,40 @@ dlgplay("pourcup"+random(1 ,4)+".ogg");
 }
 if(main == "slm")
 {
-    if(fullcups <= 0)
-    {
-        dlg("Error. You need at least one cup of lemonade made in order to sell it for cash.");
+if(fullcups <= 0)
+{
+dlg("Error. You need at least one cup of lemonade made in order to sell it for cash.");
 game();
-    }
+}
 vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>?/+-=`~", false, "");
-    string price = vd.input_box("", "What price would you like to sell each cup of lemonade for?");
-    if(price == "")
-        game();
-    double percup = string_to_number(price);
-    if(percup <= 0)
-    {
-        dlg("Error. Invalid price entered.");
-        game();
-    }
-    double total = percup * fullcups;
-    cash += total;
-    pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
-    dlg("Congratulations! You earned " + total + " dollar" + (total == 1 ? "" : "s") + " for selling " + fullcups + " cup" + (fullcups == 1 ? "" : "s") + " of lemonade.");
-    fullcups = 0;
+string cups = vd.input_box("", "How many cups of lemonade would you like to sell? You currently have " + fullcups + " cup" + (fullcups == 1 ? "" : "s") + " filled.");
+if(cups == "")
+game();
+double qty = string_to_number(cups);
+if(qty <= 0 || qty > fullcups)
+{
+dlg("Error. Invalid number of cups entered.");
+game();
+}
+string price = vd.input_box("", "What price would you like to sell each cup of lemonade for?");
+if(price == "")
+game();
+double percup = string_to_number(price);
+if(percup <= 0)
+{
+dlg("Error. Invalid price entered.");
+game();
+}
+double total = percup * qty;
+cash += total;
+fullcups -= qty;
+pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
+dlg("Congratulations! You earned " + total + " dollar" + (total == 1 ? "" : "s") + " for selling " + qty + " cup" + (qty == 1 ? "" : "s") + " of lemonade.");
     clocktime += 4;
     level += 1;
     if(level > 6)
     {
-string report = "Daily Summary for day " + daynumber + ".\r\n";
+string report = "Daily Summary for "+dayname+", "+monthname+daynumber + ".\r\n";
 report += "You ended the day with " + cash + " dollar" + (cash == 1 ? "" : "s") + " in cash.\r\n";
 report += "Your inventory:\r\n";
 report += "- Empty cups: " + cups + "\r\n";
