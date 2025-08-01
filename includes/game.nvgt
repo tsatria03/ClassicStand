@@ -4,6 +4,7 @@ while(true)
 {
 wait(5);
 setupmenu();
+m.add_item("business title: "+business_name);
 m.add_item("date: "+dayname+", "+monthname+daynumber+": level "+level+" of "+maxlevel);
 int hour = clocktime % 24;
 string hour_period = (hour >= 12 && hour < 24) ? "PM" : "AM";

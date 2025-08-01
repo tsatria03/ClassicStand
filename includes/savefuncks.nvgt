@@ -1,6 +1,10 @@
 void readdata()
 {
     sd.load();
+    if (sd.d.exists("busprofed"))
+{
+busprofed = sd.read_bool("busprofed");
+}
     if (sd.d.exists("cash"))
 {
 cash = sd.read_double("cash");
@@ -101,6 +105,10 @@ pitcher = sd.read_int("pitcher");
 {
 temprature = sd.read_int("temprature");
 }
+    if (sd.d.exists("business_name"))
+{
+business_name = sd.read_string("business_name");
+}
 if (sd.d.exists("dayname"))
 {
 dayname = sd.read_string("dayname");
@@ -112,6 +120,7 @@ monthname = sd.read_string("monthname");
 }
 void writedata()
 {
+sd.add("busprofed", busprofed);
     sd.add("cash", cash);
     sd.add("fullcups", fullcups);
     sd.add("hydration", hydration);
@@ -137,6 +146,7 @@ sd.add("current_month_index", current_month_index);
     sd.add("daynumber", daynumber);
     sd.add("pitcher", pitcher);
     sd.add("temprature", temprature);
+sd.add("business_name",business_name);
 sd.add("dayname", dayname);
 sd.add("monthname", monthname);
     sd.save();
