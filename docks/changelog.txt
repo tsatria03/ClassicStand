@@ -1,4 +1,6 @@
 new in 1.2.
+Improved the daily summery tracker by adding some stats that weren't their before. It's also now slightly reworded for better readability.
+Made it so the game remembers the last item that you've recently selected. This is useful for returning back to a spisific item in the menu without having to start over from the top of the menu again.
 Added the ability to track how many cups of lemonade you've sold so far. This stat will now be shown in the game's main menu.
 Made it so resetting your game's progress will now cause you to restart the game for the changes to propperly take effect.
 Added the ability to set your business title at the start of a new game. You'll be asked to set this upon starting a new save file for the game.

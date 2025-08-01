@@ -1,7 +1,7 @@
 #include"includes/includes.nvgt"
 bool busprofed=false;
 double cash=50, fullcups=0, soldcups=0, hydration=10000, maxhydration=10000, level=1, maxlevel=6, pitcherstat=0, cups=0, ices=0, lemons=0, salts=0, sugars=0, waters=0, cupcost=1, icecost=2, lemoncost=3, saltcost=4, sugarcost=5, watercost=6;
-int current_day_index=0, current_month_index=0, clocktime=0, daynumber=1, pitcher=0, temprature=20;
+int last_menu_index=-1, current_day_index=0, current_month_index=0, clocktime=0, daynumber=1, pitcher=0, temprature=20;
 string business_name="";
 string[] daynames = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 string[] monthnames = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
@@ -33,7 +33,7 @@ else
 if(busprofed == false)
 {
 wait(500);
-dlg("Welcome to Classic Stand! Please complete the following steps before playing the game. You’ll be asked to provide basic information, which will be used to personilize your business. Please press enter to continue to the next screen.");
+dlgmessage("Welcome to Classic Stand! Please complete the following steps before playing the game. You’ll be asked to provide basic information, which will be used to personilize your business. Please press enter to continue to the next screen.");
 vd.set_disallowed_chars(" !@#$%^&*()[]{};:'\"\\|,.<>?/+-=`~", false, "");
     string name = vd.input_box("", "What would you like your Business title to be?");
     if(name == "")

@@ -4,8 +4,9 @@ while(true)
 {
 wait(5);
 setupmenu();
-m.add_item("business title: "+business_name);
-m.add_item("date: "+dayname+", "+monthname+daynumber+": level "+level+" of "+maxlevel);
+m.add_item("Business title: "+business_name);
+m.add_item("Date: "+dayname+", "+monthname+daynumber);
+m.add_item("Level: "+level+" of "+maxlevel);
 int hour = clocktime % 24;
 string hour_period = (hour >= 12 && hour < 24) ? "PM" : "AM";
 int display_hour = hour % 12;
@@ -50,7 +51,9 @@ m.add_item("reload game", "rgl");
 m.add_item("reset game", "rgm");
 m.add_item("save game", "sgm");
 m.intro_text = "Lemonaid manager. What would you like to do?";
+m.set_focused_item(last_menu_index, false);
 int mres=m.run();
+last_menu_index = mres;
 string main = m.get_selected_item_id();
 if(mres==-1)
 {
@@ -63,12 +66,14 @@ m.intro_text = "Are you sure you want to quit? You will lose all progress for th
 int mres = m.run();
     if(mres==-1)
     {
+last_menu_index=-1;
 game();
     }
 if (m.get_selected_item_id() == "quit_no_save")
     {
         speak("Exiting the game without saving.");
 wait(500);
+last_menu_index=-1;
 exit();
     }
 if (m.get_selected_item_id() == "quit_save")
@@ -76,10 +81,12 @@ if (m.get_selected_item_id() == "quit_save")
         writedata();
         speak("game saved, Exiting.");
 wait(500);
+last_menu_index=-1;
 exit();
     }
 if (m.get_selected_item_id() == "continue")
     {
+last_menu_index=-1;
 game();
     }
 if (m.get_selected_item_id() == "save_continue")
@@ -87,6 +94,7 @@ if (m.get_selected_item_id() == "save_continue")
         writedata();
 speak("game saved");
 wait(500);
+last_menu_index=-1;
 game();
     }
 }
@@ -371,9 +379,9 @@ dlg("Congratulations! You sold a total of " + qty + " cup" + (qty == 1 ? "" : "s
     level += 1;
     if(level > 6)
     {
-string report = "Daily Summary for "+dayname+", "+monthname+daynumber + ".\r\n";
-report += "You ended the day with " + cash + " dollar" + (cash == 1 ? "" : "s") + " in cash.\r\n";
-report += "You sold a total of " + soldcups + " cup" + (soldcups == 1 ? "" : "s") + " of lemonade.\r\n";
+string report = "Daily summary for " + business_name + ".\r\n";
+report += "For the date of " + dayname + ", " + monthname + daynumber + ", you ended with a total of " + cash + " dollar" + (cash == 1 ? "" : "s") + " in cash.\r\n";
+report += "You sold a total of " + soldcups + " cup" + (soldcups == 1 ? "" : "s") + " of lemonade.\r\n\r\n";
 report += "Your inventory:\r\n";
 report += "- Empty cups: " + cups + "\r\n";
 report += "- Bags of ice: " + ices + "\r\n";
@@ -516,12 +524,14 @@ m.intro_text = "Are you sure you want to quit? You will lose all progress for th
 int mres = m.run();
     if(mres==-1)
     {
+last_menu_index=-1;
 game();
     }
 if (m.get_selected_item_id() == "quit_no_save")
     {
         speak("Exiting the game without saving.");
 wait(500);
+last_menu_index=-1;
 exit();
     }
 if (m.get_selected_item_id() == "quit_save")
@@ -529,10 +539,12 @@ if (m.get_selected_item_id() == "quit_save")
         writedata();
         speak("game saved, Exiting.");
 wait(500);
+last_menu_index=-1;
 exit();
     }
 if (m.get_selected_item_id() == "continue")
     {
+last_menu_index=-1;
 game();
     }
 if (m.get_selected_item_id() == "save_continue")
@@ -540,6 +552,7 @@ if (m.get_selected_item_id() == "save_continue")
         writedata();
 speak("game saved");
 wait(500);
+last_menu_index=-1;
 game();
     }
 }
@@ -548,6 +561,7 @@ if(main=="rgl")
 readdata();
 speak("game reloaded");
 wait(500);
+last_menu_index=-1;
 game();
 }
 if(main=="rgm")
@@ -560,14 +574,16 @@ int mres=m.run();
 string confirm = m.get_selected_item_id();
     if (mres == -1 or confirm == "no")
     {
+last_menu_index=-1;
         game();
     }
 if(confirm=="yes")
 {
 if(file_exists("data/saves/game.clm")) file_delete("data/saves/game.clm");
 if(file_exists("data/stats/daily_summeries.txt")) file_delete("data/stats/daily_summeries.txt");
+last_menu_index=-1;
 resetgame();
-dlg("Success. Your game progress has been reset. Press enter to restart the game.");
+dlgmessage("Success. Your game progress has been reset. Press enter to restart the game.");
 speak("restarting");
 wait(500);
 restart_game();
@@ -578,6 +594,7 @@ if(main=="sgm")
 writedata();
 speak("game saved");
 wait(500);
+last_menu_index=-1;
 game();
 }
 }
