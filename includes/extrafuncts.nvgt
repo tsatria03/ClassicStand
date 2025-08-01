@@ -36,3 +36,23 @@ double max(double a, double b)
 {
 return (a > b) ? a : b;
 }
+void restart_game(string appid="cst.exe", string scriptid="cst.nvgt")
+{
+if(SCRIPT_COMPILED)
+{
+bool success=run(appid,"",false,false);
+if(!success)
+{
+alert("errorr", "Unable to restart "+appid+"!");
+}
+}
+else
+{
+bool success=run("c:\\nvgt\\nvgtw.exe", scriptid,false,false);
+if(!success)
+{
+alert("errorr", "Unable to restart "+scriptid+"!");
+}
+}
+exit();
+}

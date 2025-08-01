@@ -1,4 +1,5 @@
 new in 1.2.
+Made it so resetting your game's progress will now cause you to restart the game for the changes to propperly take effect.
 Added the ability to set your business title at the start of a new game. You'll be asked to set this upon starting a new save file for the game.
 Changed the way selling lemonade works. Instead of asking the user what price each cup of lemonade should be sold for, it will now ask you how many cups you'd like to sell, and what price you'd like each cup to be sold for.
 Implemented a new in-game calendar system that keeps track of how many days you've ran your business. The date menu item will now tell you what the actual date is in the game world.
