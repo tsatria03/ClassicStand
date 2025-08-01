@@ -15,6 +15,7 @@ double celsius = round((temprature - 32) * 5 / 9, 0);
 m.add_item("Temperature: " + temprature + " degrees Fahrenheit, " + celsius + " degrees Celsius.");
 m.add_item("Cash: " + cash + " dollar" + (cash == 1 ? "" : "s."));
 m.add_item("filled cups: " + fullcups);
+m.add_item("sold cups: " + soldcups);
 double hydration_percent = round(hydration / maxhydration * 100, 0);
 string status;
 if(hydration_percent >= 100)
@@ -363,14 +364,16 @@ game();
 double total = percup * qty;
 cash += total;
 fullcups -= qty;
+soldcups+=qty;
 pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
-dlg("Congratulations! You earned " + total + " dollar" + (total == 1 ? "" : "s") + " for selling " + qty + " cup" + (qty == 1 ? "" : "s") + " of lemonade.");
+dlg("Congratulations! You sold a total of " + qty + " cup" + (qty == 1 ? "" : "s") + " of lemonade for " + total + " dollar" + (total == 1 ? "" : "s") + ".");
     clocktime += 4;
     level += 1;
     if(level > 6)
     {
 string report = "Daily Summary for "+dayname+", "+monthname+daynumber + ".\r\n";
 report += "You ended the day with " + cash + " dollar" + (cash == 1 ? "" : "s") + " in cash.\r\n";
+report += "You sold a total of " + soldcups + " cup" + (soldcups == 1 ? "" : "s") + " of lemonade.\r\n";
 report += "Your inventory:\r\n";
 report += "- Empty cups: " + cups + "\r\n";
 report += "- Bags of ice: " + ices + "\r\n";
@@ -383,6 +386,7 @@ if(pitcherstat > 0)
 else
     report += "Your pitcher is currently empty.";
 dlgmessage(report);
+soldcups=0;
         level = 1;
 daynumber += 1;
 current_day_index = (current_day_index + 1) % daynames.length();
@@ -551,7 +555,7 @@ if(main=="rgm")
 setupmenu();
     m.add_item("Yes", "yes");
     m.add_item("No", "no");
-m.intro_text="Are you sure you want to reset all of your game's progress?";
+m.intro_text="Are you sure you want to reset all of your game's progress? This action can't be undone.";
 int mres=m.run();
 string confirm = m.get_selected_item_id();
     if (mres == -1 or confirm == "no")
