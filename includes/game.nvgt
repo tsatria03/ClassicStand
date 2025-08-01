@@ -100,7 +100,7 @@ game();
 }
 if(main == "cps")
 {
-vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>?/+-=`~", false, "");
+vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
     string cup = vd.input_box("", "How many empty cups would you like to buy? Each one costs " + cupcost + " dollar" + (cupcost == 1 ? "" : "s."));
     if(cup == "")
         game();
@@ -121,7 +121,7 @@ dlg("Purchase complete. You bought " + qty + " empty cup" + (qty == 1 ? "" : "s"
 }
 if(main == "ics")
 {
-vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>?/+-=`~", false, "");
+vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
     string ice = vd.input_box("", "How many bags of ice would you like to buy? Each one costs " + icecost + " dollar" + (icecost == 1 ? "" : "s."));
     if(ice == "")
         game();
@@ -142,7 +142,7 @@ dlg("Purchase complete. You bought " + qty + " bag" + (qty == 1 ? "" : "s") + " 
 }
 if(main == "lms")
 {
-vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>?/+-=`~", false, "");
+vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
     string lemon = vd.input_box("", "How many ripe lemons would you like to buy? Each one costs " + lemoncost + " dollar" + (lemoncost == 1 ? "" : "s."));
     if(lemon == "")
         game();
@@ -163,7 +163,7 @@ dlg("Purchase complete. You bought " + qty + " ripe lemon" + (qty == 1 ? "" : "s
 }
 if(main == "slt")
 {
-vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>?/+-=`~", false, "");
+vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
     string salt = vd.input_box("", "How many packets of salt would you like to buy? Each one costs " + saltcost + " dollar" + (saltcost == 1 ? "" : "s."));
     if(salt == "")
         game();
@@ -184,7 +184,7 @@ dlg("Purchase complete. You bought " + qty + " packet" + (qty == 1 ? "" : "s") +
 }
 if(main == "sgr")
 {
-vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>?/+-=`~", false, "");
+vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
     string sugar = vd.input_box("", "How many packets of sugar would you like to buy? Each one costs " + sugarcost + " dollar" + (sugarcost == 1 ? "" : "s."));
     if(sugar == "")
         game();
@@ -205,7 +205,7 @@ dlg("Purchase complete. You bought " + qty + " packet" + (qty == 1 ? "" : "s") +
 }
 if(main == "swr")
 {
-vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>?/+-=`~", false, "");
+vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
     string water = vd.input_box("", "How many liters of water would you like to buy? Each one costs " + watercost + " dollar" + (watercost == 1 ? "" : "s."));
     if(water == "")
         game();
@@ -237,7 +237,7 @@ if(main == "dlm")
         dlg("Error. You're already fully hydrated. You don't need to drink any more lemonade.");
         game();
     }
-    vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>?/+-=`~", false, "");
+    vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
     string cupsinput = vd.input_box("", "How many cups of lemonade would you like to drink? Each cup of lemonade will increase your hydration by 1 to 5 percent.");
     if(cupsinput == "")
         game();
@@ -279,7 +279,7 @@ if(main == "mlm")
         dlg("Error. You need at least one of every ingredient and a cup to make lemonade.");
         game();
     }
-vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>?/+-=`~", false, "");
+vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
     string input = vd.input_box("", "How many cups of lemonade would you like to make?");
     if(input == "") game();
     double cupcount = string_to_number(input);
@@ -322,7 +322,7 @@ if(main == "plm")
         dlg("Error. The pitcher doesn't have enough lemonade to pour a single cup.");
         game();
     }
-vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>?/+-=`~", false, "");
+vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
     string input = vd.input_box("", "How many cups would you like to pour from the pitcher? You can pour up to " + maxcups + ".");
     if(input == "") game();
     double pourcount = string_to_number(input);
@@ -350,7 +350,7 @@ if(fullcups <= 0)
 dlg("Error. You need at least one cup of lemonade made in order to sell it for cash.");
 game();
 }
-vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>?/+-=`~", false, "");
+vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
 string cups = vd.input_box("", "How many cups of lemonade would you like to sell? You currently have " + fullcups + " cup" + (fullcups == 1 ? "" : "s") + " filled.");
 if(cups == "")
 game();

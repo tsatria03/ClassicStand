@@ -34,7 +34,7 @@ if(busprofed == false)
 {
 wait(500);
 dlgmessage("Welcome to Classic Stand! Please complete the following steps before playing the game. You’ll be asked to provide basic information, which will be used to personilize your business. Please press enter to continue to the next screen.");
-vd.set_disallowed_chars(" !@#$%^&*()[]{};:'\"\\|,.<>?/+-=`~", false, "");
+vd.set_disallowed_chars(" !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
     string name = vd.input_box("", "What would you like your Business title to be?");
     if(name == "")
 {
