@@ -155,7 +155,10 @@ voltimer.restart();
 }
 if(key_repeating(KEY_TAB) and intro_text.length()>0)
 {
-speak(intro_text);
+	speak(intro_text);
+	string focused = form.get_list_item(0, form.get_list_position(0));
+	if(!focused.empty())
+		speak(focused, false);
 }
 		form.monitor();
 		if (form.is_pressed(f_cancel)) {
