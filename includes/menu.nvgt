@@ -308,7 +308,7 @@ dlg("Error. You need at least one cup of lemonade made in order to sell it for c
 actsmenu();
 }
 vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
-string cups = vd.input_box("", "How many cups of lemonade would you like to sell? You currently have " + fullcups + " cup" + (fullcups == 1 ? "" : "s") + " filled.");
+string cups = vd.input_box("", "How many cups of lemonade would you like to sell? You currently have " + fullcups + " filled cup" + (fullcups == 1 ? "" : "s") + ".");
 if(cups == "")
 actsmenu();
 double qty = string_to_number(cups);
@@ -338,8 +338,8 @@ dlg("Success. You sold " + qty + " cup" + (qty == 1 ? "" : "s") + " of lemonade 
     {
 string report = "Daily summary for " + business_name + ".\r\n";
 report += "For the date of " + dayname + ", " + monthname + daynumber + ", you ended with a total of " + cash + " dollar" + (cash == 1 ? "" : "s") + " in cash.\r\n";
-report += "You sold a total of " + soldcups + " cup" + (soldcups == 1 ? "" : "s") + " of lemonade.\r\n\r\n";
-report += "Your inventory has the folowing items:\r\n";
+report += "You sold a total of " + soldcups + " cup" + (soldcups == 1 ? "" : "s") + " of lemonade.\r\n";
+report += "Your inventory had the folowing items:\r\n";
 report += "- Empty cups: " + cups + "\r\n";
 report += "- Bags of ice: " + ices + "\r\n";
 report += "- Ripe lemons: " + lemons + "\r\n";
@@ -347,9 +347,9 @@ report += "- Packets of salt: " + salts + "\r\n";
 report += "- Packets of sugar: " + sugars + "\r\n";
 report += "- Liters of water: " + waters + "\r\n";
 if(pitcherstat > 0)
-    report += "You also have " + ceil(pitcherstat) + " liters of lemonade in your pitcher.";
+    report += "You also had " + ceil(pitcherstat) + " liters of lemonade in your pitcher.";
 else
-    report += "Your pitcher is currently empty.";
+    report += "Your pitcher is now empty.";
 dlgmessage(report);
 soldcups=0;
         level = 1;
@@ -410,7 +410,7 @@ last_menu_index=0;
             else if (choice == "export")
             {
                 file poastfile;
-                poastfile.open("data/stats/daily_summeries.txt", "a");
+                poastfile.open(DIRECTORY_APPDATA + "tsatria03/ClassicStand/data/stats/daily_summeries.txt", "a");
                 poastfile.write("\r\n\r\n"+report);
                 poastfile.close();
                 dlg("Your daily summery has been exported to data/stats/daily_summeries.txt.");

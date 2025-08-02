@@ -1,4 +1,5 @@
 new in 1.3.
+Made it so the data for this game is now saved to the user's AppData folder under tsatria03/ClassicStand/data/saves, and tsatria03/ClassicStand/data/stats.
 Made it so costs of items are shown next to the item itself in the ingredients menu, rather than showing up when the user buys the item when prompted.
 Moved the buy ingredients option from the game's main menu to the business actions menu.
 Revamped the user interface in the game. The game's main menu is now grouped into several sub menus for easier navigation.

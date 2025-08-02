@@ -134,8 +134,8 @@ last_menu_index=0;
     }
 if(confirm=="yes")
 {
-if(file_exists("data/saves/game.clm")) file_delete("data/saves/game.clm");
-if(file_exists("data/stats/daily_summeries.txt")) file_delete("data/stats/daily_summeries.txt");
+if(file_exists(DIRECTORY_APPDATA + "tsatria03/ClassicStand/data/saves/game.clm")) file_delete(DIRECTORY_APPDATA + "tsatria03/ClassicStand/data/saves/game.clm");
+if(file_exists(DIRECTORY_APPDATA + "tsatria03/ClassicStand/data/stats/daily_summeries.txt")) file_delete(DIRECTORY_APPDATA + "tsatria03/ClassicStand/data/stats/daily_summeries.txt");
 resetgame();
 dlgmessage("Success. Your game progress has been reset. Press enter to restart the game.");
 speak("restarting");

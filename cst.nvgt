@@ -7,11 +7,11 @@ string[] daynames = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Fr
 string[] monthnames = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 string dayname = daynames[current_day_index];
 string monthname = monthnames[current_month_index];
-string savePath = "data/saves/";
-string statsPath = "data/stats/";
+string savePath = DIRECTORY_APPDATA + "tsatria03/ClassicStand/data/saves/";
+string statsPath = DIRECTORY_APPDATA + "tsatria03/ClassicStand/data/stats/";
 string version="1.3";
 instance gamstence("cst");
-savedata sd("data/saves/game.clm", "YVKETdQyz0ip6GSOFef8bjstJamgHaktAUnFBUs0C0RGw3LQAtwqR6H7db7EV2Fr2TJXoKdFt4unntAsIDHVlKqK1Evjt9z7qCfE71w2ZkbztfcXzyvwLvv8VIkm932olztQOxG4zZ6lXKwGNiGU8rZzHOifY4Ba6XJGHa8spMOlSeaSk4uKfSZvzkVUrdfo5LYHKGITrzjgNqAiblASk7RElkfQ2fcs9kYo9vrCrkFaVyF6GYXEFzIGHaAF5YQ8na6U4A3hB0ShycIuQoqv7xKRHHbyUHwmjkz6yXgMeOy5rvnajrdEb0JWEQt2w3OwQVQnYDxbfuAWQ81HJkFIleYRgGAaKTzu2Kp6ZVPMN2LX9jHXWFmJCBb19PDpI1brQvQASa");
+savedata sd(DIRECTORY_APPDATA + "tsatria03/ClassicStand/data/saves/game.clm", "YVKETdQyz0ip6GSOFef8bjstJamgHaktAUnFBUs0C0RGw3LQAtwqR6H7db7EV2Fr2TJXoKdFt4unntAsIDHVlKqK1Evjt9z7qCfE71w2ZkbztfcXzyvwLvv8VIkm932olztQOxG4zZ6lXKwGNiGU8rZzHOifY4Ba6XJGHa8spMOlSeaSk4uKfSZvzkVUrdfo5LYHKGITrzjgNqAiblASk7RElkfQ2fcs9kYo9vrCrkFaVyF6GYXEFzIGHaAF5YQ8na6U4A3hB0ShycIuQoqv7xKRHHbyUHwmjkz6yXgMeOy5rvnajrdEb0JWEQt2w3OwQVQnYDxbfuAWQ81HJkFIleYRgGAaKTzu2Kp6ZVPMN2LX9jHXWFmJCBb19PDpI1brQvQASa");
 menu m;
 virtual_dialogs vd;
 sound_pool pool, temp;
