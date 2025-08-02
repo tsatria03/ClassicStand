@@ -280,7 +280,6 @@ if(use_ices > ices) missing.insert_last("bags of ice");
 if(use_salts > salts) missing.insert_last("packets of salt");
 if(use_sugars > sugars) missing.insert_last("packets of sugar");
 if(use_waters > waters) missing.insert_last("liters of water");
-
 if(missing.length() > 0)
 {
 string message = "Error. You don't have enough ";
@@ -305,16 +304,26 @@ actsmenu();
 }
 if(use_lemons < cupcount || use_ices < cupcount || use_salts < cupcount || use_sugars < cupcount || use_waters < cupcount)
 {
-string missing = "";
-if(use_lemons < cupcount) missing += "lemons, ";
-if(use_ices < cupcount) missing += "ice, ";
-if(use_salts < cupcount) missing += "salt, ";
-if(use_sugars < cupcount) missing += "sugar, ";
-if(use_waters < cupcount) missing += "water, ";
-if(missing != "")
+string[] low = {};
+if(use_lemons < cupcount) low.insert_last((cupcount - use_lemons) + " ripe lemon" + ((cupcount - use_lemons) == 1 ? "" : "s"));
+if(use_ices < cupcount) low.insert_last((cupcount - use_ices) + " bag" + ((cupcount - use_ices) == 1 ? "" : "s") + " of ice");
+if(use_salts < cupcount) low.insert_last((cupcount - use_salts) + " packet" + ((cupcount - use_salts) == 1 ? "" : "s") + " of salt");
+if(use_sugars < cupcount) low.insert_last((cupcount - use_sugars) + " packet" + ((cupcount - use_sugars) == 1 ? "" : "s") + " of sugar");
+if(use_waters < cupcount) low.insert_last((cupcount - use_waters) + " liter" + ((cupcount - use_waters) == 1 ? "" : "s") + " of water");
+if(low.length() > 0)
 {
-missing = missing.substr(0, missing.length() - 2);
-dlg("Error. You must use at least " + cupcount + " of each ingredient to make " + cupcount + " cup" + (cupcount == 1 ? "" : "s") + " of lemonade. You are short on: " + missing + ".");
+string list;
+if(low.length() == 1)
+list = low[0];
+else if(low.length() == 2)
+list = low[0] + " and " + low[1];
+else
+{
+for(uint i = 0; i < int(low.length()) - 1; i++)
+list += low[i] + ", ";
+list += "and " + low[low.length() - 1];
+}
+dlg("Error. You must use at least " + cupcount + " of each ingredient to make " + cupcount + " cup" + (cupcount == 1 ? "" : "s") + " of lemonade. You're short on " + list + ".");
 actsmenu();
 }
 }
