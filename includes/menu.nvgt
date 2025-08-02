@@ -154,7 +154,7 @@ dlg("Purchase complete. You bought " + qty + " liter" + (qty == 1 ? "" : "s") + 
 void actsmenu()
 {
 setupmenu();
-m.add_item("Buy ingredients: SubMenu.", "bgn");
+m.add_item("Buy ingredients.", "bgn");
 m.add_item("drink lemonaid", "dlm");
 m.add_item("make lemonaid", "mlm");
 m.add_item("pour lemonaid", "plm");
@@ -227,42 +227,71 @@ last_menu_index=0;
 }
 if(bactem == "mlm")
 {
-    if(cups < 1 || ices < 1 || lemons < 1 || salts < 1 || sugars < 1 || waters < 1)
-    {
-        dlg("Error. You need at least one of every ingredient and a cup to make lemonade.");
-        actsmenu();
-    }
+if(cups < 1 || ices < 1 || lemons < 1 || salts < 1 || sugars < 1 || waters < 1)
+{
+dlg("Error. You need at least one of every ingredient and a cup to make lemonade.");
+actsmenu();
+}
 vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
-    string input = vd.input_box("", "How many cups of lemonade would you like to make?");
-    if(input == "") actsmenu();
-    double cupcount = string_to_number(input);
-    if(cupcount <= 0)
-        actsmenu();
-    if(cupcount > cups)
-    {
-        dlg("Error. You don't have enough cups. You only have " + cups + ".");
-        actsmenu();
-    }
-    if(ices < cupcount || lemons < cupcount || salts < cupcount || sugars < cupcount || waters < cupcount)
-    {
-        dlg("Error. You don't have enough ingredients to make "+cupcount+" cups of lemonade.");
-        actsmenu();
-    }
-    cups -= cupcount;
-ices -= cupcount;
-    lemons -= cupcount;
-    salts -= cupcount;
-    sugars -= cupcount;
-    waters -= cupcount;
-    pitcher = 1;
-    pitcherstat += cupcount * 0.25;
+string input = vd.input_box("", "How many cups of lemonade would you like to make?");
+if(input == "") actsmenu();
+double cupcount = string_to_number(input);
+if(cupcount <= 0) actsmenu();
+if(cupcount > cups)
+{
+dlg("Error. You don't have enough cups. You only have " + cups + ".");
+actsmenu();
+}
+double use_lemons = string_to_number(vd.input_box("", "How many ripe lemons would you like to use?"));
+if(use_lemons <=0)
+{
+dlg("Error. You must use at least 1 ripe lemon to make this lemonade.");
+actsmenu();
+}
+double use_ices = string_to_number(vd.input_box("", "How many bags of ice would you like to use?"));
+if(use_ices <= 0)
+{
+dlg("Error. You must use at least 1 bag of ice to make this lemonade.");
+actsmenu();
+}
+double use_salts = string_to_number(vd.input_box("", "How many packets of salt would you like to use?"));
+if(use_salts <= 0)
+{
+dlg("Error. You must use at least 1 packet of salt to make this lemonade.");
+actsmenu();
+}
+double use_sugars = string_to_number(vd.input_box("", "How many packets of sugar would you like to use?"));
+if(use_sugars <= 0)
+{
+dlg("Error. You must use at least 1 packet of sugar to make this lemonade.");
+actsmenu();
+}
+double use_waters = string_to_number(vd.input_box("", "How many liters of water would you like to use?"));
+if(use_waters <= 0)
+{
+dlg("Error. You must use at least 1 liter of water to make this lemonade.");
+actsmenu();
+}
+if(use_lemons < cupcount || use_ices < cupcount || use_salts < cupcount || use_sugars < cupcount || use_waters < cupcount)
+{
+dlg("Error. You must use at least " + cupcount + " of each ingredient to make " + cupcount + " cup" + (cupcount == 1 ? "" : "s") + " of lemonade.");
+actsmenu();
+}
+cups -= cupcount;
+lemons -= use_lemons;
+ices -= use_ices;
+salts -= use_salts;
+sugars -= use_sugars;
+waters -= use_waters;
+pitcher = 1;
+pitcherstat += cupcount * 0.25;
 speak("Mixing... Please wait.");
-    pool.play_stationary("makestart.ogg", false);
+pool.play_stationary("makestart.ogg", false);
 dlgplay("makeloop.ogg");
 pool.play_stationary("makestop.ogg", false);
-    dlg("Success. You made " + cupcount + " cup" + (cupcount == 1 ? "" : "s") + " of lemonade and added it to the pitcher.");
-last_menu_index=0;
-        actsmenu();
+dlg("Success. You made " + cupcount + " cup" + (cupcount == 1 ? "" : "s") + " of lemonade and added it to the pitcher.");
+last_menu_index = 0;
+actsmenu();
 }
 if(bactem == "plm")
 {
@@ -494,15 +523,15 @@ m.add_item("sold cups: " + soldcups);
 double hydration_percent = round(hydration / maxhydration * 100, 0);
 string status;
 if(hydration_percent >= 100)
-	status = "Fully hydrated.";
+status = "Fully hydrated.";
 else if(hydration_percent >= 75)
-	status = "Slightly thirsty.";
+status = "Slightly thirsty.";
 else if(hydration_percent >= 50)
-	status = "Thirsty.";
+status = "Thirsty.";
 else if(hydration_percent >= 25)
-	status = "Very thirsty.";
+status = "Very thirsty.";
 else
-	status = "Critically dehydrated!";
+status = "Critically dehydrated!";
 m.add_item("Hydration status: " + hydration_percent + " percent. " + status);
 if(pitcherstat <= 0)
     m.add_item("Pitcher status: 0 liters of lemonade.");

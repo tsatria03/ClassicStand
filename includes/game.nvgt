@@ -4,8 +4,8 @@ while(true)
 {
 wait(5);
 setupmenu();
-m.add_item("Business actions: SubMenu.", "bcm");
-m.add_item("Business information: SubMenu.", "bsm");
+m.add_item("Business actions.", "bcm");
+m.add_item("Business information.", "bsm");
 m.add_item("exit game", "ex");
 m.add_item("reload game", "rgl");
 m.add_item("reset game", "rgm");
