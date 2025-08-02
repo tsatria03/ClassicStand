@@ -1,4 +1,7 @@
 ##These are the things that need to be finished for future versions of the game.
+*Unfinished. Add contextual info about how many of an ingredient there is per item when buying one from the store.
+*Unfinished. Make it so sertain Ingredients can be optional.
+*Unfinished. Make it so you can choose how much of an Ingredient can go in the piture
 *Unfinished. Make this game more map based.
 
 ##These are the things that are already finished from earlier versions of the game.

@@ -9,6 +9,7 @@
 #include"form.nvgt"
 #include"form_menu.nvgt"
 #include"game.nvgt"
+#include"menu.nvgt"
 #include"savedata.nvgt"
 #include"savefuncks.nvgt"
 #include"speech.nvgt"

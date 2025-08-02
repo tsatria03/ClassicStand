@@ -1,0 +1,528 @@
+void buymenu()
+{
+setupmenu();
+m.add_item("Cup: costs " + cupcost + " dollar" + (cupcost == 1 ? "" : "s") + ". You have " + cups + " empty cup" + (cups == 1 ? "" : "s"), "cps");
+m.add_item("Ice: costs " + icecost + " dollar" + (icecost == 1 ? "" : "s") + ". You have " + ices + " bag" + (ices == 1 ? "" : "s") + " of ice", "ics");
+m.add_item("Lemon: costs " + lemoncost + " dollar" + (lemoncost == 1 ? "" : "s") + ". You have " + lemons + " ripe lemon" + (lemons == 1 ? "" : "s"), "lms");
+m.add_item("Salt: costs " + saltcost + " dollar" + (saltcost == 1 ? "" : "s") + ". You have " + salts + " packet" + (salts == 1 ? "" : "s") + " of salt", "slt");
+m.add_item("Sugar: costs " + sugarcost + " dollar" + (sugarcost == 1 ? "" : "s") + ". You have " + sugars + " packet" + (sugars == 1 ? "" : "s") + " of sugar", "sgr");
+m.add_item("Water: costs " + watercost + " dollar" + (watercost == 1 ? "" : "s") + ". You have " + waters + " liter" + (waters == 1 ? "" : "s") + " of water", "swr");
+m.add_item("back", "back");
+m.intro_text = "Ingredients menu.";
+m.set_focused_item(last_menu_index, false);
+int mres=m.run();
+last_menu_index = mres;
+string buyem = m.get_selected_item_id();
+if(mres==-1 || buyem=="back")
+{
+last_menu_index=0;
+actsmenu();
+}
+if(buyem== "cps")
+{
+vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
+    string cup = vd.input_box("", "How many empty cups would you like to buy?");
+    if(cup == "")
+        buymenu();
+    double qty = string_to_number(cup);
+    if(qty <= 0)
+        buymenu();
+    double total = qty * cupcost;
+    if(cash < total)
+    {
+        dlg("Error. You don't have enough cash to purchase " + qty + " empty cup" + (qty == 1 ? "" : "s") + ".");
+        buymenu();
+    }
+    cups += qty;
+    cash -= total;
+pool.play_stationary("buycup" + random(1, 2) + ".ogg", false);
+    pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
+dlg("Purchase complete. You bought " + qty + " empty cup" + (qty == 1 ? "" : "s") + " for " + total + " dollar" + (total == 1 ? "" : "s") + ". " + "You now have " + cash + " dollar" + (cash == 1 ? "" : "s") + " in cash remaining.");
+        buymenu();
+}
+if(buyem== "ics")
+{
+vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
+    string ice = vd.input_box("", "How many bags of ice would you like to buy?");
+    if(ice == "")
+        buymenu();
+    double qty = string_to_number(ice);
+    if(qty <= 0)
+        buymenu();
+    double total = qty * icecost;
+    if(cash < total)
+    {
+dlg("Error. You don't have enough cash to purchase " + qty + " bag" + (qty == 1 ? "" : "s") + " of ice.");
+        buymenu();
+    }
+    ices += qty;
+    cash -= total;
+pool.play_stationary("buybag" + random(1, 4) + ".ogg", false);
+    pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
+dlg("Purchase complete. You bought " + qty + " bag" + (qty == 1 ? "" : "s") + " of ice for " + total + " dollar" + (total == 1 ? "" : "s") + ". You now have " + cash + " dollar" + (cash == 1 ? "" : "s") + " in cash remaining.");
+        buymenu();
+}
+if(buyem== "lms")
+{
+vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
+    string lemon = vd.input_box("", "How many ripe lemons would you like to buy?");
+    if(lemon == "")
+        buymenu();
+    double qty = string_to_number(lemon);
+    if(qty <= 0)
+        buymenu();
+    double total = qty * lemoncost;
+    if(cash < total)
+    {
+        dlg("Error. You don't have enough cash to purchase " + qty + " ripe lemon" + (qty == 1 ? "" : "s") + ".");
+        buymenu();
+    }
+    lemons += qty;
+    cash -= total;
+pool.play_stationary("buyfruit" + random(1, 2) + ".ogg", false);
+    pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
+dlg("Purchase complete. You bought " + qty + " ripe lemon" + (qty == 1 ? "" : "s") + " for " + total + " dollar" + (total == 1 ? "" : "s") + ". " + "You now have " + cash + " dollar" + (cash == 1 ? "" : "s") + " in cash remaining.");
+        buymenu();
+}
+if(buyem== "slt")
+{
+vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
+    string salt = vd.input_box("", "How many packets of salt would you like to buy?");
+    if(salt == "")
+        buymenu();
+    double qty = string_to_number(salt);
+    if(qty <= 0)
+        buymenu();
+    double total = qty * saltcost;
+    if(cash < total)
+    {
+dlg("Error. You don't have enough cash to purchase " + qty + " packet" + (qty == 1 ? "" : "s") + " of salt.");
+        buymenu();
+    }
+    salts += qty;
+    cash -= total;
+pool.play_stationary("buypack" + random(1, 2) + ".ogg", false);
+    pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
+dlg("Purchase complete. You bought " + qty + " packet" + (qty == 1 ? "" : "s") + " of salt for " + total + " dollar" + (total == 1 ? "" : "s") + ". You now have " + cash + " dollar" + (cash == 1 ? "" : "s") + " in cash remaining.");
+        buymenu();
+}
+if(buyem== "sgr")
+{
+vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
+    string sugar = vd.input_box("", "How many packets of sugar would you like to buy?");
+    if(sugar == "")
+        buymenu();
+    double qty = string_to_number(sugar);
+    if(qty <= 0)
+        buymenu();
+    double total = qty * sugarcost;
+    if(cash < total)
+    {
+dlg("Error. You don't have enough cash to purchase " + qty + " packet" + (qty == 1 ? "" : "s") + " of sugar.");
+        buymenu();
+    }
+    sugars += qty;
+    cash -= total;
+pool.play_stationary("buypack" + random(1, 2) + ".ogg", false);
+    pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
+dlg("Purchase complete. You bought " + qty + " packet" + (qty == 1 ? "" : "s") + " of sugar for " + total + " dollar" + (total == 1 ? "" : "s") + ". You now have " + cash + " dollar" + (cash == 1 ? "" : "s") + " in cash remaining.");
+        buymenu();
+}
+if(buyem== "swr")
+{
+vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
+    string water = vd.input_box("", "How many liters of water would you like to buy?");
+    if(water == "")
+        buymenu();
+    double qty = string_to_number(water);
+    if(qty <= 0)
+        buymenu();
+    double total = qty * watercost;
+    if(cash < total)
+    {
+dlg("Error. You don't have enough cash to purchase " + qty + " liter" + (qty == 1 ? "" : "s") + " of water.");
+        buymenu();
+    }
+    waters += qty;
+    cash -= total;
+pool.play_stationary("buywater" + random(1, 2) + ".ogg", false);
+    pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
+dlg("Purchase complete. You bought " + qty + " liter" + (qty == 1 ? "" : "s") + " of water for " + total + " dollar" + (total == 1 ? "" : "s") + ". You now have " + cash + " dollar" + (cash == 1 ? "" : "s") + " in cash remaining.");
+        buymenu();
+}
+}
+void actsmenu()
+{
+setupmenu();
+m.add_item("Buy ingredients: SubMenu.", "bgn");
+m.add_item("drink lemonaid", "dlm");
+m.add_item("make lemonaid", "mlm");
+m.add_item("pour lemonaid", "plm");
+m.add_item("sell lemonaid", "slm");
+m.add_item("back", "back");
+m.intro_text = "Actions menu.";
+m.set_focused_item(last_menu_index, false);
+int mres=m.run();
+last_menu_index = mres;
+string bactem = m.get_selected_item_id();
+if(mres==-1 || bactem=="back")
+{
+last_menu_index=0;
+game();
+}
+if(bactem == "bgn")
+{
+last_menu_index=0;
+buymenu();
+}
+if(bactem == "dlm")
+{
+    if(fullcups <= 0)
+    {
+        dlg("Error. You don’t have any lemonade to drink. Please make and pour some first.");
+        actsmenu();
+    }
+    double maxdrink = min(fullcups, ceil((maxhydration - hydration) / 100.0));
+    if(maxdrink <= 0)
+    {
+        dlg("Error. You're already fully hydrated. You don't need to drink any more lemonade.");
+        actsmenu();
+    }
+    vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
+    string cupsinput = vd.input_box("", "How many cups of lemonade would you like to drink? Each cup of lemonade will increase your hydration by 1 to 5 percent.");
+    if(cupsinput == "")
+        actsmenu();
+    double drinkcount = string_to_number(cupsinput);
+    if(drinkcount <= 0)
+    {
+        dlg("Error. Invalid number of cups entered.");
+        actsmenu();
+    }
+    if(drinkcount > maxdrink)
+    {
+        dlg("Error. You can't drink that many cups of lemonade.");
+        actsmenu();
+    }
+    fullcups -= drinkcount;
+double min_increase = 100.0;
+double max_increase = 500.0;
+double total_increase = 0;
+double tmpcount = drinkcount;
+while (tmpcount > 0)
+{
+double single = random(min_increase, max_increase);
+total_increase += single;
+tmpcount -= 1;
+}
+if (hydration + total_increase > maxhydration)
+total_increase = maxhydration - hydration;
+if (total_increase < 0) total_increase = 0;
+hydration += total_increase;
+double percent_increase = round((total_increase / maxhydration) * 100, 0);
+    speak("Drinking " + drinkcount + " cup" + (drinkcount == 1 ? "" : "s") + " of lemonade. Please wait.");
+    dlgplay("drinkcup" + random(1, 2) + ".ogg");
+    dlg("Success. You drank " + drinkcount + " cup" + (drinkcount == 1 ? "" : "s") + " of lemonade. Your hydration has been increased by " + percent_increase + " percent.");
+last_menu_index=0;
+        actsmenu();
+}
+if(bactem == "mlm")
+{
+    if(cups < 1 || ices < 1 || lemons < 1 || salts < 1 || sugars < 1 || waters < 1)
+    {
+        dlg("Error. You need at least one of every ingredient and a cup to make lemonade.");
+        actsmenu();
+    }
+vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
+    string input = vd.input_box("", "How many cups of lemonade would you like to make?");
+    if(input == "") actsmenu();
+    double cupcount = string_to_number(input);
+    if(cupcount <= 0)
+        actsmenu();
+    if(cupcount > cups)
+    {
+        dlg("Error. You don't have enough cups. You only have " + cups + ".");
+        actsmenu();
+    }
+    if(ices < cupcount || lemons < cupcount || salts < cupcount || sugars < cupcount || waters < cupcount)
+    {
+        dlg("Error. You don't have enough ingredients to make "+cupcount+" cups of lemonade.");
+        actsmenu();
+    }
+    cups -= cupcount;
+ices -= cupcount;
+    lemons -= cupcount;
+    salts -= cupcount;
+    sugars -= cupcount;
+    waters -= cupcount;
+    pitcher = 1;
+    pitcherstat += cupcount * 0.25;
+speak("Mixing... Please wait.");
+    pool.play_stationary("makestart.ogg", false);
+dlgplay("makeloop.ogg");
+pool.play_stationary("makestop.ogg", false);
+    dlg("Success. You made " + cupcount + " cup" + (cupcount == 1 ? "" : "s") + " of lemonade and added it to the pitcher.");
+last_menu_index=0;
+        actsmenu();
+}
+if(bactem == "plm")
+{
+    if(pitcher < 1 || pitcherstat <= 0)
+    {
+        dlg("Error. The pitcher is currently empty. Please make some lemonade first to pour into a cup.");
+        actsmenu();
+    }
+    double maxcups = floor(pitcherstat / 0.25);
+    if(maxcups < 1)
+    {
+        dlg("Error. The pitcher doesn't have enough lemonade to pour a single cup.");
+        actsmenu();
+    }
+vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
+    string input = vd.input_box("", "How many cups would you like to pour from the pitcher?");
+    if(input == "") actsmenu();
+    double pourcount = string_to_number(input);
+    if(pourcount <= 0) actsmenu();
+    if(pourcount > maxcups)
+    {
+        dlg("Error. You can't pour more than " + maxcups + " cup" + (maxcups == 1 ? "" : "s") + " of lemonade out of the pitcher.");
+        actsmenu();
+    }
+    pitcherstat -= pourcount * 0.25;
+    fullcups += pourcount;
+    if(pitcherstat <= 0)
+    {
+        pitcherstat = 0;
+        pitcher = 0;
+    }
+speak("Pouring... Please wait.");
+dlgplay("pourcup"+random(1 ,4)+".ogg");
+    dlg("Success. You poured " + pourcount + " cup" + (pourcount == 1 ? "" : "s") + " of lemonade into sellable serving cups.");
+last_menu_index=0;
+        actsmenu();
+}
+if(bactem == "slm")
+{
+if(fullcups <= 0)
+{
+dlg("Error. You need at least one cup of lemonade made in order to sell it for cash.");
+actsmenu();
+}
+vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
+string cups = vd.input_box("", "How many cups of lemonade would you like to sell? You currently have " + fullcups + " cup" + (fullcups == 1 ? "" : "s") + " filled.");
+if(cups == "")
+actsmenu();
+double qty = string_to_number(cups);
+if(qty <= 0 || qty > fullcups)
+{
+dlg("Error. Invalid number of cups entered.");
+actsmenu();
+}
+string price = vd.input_box("", "What price would you like to sell each cup of lemonade for?");
+if(price == "")
+actsmenu();
+double percup = string_to_number(price);
+if(percup <= 0)
+{
+dlg("Error. Invalid price entered.");
+actsmenu();
+}
+double total = percup * qty;
+cash += total;
+fullcups -= qty;
+soldcups+=qty;
+pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
+dlg("Success. You sold " + qty + " cup" + (qty == 1 ? "" : "s") + " of lemonade for " + total + " dollar" + (total == 1 ? "" : "s") + ".");
+    clocktime += 4;
+    level += 1;
+    if(level > 6)
+    {
+string report = "Daily summary for " + business_name + ".\r\n";
+report += "For the date of " + dayname + ", " + monthname + daynumber + ", you ended with a total of " + cash + " dollar" + (cash == 1 ? "" : "s") + " in cash.\r\n";
+report += "You sold a total of " + soldcups + " cup" + (soldcups == 1 ? "" : "s") + " of lemonade.\r\n\r\n";
+report += "Your inventory has the folowing items:\r\n";
+report += "- Empty cups: " + cups + "\r\n";
+report += "- Bags of ice: " + ices + "\r\n";
+report += "- Ripe lemons: " + lemons + "\r\n";
+report += "- Packets of salt: " + salts + "\r\n";
+report += "- Packets of sugar: " + sugars + "\r\n";
+report += "- Liters of water: " + waters + "\r\n";
+if(pitcherstat > 0)
+    report += "You also have " + ceil(pitcherstat) + " liters of lemonade in your pitcher.";
+else
+    report += "Your pitcher is currently empty.";
+dlgmessage(report);
+soldcups=0;
+        level = 1;
+daynumber += 1;
+current_day_index = (current_day_index + 1) % daynames.length();
+dayname = daynames[current_day_index];
+bool month_has_31 = (current_month_index == 0 || current_month_index == 2 || current_month_index == 4 || current_month_index == 6 || current_month_index == 7 || current_month_index == 9 || current_month_index == 11);
+int max_days = month_has_31 ? 31 : 30;
+if(daynumber > max_days)
+{
+daynumber = 1;
+current_month_index = (current_month_index + 1) % monthnames.length();
+monthname = monthnames[current_month_index];
+}
+clocktime = 0;
+        setupmenu();
+        m.add_item("Copy daily summery to clipboard", "copy");
+        m.add_item("Export daily summery to file", "export");
+        m.add_item("Return to the game.", "cancel");
+        m.intro_text = "What would you like to do with the current daily summery for this game session?";
+        int res = m.run();
+        string choice = m.get_selected_item_id();
+        if (res != -1)
+        {
+            if (choice == "copy")
+            {
+                clipboard_copy_text(report);
+                dlg("Your daily summery has been copied to your clipboard.");
+    int daily_min = clamp(20 + daynumber * 1, 20, 90);
+int daily_max = clamp(70 + daynumber * 2, 70, 120);
+if(level == 1)
+    temprature = random(daily_min, daily_min + 5);
+else if(level == 2)
+    temprature = random(daily_min + 5, daily_min + 15);
+else if(level == 3)
+    temprature = random(daily_min + 15, daily_max - 15);
+else if(level == 4)
+    temprature = random(daily_max - 10, daily_max);
+else if(level == 5)
+    temprature = random(daily_max - 20, daily_max - 5);
+else
+    temprature = random(daily_min + 5, daily_min + 15);
+double daily_base = temprature - 60;
+double percent = daily_base * 0.005 + level * 0.01 + daynumber * 0.005;
+percent = clamp(percent, 0.01, 0.1);
+double rounded_percent = round(percent * 100, 0);
+double hydration_loss = (rounded_percent / 100.0) * maxhydration;
+hydration = max(hydration - hydration_loss, 0);
+cupcost   = 1 * level * daynumber;
+icecost   = 2 * level * daynumber;
+lemoncost = 3 * level * daynumber;
+saltcost  = 4 * level * daynumber;
+sugarcost = 5 * level * daynumber;
+watercost = 6 * level * daynumber;
+last_menu_index=0;
+                game();
+            }
+            else if (choice == "export")
+            {
+                file poastfile;
+                poastfile.open("data/stats/daily_summeries.txt", "a");
+                poastfile.write("\r\n\r\n"+report);
+                poastfile.close();
+                dlg("Your daily summery has been exported to data/stats/daily_summeries.txt.");
+    int daily_min = clamp(20 + daynumber * 1, 20, 90);
+int daily_max = clamp(70 + daynumber * 2, 70, 120);
+if(level == 1)
+    temprature = random(daily_min, daily_min + 5);
+else if(level == 2)
+    temprature = random(daily_min + 5, daily_min + 15);
+else if(level == 3)
+    temprature = random(daily_min + 15, daily_max - 15);
+else if(level == 4)
+    temprature = random(daily_max - 10, daily_max);
+else if(level == 5)
+    temprature = random(daily_max - 20, daily_max - 5);
+else
+    temprature = random(daily_min + 5, daily_min + 15);
+double daily_base = temprature - 60;
+double percent = daily_base * 0.005 + level * 0.01 + daynumber * 0.005;
+percent = clamp(percent, 0.01, 0.1);
+double rounded_percent = round(percent * 100, 0);
+double hydration_loss = (rounded_percent / 100.0) * maxhydration;
+hydration = max(hydration - hydration_loss, 0);
+cupcost   = 1 * level * daynumber;
+icecost   = 2 * level * daynumber;
+lemoncost = 3 * level * daynumber;
+saltcost  = 4 * level * daynumber;
+sugarcost = 5 * level * daynumber;
+watercost = 6 * level * daynumber;
+last_menu_index=0;
+game();
+            }
+        }
+    }
+    int daily_min = clamp(20 + daynumber * 1, 20, 90);
+int daily_max = clamp(70 + daynumber * 2, 70, 120);
+if(level == 1)
+    temprature = random(daily_min, daily_min + 5);
+else if(level == 2)
+    temprature = random(daily_min + 5, daily_min + 15);
+else if(level == 3)
+    temprature = random(daily_min + 15, daily_max - 15);
+else if(level == 4)
+    temprature = random(daily_max - 10, daily_max);
+else if(level == 5)
+    temprature = random(daily_max - 20, daily_max - 5);
+else
+    temprature = random(daily_min + 5, daily_min + 15);
+double daily_base = temprature - 60;
+double percent = daily_base * 0.005 + level * 0.01 + daynumber * 0.005;
+percent = clamp(percent, 0.01, 0.1);
+double rounded_percent = round(percent * 100, 0);
+double hydration_loss = (rounded_percent / 100.0) * maxhydration;
+hydration = max(hydration - hydration_loss, 0);
+cupcost   = 1 * level * daynumber;
+icecost   = 2 * level * daynumber;
+lemoncost = 3 * level * daynumber;
+saltcost  = 4 * level * daynumber;
+sugarcost = 5 * level * daynumber;
+watercost = 6 * level * daynumber;
+last_menu_index=0;
+game();
+}
+}
+void infomenu()
+{
+setupmenu();
+m.add_item("Business title: "+business_name);
+m.add_item("Date: "+dayname+", "+monthname+daynumber);
+m.add_item("Level: "+level+" of "+maxlevel);
+int hour = clocktime % 24;
+string hour_period = (hour >= 12 && hour < 24) ? "PM" : "AM";
+int display_hour = hour % 12;
+if(display_hour == 0) display_hour = 12;
+m.add_item("Time: " + display_hour + hour_period + ".");
+double celsius = round((temprature - 32) * 5 / 9, 0);
+m.add_item("Temperature: " + temprature + " degrees Fahrenheit, " + celsius + " degrees Celsius.");
+m.add_item("Cash: " + cash + " dollar" + (cash == 1 ? "" : "s."));
+m.add_item("filled cups: " + fullcups);
+m.add_item("sold cups: " + soldcups);
+double hydration_percent = round(hydration / maxhydration * 100, 0);
+string status;
+if(hydration_percent >= 100)
+	status = "Fully hydrated.";
+else if(hydration_percent >= 75)
+	status = "Slightly thirsty.";
+else if(hydration_percent >= 50)
+	status = "Thirsty.";
+else if(hydration_percent >= 25)
+	status = "Very thirsty.";
+else
+	status = "Critically dehydrated!";
+m.add_item("Hydration status: " + hydration_percent + " percent. " + status);
+if(pitcherstat <= 0)
+    m.add_item("Pitcher status: 0 liters of lemonade.");
+else if(pitcherstat <= 1)
+    m.add_item("Pitcher status: 1 liter of lemonade.");
+else
+    m.add_item("Pitcher status: " + ceil(pitcherstat) + " liters of lemonade.");
+m.add_item("back", "back");
+m.intro_text = "Information menu.";
+m.set_focused_item(last_menu_index, false);
+int mres=m.run();
+string infem = m.get_selected_item_id();
+if(mres>=0 and mres<=9)
+{
+last_menu_index = mres;
+infomenu();
+}
+if(mres==-1 || infem=="back")
+{
+last_menu_index=0;
+game();
+}
+}

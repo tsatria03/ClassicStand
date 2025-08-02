@@ -1,3 +1,7 @@
+new in 1.3.
+Made it so costs of items are shown next to the item itself in the ingredients menu, rather than showing up when the user buys the item when prompted.
+Moved the buy ingredients option from the game's main menu to the business actions menu.
+Revamped the user interface in the game. The game's main menu is now grouped into several sub menus for easier navigation.
 new in 1.2.
 Improved the daily summery tracker by adding some stats that weren't their before. It's also now slightly reworded for better readability.
 Made it so the game remembers the last item that you've recently selected. This is useful for returning back to a spisific item in the menu without having to start over from the top of the menu again.
