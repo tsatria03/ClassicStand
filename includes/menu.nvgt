@@ -348,10 +348,10 @@ dlg("Error. You need at least one cup of lemonade made in order to sell it for c
 actsmenu();
 }
 vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
-string cups = vd.input_box("", "How many cups of lemonade would you like to sell? You currently have " + fullcups + " filled cup" + (fullcups == 1 ? "" : "s") + ".");
-if(cups == "")
+string cup_imp = vd.input_box("", "How many cups of lemonade would you like to sell? You currently have " + fullcups + " filled cup" + (fullcups == 1 ? "" : "s") + ".");
+if(cup_imp == "")
 actsmenu();
-double qty = string_to_number(cups);
+double qty = string_to_number(cup_imp);
 if(qty <= 0 || qty > fullcups)
 {
 dlg("Error. Invalid number of cups entered.");
