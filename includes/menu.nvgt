@@ -154,11 +154,11 @@ dlg("Purchase complete. You bought " + qty + " liter" + (qty == 1 ? "" : "s") + 
 void actsmenu()
 {
 setupmenu();
-m.add_item("Buy ingredients.", "bgn");
-m.add_item("drink lemonaid", "dlm");
-m.add_item("make lemonaid", "mlm");
-m.add_item("pour lemonaid", "plm");
-m.add_item("sell lemonaid", "slm");
+m.add_item("Buy ingredients. You currently have " + cash + " dollar" + (cash == 1 ? "" : "s") + " in cash.", "bgn");
+m.add_item("Drink lemonade. You currently have " + fullcups + " filled cup" + (fullcups == 1 ? "" : "s") + ".", "dlm");
+m.add_item("Make lemonade. You currently have " + cups + " empty cup" + (cups == 1 ? "" : "s") + ".", "mlm");
+m.add_item("Pour lemonade. You currently have " + format_float(pitcherstat, 1) + " liter" + (pitcherstat == 1.0 ? "" : "s") + " of lemonade in the pitcher.", "plm");
+m.add_item("Sell lemonade. You currently have " + soldcups + " sold cup" + (soldcups == 1 ? "" : "s") + ".", "slm");
 m.add_item("back", "back");
 m.intro_text = "Actions menu.";
 m.set_focused_item(last_menu_index, false);

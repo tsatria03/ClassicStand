@@ -1,5 +1,6 @@
 new in 1.3.
-Made it so adding the ice and salt ingredient is optional for making a pitcher of lemonade.
+Added contextual stats to all of the options found in the business actions menu of the game.
+Made it so adding ice and salt as ingredient is optional for making a pitcher of lemonade.
 Added safeguards against attempting to use more ingredients than you actually have in stock when making lemonade. The game will now warn you about which ingredients you're exactly short on moving forward.
 Made it so if you have less than 1 of any ingredient, it will notify the user of what's missing when making the lemonade.
 Made it so you can choose how much of an Ingredient can go in the pitcher when making lemonade.
