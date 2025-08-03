@@ -154,10 +154,15 @@ dlg("Purchase complete. You bought " + qty + " liter" + (qty == 1 ? "" : "s") + 
 void actsmenu()
 {
 setupmenu();
-m.add_item("Buy ingredients: SubMenu. You currently have " + cash + " dollar" + (cash == 1 ? "" : "s") + " in cash.", "bgn");
+m.add_item("Buy ingredients. You currently have " + cash + " dollar" + (cash == 1 ? "" : "s") + " in cash.", "bgn");
 m.add_item("Drink lemonade. You currently have " + fullcups + " filled cup" + (fullcups == 1 ? "" : "s") + ".", "dlm");
 m.add_item("Make lemonade. You currently have " + cups + " empty cup" + (cups == 1 ? "" : "s") + ".", "mlm");
-m.add_item("Pour lemonade. You currently have " + format_float(pitcherstat, 1) + " liter" + (pitcherstat == 1.0 ? "" : "s") + " of lemonade in the pitcher.", "plm");
+if(pitcherstat <= 0)
+    m.add_item("Pour lemonade. You currently have 0 liters of lemonade in the pitcher.", "plm");
+else if(pitcherstat <= 1)
+    m.add_item("Pour lemonade. You currently have 1 liter of lemonade in the pitcher.", "plm");
+else
+    m.add_item("Pour lemonade. You currently have " + ceil(pitcherstat) + " liters of lemonade in the pitcher.", "plm");
 m.add_item("Sell lemonade. You currently have " + soldcups + " sold cup" + (soldcups == 1 ? "" : "s") + ".", "slm");
 m.add_item("back", "back");
 m.intro_text = "Actions menu.";
