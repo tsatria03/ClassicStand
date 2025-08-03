@@ -227,39 +227,28 @@ last_menu_index=0;
 }
 if(bactem == "mlm")
 {
-if(cups < 1 || ices < 1 || lemons < 1 || salts < 1 || sugars < 1 || waters < 1)
+if(cups < 1 || lemons < 1 || sugars < 1 || waters < 1)
 {
-dlg("Error. You need at least one of every ingredient and a cup to make lemonade.");
+dlg("Error. You need at least one empty cup, 1 ripe lemon, 1 packet of sugar, and 1 liter of water to make lemonade.");
 actsmenu();
 }
 vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
 string input = vd.input_box("", "How many cups of lemonade would you like to make?");
 if(input == "") actsmenu();
 double cupcount = string_to_number(input);
-if(cupcount <= 0) actsmenu();
-if(cupcount > cups)
+if(cupcount <= 0 || cupcount > cups)
 {
-dlg("Error. You don't have enough cups. You only have " + cups + ".");
+dlg("Error. Invalid cup count. You only have " + cups + " cup" + (cups == 1 ? "" : "s") + ".");
 actsmenu();
 }
 double use_lemons = string_to_number(vd.input_box("", "How many ripe lemons would you like to use?"));
-if(use_lemons <=0)
+if(use_lemons <= 0)
 {
 dlg("Error. You must use at least 1 ripe lemon to make this lemonade.");
 actsmenu();
 }
-double use_ices = string_to_number(vd.input_box("", "How many bags of ice would you like to use?"));
-if(use_ices <= 0)
-{
-dlg("Error. You must use at least 1 bag of ice to make this lemonade.");
-actsmenu();
-}
-double use_salts = string_to_number(vd.input_box("", "How many packets of salt would you like to use?"));
-if(use_salts <= 0)
-{
-dlg("Error. You must use at least 1 packet of salt to make this lemonade.");
-actsmenu();
-}
+double use_ices = string_to_number(vd.input_box("", "How many bags of ice would you like to use?")); // Optional
+double use_salts = string_to_number(vd.input_box("", "How many packets of salt would you like to use?")); // Optional
 double use_sugars = string_to_number(vd.input_box("", "How many packets of sugar would you like to use?"));
 if(use_sugars <= 0)
 {
@@ -272,67 +261,34 @@ if(use_waters <= 0)
 dlg("Error. You must use at least 1 liter of water to make this lemonade.");
 actsmenu();
 }
-if(use_lemons > lemons || use_ices > ices || use_salts > salts || use_sugars > sugars || use_waters > waters)
+string[] overuse;
+if(use_lemons > lemons) overuse.insert_last("ripe lemons");
+if(use_ices > ices) overuse.insert_last("bags of ice");
+if(use_salts > salts) overuse.insert_last("packets of salt");
+if(use_sugars > sugars) overuse.insert_last("packets of sugar");
+if(use_waters > waters) overuse.insert_last("liters of water");
+if(overuse.length() > 0)
 {
-string[] missing;
-if(use_lemons > lemons) missing.insert_last("ripe lemons");
-if(use_ices > ices) missing.insert_last("bags of ice");
-if(use_salts > salts) missing.insert_last("packets of salt");
-if(use_sugars > sugars) missing.insert_last("packets of sugar");
-if(use_waters > waters) missing.insert_last("liters of water");
-if(missing.length() > 0)
-{
-string message = "Error. You don't have enough ";
-if(missing.length() == 1)
-{
-message += missing[0];
-}
-else if(missing.length() == 2)
-{
-message += missing[0] + " and " + missing[1];
-}
-else
-{
-for(uint i = 0; i < missing.length() - 1; i++)
-message += missing[i] + ", ";
-message += "and " + missing[missing.length() - 1];
-}
-message += " to make that much lemonade.";
-dlg(message);
+string msg = format_list(overuse);
+dlg("Error. You don't have enough " + msg + " to make that much lemonade.");
 actsmenu();
 }
-}
-if(use_lemons < cupcount || use_ices < cupcount || use_salts < cupcount || use_sugars < cupcount || use_waters < cupcount)
-{
 string[] low = {};
 if(use_lemons < cupcount) low.insert_last((cupcount - use_lemons) + " ripe lemon" + ((cupcount - use_lemons) == 1 ? "" : "s"));
-if(use_ices < cupcount) low.insert_last((cupcount - use_ices) + " bag" + ((cupcount - use_ices) == 1 ? "" : "s") + " of ice");
-if(use_salts < cupcount) low.insert_last((cupcount - use_salts) + " packet" + ((cupcount - use_salts) == 1 ? "" : "s") + " of salt");
 if(use_sugars < cupcount) low.insert_last((cupcount - use_sugars) + " packet" + ((cupcount - use_sugars) == 1 ? "" : "s") + " of sugar");
 if(use_waters < cupcount) low.insert_last((cupcount - use_waters) + " liter" + ((cupcount - use_waters) == 1 ? "" : "s") + " of water");
 if(low.length() > 0)
 {
-string list;
-if(low.length() == 1)
-list = low[0];
-else if(low.length() == 2)
-list = low[0] + " and " + low[1];
-else
-{
-for(uint i = 0; i < int(low.length()) - 1; i++)
-list += low[i] + ", ";
-list += "and " + low[low.length() - 1];
-}
-dlg("Error. You must use at least " + cupcount + " of each ingredient to make " + cupcount + " cup" + (cupcount == 1 ? "" : "s") + " of lemonade. You're short on " + list + ".");
+string list = format_list(low);
+dlg("Error. You must use at least " + cupcount + " of each required ingredient to make " + cupcount + " cup" + (cupcount == 1 ? "" : "s") + " of lemonade. You're short on " + list + ".");
 actsmenu();
-}
 }
 cups -= cupcount;
 lemons -= use_lemons;
-ices -= use_ices;
-salts -= use_salts;
 sugars -= use_sugars;
 waters -= use_waters;
+ices -= use_ices;
+salts -= use_salts;
 pitcher = 1;
 pitcherstat += cupcount * 0.25;
 speak("Mixing... Please wait.");

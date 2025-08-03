@@ -36,6 +36,15 @@ double max(double a, double b)
 {
 return (a > b) ? a : b;
 }
+string format_list(string[] items)
+{
+if(items.length() == 1) return items[0];
+if(items.length() == 2) return items[0] + " and " + items[1];
+string result = "";
+for(uint i = 0; i < items.length() - 1; i++)
+result += items[i] + ", ";
+return result + "and " + items[items.length() - 1];
+}
 void restart_game(string appid="cst.exe", string scriptid="cst.nvgt")
 {
 if(SCRIPT_COMPILED)
