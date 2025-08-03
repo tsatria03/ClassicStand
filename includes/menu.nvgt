@@ -154,7 +154,7 @@ dlg("Purchase complete. You bought " + qty + " liter" + (qty == 1 ? "" : "s") + 
 void actsmenu()
 {
 setupmenu();
-m.add_item("Buy ingredients. You currently have " + cash + " dollar" + (cash == 1 ? "" : "s") + " in cash.", "bgn");
+m.add_item("Buy ingredients: SubMenu. You currently have " + cash + " dollar" + (cash == 1 ? "" : "s") + " in cash.", "bgn");
 m.add_item("Drink lemonade. You currently have " + fullcups + " filled cup" + (fullcups == 1 ? "" : "s") + ".", "dlm");
 m.add_item("Make lemonade. You currently have " + cups + " empty cup" + (cups == 1 ? "" : "s") + ".", "mlm");
 m.add_item("Pour lemonade. You currently have " + format_float(pitcherstat, 1) + " liter" + (pitcherstat == 1.0 ? "" : "s") + " of lemonade in the pitcher.", "plm");
@@ -513,7 +513,7 @@ game();
 void infomenu()
 {
 setupmenu();
-m.add_item("Business title: "+business_name);
+m.add_item("Business title: "+business_name+". Press enter to change it.", "bst");
 m.add_item("Date: "+dayname+", "+monthname+daynumber);
 m.add_item("Level: "+level+" of "+maxlevel);
 int hour = clocktime % 24;
@@ -550,7 +550,7 @@ m.intro_text = "Information menu.";
 m.set_focused_item(last_menu_index, false);
 int mres=m.run();
 string infem = m.get_selected_item_id();
-if(mres>=0 and mres<=9)
+if(mres>=1 and mres<=9)
 {
 last_menu_index = mres;
 infomenu();
@@ -559,5 +559,15 @@ if(mres==-1 || infem=="back")
 {
 last_menu_index=0;
 game();
+}
+if(infem=="bst")
+{
+vd.set_disallowed_chars(" !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
+    string name = vd.input_box("", "What would you like your new Business title to be?");
+    if(name == "") infomenu();
+business_name=name;
+dlg("Success. You're business title has now been changed to "+business_name+".");
+last_menu_index=0;
+infomenu();
 }
 }
