@@ -247,8 +247,8 @@ if(use_lemons <= 0)
 dlg("Error. You must use at least 1 ripe lemon to make this lemonade.");
 actsmenu();
 }
-double use_ices = string_to_number(vd.input_box("", "How many bags of ice would you like to use?")); // Optional
-double use_salts = string_to_number(vd.input_box("", "How many packets of salt would you like to use?")); // Optional
+double use_ices = string_to_number(vd.input_box("", "How many bags of ice would you like to use?"));
+double use_salts = string_to_number(vd.input_box("", "How many packets of salt would you like to use?"));
 double use_sugars = string_to_number(vd.input_box("", "How many packets of sugar would you like to use?"));
 if(use_sugars <= 0)
 {
