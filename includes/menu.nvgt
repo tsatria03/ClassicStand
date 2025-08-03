@@ -246,13 +246,13 @@ if(cupcount <= 0 || cupcount > cups)
 dlg("Error. Invalid cup count. You only have " + cups + " cup" + (cups == 1 ? "" : "s") + ".");
 actsmenu();
 }
+double use_ices = string_to_number(vd.input_box("", "How many bags of ice would you like to use?"));
 double use_lemons = string_to_number(vd.input_box("", "How many ripe lemons would you like to use?"));
 if(use_lemons <= 0)
 {
 dlg("Error. You must use at least 1 ripe lemon to make this lemonade.");
 actsmenu();
 }
-double use_ices = string_to_number(vd.input_box("", "How many bags of ice would you like to use?"));
 double use_salts = string_to_number(vd.input_box("", "How many packets of salt would you like to use?"));
 double use_sugars = string_to_number(vd.input_box("", "How many packets of sugar would you like to use?"));
 if(use_sugars <= 0)
@@ -267,8 +267,8 @@ dlg("Error. You must use at least 1 liter of water to make this lemonade.");
 actsmenu();
 }
 string[] overuse;
-if(use_lemons > lemons) overuse.insert_last("ripe lemons");
 if(use_ices > ices) overuse.insert_last("bags of ice");
+if(use_lemons > lemons) overuse.insert_last("ripe lemons");
 if(use_salts > salts) overuse.insert_last("packets of salt");
 if(use_sugars > sugars) overuse.insert_last("packets of sugar");
 if(use_waters > waters) overuse.insert_last("liters of water");
@@ -289,11 +289,11 @@ dlg("Error. You must use at least " + cupcount + " of each required ingredient t
 actsmenu();
 }
 cups -= cupcount;
+ices -= use_ices;
 lemons -= use_lemons;
+salts -= use_salts;
 sugars -= use_sugars;
 waters -= use_waters;
-ices -= use_ices;
-salts -= use_salts;
 pitcher = 1;
 pitcherstat += cupcount * 0.25;
 speak("Mixing... Please wait.");
