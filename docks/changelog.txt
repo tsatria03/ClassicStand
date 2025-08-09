@@ -1,4 +1,5 @@
-new in 1.4.
+new in 1.4beta.
+Fixed some issues pertaining to the daily summery viewer.
 Moved all of the game related options out of the game's main menu into it's own game options menu.
 Added the ability to restart the game by pressing the restart game option in the game's main menu.
 Fixed a bug where the time period level per day would get stuck at the first level at the start of each month.

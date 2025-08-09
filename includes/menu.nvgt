@@ -518,7 +518,7 @@ game();
 void infomenu()
 {
 setupmenu();
-m.add_item("Business title: "+business_name+". Press enter to change it.", "bst");
+m.add_item("Business title: "+business_name+". Press enter to change.", "bst");
 m.add_item("Date: "+dayname+", "+monthname+daynumber);
 int hour = clocktime % 24;
 string hour_period = (hour >= 12 && hour < 24) ? "PM" : "AM";
@@ -642,7 +642,7 @@ readdata();
 speak("game reloaded");
 wait(500);
 last_menu_index=0;
-optsmenu();
+game();
 }
 if(opm=="rgm")
 {
@@ -680,6 +680,6 @@ writedata();
 speak("game saved");
 wait(500);
 last_menu_index=0;
-optsmenu();
+game();
 }
 }
