@@ -9,7 +9,7 @@ string dayname = daynames[current_day_index];
 string monthname = monthnames[current_month_index];
 string savePath = DIRECTORY_APPDATA + "tsatria03/ClassicStand/data/saves/";
 string statsPath = DIRECTORY_APPDATA + "tsatria03/ClassicStand/data/stats/";
-string version="1.4beta";
+string version="1.4";
 instance gamstence("cst");
 savedata sd(DIRECTORY_APPDATA + "tsatria03/ClassicStand/data/saves/game.clm", "YVKETdQyz0ip6GSOFef8bjstJamgHaktAUnFBUs0C0RGw3LQAtwqR6H7db7EV2Fr2TJXoKdFt4unntAsIDHVlKqK1Evjt9z7qCfE71w2ZkbztfcXzyvwLvv8VIkm932olztQOxG4zZ6lXKwGNiGU8rZzHOifY4Ba6XJGHa8spMOlSeaSk4uKfSZvzkVUrdfo5LYHKGITrzjgNqAiblASk7RElkfQ2fcs9kYo9vrCrkFaVyF6GYXEFzIGHaAF5YQ8na6U4A3hB0ShycIuQoqv7xKRHHbyUHwmjkz6yXgMeOy5rvnajrdEb0JWEQt2w3OwQVQnYDxbfuAWQ81HJkFIleYRgGAaKTzu2Kp6ZVPMN2LX9jHXWFmJCBb19PDpI1brQvQASa");
 menu m;

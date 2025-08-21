@@ -1,10 +1,11 @@
-new in 1.4beta.
+New in 1.4.
+Moved the time period stat into the text that shows what time it is in the business information menu.
 Fixed some issues pertaining to the daily summery viewer.
 Moved all of the game related options out of the game's main menu into it's own game options menu.
 Added the ability to restart the game by pressing the restart game option in the game's main menu.
 Fixed a bug where the time period level per day would get stuck at the first level at the start of each month.
 Fixed a bug where selling cups of lemonade would show incorrect empty cups after the day has ended in the daily summery report.
-new in 1.3.
+New in 1.3.
 Added the ability to change your business title right from the business information menu. You no longer need to reset the game to have it pop up again.
 Added contextual stats to all of the options found in the business actions menu of the game.
 Made it so adding ice and salt as ingredient is optional for making a pitcher of lemonade.
@@ -15,18 +16,18 @@ Made it so the game's data is now saved to the user's AppData folder under tsatr
 Made it so costs of items are shown next to the item itself in the ingredients menu, rather than showing up when the user buys the item when prompted.
 Moved the buy ingredients option from the game's main menu to the business actions menu.
 Revamped the user interface in the game. The game's main menu is now grouped into several sub menus for easier navigation.
-new in 1.2.
+New in 1.2.
 Improved the daily summery tracker by adding some stats that weren't their before. It's also now slightly reworded for better readability.
 Made it so the game remembers the last item that you've recently selected. This is useful for returning back to a spisific item in the menu without having to start over from the top of the menu again.
 Added the ability to track how many cups of lemonade you've sold so far. This stat will now be shown in the game's main menu.
 Made it so resetting your game's progress will now cause you to restart the game for the changes to propperly take effect.
 Added the ability to set your business title at the start of a new game. You'll be asked to set this upon starting a new save.
 Changed the way selling lemonade works. Instead of asking the user what price each cup of lemonade should be sold for, it will now ask you how many cups you'd like to sell, and what price you'd like each cup to be sold for.
-Implemented a new in-game calendar system that keeps track of how many days you've ran your business. The date menu item will now tell you what the actual date is in the game world.
+Implemented a New in-game calendar system that keeps track of how many days you've ran your business. The date menu item will now tell you what the actual date is in the game world.
 Made it so the temprature stat also shows up in celsius as well, not just in fahrenheit.
 Made it so the hydration stat now includes a descriptive label that changes based on how hydrated you are.
 Reversed the thurst system's lojic to decrease your hydration level instead of increasing it. From now on, your hydration level will start at 100 percent, and every time the temprature changes throughout the day, it will steadily drop to denote having to drink more to keep it up.
-new in 1.1.
+New in 1.1.
 Fixed a bug where drinking multiple cups of lemonade displayed incorrect thirst reduction percentages. The game now correctly calculates and reports the total thirst dropped based on your current thirst level.
 Made it so drinking a cup of lemonade drops your thurst by a random amount, between 1 to 5 percent.
 Made it so you are able to type how many cups of lemonade you'd like to drink from the already poured cups of lemonade you currently have.
@@ -37,7 +38,7 @@ Added the ability to reset your game's progress by pressing the reset game optio
 Added the ability to quickly save your game's progress by pressing the save game option in the game's main menu.
 Added the ability to save your game's progress when pressing escape. The escape key will now bring up Additional menu options for what to do when it asks you if you want to quit the game or not.
 Fixed a bug where costs of items wouldn't update properly upon starting a new day after copying or exporting a daily summery.
-new in 1.0
+New in 1.0.
 Added the ability to copy and export your daily summeries to a file that show up at the end of each day.
 Added the ability to view the daily summary of your business at the end of each day. This includes things like your overall balance, your current inventory, and how much lemonade is left in the pitcher.
 You can now buy ice to make a pitcher of lemonade.
