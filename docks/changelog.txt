@@ -1,6 +1,9 @@
+New in 1.5.
+Added some sounds for purchasing ingredient bundles.
+Changed the bundle names in the buy ingredients menu to sound more creative than it's older counterparts.
 New in 1.4.
 Reorganized the Buy ingredients menu into 2 separate menus.
-Made it so the menu prompts that asked weather you'd like to buy ice and salt will now show up after you type how much of a bundle you'd like to buy.
+Made it so the menu prompts that asked weather you'd like to buy ice and salt will now show up after you type how much of an ingredient bundle you'd like to buy.
 Made it so buying an ingredient bundle shows the user the cost of the bundle when hovering over the item.
 Added the ability to purchase ingredient bundles to speed up the lemonade making process.
 Moved the time period stat into the text that shows what time it is in the business information menu.

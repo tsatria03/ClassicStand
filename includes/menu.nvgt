@@ -392,52 +392,52 @@ buysmenu();
 void buybmenu()
 {
 setupmenu();
-double mini_cost   = (cupcost + lemoncost + sugarcost + watercost) * 4;
-m.add_item("Mini bundle: costs " + mini_cost + " dollars. This ingredient bundle contains 4 empty cups, 4 ripe lemons, 4 packets of sugar, and 4 liters of water. Ice and salt is optional.", "mbl");
-double small_cost  = (cupcost + lemoncost + sugarcost + watercost) * 8;
-m.add_item("Small bundle: costs " + small_cost + " dollars. This ingredient bundle contains 8 empty cups, 8 ripe lemons, 8 packets of sugar, and 8 liters of water. Ice and salt is optional.", "sbl");
-double medium_cost = (cupcost + lemoncost + sugarcost + watercost) * 12;
-m.add_item("Medium bundle: costs " + medium_cost + " dollars. This ingredient bundle contains 12 empty cups, 12 ripe lemons, 12 packets of sugar, and 12 liters of water. Ice and salt is optional.", "dbl");
-double big_cost    = (cupcost + lemoncost + sugarcost + watercost) * 16;
-m.add_item("Big bundle: costs " + big_cost + " dollars. This ingredient bundle contains 16 empty cups, 16 ripe lemons, 16 packets of sugar, and 16 liters of water. Ice and salt is optional.", "gbl");
-double large_cost  = (cupcost + lemoncost + sugarcost + watercost) * 20;
-m.add_item("Large bundle: costs " + large_cost + " dollars. This ingredient bundle contains 20 empty cups, 20 ripe lemons, 20 packets of sugar, and 20 liters of water. Ice and salt is optional.", "lbl");
-double huge_cost   = (cupcost + lemoncost + sugarcost + watercost) * 24;
-m.add_item("Huge bundle: costs " + huge_cost + " dollars. This ingredient bundle contains 24 empty cups, 24 ripe lemons, 24 packets of sugar, and 24 liters of water. Ice and salt is optional.", "hbl");
+double booth_cost = (cupcost + lemoncost + sugarcost + watercost) * 4;
+m.add_item("Booth bundle: costs " + booth_cost + " dollars. This ingredient bundle contains 4 empty cups, 4 ripe lemons, 4 packets of sugar, and 4 liters of water. Ice and salt is optional.", "tbl");
+double community_cost = (cupcost + lemoncost + sugarcost + watercost) * 8;
+m.add_item("Community bundle: costs " + community_cost + " dollars. This ingredient bundle contains 8 empty cups, 8 ripe lemons, 8 packets of sugar, and 8 liters of water. Ice and salt is optional.", "cbl");
+double carnival_cost = (cupcost + lemoncost + sugarcost + watercost) * 12;
+m.add_item("Carnival bundle: costs " + carnival_cost + " dollars. This ingredient bundle contains 12 empty cups, 12 ripe lemons, 12 packets of sugar, and 12 liters of water. Ice and salt is optional.", "rbl");
+double festival_cost = (cupcost + lemoncost + sugarcost + watercost) * 16;
+m.add_item("Festival bundle: costs " + festival_cost + " dollars. This ingredient bundle contains 16 empty cups, 16 ripe lemons, 16 packets of sugar, and 16 liters of water. Ice and salt is optional.", "fbl");
+double market_cost = (cupcost + lemoncost + sugarcost + watercost) * 20;
+m.add_item("Market bundle: costs " + market_cost + " dollars. This ingredient bundle contains 20 empty cups, 20 ripe lemons, 20 packets of sugar, and 20 liters of water. Ice and salt is optional.", "mbl");
+double parade_cost = (cupcost + lemoncost + sugarcost + watercost) * 24;
+m.add_item("Parade bundle: costs " + parade_cost + " dollars. This ingredient bundle contains 24 empty cups, 24 ripe lemons, 24 packets of sugar, and 24 liters of water. Ice and salt is optional.", "pbl");
 m.add_item("back", "back");
 m.intro_text = "Bundled ingredients menu.";
 m.set_focused_item(last_menu_index, false);
-int mres=m.run();
+int mres = m.run();
 last_menu_index = mres;
 string buybem = m.get_selected_item_id();
-if(mres==-1 || buybem=="back")
+if (mres == -1 || buybem == "back")
 {
-last_menu_index=0;
+last_menu_index = 0;
 buymenu();
 }
-if(buybem == "mbl")
+if (buybem == "tbl")
 {
-purchase_ingredient_bundle("mbl", "mini", 4);
+purchase_ingredient_bundle("tbl", "booth", 4);
 }
-if(buybem == "sbl")
+if (buybem == "cbl")
 {
-purchase_ingredient_bundle("sbl", "small", 8);
+purchase_ingredient_bundle("cbl", "community", 8);
 }
-if(buybem == "dbl")
+if (buybem == "rbl")
 {
-purchase_ingredient_bundle("dbl", "medium", 12);
+purchase_ingredient_bundle("rbl", "carnival", 12);
 }
-if(buybem == "gbl")
+if (buybem == "fbl")
 {
-purchase_ingredient_bundle("gbl", "big", 16);
+purchase_ingredient_bundle("fbl", "festival", 16);
 }
-if(buybem == "lbl")
+if (buybem == "mbl")
 {
-purchase_ingredient_bundle("lbl", "large", 20);
+purchase_ingredient_bundle("mbl", "market", 20);
 }
-if(buybem == "hbl")
+if (buybem == "pbl")
 {
-purchase_ingredient_bundle("hbl", "huge", 24);
+purchase_ingredient_bundle("pbl", "parade", 24);
 }
 }
 void buysmenu()
