@@ -1,4 +1,5 @@
 New in 1.5.
+Made it so if you fail to enter a Business title at the start of the game, it will take you back to the input prompt to re-enter it again, instead of exiting entirely.
 Increased your starting cash from 50 to 100 dollars.
 Reduced the cost of all ingredient bundles to make the game easier to play in earlier levels.
 Added some sounds for purchasing ingredient bundles.
@@ -17,7 +18,7 @@ Fixed a bug where selling cups of lemonade would show incorrect empty cups after
 New in 1.3.
 Added the ability to change your business title right from the business information menu. You no longer need to reset the game to have it pop up again.
 Added contextual stats to all of the options found in the business actions menu of the game.
-Made it so adding ice and salt as ingredient is optional for making a pitcher of lemonade.
+Made it so adding ice and salt as ingredients is optional for making a pitcher of lemonade.
 Added safeguards against attempting to use more ingredients than you actually have in stock when making lemonade. The game will now warn you about which ingredients you're exactly short on moving forward.
 Made it so if you have less than 1 of any ingredient, it will notify the user of what's missing when making the lemonade.
 Made it so you can choose how much of an Ingredient can go in the pitcher when making lemonade.
@@ -54,7 +55,7 @@ You can now buy ice to make a pitcher of lemonade.
 Made it so temperatures are no longer randomized throughout the day. The game now uses a dynamic temperature system that scales based on the current day, and time of day. Each day defines a temperature range, which increases the more the game progresses.
 Made it so the game's clock time folows the day time pattern, instead of randomizing the time each day. It will also denote weather the time is set to A-M or P-M when reading the time in the game's main menu.
 Made it so the day and level systems are now separated. Each day contains 6 levels, representing time blocks, such as early morning, early afternoon, mid afternoon, early evening, midnight, and late night. After reaching level 6, the level resets back to 1, and the day increases by 1.
-Made it so the pricing system has  now been reworked to scale with both the current day and level. This allows for gradual and realistic economic inflation. This system encourages long-term strategy, high-stakes resource management, and optimized pricing.
+The pricing system has  now been reworked to scale with both the current day and level. This allows for gradual and realistic economic inflation. This system encourages long-term strategy, high-stakes resource management, and optimized pricing.
 Enhanced all purchase dialogs to now include the quantity bought, the total cost of the purchase, and the remaining cash after the transaction.
 Added the ability to drink the lemonade you made and poured into a cup.
 Added some sounds for making and pouring lemonade in the game.
