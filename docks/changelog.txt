@@ -1,5 +1,5 @@
 New in 1.5.
-Made it so if you fail to enter a Business title at the start of the game, it will take you back to the input prompt to re-enter it again, instead of exiting entirely.
+Made it so if you fail to enter a Business title at the start of the game, it will take you back to the input prompt to re-enter it again, instead of exiting the game entirely.
 Increased your starting cash from 50 to 100 dollars.
 Reduced the cost of all ingredient bundles to make the game easier to play in earlier levels.
 Added some sounds for purchasing ingredient bundles.

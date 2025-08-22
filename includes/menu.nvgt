@@ -392,17 +392,17 @@ buysmenu();
 void buybmenu()
 {
 setupmenu();
-double booth_cost     = ((cupcost + lemoncost + sugarcost + watercost) * 4) / 2;
+double booth_cost     = ((cupcost + lemoncost + sugarcost + watercost) * 4) / 6;
 m.add_item("Booth bundle: costs " + booth_cost + " dollars. This ingredient bundle contains 4 empty cups, 4 ripe lemons, 4 packets of sugar, and 4 liters of water. Ice and salt is optional.", "tbl");
-double community_cost = ((cupcost + lemoncost + sugarcost + watercost) * 8) / 2;
+double community_cost = ((cupcost + lemoncost + sugarcost + watercost) * 8) / 6;
 m.add_item("Community bundle: costs " + community_cost + " dollars. This ingredient bundle contains 8 empty cups, 8 ripe lemons, 8 packets of sugar, and 8 liters of water. Ice and salt is optional.", "cbl");
-double carnival_cost  = ((cupcost + lemoncost + sugarcost + watercost) * 12) / 2;
+double carnival_cost  = ((cupcost + lemoncost + sugarcost + watercost) * 12) / 6;
 m.add_item("Carnival bundle: costs " + carnival_cost + " dollars. This ingredient bundle contains 12 empty cups, 12 ripe lemons, 12 packets of sugar, and 12 liters of water. Ice and salt is optional.", "rbl");
-double festival_cost  = ((cupcost + lemoncost + sugarcost + watercost) * 16) / 2;
+double festival_cost  = ((cupcost + lemoncost + sugarcost + watercost) * 16) / 6;
 m.add_item("Festival bundle: costs " + festival_cost + " dollars. This ingredient bundle contains 16 empty cups, 16 ripe lemons, 16 packets of sugar, and 16 liters of water. Ice and salt is optional.", "fbl");
-double market_cost    = ((cupcost + lemoncost + sugarcost + watercost) * 20) / 2;
+double market_cost    = ((cupcost + lemoncost + sugarcost + watercost) * 20) / 6;
 m.add_item("Market bundle: costs " + market_cost + " dollars. This ingredient bundle contains 20 empty cups, 20 ripe lemons, 20 packets of sugar, and 20 liters of water. Ice and salt is optional.", "mbl");
-double parade_cost    = ((cupcost + lemoncost + sugarcost + watercost) * 24) / 2;
+double parade_cost    = ((cupcost + lemoncost + sugarcost + watercost) * 24) / 6;
 m.add_item("Parade bundle: costs " + parade_cost + " dollars. This ingredient bundle contains 24 empty cups, 24 ripe lemons, 24 packets of sugar, and 24 liters of water. Ice and salt is optional.", "pbl");
 m.add_item("back", "back");
 m.intro_text = "Bundled ingredients menu.";
