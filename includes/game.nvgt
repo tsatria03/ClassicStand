@@ -7,7 +7,7 @@ setupmenu();
 m.add_item("Business actions.", "bcm");
 m.add_item("Business information.", "bsm");
 m.add_item("game options", "gsp");
-m.intro_text = "Lemonaid manager.";
+m.intro_text = "Lemonade manager.";
 m.set_focused_item(last_menu_index, false);
 int mres=m.run();
 last_menu_index = mres;
