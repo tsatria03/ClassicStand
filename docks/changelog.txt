@@ -1,4 +1,6 @@
 New in 1.5.
+Increased your starting cash from 50 to 100 dollars.
+Reduced the cost of all ingredient bundles to make the game easier to play in earlier levels.
 Added some sounds for purchasing ingredient bundles.
 Changed the bundle names in the buy ingredients menu to sound more creative than it's older counterparts.
 New in 1.4.

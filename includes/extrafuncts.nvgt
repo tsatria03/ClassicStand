@@ -70,7 +70,7 @@ m.add_item("No", "no");
 m.intro_text = "Would you like to include " + unit_qty + " packets of salt with each bundle?";
 int mres2 = m.run();
 bool include_salt = m.get_selected_item_id() == "yes";
-double per_bundle = (cupcost + lemoncost + sugarcost + watercost) * unit_qty;
+double per_bundle = ((cupcost + lemoncost + sugarcost + watercost) * unit_qty) / 2;
 if(include_ice)  per_bundle += icecost * unit_qty;
 if(include_salt) per_bundle += saltcost * unit_qty;
 double total = per_bundle * qty;
