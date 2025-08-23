@@ -219,9 +219,9 @@ string price = vd.input_box("", "How much money would you like to sell each cup 
 if(price == "")
 actsmenu();
 double percup = string_to_number(price) * 100;
-if(percup <= 0)
+if (percup <= 0 || percup > 10000)
 {
-dlg("Error. Invalid price entered.");
+dlg("Error. Invalid price entered. You can't sell a cup of lemonade for more than 100 dollars in cash.");
 actsmenu();
 }
 double total = percup * qty;
