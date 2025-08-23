@@ -672,7 +672,11 @@ if(infem=="bst")
 m.fade_music();
 vd.set_disallowed_chars(" !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
     string name = vd.input_box("", "What would you like your new Business title to be?");
-    if(name == "") infomenu();
+    if(name == "")
+{
+last_menu_index=0;
+infomenu();
+}
 business_name=name;
 dlg("Success. You're business title has now been changed to "+business_name+".");
 last_menu_index=0;
