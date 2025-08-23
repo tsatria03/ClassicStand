@@ -113,6 +113,7 @@ msg += ", " + (unit_qty * qty) + " packets of sugar";
 msg += ", and " + (unit_qty * qty) + " liters of water.";
 msg += "\r\nYou now have " + convert_to_currency(cash) + " in cash remaining.";
 dlgmessage(msg);
+wait(500);
 buybmenu();
 }
 void restart_game(string appid="cst.exe", string scriptid="cst.nvgt")

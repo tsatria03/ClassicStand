@@ -1,4 +1,5 @@
 New in 1.5.
+Added a hidden keyboard shortcut to announce the current music volume in all menus. Holding Alt and pressing Left + Right or Right + Left arrows will now speak the current menu music volume.
 Made it so you can no longer sell a single cup of lemonade for more than 100 dollars in cash.
 Refactored the lemonade seller. You're now able to type actual decimal values to sell cups of lemonade for grater than or less than a dollar.
 Replaced the menu sounds with new ones. This also includes some new music as well.

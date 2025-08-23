@@ -249,6 +249,7 @@ if(pitcherstat > 0)
 else
     report += "Your pitcher is now empty.";
 dlgmessage(report);
+wait(500);
 soldcups=0;
 daynumber += 1;
 current_day_index = (current_day_index + 1) % daynames.length();
@@ -766,9 +767,9 @@ if(confirm=="yes")
 if(file_exists(DIRECTORY_APPDATA + "tsatria03/ClassicStand/data/saves/game.clm")) file_delete(DIRECTORY_APPDATA + "tsatria03/ClassicStand/data/saves/game.clm");
 if(file_exists(DIRECTORY_APPDATA + "tsatria03/ClassicStand/data/stats/daily_summeries.txt")) file_delete(DIRECTORY_APPDATA + "tsatria03/ClassicStand/data/stats/daily_summeries.txt");
 resetgame();
-dlg("Success. Your game progress has been reset. Press enter to restart the game.");
+dlgmessage("Success. Your game progress has been reset. Press enter to restart the game.");
 speak("restarting");
-m.fade_music();
+wait(500);
 restart_game();
 }
 }
