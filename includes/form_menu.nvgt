@@ -144,14 +144,18 @@ music.play_looped();
 if (key_down(volkeydown) and voltimer.elapsed >= voltime and menumusvolume > -50) {
 menumusvolume -= 2;
 music.set_volume(menumusvolume);
-//writepreffs();
+writedata();
 voltimer.restart();
 }
 if (key_down(volkeyup) and voltimer.elapsed >= voltime and menumusvolume < 0) {
 menumusvolume += 2;
 music.set_volume(menumusvolume);
-//writepreffs();
+writedata();
 voltimer.restart();
+}
+if(alt_is_down() and key_down(KEY_LEFT) and key_repeating(KEY_RIGHT) or alt_is_down() and key_down(KEY_RIGHT) and key_repeating(KEY_LEFT))
+{
+speak("music volume, "+menumusvolume);
 }
 if(key_repeating(KEY_TAB) and intro_text.length()>0)
 {
@@ -288,11 +292,11 @@ void learn_game_sounds_menu(dictionary@ sfx, const string&in audio_prefix = "", 
 		else speak("Unable to play "+sfx_names[m.selected_item]);
 	}
 }
-void setupmenu(bool music_added = false)
+void setupmenu(bool music_added = false, string musicpath="")
 {
 if (music_added)
 {
-m.add_music("menumus.ogg");
+m.add_music(musicpath);
 } else
 {
 m.add_music("");

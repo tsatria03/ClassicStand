@@ -1,4 +1,6 @@
 New in 1.5.
+Replaced the menu sounds with new ones. This also includes some new music as well.
+Introduced a new realistic currency system. The game now supports both dollars and cents. This allows for more natural and precise item pricing.
 Made it so if you fail to enter a Business title at the start of the game, it will take you back to the input prompt to re-enter it again, instead of exiting the game entirely.
 Increased your starting cash from 50 to 100 dollars.
 Reduced the cost of all ingredient bundles to make the game easier to play in earlier levels.

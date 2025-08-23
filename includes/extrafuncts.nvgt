@@ -36,6 +36,16 @@ double max(double a, double b)
 {
 return (a > b) ? a : b;
 }
+string convert_to_currency(double number, string currency_symbol = "$")
+{
+if (number < 0) return "";
+int64 num = int64(number + 0.5);
+int64 dollars = num / 100;
+int64 cents = num % 100;
+string cents_str = "" + cents;
+if (string_len(cents_str) == 1) cents_str = "0" + cents_str;
+return currency_symbol + dollars + "." + cents_str;
+}
 string format_list(string[] items)
 {
 if(items.length() == 1) return items[0];
@@ -92,14 +102,14 @@ pool.play_stationary("buyfruit" + random(1, 2) + ".ogg", false);
 pool.play_stationary("buypack" + random(1, 2) + ".ogg", false);
 pool.play_stationary("buywater" + random(1, 2) + ".ogg", false);
 pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
-string msg = "Purchase complete. You bought " + qty + " " + bundle_name + " bundle" + (qty == 1 ? "" : "s") + " of supplies for " + total + " dollar" + (total == 1 ? "" : "s") + ".\r\n";
+string msg = "Purchase complete. You bought " + qty + " " + bundle_name + " bundle" + (qty == 1 ? "" : "s") + " of supplies for " + convert_to_currency(total) + ".\r\n";
 msg += "You received " + (unit_qty * qty) + " empty cups";
 if(include_ice)  msg += ", " + (unit_qty * qty) + " bags of ice";
 msg += ", " + (unit_qty * qty) + " ripe lemons";
 if(include_salt) msg += ", " + (unit_qty * qty) + " packets of salt";
 msg += ", " + (unit_qty * qty) + " packets of sugar";
 msg += ", and " + (unit_qty * qty) + " liters of water.";
-msg += "\r\nYou now have " + cash + " dollar" + (cash == 1 ? "" : "s") + " in cash remaining.";
+msg += "\r\nYou now have " + convert_to_currency(cash) + " in cash remaining.";
 dlgmessage(msg);
 buybmenu();
 }

@@ -3,7 +3,7 @@ void game()
 while(true)
 {
 wait(5);
-setupmenu();
+setupmenu(true, "menumus1.ogg");
 m.add_item("Business actions.", "bcm");
 m.add_item("Business information.", "bsm");
 m.add_item("game options", "gsp");
@@ -14,7 +14,7 @@ last_menu_index = mres;
 string main = m.get_selected_item_id();
 if(mres==-1)
 {
-    setupmenu(false);    
+setupmenu(true, "menumus1.ogg");
     m.add_item("Yes, quit the game without saving", "quit_no_save");
     m.add_item("Yes, save the game and then quit", "quit_save");
     m.add_item("No, continue playing", "continue");
@@ -29,14 +29,14 @@ game();
 if (m.get_selected_item_id() == "quit_no_save")
     {
         speak("Exiting the game without saving.");
-wait(500);
+m.fade_music();
 exit();
     }
 if (m.get_selected_item_id() == "quit_save")
     {
         writedata();
         speak("game saved, Exiting.");
-wait(500);
+m.fade_music();
 exit();
     }
 if (m.get_selected_item_id() == "continue")
@@ -61,11 +61,13 @@ actsmenu();
 if(main == "bsm")
 {
 last_menu_index=0;
+m.fade_music();
 infomenu();
 }
 if(main == "gsp")
 {
 last_menu_index=0;
+m.fade_music();
 optsmenu();
 }
 }

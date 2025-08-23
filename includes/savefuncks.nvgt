@@ -1,6 +1,10 @@
 void readdata()
 {
     sd.load();
+if (sd.d.exists("menumusvolume"))
+{
+menumusvolume = sd.read_int("menumusvolume");
+}
     if (sd.d.exists("busprofed"))
 {
 busprofed = sd.read_bool("busprofed");
@@ -124,6 +128,7 @@ monthname = sd.read_string("monthname");
 }
 void writedata()
 {
+sd.add("menumusvolume", menumusvolume);
 sd.add("busprofed", busprofed);
     sd.add("cash", cash);
     sd.add("fullcups", fullcups);
