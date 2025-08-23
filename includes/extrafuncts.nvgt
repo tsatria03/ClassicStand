@@ -42,6 +42,8 @@ if (number < 0) return "";
 int64 num = int64(number + 0.5);
 int64 dollars = num / 100;
 int64 cents = num % 100;
+if (dollars == 0)
+return cents + " cent" + (cents == 1 ? "" : "s");
 string cents_str = "" + cents;
 if (string_len(cents_str) == 1) cents_str = "0" + cents_str;
 return currency_symbol + dollars + "." + cents_str;

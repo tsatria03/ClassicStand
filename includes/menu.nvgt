@@ -214,10 +214,11 @@ if(qty <= 0 || qty > fullcups)
 dlg("Error. Invalid number of cups entered.");
 actsmenu();
 }
-string price = vd.input_box("", "What price would you like to sell each cup of lemonade for?");
+vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,<>_?/+-=`~", false, "");
+string price = vd.input_box("", "How much money would you like to sell each cup of lemonade for?");
 if(price == "")
 actsmenu();
-double percup = string_to_number(price);
+double percup = string_to_number(price) * 100;
 if(percup <= 0)
 {
 dlg("Error. Invalid price entered.");
@@ -765,7 +766,7 @@ if(confirm=="yes")
 if(file_exists(DIRECTORY_APPDATA + "tsatria03/ClassicStand/data/saves/game.clm")) file_delete(DIRECTORY_APPDATA + "tsatria03/ClassicStand/data/saves/game.clm");
 if(file_exists(DIRECTORY_APPDATA + "tsatria03/ClassicStand/data/stats/daily_summeries.txt")) file_delete(DIRECTORY_APPDATA + "tsatria03/ClassicStand/data/stats/daily_summeries.txt");
 resetgame();
-dlgmessage("Success. Your game progress has been reset. Press enter to restart the game.");
+dlg("Success. Your game progress has been reset. Press enter to restart the game.");
 speak("restarting");
 m.fade_music();
 restart_game();
