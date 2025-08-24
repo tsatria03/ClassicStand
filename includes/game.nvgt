@@ -35,7 +35,8 @@ exit();
 if (m.get_selected_item_id() == "quit_save")
     {
         writedata();
-        speak("game saved, Exiting.");
+speak("game saved, Exiting.");
+dlgplay("savegame.ogg");
 m.fade_music();
 exit();
     }
@@ -48,7 +49,8 @@ if (m.get_selected_item_id() == "save_continue")
     {
         writedata();
 speak("game saved");
-wait(500);
+dlgplay("savegame.ogg");
+wait(200);
 last_menu_index=0;
 game();
     }
@@ -60,14 +62,14 @@ actsmenu();
 }
 if(main == "bsm")
 {
-last_menu_index=0;
 m.fade_music();
+last_menu_index=0;
 infomenu();
 }
 if(main == "gsp")
 {
-last_menu_index=0;
 m.fade_music();
+last_menu_index=0;
 optsmenu();
 }
 }

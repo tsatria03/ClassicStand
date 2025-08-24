@@ -1,3 +1,10 @@
+New in 1.6.
+Increased The flexibility of choosing your own business titles in the game. You can now put spaces and Basic punctuation to add some depth to the title.
+Added some typing sounds to all input prompts used in the game.
+Fixed some small bugs with the game's auto saver.
+Made it so you can no longer sell a single cup of lemonade for more than 10 dollars in cash.
+Added a suddle sound that let's you know that the game has been saved.
+Added the ability to autosave the game after a day has ended in the game. This also applies to setting up the game for the first time as well.
 New in 1.5.
 Added a hidden keyboard shortcut to announce the current music volume in all menus. Holding Alt and pressing Left + Right or Right + Left arrows will now speak the current menu music volume.
 Made it so you can no longer sell a single cup of lemonade for more than 100 dollars in cash.

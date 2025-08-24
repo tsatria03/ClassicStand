@@ -219,9 +219,9 @@ string price = vd.input_box("", "How much money would you like to sell each cup 
 if(price == "")
 actsmenu();
 double percup = string_to_number(price) * 100;
-if (percup <= 0 || percup > 10000)
+if (percup <= 0 || percup > 1000)
 {
-dlg("Error. You can't sell a cup of lemonade for more than 100 dollars in cash.");
+dlg("Error. You can't sell a cup of lemonade for more than 10 dollars in cash.");
 actsmenu();
 }
 double total = percup * qty;
@@ -230,148 +230,7 @@ fullcups -= qty;
 soldcups+=qty;
 pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
 dlg("Success. You sold " + qty + " cup" + (qty == 1 ? "" : "s") + " of lemonade for " + convert_to_currency(total) + ".");
-    clocktime += 4;
-    level += 1;
-    if(level > 6)
-    {
-string report = "Daily summary for " + business_name + ".\r\n";
-report += "For the date of " + dayname + ", " + monthname + daynumber + ", you ended with a total of " + convert_to_currency(cash) + " in cash.\r\n";
-report += "You sold a total of " + soldcups + " cup" + (soldcups == 1 ? "" : "s") + " of lemonade.\r\n";
-report += "Your inventory had the folowing items:\r\n";
-report += "- Empty cups: " + cups + "\r\n";
-report += "- Bags of ice: " + ices + "\r\n";
-report += "- Ripe lemons: " + lemons + "\r\n";
-report += "- Packets of salt: " + salts + "\r\n";
-report += "- Packets of sugar: " + sugars + "\r\n";
-report += "- Liters of water: " + waters + "\r\n";
-if(pitcherstat > 0)
-    report += "You also had " + ceil(pitcherstat) + " liters of lemonade in your pitcher.";
-else
-    report += "Your pitcher is now empty.";
-dlgmessage(report);
-wait(500);
-soldcups=0;
-daynumber += 1;
-current_day_index = (current_day_index + 1) % daynames.length();
-dayname = daynames[current_day_index];
-bool month_has_31 = (current_month_index == 0 || current_month_index == 2 || current_month_index == 4 || current_month_index == 6 || current_month_index == 7 || current_month_index == 9 || current_month_index == 11);
-int max_days = month_has_31 ? 31 : 30;
-if(daynumber > max_days)
-{
-daynumber = 1;
-current_month_index = (current_month_index + 1) % monthnames.length();
-monthname = monthnames[current_month_index];
-}
-clocktime = 0;
-        level = 1;
-setupmenu(false);
-        m.add_item("Copy daily summery to clipboard", "copy");
-        m.add_item("Export daily summery to file", "export");
-        m.add_item("Return to the game.", "cancel");
-        m.intro_text = "What would you like to do with the current daily summery for this game session?";
-        int res = m.run();
-        string choice = m.get_selected_item_id();
-        if (res != -1)
-        {
-            if (choice == "copy")
-            {
-                clipboard_copy_text(report);
-                dlg("Your daily summery has been copied to your clipboard.");
-    int daily_min = clamp(20 + daynumber * 1, 20, 90);
-int daily_max = clamp(70 + daynumber * 2, 70, 120);
-if(level == 1)
-    temprature = random(daily_min, daily_min + 5);
-else if(level == 2)
-    temprature = random(daily_min + 5, daily_min + 15);
-else if(level == 3)
-    temprature = random(daily_min + 15, daily_max - 15);
-else if(level == 4)
-    temprature = random(daily_max - 10, daily_max);
-else if(level == 5)
-    temprature = random(daily_max - 20, daily_max - 5);
-else
-    temprature = random(daily_min + 5, daily_min + 15);
-double daily_base = temprature - 60;
-double percent = daily_base * 0.005 + level * 0.01 + daynumber * 0.005;
-percent = clamp(percent, 0.01, 0.1);
-double rounded_percent = round(percent * 100, 0);
-double hydration_loss = (rounded_percent / 100.0) * maxhydration;
-hydration = max(hydration - hydration_loss, 0);
-cupcost   = 1 * level * daynumber;
-icecost   = 2 * level * daynumber;
-lemoncost = 3 * level * daynumber;
-saltcost  = 4 * level * daynumber;
-sugarcost = 5 * level * daynumber;
-watercost = 6 * level * daynumber;
-last_menu_index=0;
-                game();
-            }
-            else if (choice == "export")
-            {
-                file poastfile;
-                poastfile.open(DIRECTORY_APPDATA + "tsatria03/ClassicStand/data/stats/daily_summeries.txt", "a");
-                poastfile.write("\r\n\r\n"+report);
-                poastfile.close();
-                dlg("Your daily summery has been exported to data/stats/daily_summeries.txt.");
-    int daily_min = clamp(20 + daynumber * 1, 20, 90);
-int daily_max = clamp(70 + daynumber * 2, 70, 120);
-if(level == 1)
-    temprature = random(daily_min, daily_min + 5);
-else if(level == 2)
-    temprature = random(daily_min + 5, daily_min + 15);
-else if(level == 3)
-    temprature = random(daily_min + 15, daily_max - 15);
-else if(level == 4)
-    temprature = random(daily_max - 10, daily_max);
-else if(level == 5)
-    temprature = random(daily_max - 20, daily_max - 5);
-else
-    temprature = random(daily_min + 5, daily_min + 15);
-double daily_base = temprature - 60;
-double percent = daily_base * 0.005 + level * 0.01 + daynumber * 0.005;
-percent = clamp(percent, 0.01, 0.1);
-double rounded_percent = round(percent * 100, 0);
-double hydration_loss = (rounded_percent / 100.0) * maxhydration;
-hydration = max(hydration - hydration_loss, 0);
-cupcost   = 1 * level * daynumber;
-icecost   = 2 * level * daynumber;
-lemoncost = 3 * level * daynumber;
-saltcost  = 4 * level * daynumber;
-sugarcost = 5 * level * daynumber;
-watercost = 6 * level * daynumber;
-last_menu_index=0;
-game();
-            }
-        }
-    }
-    int daily_min = clamp(20 + daynumber * 1, 20, 90);
-int daily_max = clamp(70 + daynumber * 2, 70, 120);
-if(level == 1)
-    temprature = random(daily_min, daily_min + 5);
-else if(level == 2)
-    temprature = random(daily_min + 5, daily_min + 15);
-else if(level == 3)
-    temprature = random(daily_min + 15, daily_max - 15);
-else if(level == 4)
-    temprature = random(daily_max - 10, daily_max);
-else if(level == 5)
-    temprature = random(daily_max - 20, daily_max - 5);
-else
-    temprature = random(daily_min + 5, daily_min + 15);
-double daily_base = temprature - 60;
-double percent = daily_base * 0.005 + level * 0.01 + daynumber * 0.005;
-percent = clamp(percent, 0.01, 0.1);
-double rounded_percent = round(percent * 100, 0);
-double hydration_loss = (rounded_percent / 100.0) * maxhydration;
-hydration = max(hydration - hydration_loss, 0);
-cupcost   = 1 * level * daynumber;
-icecost   = 2 * level * daynumber;
-lemoncost = 3 * level * daynumber;
-saltcost  = 4 * level * daynumber;
-sugarcost = 5 * level * daynumber;
-watercost = 6 * level * daynumber;
-last_menu_index=0;
-game();
+generate_daily_summary();
 }
 }
 void buymenu()
@@ -663,14 +522,14 @@ infomenu();
 }
 if(mres==-1 || infem=="back")
 {
-last_menu_index=0;
 m.fade_music();
+last_menu_index=0;
 game();
 }
 if(infem=="bst")
 {
 m.fade_music();
-vd.set_disallowed_chars(" !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
+vd.set_disallowed_chars("@#$%^&*()[]{};:\"\\|,.<>_?/+-=`~", false, "");
     string name = vd.input_box("", "What would you like your new Business title to be?");
     if(name == "")
 {
@@ -699,8 +558,8 @@ last_menu_index = mres;
 string opm = m.get_selected_item_id();
 if(mres==-1 || opm=="back")
 {
-last_menu_index=0;
 m.fade_music();
+last_menu_index=0;
 game();
 }
 if(opm=="ex")
@@ -727,6 +586,7 @@ if (m.get_selected_item_id() == "quit_save")
     {
         writedata();
         speak("game saved, Exiting.");
+dlgplay("savegame.ogg");
 m.fade_music();
 exit();
     }
@@ -739,7 +599,8 @@ if (m.get_selected_item_id() == "save_continue")
     {
         writedata();
 speak("game saved");
-wait(500);
+dlgplay("savegame.ogg");
+wait(200);
 last_menu_index=0;
 optsmenu();
     }
@@ -748,8 +609,8 @@ if(opm=="rgl")
 {
 readdata();
 speak("game reloaded");
-last_menu_index=0;
 m.fade_music();
+last_menu_index=0;
 game();
 }
 if(opm=="rgm")
@@ -787,8 +648,9 @@ if(opm=="sgm")
 {
 writedata();
 speak("game saved");
-last_menu_index=0;
+dlgplay("savegame.ogg");
 m.fade_music();
+last_menu_index=0;
 game();
 }
 }
