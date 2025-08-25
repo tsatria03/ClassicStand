@@ -1,7 +1,7 @@
 void actsmenu()
 {
 setupmenu(true, "menumus1.ogg");
-m.add_item("Buy ingredients: top level sub menu. You currently have " + convert_to_currency(cash) + " in cash.", "bgn");
+m.add_item("Buy ingredients. You currently have " + convert_to_currency(cash) + " in cash.", "bgn");
 double hydration_percent = round(hydration / maxhydration * 100, 0);
 string status;
 if(hydration_percent >= 100)
@@ -572,6 +572,9 @@ optsmenu();
 }
 business_name=name;
 dlg("Success. You're business title has now been changed to "+business_name+".");
+writedata();
+dlgplay("savegame.ogg");
+wait(200);
 last_menu_index=0;
 optsmenu();
 }
