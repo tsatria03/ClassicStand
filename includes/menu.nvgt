@@ -541,7 +541,7 @@ game();
 if(infem=="bst")
 {
 m.fade_music();
-vd.set_disallowed_chars("@#$%^&*()[]{};:\"\\|,.<>_?/+-=`~", false, "");
+vd.set_disallowed_chars("@#$%^&*()[]{}\"\\|<>_/+=`~", false, "");
     string name = vd.input_box("", "What would you like your new Business title to be?");
     if(name == "")
 {
