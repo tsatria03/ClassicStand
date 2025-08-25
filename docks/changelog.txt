@@ -1,7 +1,8 @@
 New in 1.6.
+Moved the function to change your business title into the game's options menu. There's now an option called change business title. Your business title will still be shown in the business information menu regardless.
 Added the ability to abort entire dialogs by pressing the escape key. This is especially useful when browsing through multiline dialogs.
 Made it so the drink lemonade item now tells you about your hydration status instead of how many filled cups of lemonade you have in the business actions menu.
-Increased The flexibility of choosing your own business titles in the game. You can now put spaces and Basic punctuation to add some depth to the title.
+Increased The flexibility of choosing your own business titles in the game. You can now put spaces and Basic punctuation in their to add some depth to the title.
 Added some suddle typing sounds to all input prompts used in the game.
 Fixed some small bugs with the game's auto saver.
 Made it so you can no longer sell a single cup of lemonade for more than 10 dollars in cash.

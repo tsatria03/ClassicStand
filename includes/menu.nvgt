@@ -1,7 +1,7 @@
 void actsmenu()
 {
 setupmenu(true, "menumus1.ogg");
-m.add_item("Buy ingredients. You currently have " + convert_to_currency(cash) + " in cash.", "bgn");
+m.add_item("Buy ingredients: top level sub menu. You currently have " + convert_to_currency(cash) + " in cash.", "bgn");
 double hydration_percent = round(hydration / maxhydration * 100, 0);
 string status;
 if(hydration_percent >= 100)
@@ -491,7 +491,7 @@ dlg("Purchase complete. You bought " + qty + " liter" + (qty == 1 ? "" : "s") + 
 void infomenu()
 {
 setupmenu(true, "menumus2.ogg");
-m.add_item("Business title: currently set to "+business_name+". Press enter to change.", "bst");
+m.add_item("Business title: "+business_name);
 m.add_item("Date: "+dayname+", "+monthname+daynumber);
 int hour = clocktime % 24;
 string hour_period = (hour >= 12 && hour < 24) ? "PM" : "AM";
@@ -527,7 +527,7 @@ m.intro_text = "Information menu.";
 m.set_focused_item(last_menu_index, false);
 int mres=m.run();
 string infem = m.get_selected_item_id();
-if(mres>=1 and mres<=8)
+if(mres>=0 and mres<=8)
 {
 last_menu_index = mres;
 infomenu();
@@ -538,25 +538,11 @@ m.fade_music();
 last_menu_index=0;
 game();
 }
-if(infem=="bst")
-{
-m.fade_music();
-vd.set_disallowed_chars("@#$%^&*()[]{}\"\\|<>_/+=`~", false, "");
-    string name = vd.input_box("", "What would you like your new Business title to be?");
-    if(name == "")
-{
-last_menu_index=0;
-infomenu();
-}
-business_name=name;
-dlg("Success. You're business title has now been changed to "+business_name+".");
-last_menu_index=0;
-infomenu();
-}
 }
 void optsmenu()
 {
 setupmenu(true, "menumus2.ogg");
+m.add_item("Change business title.", "cbt");
 m.add_item("exit game", "ex");
 m.add_item("reload game", "rgl");
 m.add_item("reset game", "rgm");
@@ -573,6 +559,21 @@ if(mres==-1 || opm=="back")
 m.fade_music();
 last_menu_index=0;
 game();
+}
+if(opm=="cbt")
+{
+m.fade_music();
+vd.set_disallowed_chars("@#$%^&*()[]{}\"\\|<>_/+=`~", false, "");
+    string name = vd.input_box("", "What would you like your new Business title to be?");
+    if(name == "")
+{
+last_menu_index=0;
+optsmenu();
+}
+business_name=name;
+dlg("Success. You're business title has now been changed to "+business_name+".");
+last_menu_index=0;
+optsmenu();
 }
 if(opm=="ex")
 {
