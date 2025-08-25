@@ -54,6 +54,7 @@ game();
 }
 else if(busprofed == true)
 {
+wait(500);
 last_menu_index = 0;
 game();
 }

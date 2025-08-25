@@ -4,9 +4,9 @@ while(true)
 {
 wait(5);
 setupmenu(true, "menumus1.ogg");
-m.add_item("Business actions.", "bcm");
-m.add_item("Business information.", "bsm");
-m.add_item("game options", "gsp");
+m.add_item("Business actions: sub menu.", "bcm");
+m.add_item("Business information: sub menu.", "bsm");
+m.add_item("Game options: sub menu.", "gsp");
 m.intro_text = "Lemonade manager.";
 m.set_focused_item(last_menu_index, false);
 int mres=m.run();

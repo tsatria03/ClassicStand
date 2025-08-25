@@ -292,7 +292,7 @@ void learn_game_sounds_menu(dictionary@ sfx, const string&in audio_prefix = "", 
 		else speak("Unable to play "+sfx_names[m.selected_item]);
 	}
 }
-void setupmenu(bool music_added = false, string musicpath="")
+void setupmenu(bool music_added, string musicpath)
 {
 if (music_added)
 {

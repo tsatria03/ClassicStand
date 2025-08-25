@@ -2,7 +2,19 @@ void actsmenu()
 {
 setupmenu(true, "menumus1.ogg");
 m.add_item("Buy ingredients. You currently have " + convert_to_currency(cash) + " in cash.", "bgn");
-m.add_item("Drink lemonade. You currently have " + fullcups + " filled cup" + (fullcups == 1 ? "" : "s") + ".", "dlm");
+double hydration_percent = round(hydration / maxhydration * 100, 0);
+string status;
+if(hydration_percent >= 100)
+status = "Fully hydrated.";
+else if(hydration_percent >= 75)
+status = "Slightly thirsty.";
+else if(hydration_percent >= 50)
+status = "Thirsty.";
+else if(hydration_percent >= 25)
+status = "Very thirsty.";
+else
+status = "Critically dehydrated!";
+m.add_item("Drink lemonade. Your hydration is currently at " + hydration_percent + " percent. " + status, "dlm");
 m.add_item("Make lemonade. You currently have " + cups + " empty cup" + (cups == 1 ? "" : "s") + ".", "mlm");
 if(pitcherstat <= 0)
     m.add_item("Pour lemonade. You currently have 0 liters of lemonade in the pitcher.", "plm");
@@ -236,8 +248,8 @@ generate_daily_summary();
 void buymenu()
 {
 setupmenu(true, "menumus1.ogg");
-m.add_item("bundled ingredients", "bgs");
-m.add_item("single ingredients", "sgs");
+m.add_item("Bundled ingredients: sub menu.", "bgs");
+m.add_item("Single ingredients: sub menu.", "sgs");
 m.add_item("back", "back");
 m.intro_text = "Ingredients menu.";
 m.set_focused_item(last_menu_index, false);
@@ -479,7 +491,7 @@ dlg("Purchase complete. You bought " + qty + " liter" + (qty == 1 ? "" : "s") + 
 void infomenu()
 {
 setupmenu(true, "menumus2.ogg");
-m.add_item("Business title: "+business_name+". Press enter to change.", "bst");
+m.add_item("Business title: currently set to "+business_name+". Press enter to change.", "bst");
 m.add_item("Date: "+dayname+", "+monthname+daynumber);
 int hour = clocktime % 24;
 string hour_period = (hour >= 12 && hour < 24) ? "PM" : "AM";
@@ -616,7 +628,7 @@ game();
 if(opm=="rgm")
 {
 m.fade_music();
-setupmenu(false);
+setupmenu(false, "");
     m.add_item("Yes", "yes");
     m.add_item("No", "no");
 m.intro_text="Are you sure you want to reset all of your game's progress? This action can't be undone.";

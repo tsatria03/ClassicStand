@@ -1,4 +1,5 @@
 ##These are the things that need to be finished for future versions of the game.
+*Unfinished. Make it so if your thurst is too low, the game warns you to hydrate yourself.
 *Unfinished. Add random events to the game.
 *Unfinished. Add a popularity system to the game when selling lemonade.
 *Unfinished. Make this game more map based.

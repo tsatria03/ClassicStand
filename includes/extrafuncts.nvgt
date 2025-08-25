@@ -122,7 +122,7 @@ monthname = monthnames[current_month_index];
 }
 clocktime = 0;
         level = 1;
-setupmenu(false);
+setupmenu(false, "");
         m.add_item("Copy daily summary to clipboard", "copy");
         m.add_item("Export daily summary to file", "export");
         m.add_item("Return to the game.", "cancel");
@@ -181,13 +181,13 @@ if(qty <= 0)
 {
 buybmenu();
 }
-setupmenu();
+setupmenu(false, "");
 m.add_item("Yes", "yes");
 m.add_item("No", "no");
 m.intro_text = "Would you like to include " + unit_qty + " bags of ice with each bundle?";
 int mres = m.run();
 bool include_ice = m.get_selected_item_id() == "yes";
-setupmenu();
+setupmenu(false, "");
 m.add_item("Yes", "yes");
 m.add_item("No", "no");
 m.intro_text = "Would you like to include " + unit_qty + " packets of salt with each bundle?";

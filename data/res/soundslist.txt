@@ -21,43 +21,10 @@ dlgread.ogg
 dlgscroll.ogg
 drinkcup1.ogg
 drinkcup2.ogg
-makeloop.ogg
-makestart.ogg
-makestop.ogg
-menuclick.ogg
-menuclose.ogg
-menuedge.ogg
-menuenter.ogg
-menuopen.ogg
-menuwrap.ogg
-pourcup1.ogg
-pourcup2.ogg
-pourcup3.ogg
-pourcup4.ogg
-total files: 36
-buy1.ogg
-buy2.ogg
-buy3.ogg
-buy4.ogg
-buybag1.ogg
-buybag2.ogg
-buybag3.ogg
-buybag4.ogg
-buycup1.ogg
-buycup2.ogg
-buyfruit1.ogg
-buyfruit2.ogg
-buypack1.ogg
-buypack2.ogg
-buywater1.ogg
-buywater2.ogg
-dlgclose.ogg
-dlgcoppy.ogg
-dlgopen.ogg
-dlgread.ogg
-dlgscroll.ogg
-drinkcup1.ogg
-drinkcup2.ogg
+keydelete.ogg
+keyreturn.ogg
+keyspace.ogg
+keytype.ogg
 makeloop.ogg
 makestart.ogg
 makestop.ogg
@@ -72,4 +39,5 @@ pourcup1.ogg
 pourcup2.ogg
 pourcup3.ogg
 pourcup4.ogg
-total files: 37
+savegame.ogg
+total files: 42
