@@ -1,4 +1,5 @@
 New in 1.6.
+Added the ability to abort entire dialogs by pressing the escape key. This is especially useful when browsing through multiline dialogs.
 Made it so the drink lemonade item now tells you about your hydration status instead of how many filled cups of lemonade you have in the business actions menu.
 Increased The flexibility of choosing your own business titles in the game. You can now put spaces and Basic punctuation to add some depth to the title.
 Added some suddle typing sounds to all input prompts used in the game.
