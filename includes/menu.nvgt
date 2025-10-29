@@ -159,35 +159,45 @@ if (bactem == "slm")
         actsmenu();
     }
     m.fade_music();
-    vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
-    string cup_imp = vd.input_box("", "How many cups of lemonade would you like to sell? You currently have " + fullcups + " filled cup" + (fullcups == 1 ? "" : "s") + ".");
-    if (cup_imp == "") actsmenu();
-    double qty = string_to_number(cup_imp);
-    if (qty <= 0 || qty > fullcups)
-    {
-        dlg("Error. Invalid number of cups entered.");
-        actsmenu();
-    }
     vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,<>_?/+-=`~", false, "");
-    string price = vd.input_box("", "How much money would you like to sell each cup of lemonade for?");
-    if (price == "") actsmenu();
+    string price = vd.input_box("", "How much money would you like to sell each cup of lemonade for? You currently have " + fullcups + " filled cup" + (fullcups == 1 ? "" : "s") + ".");
+    if (price == "" || price == "0") actsmenu();
     double percup = string_to_number(price) * 100;
-    if (percup <= 0 || percup > 1000)
+    if (percup > 1000)
     {
         dlg("Error. You can't sell a cup of lemonade for more than 10 dollars in cash.");
         actsmenu();
     }
-    double total = 0;
-    for (int i = 0; i < qty; i++)
+int base_multiplier = random(5, 10);
+int customers = int(fullcups * (base_multiplier / 100.0));
+    int enraged_customers = 0;
+    if (percup > 100)
+    {
+        int min_range = level * daynumber;
+        int max_range = min(customers, fullcups);
+        if (max_range >= min_range)
+        {
+            enraged_customers = random(min_range, max_range);
+            dlg(enraged_customers + " customer" + (enraged_customers == 1 ? "" : "s") + " angrily stormed off when they saw the high price of " + convert_to_currency(percup) + " per cup!");
+        }
+        else
+        {
+            dlg("Some customers hesitated at the price of " + convert_to_currency(percup) + ", but no one left yet.");
+        }
+    }
+    int remaining_customers = max(0, customers - enraged_customers);
+    int cups_sold = min(fullcups, remaining_customers);
+    for (int i = 0; i < cups_sold; i++)
     {
         cash += percup;
         fullcups -= 1;
         soldcups += 1;
     }
-        pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
-    dlg("Success. You sold " + qty + " cup" + (qty == 1 ? "" : "s") + " of lemonade for " + convert_to_currency(percup * qty) + ".");
-            trigger_event();
-generate_daily_summary();
+    if (cups_sold > 0) pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
+    double total_earned = percup * cups_sold;
+    dlg("You sold " + cups_sold + " cup" + (cups_sold == 1 ? "" : "s") + " of lemonade to " + cups_sold + " out of " + customers + " potential customer" + (customers == 1 ? "" : "s") + " for a total of " + convert_to_currency(total_earned) + ".");
+    trigger_event(60);
+    generate_daily_summary();
 }
 }
 void buymenu()

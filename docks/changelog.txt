@@ -1,6 +1,9 @@
 New in 1.7.
+Made it so the number of customers that show up when selling lemonade is determined by how many cups that are poured out of the piture prior to selling it.
+Revamped the lemonade seller to include a new sails popularity system. The more actual customers that show up, the higher of a chance that a single cup would be sold to them.
+Modified some customer based events to be less harsh on the player.
 Reduced the probability chanse of triggering random events when selling lemonade by 40 percent. It will no longer trigger every single time from now on.
-Added the ability to generate random events while selling lemonade. Watch out for these, as they can be quite unexpected when they show up. Be prepared!
+Added the ability to generate random events while selling lemonade. Watch out for these, as they can be quite unexpected when they show up.
 Removed the ability to drink the lemonade that you can make and sell. The hydration system has also been removed as well.
 Fixed some menu navigation issues.
 Added the ability to navigate to the first letter of any item in a menu.

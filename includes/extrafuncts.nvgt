@@ -221,7 +221,7 @@ dlgmessage(msg);
 wait(500);
 buybmenu();
 }
-void trigger_event(int probability_chance = 60)
+void trigger_event(int probability_chance)
 {
     if (random(0, 99) >= probability_chance)
         return;
@@ -238,8 +238,6 @@ void trigger_event(int probability_chance = 60)
     }
     possible_events.insert_last("thief");
     possible_events.insert_last("lucky_bonus");
-    possible_events.insert_last("health_inspector");
-    possible_events.insert_last("customer_fight");
     possible_events.insert_last("nothing");
     string event = possible_events[random(0, possible_events.length() - 1)];
     if (event == "free_water")
@@ -280,14 +278,6 @@ void trigger_event(int probability_chance = 60)
         cash += bonus;
 pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
         dlg("A video of your stand went viral! You got a bonus of " + convert_to_currency(bonus) + ".");
-    }
-    else if (event == "health_inspector")
-    {
-        dlg("A health inspector dropped by. Luckily, your stand passed the inspection.");
-    }
-    else if (event == "customer_fight")
-    {
-        dlg(random(1 * level * daynumber, 2 * level * daynumber) + " customers got into a shouting match over the last cup. It made the day a bit stressful.");
     }
     else if (event == "nothing")
     {
