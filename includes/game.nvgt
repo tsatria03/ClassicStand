@@ -4,14 +4,23 @@ while(true)
 {
 wait(5);
 setupmenu(true, "menumus1.ogg");
-m.add_item("Business actions: sub menu.", "bcm");
-m.add_item("Business information: sub menu.", "bsm");
-m.add_item("Game options: sub menu.", "gsp");
+m.add_item("Business actions", "bcm");
+m.add_item("Business information", "bsm");
+m.add_item("Game options", "gsp");
 m.intro_text = "Lemonade manager.";
-m.set_focused_item(last_menu_index, false);
-int mres=m.run();
-last_menu_index = mres;
-string main = m.get_selected_item_id();
+    int start_pos = 0;
+    if (last_menu_id != "")
+    {
+        int found = m.find_item_by_id(last_menu_id);
+        if (found != -1)
+            start_pos = found;
+    }
+        int mres = m.run(start_pos, true);
+string main = m.get_item_id(mres);
+    if (mres != -1)
+{
+        last_menu_id = main;
+}
 if(mres==-1)
 {
 setupmenu(true, "menumus1.ogg");
@@ -23,16 +32,16 @@ m.intro_text = "Are you sure you want to quit? You will lose all progress for th
 int mres = m.run();
     if(mres==-1)
     {
-last_menu_index=0;
+last_menu_id="";
 game();
     }
-if (m.get_selected_item_id() == "quit_no_save")
+if (m.get_item_id(mres) == "quit_no_save")
     {
         speak("Exiting the game without saving.");
 m.fade_music();
 exit();
     }
-if (m.get_selected_item_id() == "quit_save")
+if (m.get_item_id(mres) == "quit_save")
     {
         writedata();
 speak("game saved, Exiting.");
@@ -40,36 +49,36 @@ dlgplay("savegame.ogg");
 m.fade_music();
 exit();
     }
-if (m.get_selected_item_id() == "continue")
+if (m.get_item_id(mres) == "continue")
     {
-last_menu_index=0;
+last_menu_id="";
 game();
     }
-if (m.get_selected_item_id() == "save_continue")
+if (m.get_item_id(mres) == "save_continue")
     {
         writedata();
 speak("game saved");
 dlgplay("savegame.ogg");
 wait(200);
-last_menu_index=0;
+last_menu_id="";
 game();
     }
 }
 if(main == "bcm")
 {
-last_menu_index=0;
+last_menu_id="";
 actsmenu();
 }
 if(main == "bsm")
 {
 m.fade_music();
-last_menu_index=0;
+last_menu_id="";
 infomenu();
 }
 if(main == "gsp")
 {
 m.fade_music();
-last_menu_index=0;
+last_menu_id="";
 optsmenu();
 }
 }

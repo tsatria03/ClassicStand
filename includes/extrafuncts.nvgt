@@ -73,12 +73,6 @@ else if(level == 5)
 temprature = random(daily_max - 20, daily_max - 5);
 else
 temprature = random(daily_min + 5, daily_min + 15);
-double daily_base = temprature - 60;
-double percent = daily_base * 0.005 + level * 0.01 + daynumber * 0.005;
-percent = clamp(percent, 0.01, 0.1);
-double rounded_percent = round(percent * 100, 0);
-double hydration_loss = (rounded_percent / 100.0) * maxhydration;
-hydration = max(hydration - hydration_loss, 0);
 cupcost   = 1 * level * daynumber;
 icecost   = 2 * level * daynumber;
 lemoncost = 3 * level * daynumber;
@@ -128,14 +122,14 @@ setupmenu(false, "");
         m.add_item("Return to the game.", "cancel");
         m.intro_text = "What would you like to do with the current daily summary for this game session?";
         int res = m.run();
-        string choice = m.get_selected_item_id();
+        string choice = m.get_item_id(res);
         if (res == -1 || choice=="cancel")
         {
 calculate_new_day_conditions();
 writedata();
 dlgplay("savegame.ogg");
 wait(200);
-last_menu_index=0;
+last_menu_id="";
 game();
 }
             if (choice == "copy")
@@ -146,7 +140,7 @@ calculate_new_day_conditions();
 writedata();
 dlgplay("savegame.ogg");
 wait(200);
-last_menu_index=0;
+last_menu_id="";
                 game();
             }
             if (choice == "export")
@@ -160,12 +154,12 @@ calculate_new_day_conditions();
 writedata();
 dlgplay("savegame.ogg");
 wait(200);
-last_menu_index=0;
+last_menu_id="";
 game();
             }
         }
 calculate_new_day_conditions();
-last_menu_index=0;
+last_menu_id="";
 game();
     }
 void purchase_ingredient_bundle(string bundle_id, string bundle_name, double unit_qty)
@@ -186,13 +180,13 @@ m.add_item("Yes", "yes");
 m.add_item("No", "no");
 m.intro_text = "Would you like to include " + unit_qty + " bags of ice with each bundle?";
 int mres = m.run();
-bool include_ice = m.get_selected_item_id() == "yes";
+bool include_ice = m.get_item_id(mres) == "yes";
 setupmenu(false, "");
 m.add_item("Yes", "yes");
 m.add_item("No", "no");
 m.intro_text = "Would you like to include " + unit_qty + " packets of salt with each bundle?";
 int mres2 = m.run();
-bool include_salt = m.get_selected_item_id() == "yes";
+bool include_salt = m.get_item_id(mres) == "yes";
 double per_bundle = ((cupcost + lemoncost + sugarcost + watercost) * unit_qty) / 6;
 if(include_ice)  per_bundle += icecost * unit_qty;
 if(include_salt) per_bundle += saltcost * unit_qty;

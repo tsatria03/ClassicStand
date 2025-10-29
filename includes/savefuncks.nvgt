@@ -21,14 +21,6 @@ fullcups = sd.read_double("fullcups");
 {
 soldcups = sd.read_double("soldcups");
 }
-    if (sd.d.exists("hydration"))
-{
-hydration = sd.read_double("hydration");
-}
-    if (sd.d.exists("maxhydration"))
-{
-maxhydration = sd.read_double("maxhydration");
-}
     if (sd.d.exists("level"))
 {
 level = sd.read_double("level");
@@ -133,8 +125,6 @@ sd.add("busprofed", busprofed);
     sd.add("cash", cash);
     sd.add("fullcups", fullcups);
 sd.add("soldcups", soldcups);
-    sd.add("hydration", hydration);
-    sd.add("maxhydration", maxhydration);
     sd.add("level", level);
     sd.add("maxlevel", maxlevel);
     sd.add("pitcherstat", pitcherstat);

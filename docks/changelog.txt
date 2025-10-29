@@ -1,3 +1,9 @@
+New in 1.7.
+Removed the ability to drink the lemonade that you can make and sell.
+Fixed some menu navigation issues.
+Added the ability to navigate to the first letter of any item in a menu.
+Added the ability to search for spisific items of intrest in the new find dialog. You can press F3 in any menu to activate it.
+Recoded the entire menu system for the game.
 New in 1.6.
 Made it so the game automaticly saves your progress after changeing your business title in the game's options menu.
 Moved the function to change your business title into the game's options menu. There's now an option called change business title. Your business title will still remain visible in the business information menu.
