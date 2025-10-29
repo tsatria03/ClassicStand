@@ -1,5 +1,7 @@
 New in 1.7.
-Removed the ability to drink the lemonade that you can make and sell.
+Reduced the probability chanse of triggering random events when selling lemonade by 40 percent. It will no longer trigger every single time from now on.
+Added the ability to generate random events while selling lemonade. Watch out for these, as they can be quite unexpected when they show up. Be prepared!
+Removed the ability to drink the lemonade that you can make and sell. The hydration system has also been removed as well.
 Fixed some menu navigation issues.
 Added the ability to navigate to the first letter of any item in a menu.
 Added the ability to search for spisific items of intrest in the new find dialog. You can press F3 in any menu to activate it.

@@ -146,7 +146,7 @@ last_menu_id="";
             if (choice == "export")
             {
                 file poastfile;
-                poastfile.open(DIRECTORY_APPDATA + "tsatria03/ClassicStand/data/stats/daily_summeries.txt", "a");
+                poastfile.open(DIRECTORY_APPDATA + "tsatria03/ClassicStand/data/stats/daily_summaries.txt", "a");
                 poastfile.write("\r\n\r\n"+report);
                 poastfile.close();
                 dlg("Your daily summary has been exported to data/stats/daily_summeries.txt.");
@@ -220,6 +220,79 @@ msg += "\r\nYou now have " + convert_to_currency(cash) + " in cash remaining.";
 dlgmessage(msg);
 wait(500);
 buybmenu();
+}
+void trigger_event(int probability_chance = 60)
+{
+    if (random(0, 99) >= probability_chance)
+        return;
+    string[] possible_events;
+    if (temprature > 85)
+    {
+        possible_events.insert_last("free_water");
+        possible_events.insert_last("heatstroke");
+    }
+    else if (temprature < 45)
+    {
+        possible_events.insert_last("slow_day");
+        possible_events.insert_last("ingredient_freeze");
+    }
+    possible_events.insert_last("thief");
+    possible_events.insert_last("lucky_bonus");
+    possible_events.insert_last("health_inspector");
+    possible_events.insert_last("customer_fight");
+    possible_events.insert_last("nothing");
+    string event = possible_events[random(0, possible_events.length() - 1)];
+    if (event == "free_water")
+    {
+        double watercount = random(1 * level * daynumber, 5 * level * daynumber);
+        waters += watercount;
+        pool.play_stationary("buywater" + random(1, 2) + ".ogg", false);
+        dlg("It was scorching hot today! A kind neighbor donated " + watercount + " liter" + (watercount == 1 ? "" : "s") + " of water to help your business.");
+    }
+    else if (event == "heatstroke")
+    {
+        double cashcount = random(1 * level * daynumber, 5 * level * daynumber);
+        cash = max(0, cash - cashcount);
+        pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
+        dlg("A customer fainted from the heat! You had to pay " + convert_to_currency(cashcount) + " in first aid supplies.");
+    }
+    else if (event == "slow_day")
+    {
+        double unsold = min(soldcups, random(1 * level * daynumber, 2 * level * daynumber));
+        soldcups -= unsold;
+        dlg("It was too chilly. Customers stayed home, and " + unsold + " cup" + (unsold == 1 ? "" : "s") + " went unsold.");
+    }
+    else if (event == "ingredient_freeze")
+    {
+        double lost = min(lemons, random(1 * level * daynumber, 2 * level * daynumber));
+        lemons -= lost;
+        dlg("A cold frost spoiled some of your lemons. You lost " + lost + " lemon" + (lost == 1 ? "" : "s") + ".");
+    }
+    else if (event == "thief")
+    {
+        double stolen = min(cash, random(200 * level * daynumber, 400 * level * daynumber));
+        cash -= stolen;
+        dlg("A thief stole " + convert_to_currency(stolen) + " from your cash box overnight!");
+    }
+    else if (event == "lucky_bonus")
+    {
+        double bonus = random(100 * level * daynumber, 200 * level * daynumber);
+        cash += bonus;
+pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
+        dlg("A video of your stand went viral! You got a bonus of " + convert_to_currency(bonus) + ".");
+    }
+    else if (event == "health_inspector")
+    {
+        dlg("A health inspector dropped by. Luckily, your stand passed the inspection.");
+    }
+    else if (event == "customer_fight")
+    {
+        dlg(random(1 * level * daynumber, 2 * level * daynumber) + " customers got into a shouting match over the last cup. It made the day a bit stressful.");
+    }
+    else if (event == "nothing")
+    {
+        dlg("Nothing unusual happened today. Just another sunny hour at the stand.");
+    }
 }
 void restart_game(string appid="cst.exe", string scriptid="cst.nvgt")
 {

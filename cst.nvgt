@@ -28,7 +28,7 @@ intro=false;
 main();
 }
 business_name=name;
-dlgmessage("Congratulations! You've successfully completed the game setup. You're business will now be known as "+business_name+". Press enter to start playing.");
+dlgmessage("Congratulations! You've successfully completed the game setup. Your business will now be known as "+business_name+". Press enter to start playing.");
 busprofed=true;
 writedata();
 dlgplay("savegame.ogg");

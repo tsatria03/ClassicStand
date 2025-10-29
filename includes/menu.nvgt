@@ -150,49 +150,51 @@ dlgplay("pourcup"+random(1 ,4)+".ogg");
 last_menu_id="";
         actsmenu();
 }
-if(bactem == "slm")
+if (bactem == "slm")
 {
-if(fullcups <= 0)
-{
-m.fade_music();
-dlg("Error. You need at least one cup of lemonade made in order to sell it for cash.");
-actsmenu();
-}
-m.fade_music();
-vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
-string cup_imp = vd.input_box("", "How many cups of lemonade would you like to sell? You currently have " + fullcups + " filled cup" + (fullcups == 1 ? "" : "s") + ".");
-if(cup_imp == "")
-actsmenu();
-double qty = string_to_number(cup_imp);
-if(qty <= 0 || qty > fullcups)
-{
-dlg("Error. Invalid number of cups entered.");
-actsmenu();
-}
-vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,<>_?/+-=`~", false, "");
-string price = vd.input_box("", "How much money would you like to sell each cup of lemonade for?");
-if(price == "")
-actsmenu();
-double percup = string_to_number(price) * 100;
-if (percup <= 0 || percup > 1000)
-{
-dlg("Error. You can't sell a cup of lemonade for more than 10 dollars in cash.");
-actsmenu();
-}
-double total = percup * qty;
-cash += total;
-fullcups -= qty;
-soldcups+=qty;
-pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
-dlg("Success. You sold " + qty + " cup" + (qty == 1 ? "" : "s") + " of lemonade for " + convert_to_currency(total) + ".");
+    if (fullcups <= 0)
+    {
+        m.fade_music();
+        dlg("Error. You need at least one cup of lemonade made in order to sell it for cash.");
+        actsmenu();
+    }
+    m.fade_music();
+    vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
+    string cup_imp = vd.input_box("", "How many cups of lemonade would you like to sell? You currently have " + fullcups + " filled cup" + (fullcups == 1 ? "" : "s") + ".");
+    if (cup_imp == "") actsmenu();
+    double qty = string_to_number(cup_imp);
+    if (qty <= 0 || qty > fullcups)
+    {
+        dlg("Error. Invalid number of cups entered.");
+        actsmenu();
+    }
+    vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,<>_?/+-=`~", false, "");
+    string price = vd.input_box("", "How much money would you like to sell each cup of lemonade for?");
+    if (price == "") actsmenu();
+    double percup = string_to_number(price) * 100;
+    if (percup <= 0 || percup > 1000)
+    {
+        dlg("Error. You can't sell a cup of lemonade for more than 10 dollars in cash.");
+        actsmenu();
+    }
+    double total = 0;
+    for (int i = 0; i < qty; i++)
+    {
+        cash += percup;
+        fullcups -= 1;
+        soldcups += 1;
+    }
+        pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
+    dlg("Success. You sold " + qty + " cup" + (qty == 1 ? "" : "s") + " of lemonade for " + convert_to_currency(percup * qty) + ".");
+            trigger_event();
 generate_daily_summary();
 }
 }
 void buymenu()
 {
 setupmenu(true, "menumus1.ogg");
-m.add_item("Bundled ingredients: sub menu.", "bgs");
-m.add_item("Single ingredients: sub menu.", "sgs");
+m.add_item("Bundled ingredients", "bgs");
+m.add_item("Single ingredients", "sgs");
 m.add_item("back", "back");
 m.intro_text = "Ingredients menu.";
     int start_pos = 0;
@@ -543,7 +545,7 @@ last_menu_id="";
 optsmenu();
 }
 business_name=name;
-dlg("Success. You're business title has now been changed to "+business_name+".");
+dlg("Success. Your business title has now been changed to "+business_name+".");
 writedata();
 dlgplay("savegame.ogg");
 wait(200);
@@ -618,7 +620,7 @@ last_menu_id="";
 if(confirm=="yes")
 {
 if(file_exists(DIRECTORY_APPDATA + "tsatria03/ClassicStand/data/saves/game.clm")) file_delete(DIRECTORY_APPDATA + "tsatria03/ClassicStand/data/saves/game.clm");
-if(file_exists(DIRECTORY_APPDATA + "tsatria03/ClassicStand/data/stats/daily_summeries.txt")) file_delete(DIRECTORY_APPDATA + "tsatria03/ClassicStand/data/stats/daily_summeries.txt");
+if(file_exists(DIRECTORY_APPDATA + "tsatria03/ClassicStand/data/stats/daily_summaries.txt")) file_delete(DIRECTORY_APPDATA + "tsatria03/ClassicStand/data/stats/daily_summaries.txt");
 resetgame();
 dlgmessage("Success. Your game progress has been reset. Press enter to restart the game.");
 speak("restarting");
