@@ -19,8 +19,6 @@ dlgcoppy.ogg
 dlgopen.ogg
 dlgread.ogg
 dlgscroll.ogg
-drinkcup1.ogg
-drinkcup2.ogg
 keydelete.ogg
 keyreturn.ogg
 keyspace.ogg
@@ -40,4 +38,4 @@ pourcup2.ogg
 pourcup3.ogg
 pourcup4.ogg
 savegame.ogg
-total files: 42
+total files: 40
