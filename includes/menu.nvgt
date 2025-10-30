@@ -160,9 +160,15 @@ if (bactem == "slm")
     }
     m.fade_music();
     vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,<>_?/+-=`~", false, "");
-    string price = vd.input_box("", "How much money would you like to sell each cup of lemonade for? You currently have " + fullcups + " filled cup" + (fullcups == 1 ? "" : "s") + ".");
+float default_price = random_float(0.25, 10.00);
+    string price = vd.input_box("", "How much money would you like to sell each cup of lemonade for? You currently have " + fullcups + " filled cup" + (fullcups == 1 ? "" : "s") + ".", round(default_price, 2));
     if (price == "" || price == "0") actsmenu();
     double percup = string_to_number(price) * 100;
+    if (percup <25)
+    {
+        dlg("Error. You can't sell a cup of lemonade for less than 25 sents in cash.");
+        actsmenu();
+    }
     if (percup > 1000)
     {
         dlg("Error. You can't sell a cup of lemonade for more than 10 dollars in cash.");
@@ -171,7 +177,7 @@ if (bactem == "slm")
 int base_multiplier = random(5, 10);
 int customers = int(fullcups * (base_multiplier / 100.0));
     int enraged_customers = 0;
-    if (percup > 100)
+    if (percup > 500)
     {
         int min_range = level * daynumber;
         int max_range = min(customers, fullcups);
@@ -180,11 +186,11 @@ int customers = int(fullcups * (base_multiplier / 100.0));
             enraged_customers = random(min_range, max_range);
             dlg(enraged_customers + " customer" + (enraged_customers == 1 ? "" : "s") + " angrily stormed off when they saw the high price of " + convert_to_currency(percup) + " per cup!");
         }
-        else
-        {
-            dlg("Some customers hesitated at the price of " + convert_to_currency(percup) + ", but no one left yet.");
-        }
     }
+if (percup > 250 && percup <= 500)
+{
+    dlg("Some customers hesitated at the price of " + convert_to_currency(percup) + ".");
+}
     int remaining_customers = max(0, customers - enraged_customers);
     int cups_sold = min(fullcups, remaining_customers);
     for (int i = 0; i < cups_sold; i++)
