@@ -1,5 +1,5 @@
 #define MyAppName "ClassicStand"
-#define MyAppVersion "1.7"
+#define MyAppVersion "1.8"
 #define MyAppPublisher "tsatria03"
 #define MyAppURL "https://tsatria03.itch.io/classicstand"
 #define MyAppExeName "cst.exe"

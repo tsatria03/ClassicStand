@@ -1,3 +1,5 @@
+New in 1.8.
+Removed the auto-filled price values for selling lemonade from the sell prompt.
 New in 1.7.
 Made it so the number of customers that show up when selling lemonade is determined by how many cups that are poured out of the piture prior to selling it.
 Revamped the lemonade seller to include a new sails popularity system. The more actual customers that show up, the higher of a chance that a single cup would be sold to them.

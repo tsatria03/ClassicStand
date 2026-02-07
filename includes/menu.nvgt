@@ -44,7 +44,7 @@ dlg("Error. You need at least one empty cup, 1 ripe lemon, 1 packet of sugar, an
 actsmenu();
 }
 m.fade_music();
-vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
+vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !`@`$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
 string input = vd.input_box("", "How many cups of lemonade would you like to make?");
 if(input == "") actsmenu();
 double cupcount = string_to_number(input);
@@ -127,7 +127,7 @@ m.fade_music();
         actsmenu();
     }
 m.fade_music();
-vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
+vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !`@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
     string input = vd.input_box("", "How many cups would you like to pour from the pitcher?");
     if(input == "") actsmenu();
     double pourcount = string_to_number(input);
@@ -159,9 +159,8 @@ if (bactem == "slm")
         actsmenu();
     }
     m.fade_music();
-    vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,<>_?/+-=`~", false, "");
-float default_price = random_float(0.25, 10.00);
-    string price = vd.input_box("", "How much money would you like to sell each cup of lemonade for? You currently have " + fullcups + " filled cup" + (fullcups == 1 ? "" : "s") + ".", round(default_price, 2));
+    vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !`@#$%^&*()[]{};:'\"\\|,<>_?/+-=`~", false, "");
+    string price = vd.input_box("", "How much money would you like to sell each cup of lemonade for? You currently have " + fullcups + " filled cup" + (fullcups == 1 ? "" : "s") + ".");
     if (price == "" || price == "0") actsmenu();
     double percup = string_to_number(price) * 100;
     if (percup <25)
@@ -340,7 +339,7 @@ buymenu();
 if(buyem== "cps")
 {
 m.fade_music();
-vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
+vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !`@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
     string cup = vd.input_box("", "How many empty cups would you like to buy?");
     if(cup == "")
         buysmenu();
@@ -363,7 +362,7 @@ dlg("Purchase complete. You bought " + qty + " empty cup" + (qty == 1 ? "" : "s"
 if(buyem== "ics")
 {
 m.fade_music();
-vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
+vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !`@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
     string ice = vd.input_box("", "How many bags of ice would you like to buy?");
     if(ice == "")
         buysmenu();
@@ -386,7 +385,7 @@ dlg("Purchase complete. You bought " + qty + " bag" + (qty == 1 ? "" : "s") + " 
 if(buyem== "lms")
 {
 m.fade_music();
-vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
+vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !`@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
     string lemon = vd.input_box("", "How many ripe lemons would you like to buy?");
     if(lemon == "")
         buysmenu();
@@ -409,7 +408,7 @@ dlg("Purchase complete. You bought " + qty + " ripe lemon" + (qty == 1 ? "" : "s
 if(buyem== "slt")
 {
 m.fade_music();
-vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
+vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !`@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
     string salt = vd.input_box("", "How many packets of salt would you like to buy?");
     if(salt == "")
         buysmenu();
@@ -432,7 +431,7 @@ dlg("Purchase complete. You bought " + qty + " packet" + (qty == 1 ? "" : "s") +
 if(buyem== "sgr")
 {
 m.fade_music();
-vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
+vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !`@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
     string sugar = vd.input_box("", "How many packets of sugar would you like to buy?");
     if(sugar == "")
         buysmenu();
@@ -455,7 +454,7 @@ dlg("Purchase complete. You bought " + qty + " packet" + (qty == 1 ? "" : "s") +
 if(buyem== "swr")
 {
 m.fade_music();
-vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
+vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !`@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
     string water = vd.input_box("", "How many liters of water would you like to buy?");
     if(water == "")
         buysmenu();
@@ -553,7 +552,7 @@ game();
 if(opm=="cbt")
 {
 m.fade_music();
-vd.set_disallowed_chars("@#$%^&*()[]{}\"\\|<>_/+=`~", false, "");
+vd.set_disallowed_chars("`@#$%^&*()[]{}\"\\|<>_/+=`~", false, "");
     string name = vd.input_box("", "What would you like your new Business title to be?");
     if(name == "")
 {
