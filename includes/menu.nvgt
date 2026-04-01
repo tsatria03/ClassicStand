@@ -1,6 +1,6 @@
 void actsmenu()
 {
-setupmenu(true, "menumus1.ogg");
+setupmenu(true);
 m.add_item("Buy ingredients. You currently have " + convert_to_currency(cash) + " in cash.", "bgn");
 m.add_item("Make lemonade. You currently have " + cups + " empty cup" + (cups == 1 ? "" : "s") + ".", "mlm");
 if(pitcherstat <= 0)
@@ -207,7 +207,7 @@ if (percup > 250 && percup <= 500)
 }
 void buymenu()
 {
-setupmenu(true, "menumus1.ogg");
+setupmenu(true);
 m.add_item("Bundled ingredients", "bgs");
 m.add_item("Single ingredients", "sgs");
 m.add_item("back", "back");
@@ -243,7 +243,7 @@ buysmenu();
 }
 void buybmenu()
 {
-setupmenu(true, "menumus1.ogg");
+setupmenu(true);
 double booth_cost     = ((cupcost + lemoncost + sugarcost + watercost) * 4) / 6;
 m.add_item("Booth bundle: costs " + convert_to_currency(booth_cost) + ". This ingredient bundle contains 4 empty cups, 4 ripe lemons, 4 packets of sugar, and 4 liters of water. Ice and salt is optional.", "tbl");
 double community_cost = ((cupcost + lemoncost + sugarcost + watercost) * 8) / 6;
@@ -309,7 +309,7 @@ purchase_ingredient_bundle("pbl", "parade", 24);
 }
 void buysmenu()
 {
-setupmenu(true, "menumus1.ogg");
+setupmenu(true);
 m.add_item("Cup: costs " + convert_to_currency(cupcost) + ". You have " + cups + " empty cup" + (cups == 1 ? "" : "s"), "cps");
 m.add_item("Ice: costs " + convert_to_currency(icecost) + ". You have " + ices + " bag" + (ices == 1 ? "" : "s") + " of ice", "ics");
 m.add_item("Lemon: costs " + convert_to_currency(lemoncost) + ". You have " + lemons + " ripe lemon" + (lemons == 1 ? "" : "s"), "lms");
@@ -477,7 +477,7 @@ dlg("Purchase complete. You bought " + qty + " liter" + (qty == 1 ? "" : "s") + 
 }
 void infomenu()
 {
-    setupmenu(true, "menumus2.ogg");
+    setupmenu(true, "sounds/menu/music2.ogg");
     m.add_item("Business title: " + business_name, "inf1");
     m.add_item("Date: " + dayname + ", " + monthname + daynumber, "inf2");
     int hour = clocktime % 24;
@@ -521,7 +521,7 @@ void infomenu()
 }
 void optsmenu()
 {
-setupmenu(true, "menumus2.ogg");
+setupmenu(true, "sounds/menu/music2.ogg");
 m.add_item("Change business title.", "cbt");
 m.add_item("exit game", "ex");
 m.add_item("reload game", "rgl");
@@ -569,7 +569,7 @@ game();
 }
 if(opm=="ex")
 {
-    setupmenu(true, "menumus2.ogg");    
+setupmenu(true, "sounds/menu/music2.ogg");
     m.add_item("Yes, quit the game without saving", "quit_no_save");
     m.add_item("Yes, save the game and then quit", "quit_save");
     m.add_item("No, continue playing", "continue");
@@ -624,7 +624,7 @@ m.fade_music();
 setupmenu(false, "");
     m.add_item("Yes", "yes");
     m.add_item("No", "no");
-m.intro_text="Are you sure you want to reset all of your game's progress? This action can't be undone.";
+m.intro_text="Are you sure you want to reset all of your game's progress? This action cannot be undone.";
 int mres=m.run();
 string confirm = m.get_item_id(mres);
     if (mres == -1 or confirm == "no")
@@ -634,8 +634,8 @@ last_menu_id="";
     }
 if(confirm=="yes")
 {
-if(file_exists(DIRECTORY_APPDATA + "tsatria03/ClassicStand/data/saves/game.clm")) file_delete(DIRECTORY_APPDATA + "tsatria03/ClassicStand/data/saves/game.clm");
-if(file_exists(DIRECTORY_APPDATA + "tsatria03/ClassicStand/data/stats/daily_summaries.txt")) file_delete(DIRECTORY_APPDATA + "tsatria03/ClassicStand/data/stats/daily_summaries.txt");
+if(file_exists(DIRECTORY_APPDATA + "tsatria03/ClassicStand/saves/game.clm")) file_delete(DIRECTORY_APPDATA + "tsatria03/ClassicStand/saves/game.clm");
+if(file_exists(DIRECTORY_APPDATA + "tsatria03/ClassicStand/stats/daily_summaries.txt")) file_delete(DIRECTORY_APPDATA + "tsatria03/ClassicStand/stats/daily_summaries.txt");
 resetgame();
 dlgmessage("Success. Your game progress has been reset. Press enter to restart the game.");
 speak("restarting");

@@ -1,4 +1,4 @@
-void setupmenu(bool music_added, string musicpath)
+void setupmenu(bool music_added = false, string musicpath="sounds/menu/music1.ogg", string clicksound="sounds/menu/click.ogg", string closesound="sounds/menu/close.ogg", string edgesound="sounds/menu/edge.ogg", string entersound="sounds/menu/enter.ogg", string opensound="sounds/menu/open.ogg", string wrapsound="sounds/menu/wrap.ogg")
 {
 if (music_added)
 {
@@ -8,16 +8,16 @@ m.add_music(musicpath);
 m.add_music("");
 }
 m.reset();
-    m.enable_up_and_down = true;
-    m.enable_left_and_right = true;
-    m.enable_home_and_end = true;
-    m.enable_wrapping = true;
-    m.enable_first_letter_navigation=true;
-    m.speak_position = false;
-m.click_sound="menuclick.ogg";
-m.close_sound="menuclose.ogg";
-m.edge_sound="menuedge.ogg";
-m.enter_sound="menuenter.ogg";
-m.open_sound="menuopen.ogg";
-m.wrap_sound="menuwrap.ogg";
+    m.enable_up_and_down = up_and_down;
+    m.enable_left_and_right = left_and_right;
+    m.enable_home_and_end = home_and_end;
+    m.enable_wrapping = menuwrap;
+    m.enable_first_letter_navigation = first_letter;
+    m.speak_position = speak_menu_position;
+m.click_sound=clicksound;
+m.close_sound=closesound;
+m.edge_sound=edgesound;
+m.enter_sound=entersound;
+m.open_sound=opensound;
+m.wrap_sound=wrapsound;
 }

@@ -1,8 +1,6 @@
 #include"includes/includes.nvgt"
 void main()
 {
-set_sound_storage("*");
-set_sound_decryption_key("Y3KuIRoUehwlqoQwzdAYtchD0ZGd7Far84PGFhaISYDy41EaPFJ2fCfmCqOyIjWEVuI9OrGc6O8snpWfzxKZHL3VJNpubYBGEdN4CIAPbweVgL2pugjK79Kthps1bK8N47qkMslu5KZqjNkATIUik4b7u0xJBpgMzBTlAKc1nFv2bGHDaY2N0zcdw8YKkMeBknxiur",true);
 if (!directory_exists(savePath)) directory_create(savePath);
 if (!directory_exists(statsPath)) directory_create(statsPath);
 readdata();

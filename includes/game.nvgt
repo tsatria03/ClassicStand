@@ -3,7 +3,7 @@ void game()
 while(true)
 {
 wait(5);
-setupmenu(true, "menumus1.ogg");
+setupmenu(true);
 m.add_item("Business actions", "bcm");
 m.add_item("Business information", "bsm");
 m.add_item("Game options", "gsp");
@@ -23,7 +23,7 @@ string main = m.get_item_id(mres);
 }
 if(mres==-1)
 {
-setupmenu(true, "menumus1.ogg");
+setupmenu(true);
     m.add_item("Yes, quit the game without saving", "quit_no_save");
     m.add_item("Yes, save the game and then quit", "quit_save");
     m.add_item("No, continue playing", "continue");

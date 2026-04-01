@@ -156,10 +156,10 @@ last_menu_id="";
             if (choice == "export")
             {
                 file poastfile;
-                poastfile.open(DIRECTORY_APPDATA + "tsatria03/ClassicStand/data/stats/daily_summaries.txt", "a");
+                poastfile.open(DIRECTORY_APPDATA + "tsatria03/ClassicStand/stats/daily_summaries.txt", "a");
                 poastfile.write("\r\n\r\n"+report);
                 poastfile.close();
-                dlg("Your daily summary has been exported to data/stats/daily_summeries.txt.");
+                dlg("Your daily summary has been exported to stats/daily_summeries.txt.");
 calculate_new_day_conditions();
 writedata();
 dlgplay("savegame.ogg");
