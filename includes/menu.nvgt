@@ -1,49 +1,39 @@
 void actsmenu()
 {
-setupmenu(true);
-m.add_item("Buy ingredients. You currently have " + convert_to_currency(cash) + " in cash.", "bgn");
-m.add_item("Make lemonade. You currently have " + cups + " empty cup" + (cups == 1 ? "" : "s") + ".", "mlm");
+form.reset();
+form.create_window("Business actions", false);
+int bgn=form.create_button("Buy ingredients. You currently have " + convert_to_currency(cash) + " in cash");
+int mlm=form.create_button("Make lemonade. You currently have " + cups + " empty cup" + (cups == 1 ? "" : "s"));
+int plm;
 if(pitcherstat <= 0)
-    m.add_item("Pour lemonade. You currently have 0 liters of lemonade in the pitcher.", "plm");
+plm=form.create_button("Pour lemonade. You currently have 0 liters of lemonade in the pitcher");
 else if(pitcherstat <= 1)
-    m.add_item("Pour lemonade. You currently have 1 liter of lemonade in the pitcher.", "plm");
+plm=form.create_button("Pour lemonade. You currently have 1 liter of lemonade in the pitcher");
 else
-    m.add_item("Pour lemonade. You currently have " + ceil(pitcherstat) + " liters of lemonade in the pitcher.", "plm");
-m.add_item("Sell lemonade. You currently have " + soldcups + " sold cup" + (soldcups == 1 ? "" : "s") + ".", "slm");
-m.add_item("back", "back");
-m.intro_text = "Actions menu.";
-    int start_pos = 0;
-    if (last_menu_id != "")
-    {
-        int found = m.find_item_by_id(last_menu_id);
-        if (found != -1)
-            start_pos = found;
-    }
-        int mres = m.run(start_pos, true);
-string bactem = m.get_item_id(mres);
-    if (mres != -1)
+plm=form.create_button("Pour lemonade. You currently have " + ceil(pitcherstat) + " liters of lemonade in the pitcher");
+int slm=form.create_button("Sell lemonade. You currently have " + soldcups + " sold cup" + (soldcups == 1 ? "" : "s"));
+form.focus(bgn);
+while(true)
 {
-        last_menu_id = bactem;
-}
-if(mres==-1 || bactem=="back")
+wait(5);
+form.monitor();
+if(key_repeating(KEY_ESCAPE))
 {
 last_menu_id="";
 game();
 }
-if(bactem == "bgn")
+if(form.is_pressed(bgn))
 {
 last_menu_id="";
 buymenu();
 }
-if(bactem == "mlm")
+if(form.is_pressed(mlm))
 {
 if(cups < 1 || lemons < 1 || sugars < 1 || waters < 1)
 {
-m.fade_music();
 dlg("Error. You need at least one empty cup, 1 ripe lemon, 1 packet of sugar, and 1 liter of water to make lemonade.");
 actsmenu();
 }
-m.fade_music();
 vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !`@`$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
 string input = vd.input_box("", "How many cups of lemonade would you like to make?");
 if(input == "") actsmenu();
@@ -104,29 +94,26 @@ waters -= use_waters;
 pitcher = 1;
 pitcherstat += cupcount * 0.25;
 speak("Mixing... Please wait.");
-pool.play_stationary("makestart.ogg", false);
-dlgplay("makeloop.ogg");
-pool.play_stationary("makestop.ogg", false);
+pool.play_stationary("sounds/misc/makestart.ogg", false);
+dlgplay("sounds/misc/makeloop.ogg");
+pool.play_stationary("sounds/misc/makestop.ogg", false);
 dlg("Success. You made " + cupcount + " cup" + (cupcount == 1 ? "" : "s") + " of lemonade and added it to the pitcher.");
 last_menu_id = "";
 actsmenu();
 }
-if(bactem == "plm")
+if(form.is_pressed(plm))
 {
     if(pitcher < 1 || pitcherstat <= 0)
     {
-m.fade_music();
         dlg("Error. The pitcher is currently empty. Please make some lemonade first to pour into a cup.");
         actsmenu();
     }
     double maxcups = floor(pitcherstat / 0.25);
     if(maxcups < 1)
     {
-m.fade_music();
         dlg("Error. The pitcher doesn't have enough lemonade to pour a single cup.");
         actsmenu();
     }
-m.fade_music();
 vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !`@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
     string input = vd.input_box("", "How many cups would you like to pour from the pitcher?");
     if(input == "") actsmenu();
@@ -145,20 +132,18 @@ vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !`
         pitcher = 0;
     }
 speak("Pouring... Please wait.");
-dlgplay("pourcup"+random(1 ,4)+".ogg");
+dlgplay("sounds/misc/pourcup"+random(1 ,4)+".ogg");
     dlg("Success. You poured " + pourcount + " cup" + (pourcount == 1 ? "" : "s") + " of lemonade into sellable serving cups.");
 last_menu_id="";
         actsmenu();
 }
-if (bactem == "slm")
+if (form.is_pressed(slm))
 {
     if (fullcups <= 0)
     {
-        m.fade_music();
         dlg("Error. You need at least one cup of lemonade made in order to sell it for cash.");
         actsmenu();
     }
-    m.fade_music();
     vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !`@#$%^&*()[]{};:'\"\\|,<>_?/+-=`~", false, "");
     string price = vd.input_box("", "How much money would you like to sell each cup of lemonade for? You currently have " + fullcups + " filled cup" + (fullcups == 1 ? "" : "s") + ".");
     if (price == "" || price == "0") actsmenu();
@@ -198,16 +183,17 @@ if (percup > 250 && percup <= 500)
         fullcups -= 1;
         soldcups += 1;
     }
-    if (cups_sold > 0) pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
+    if (cups_sold > 0) pool.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
     double total_earned = percup * cups_sold;
     dlg("You sold " + cups_sold + " cup" + (cups_sold == 1 ? "" : "s") + " of lemonade to " + cups_sold + " out of " + customers + " potential customer" + (customers == 1 ? "" : "s") + " for a total of " + convert_to_currency(total_earned) + ".");
     trigger_event(60);
     generate_daily_summary();
 }
 }
+}
 void buymenu()
 {
-setupmenu(true);
+setupmenu();
 m.add_item("Bundled ingredients", "bgs");
 m.add_item("Single ingredients", "sgs");
 m.add_item("back", "back");
@@ -243,7 +229,7 @@ buysmenu();
 }
 void buybmenu()
 {
-setupmenu(true);
+setupmenu();
 double booth_cost     = ((cupcost + lemoncost + sugarcost + watercost) * 4) / 6;
 m.add_item("Booth bundle: costs " + convert_to_currency(booth_cost) + ". This ingredient bundle contains 4 empty cups, 4 ripe lemons, 4 packets of sugar, and 4 liters of water. Ice and salt is optional.", "tbl");
 double community_cost = ((cupcost + lemoncost + sugarcost + watercost) * 8) / 6;
@@ -309,7 +295,7 @@ purchase_ingredient_bundle("pbl", "parade", 24);
 }
 void buysmenu()
 {
-setupmenu(true);
+setupmenu();
 m.add_item("Cup: costs " + convert_to_currency(cupcost) + ". You have " + cups + " empty cup" + (cups == 1 ? "" : "s"), "cps");
 m.add_item("Ice: costs " + convert_to_currency(icecost) + ". You have " + ices + " bag" + (ices == 1 ? "" : "s") + " of ice", "ics");
 m.add_item("Lemon: costs " + convert_to_currency(lemoncost) + ". You have " + lemons + " ripe lemon" + (lemons == 1 ? "" : "s"), "lms");
@@ -354,8 +340,8 @@ vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !`
     }
     cups += qty;
     cash -= total;
-pool.play_stationary("buycup" + random(1, 2) + ".ogg", false);
-    pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
+pool.play_stationary("sounds/misc/buycup" + random(1, 2) + ".ogg", false);
+    pool.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
 dlg("Purchase complete. You bought " + qty + " empty cup" + (qty == 1 ? "" : "s") + " for " + convert_to_currency(total) + ". You now have " + convert_to_currency(cash) + " in cash remaining.");
         buysmenu();
 }
@@ -377,8 +363,8 @@ dlg("Error. You don't have enough cash to purchase " + qty + " bag" + (qty == 1 
     }
     ices += qty;
     cash -= total;
-pool.play_stationary("buybag" + random(1, 4) + ".ogg", false);
-    pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
+pool.play_stationary("sounds/misc/buybag" + random(1, 4) + ".ogg", false);
+    pool.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
 dlg("Purchase complete. You bought " + qty + " bag" + (qty == 1 ? "" : "s") + " of ice for " + convert_to_currency(total) + ". You now have " + convert_to_currency(cash) + " in cash remaining.");
         buysmenu();
 }
@@ -400,8 +386,8 @@ vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !`
     }
     lemons += qty;
     cash -= total;
-pool.play_stationary("buyfruit" + random(1, 2) + ".ogg", false);
-    pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
+pool.play_stationary("sounds/misc/buyfruit" + random(1, 2) + ".ogg", false);
+    pool.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
 dlg("Purchase complete. You bought " + qty + " ripe lemon" + (qty == 1 ? "" : "s") + " for " + convert_to_currency(total) + ". You now have " + convert_to_currency(cash) + " in cash remaining.");
         buysmenu();
 }
@@ -423,8 +409,8 @@ dlg("Error. You don't have enough cash to purchase " + qty + " packet" + (qty ==
     }
     salts += qty;
     cash -= total;
-pool.play_stationary("buypack" + random(1, 2) + ".ogg", false);
-    pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
+pool.play_stationary("sounds/misc/buypack" + random(1, 2) + ".ogg", false);
+    pool.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
 dlg("Purchase complete. You bought " + qty + " packet" + (qty == 1 ? "" : "s") + " of salt for " + convert_to_currency(total) + ". You now have " + convert_to_currency(cash) + " in cash remaining.");
         buysmenu();
 }
@@ -446,8 +432,8 @@ dlg("Error. You don't have enough cash to purchase " + qty + " packet" + (qty ==
     }
     sugars += qty;
     cash -= total;
-pool.play_stationary("buypack" + random(1, 2) + ".ogg", false);
-    pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
+pool.play_stationary("sounds/misc/buypack" + random(1, 2) + ".ogg", false);
+    pool.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
 dlg("Purchase complete. You bought " + qty + " packet" + (qty == 1 ? "" : "s") + " of sugar for " + convert_to_currency(total) + ". You now have " + convert_to_currency(cash) + " in cash remaining.");
         buysmenu();
 }
@@ -469,89 +455,93 @@ dlg("Error. You don't have enough cash to purchase " + qty + " liter" + (qty == 
     }
     waters += qty;
     cash -= total;
-pool.play_stationary("buywater" + random(1, 2) + ".ogg", false);
-    pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
+pool.play_stationary("sounds/misc/buywater" + random(1, 2) + ".ogg", false);
+    pool.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
 dlg("Purchase complete. You bought " + qty + " liter" + (qty == 1 ? "" : "s") + " of water for " + convert_to_currency(total) + ". You now have " + convert_to_currency(cash) + " in cash remaining.");
         buysmenu();
 }
 }
-void infomenu()
+void purchase_ingredient_bundle(string bundle_id, string bundle_name, double unit_qty)
 {
-    setupmenu(true, "sounds/menu/music2.ogg");
-    m.add_item("Business title: " + business_name, "inf1");
-    m.add_item("Date: " + dayname + ", " + monthname + daynumber, "inf2");
-    int hour = clocktime % 24;
-    string hour_period = (hour >= 12 && hour < 24) ? "PM" : "AM";
-    int display_hour = hour % 12;
-    if(display_hour == 0) display_hour = 12;
-    m.add_item("Time: " + display_hour + hour_period + ". Level " + level + " of " + maxlevel + ".", "inf3");
-    double celsius = round((temprature - 32) * 5 / 9, 0);
-    m.add_item("Temperature: " + temprature + " degrees Fahrenheit, " + celsius + " degrees Celsius.", "inf4");
-    m.add_item("Cash: " + convert_to_currency(cash), "inf5");
-    m.add_item("filled cups: " + fullcups, "inf6");
-    m.add_item("sold cups: " + soldcups, "inf7");
-    if (pitcherstat <= 0)
-        m.add_item("Pitcher status: 0 liters of lemonade.", "inf9");
-    else if (pitcherstat <= 1)
-        m.add_item("Pitcher status: 1 liter of lemonade.", "inf9");
-    else
-        m.add_item("Pitcher status: " + ceil(pitcherstat) + " liters of lemonade.", "inf9");
-    m.add_item("back", "back");
-    m.intro_text = "Information menu.";
-    int start_pos = 0;
-    if (last_menu_id != "")
-    {
-        int found = m.find_item_by_id(last_menu_id);
-        if (found != -1)
-            start_pos = found;
-    }
-    int mres = m.run(start_pos, true);
-    string infem = m.get_item_id(mres);
-    if (mres != -1 && infem != "back")
-    {
-        last_menu_id = infem;
-        infomenu();
-    }
-    else
-    {
-        m.fade_music();
-        last_menu_id = "";
-        game();
-    }
+vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=~", false, "");
+string qty_input = vd.input_box("", "How many " + bundle_name + (bundle_name == "booth" ? " bundles" : " bundles") + " would you like to buy?");
+if(qty_input == "")
+{
+buybmenu();
+}
+double qty = string_to_number(qty_input);
+if(qty <= 0)
+{
+buybmenu();
+}
+setupmenu();
+m.add_item("Yes", "yes");
+m.add_item("No", "no");
+m.intro_text = "Would you like to include " + unit_qty + " bags of ice with each bundle?";
+int mres = m.run();
+bool include_ice = m.get_item_id(mres) == "yes";
+setupmenu();
+m.add_item("Yes", "yes");
+m.add_item("No", "no");
+m.intro_text = "Would you like to include " + unit_qty + " packets of salt with each bundle?";
+int mres2 = m.run();
+bool include_salt = m.get_item_id(mres) == "yes";
+double per_bundle = ((cupcost + lemoncost + sugarcost + watercost) * unit_qty) / 6;
+if(include_ice)  per_bundle += icecost * unit_qty;
+if(include_salt) per_bundle += saltcost * unit_qty;
+double total = per_bundle * qty;
+if(cash < total)
+{
+dlg("Error. You don't have enough cash to purchase " + qty + " " + bundle_name + " bundle" + (qty == 1 ? "" : "s") + " of supplies.");
+buybmenu();
+}
+cash   -= total;
+cups   += unit_qty * qty;
+if(include_ice) ices += unit_qty * qty;
+lemons += unit_qty * qty;
+if(include_salt) salts += unit_qty * qty;
+sugars += unit_qty * qty;
+waters += unit_qty * qty;
+pool.play_stationary("sounds/misc/buycup" + random(1, 2) + ".ogg", false);
+pool.play_stationary("sounds/misc/buybag" + random(1, 4) + ".ogg", false);
+pool.play_stationary("sounds/misc/buyfruit" + random(1, 2) + ".ogg", false);
+pool.play_stationary("sounds/misc/buypack" + random(1, 2) + ".ogg", false);
+pool.play_stationary("sounds/misc/buywater" + random(1, 2) + ".ogg", false);
+pool.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
+string msg = "Purchase complete. You bought " + qty + " " + bundle_name + " bundle" + (qty == 1 ? "" : "s") + " of supplies for " + convert_to_currency(total) + ".\r\n";
+msg += "You received " + (unit_qty * qty) + " empty cups";
+if(include_ice)  msg += ", " + (unit_qty * qty) + " bags of ice";
+msg += ", " + (unit_qty * qty) + " ripe lemons";
+if(include_salt) msg += ", " + (unit_qty * qty) + " packets of salt";
+msg += ", " + (unit_qty * qty) + " packets of sugar";
+msg += ", and " + (unit_qty * qty) + " liters of water.";
+msg += "\r\nYou now have " + convert_to_currency(cash) + " in cash remaining.";
+dlgmessage(msg);
+wait(500);
+buybmenu();
 }
 void optsmenu()
 {
-setupmenu(true, "sounds/menu/music2.ogg");
-m.add_item("Change business title.", "cbt");
-m.add_item("exit game", "ex");
-m.add_item("reload game", "rgl");
-m.add_item("reset game", "rgm");
-m.add_item("restart game", "rgs");
-m.add_item("save game", "sgm");
-m.add_item("back", "back");
-m.intro_text = "Options menu.";
-    int start_pos = 0;
-    if (last_menu_id != "")
-    {
-        int found = m.find_item_by_id(last_menu_id);
-        if (found != -1)
-            start_pos = found;
-    }
-        int mres = m.run(start_pos, true);
-string opm = m.get_item_id(mres);
-    if (mres != -1)
+form.reset();
+form.create_window("Game options", false);
+int cbt=form.create_button("Change business title");
+int ex=form.create_button("exit game");
+int rgl=form.create_button("reload game");
+int rgm=form.create_button("reset game");
+int rgs=form.create_button("restart game");
+int sgm=form.create_button("save game");
+form.focus(cbt);
+while(true)
 {
-        last_menu_id = opm;
-}
-if(mres==-1 || opm=="back")
+wait(5);
+form.monitor();
+if(key_repeating(KEY_ESCAPE))
 {
-m.fade_music();
 last_menu_id="";
 game();
 }
-if(opm=="cbt")
+if(form.is_pressed(cbt))
 {
-m.fade_music();
 vd.set_disallowed_chars("`@#$%^&*()[]{}\"\\|<>_/+=`~", false, "");
     string name = vd.input_box("", "What would you like your new Business title to be?");
     if(name == "")
@@ -562,14 +552,14 @@ optsmenu();
 business_name=name;
 dlg("Success. Your business title has now been changed to "+business_name+".");
 writedata();
-dlgplay("savegame.ogg");
+dlgplay("sounds/misc/savegame.ogg");
 wait(200);
 last_menu_id="";
 game();
 }
-if(opm=="ex")
+if(form.is_pressed(ex))
 {
-setupmenu(true, "sounds/menu/music2.ogg");
+setupmenu();
     m.add_item("Yes, quit the game without saving", "quit_no_save");
     m.add_item("Yes, save the game and then quit", "quit_save");
     m.add_item("No, continue playing", "continue");
@@ -584,14 +574,13 @@ optsmenu();
 if (m.get_item_id(mres) == "quit_no_save")
     {
         speak("Exiting the game without saving.");
-m.fade_music();
 exit();
     }
 if (m.get_item_id(mres) == "quit_save")
     {
         writedata();
         speak("game saved, Exiting.");
-dlgplay("savegame.ogg");
+dlgplay("sounds/misc/savegame.ogg");
 m.fade_music();
 exit();
     }
@@ -604,24 +593,22 @@ if (m.get_item_id(mres) == "save_continue")
     {
         writedata();
 speak("game saved");
-dlgplay("savegame.ogg");
+dlgplay("sounds/misc/savegame.ogg");
 wait(200);
 last_menu_id="";
 optsmenu();
     }
 }
-if(opm=="rgl")
+if(form.is_pressed(rgl))
 {
 readdata();
 speak("game reloaded");
-m.fade_music();
 last_menu_id="";
 game();
 }
-if(opm=="rgm")
+if(form.is_pressed(rgm))
 {
-m.fade_music();
-setupmenu(false, "");
+setupmenu();
     m.add_item("Yes", "yes");
     m.add_item("No", "no");
 m.intro_text="Are you sure you want to reset all of your game's progress? This action cannot be undone.";
@@ -643,19 +630,18 @@ wait(500);
 restart_game();
 }
 }
-if(opm=="rgs")
+if(form.is_pressed(rgs))
 {
 speak("restarting");
-m.fade_music();
 restart_game();
 }
-if(opm=="sgm")
+if(form.is_pressed(sgm))
 {
 writedata();
 speak("game saved");
-dlgplay("savegame.ogg");
-m.fade_music();
+dlgplay("sounds/misc/savegame.ogg");
 last_menu_id="";
 game();
+}
 }
 }

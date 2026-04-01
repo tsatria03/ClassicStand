@@ -1,4 +1,5 @@
 New in 1.8.
+Revamped the user interface in the game. The game's main menu is now converted to use the audio forms system.
 The sounds for the game are no longer encrypted from now on.
 Removed the auto-filled price values for selling lemonade from the sell prompt.
 New in 1.7.

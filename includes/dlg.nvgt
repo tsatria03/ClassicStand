@@ -1,7 +1,7 @@
 bool dlg(string message, bool dlgcoppy=true, bool dlgsound=true, int timeout=-1)
 {
 timer timeouter;
-if(dlgsound==true) temp.play_stationary("dlgread.ogg", false);
+if(dlgsound==true) temp.play_stationary("sounds/dlg/read.ogg", false);
 speak(message);
 while(true)
 {

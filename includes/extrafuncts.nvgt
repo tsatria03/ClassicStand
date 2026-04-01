@@ -126,7 +126,7 @@ monthname = monthnames[current_month_index];
 }
 clocktime = 0;
         level = 1;
-setupmenu(false, "");
+setupmenu();
         m.add_item("Copy daily summary to clipboard", "copy");
         m.add_item("Export daily summary to file", "export");
         m.add_item("Return to the game.", "cancel");
@@ -172,65 +172,6 @@ calculate_new_day_conditions();
 last_menu_id="";
 game();
     }
-void purchase_ingredient_bundle(string bundle_id, string bundle_name, double unit_qty)
-{
-vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=~", false, "");
-string qty_input = vd.input_box("", "How many " + bundle_name + (bundle_name == "booth" ? " bundles" : " bundles") + " would you like to buy?");
-if(qty_input == "")
-{
-buybmenu();
-}
-double qty = string_to_number(qty_input);
-if(qty <= 0)
-{
-buybmenu();
-}
-setupmenu(false, "");
-m.add_item("Yes", "yes");
-m.add_item("No", "no");
-m.intro_text = "Would you like to include " + unit_qty + " bags of ice with each bundle?";
-int mres = m.run();
-bool include_ice = m.get_item_id(mres) == "yes";
-setupmenu(false, "");
-m.add_item("Yes", "yes");
-m.add_item("No", "no");
-m.intro_text = "Would you like to include " + unit_qty + " packets of salt with each bundle?";
-int mres2 = m.run();
-bool include_salt = m.get_item_id(mres) == "yes";
-double per_bundle = ((cupcost + lemoncost + sugarcost + watercost) * unit_qty) / 6;
-if(include_ice)  per_bundle += icecost * unit_qty;
-if(include_salt) per_bundle += saltcost * unit_qty;
-double total = per_bundle * qty;
-if(cash < total)
-{
-dlg("Error. You don't have enough cash to purchase " + qty + " " + bundle_name + " bundle" + (qty == 1 ? "" : "s") + " of supplies.");
-buybmenu();
-}
-cash   -= total;
-cups   += unit_qty * qty;
-if(include_ice) ices += unit_qty * qty;
-lemons += unit_qty * qty;
-if(include_salt) salts += unit_qty * qty;
-sugars += unit_qty * qty;
-waters += unit_qty * qty;
-pool.play_stationary("buycup" + random(1, 2) + ".ogg", false);
-pool.play_stationary("buybag" + random(1, 4) + ".ogg", false);
-pool.play_stationary("buyfruit" + random(1, 2) + ".ogg", false);
-pool.play_stationary("buypack" + random(1, 2) + ".ogg", false);
-pool.play_stationary("buywater" + random(1, 2) + ".ogg", false);
-pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
-string msg = "Purchase complete. You bought " + qty + " " + bundle_name + " bundle" + (qty == 1 ? "" : "s") + " of supplies for " + convert_to_currency(total) + ".\r\n";
-msg += "You received " + (unit_qty * qty) + " empty cups";
-if(include_ice)  msg += ", " + (unit_qty * qty) + " bags of ice";
-msg += ", " + (unit_qty * qty) + " ripe lemons";
-if(include_salt) msg += ", " + (unit_qty * qty) + " packets of salt";
-msg += ", " + (unit_qty * qty) + " packets of sugar";
-msg += ", and " + (unit_qty * qty) + " liters of water.";
-msg += "\r\nYou now have " + convert_to_currency(cash) + " in cash remaining.";
-dlgmessage(msg);
-wait(500);
-buybmenu();
-}
 void trigger_event(int probability_chance)
 {
     if (random(0, 99) >= probability_chance)
@@ -254,14 +195,14 @@ void trigger_event(int probability_chance)
     {
         double watercount = random(5 * level * daynumber, 10 * level * daynumber);
         waters += watercount;
-        pool.play_stationary("buywater" + random(1, 2) + ".ogg", false);
+        pool.play_stationary("sounds/misc/buywater" + random(1, 2) + ".ogg", false);
         dlg("It was scorching hot today! A kind neighbor donated " + watercount + " liter" + (watercount == 1 ? "" : "s") + " of water to help your business.");
     }
     else if (event == "heatstroke")
     {
         double cashcount = random(100 * level * daynumber, 500 * level * daynumber);
         cash = max(0, cash - cashcount);
-        pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
+        pool.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
         dlg("A customer fainted from the heat! You had to pay " + convert_to_currency(cashcount) + " in first aid supplies.");
     }
     else if (event == "slow_day")
@@ -286,7 +227,7 @@ void trigger_event(int probability_chance)
     {
         double bonus = random(100 * level * daynumber, 500 * level * daynumber);
         cash += bonus;
-pool.play_stationary("buy" + random(1, 4) + ".ogg", false);
+pool.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
         dlg("A video of your stand went viral! You got a bonus of " + convert_to_currency(bonus) + ".");
     }
     else if (event == "nothing")

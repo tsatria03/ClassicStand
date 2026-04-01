@@ -1,29 +1,18 @@
 void game()
 {
+form.reset();
+form.create_window("ClassicStand", false);
+int bcm=form.create_button("Business actions");
+int bsm=form.create_button("Business information");
+int gsp=form.create_button("Game options");
+form.focus(bcm);
 while(true)
 {
 wait(5);
-setupmenu(true);
-m.add_item("Business actions", "bcm");
-m.add_item("Business information", "bsm");
-m.add_item("Game options", "gsp");
-m.intro_text = "Lemonade manager.";
-    int start_pos = 0;
-    if (last_menu_id != "")
-    {
-        int found = m.find_item_by_id(last_menu_id);
-        if (found != -1)
-            start_pos = found;
-    }
-        int mres = m.run(start_pos, true);
-string main = m.get_item_id(mres);
-    if (mres != -1)
+form.monitor();
+if(key_repeating(KEY_ESCAPE))
 {
-        last_menu_id = main;
-}
-if(mres==-1)
-{
-setupmenu(true);
+setupmenu();
     m.add_item("Yes, quit the game without saving", "quit_no_save");
     m.add_item("Yes, save the game and then quit", "quit_save");
     m.add_item("No, continue playing", "continue");
@@ -64,20 +53,56 @@ last_menu_id="";
 game();
     }
 }
-if(main == "bcm")
+if(form.is_pressed(bcm))
 {
 last_menu_id="";
 actsmenu();
 }
-if(main == "bsm")
+if(form.is_pressed(bsm))
 {
-m.fade_music();
 last_menu_id="";
-infomenu();
-}
-if(main == "gsp")
+form.reset();
+form.create_window("Business information", false);
+string inftext="";
+inftext+="Business title: " + business_name + "\r\n";
+    inftext+="Date: " + dayname + ", " + monthname + daynumber + "\r\n";
+    int hour = clocktime % 24;
+    string hour_period = (hour >= 12 && hour < 24) ? "PM" : "AM";
+    int display_hour = hour % 12;
+    if(display_hour == 0) display_hour = 12;
+    inftext+="Time: " + display_hour + hour_period + ". Level " + level + " of " + maxlevel + "." + "\r\n";
+    double celsius = round((temprature - 32) * 5 / 9, 0);
+    inftext+="Temperature: " + temprature + " degrees Fahrenheit, " + celsius + " degrees Celsius." + "\r\n";
+    inftext+="Cash: " + convert_to_currency(cash) + "\r\n";
+    inftext+="filled cups: " + fullcups + "\r\n";
+    inftext+="sold cups: " + soldcups + "\r\n";
+    if (pitcherstat <= 0)
+        inftext+="Pitcher status: 0 liters of lemonade." + "\r\n";
+    else if (pitcherstat <= 1)
+        inftext+="Pitcher status: 1 liter of lemonade." + "\r\n";
+    else
+        inftext+="Pitcher status: " + ceil(pitcherstat) + " liters of lemonade.";
+int infbox=form.create_input_box("Information", inftext, read_only:true, multiline:true);
+int closebox=form.create_button("close");
+form.focus(bcm);
+while(true)
 {
-m.fade_music();
+wait(5);
+form.monitor();
+if(key_repeating(KEY_ESCAPE))
+{
+last_menu_id="";
+game();
+}
+if(form.is_pressed(closebox))
+{
+last_menu_id="";
+game();
+}
+}
+}
+if(form.is_pressed(gsp))
+{
 last_menu_id="";
 optsmenu();
 }
