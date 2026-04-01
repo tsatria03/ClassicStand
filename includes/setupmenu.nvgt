@@ -1,4 +1,4 @@
-void setupmenu(bool music_added = false, string musicpath="sounds/menu/music1.ogg", string clicksound="sounds/menu/click.ogg", string closesound="sounds/menu/close.ogg", string edgesound="sounds/menu/edge.ogg", string entersound="sounds/menu/enter.ogg", string opensound="sounds/menu/open.ogg", string wrapsound="sounds/menu/wrap.ogg")
+void setupmenu(bool music_added = false, string musicpath="sounds/menu/music.ogg", string clicksound="sounds/menu/click.ogg", string closesound="sounds/menu/close.ogg", string edgesound="sounds/menu/edge.ogg", string entersound="sounds/menu/enter.ogg", string opensound="sounds/menu/open.ogg", string wrapsound="sounds/menu/wrap.ogg")
 {
 if (music_added)
 {

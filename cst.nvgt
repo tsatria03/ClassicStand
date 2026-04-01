@@ -1,9 +1,15 @@
 #include"includes/includes.nvgt"
 void main()
 {
+dummy.load("dummy");
 if (!directory_exists(savePath)) directory_create(savePath);
 if (!directory_exists(statsPath)) directory_create(statsPath);
 readdata();
+readpreffs();
+sound_global_hrtf=hrtf;
+apply_pitch_pool_settings();
+apply_misc_pool_settings();
+getver();
 show_window("ClassicStand, version "+version);
 if(gamstence.is_already_running)
 {
@@ -28,23 +34,31 @@ main();
 business_name=name;
 dlgmessage("Congratulations! You've successfully completed the game setup. Your business will now be known as "+business_name+". Press enter to start playing.");
 busprofed=true;
-writedata();
+writepreffs();
 dlgplay("savegame.ogg");
 wait(200);
 last_menu_id = "";
-game();
+mainmenu();
 }
 else if(busprofed == true)
 {
 wait(500);
 last_menu_id = "";
-game();
+mainmenu();
 }
 }
+}
+void getver()
+{
+dockver.open("docks/version.txt","rb");
+version=dockver.read();
+dockver.close();
 }
 void resetgame()
 {
-busprofed=false;
+business_name="";
+me.x=0;
+me.y=0;
 cash=100;
 fullcups=0;
 soldcups=0;
@@ -69,7 +83,6 @@ current_month_index=0;
 daynumber=1;
 pitcher=0;
 temprature=20;
-business_name="";
 dayname = daynames[current_day_index];
 monthname = monthnames[current_month_index];
 }

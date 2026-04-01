@@ -1,5 +1,10 @@
 New in 1.8.
-Revamped the user interface in the game. The game's main menu is now converted to use the audio forms system.
+Added the ability to load and save multiple games. There's now a load game option in the game menu.
+Restructured the entire game. There's now an actual main menu.
+Removed the options menu from the main game. This will be added back later on.
+Added map based navigation support to the game. This will be used later on.
+Added the ability to quickly load and save your game progress by pressing Control L or Control S. You can also quickly exit the game by pressing Alt F4.
+Revamped the user interface in the game. The game's action, information, main, and option menus are now converted to use the audio forms system.
 The sounds for the game are no longer encrypted from now on.
 Removed the auto-filled price values for selling lemonade from the sell prompt.
 New in 1.7.

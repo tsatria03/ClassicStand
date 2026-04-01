@@ -2,61 +2,124 @@ void game()
 {
 form.reset();
 form.create_window("ClassicStand", false);
-int bcm=form.create_button("Business actions");
-int bsm=form.create_button("Business information");
-int gsp=form.create_button("Game options");
-form.focus(bcm);
+int bcm=form.create_button("Business &actions");
+int bsm=form.create_button("Business &information");
+int gm=form.create_keyboard_area("&Game keyboard area");
+form.focus(gm);
 while(true)
 {
 wait(5);
 form.monitor();
-if(key_repeating(KEY_ESCAPE))
+p.update_listener_2d(me.x,me.y);
+if(form.get_current_focus()==gm)
 {
-setupmenu();
-    m.add_item("Yes, quit the game without saving", "quit_no_save");
-    m.add_item("Yes, save the game and then quit", "quit_save");
-    m.add_item("No, continue playing", "continue");
-    m.add_item("No, save the game, but continue playing", "save_continue");
-m.intro_text = "Are you sure you want to quit? You will lose all progress for this current game session.";
-int mres = m.run();
-    if(mres==-1)
-    {
+    bool running = autorun;
+    if (alt_is_down() or control_is_down())
+        running = !running;
+    movetime = running ? runtime : walktime;
+if(shift_is_down())
+{
+if(key_pressed(KEY_LEFT) and facing=="left"==false)
+{
+facing="left";
+p.play_2d("sounds/misc/turn.ogg", me.x-1, me.y, me.x-1, me.y, false);
+}
+if(key_pressed(KEY_RIGHT) and facing=="right"==false)
+{
+facing="right";
+p.play_2d("sounds/misc/turn.ogg", me.x+1, me.y, me.x+1, me.y, false);
+}
+if(key_pressed(KEY_DOWN) and facing=="backward"==false)
+{
+facing="backward";
+p.play_2d("sounds/misc/turn.ogg", me.x, me.y-1, me.x, me.y-1, false);
+}
+if(key_pressed(KEY_UP) and facing=="forward"==false)
+{
+facing="forward";
+p.play_2d("sounds/misc/turn.ogg", me.x, me.y+1, me.x, me.y+1, false);
+}
+}
+if(!shift_is_down() && key_pressed(KEY_LEFT) and me.x!=minx)
+{
+me.x-=1;
+facing="left";
+p.play_stationary("sounds/platforms/"+tiletype+"/step"+random(1,5)+".ogg", false);
+movetimer.restart();
+}
+if(!shift_is_down() && key_pressed(KEY_RIGHT) and me.x!=maxx)
+{
+me.x+=1;
+facing="right";
+p.play_stationary("sounds/platforms/"+tiletype+"/step"+random(1,5)+".ogg", false);
+movetimer.restart();
+}
+if(!shift_is_down() && key_pressed(KEY_DOWN) and me.y!=miny)
+{
+me.y-=1;
+facing="backward";
+p.play_stationary("sounds/platforms/"+tiletype+"/step"+random(1,5)+".ogg", false);
+movetimer.restart();
+}
+if(!shift_is_down() && key_pressed(KEY_UP) and me.y!=maxy)
+{
+me.y+=1;
+facing="forward";
+p.play_stationary("sounds/platforms/"+tiletype+"/step"+random(1,5)+".ogg", false);
+movetimer.restart();
+}
+if(movetimer.elapsed>=movetime)
+{
+if(!shift_is_down() && key_down(KEY_LEFT) and me.x!=minx)
+{
+me.x-=1;
+facing="left";
+p.play_stationary("sounds/platforms/"+tiletype+"/step"+random(1,5)+".ogg", false);
+movetimer.restart();
+}
+if(!shift_is_down() && key_down(KEY_RIGHT) and me.x!=maxx)
+{
+me.x+=1;
+facing="right";
+p.play_stationary("sounds/platforms/"+tiletype+"/step"+random(1,5)+".ogg", false);
+movetimer.restart();
+}
+if(!shift_is_down() && key_down(KEY_DOWN) and me.y!=miny)
+{
+me.y-=1;
+facing="backward";
+p.play_stationary("sounds/platforms/"+tiletype+"/step"+random(1,5)+".ogg", false);
+movetimer.restart();
+}
+if(!shift_is_down() && key_down(KEY_UP) and me.y!=maxy)
+{
+me.y+=1;
+facing="forward";
+p.play_stationary("sounds/platforms/"+tiletype+"/step"+random(1,5)+".ogg", false);
+movetimer.restart();
+}
+}
+if(key_pressed(KEY_C))
+{
+speak(me.x+", "+me.y+" on "+tiletype+". Facing "+facing+".");
+}
+if(control_is_down() and key_pressed(KEY_L))
+{
+readdata();
+speak("game reloaded");
+wait(500);
 last_menu_id="";
 game();
-    }
-if (m.get_item_id(mres) == "quit_no_save")
-    {
-        speak("Exiting the game without saving.");
-m.fade_music();
-exit();
-    }
-if (m.get_item_id(mres) == "quit_save")
-    {
-        writedata();
-speak("game saved, Exiting.");
-dlgplay("savegame.ogg");
-m.fade_music();
-exit();
-    }
-if (m.get_item_id(mres) == "continue")
-    {
-last_menu_id="";
-game();
-    }
-if (m.get_item_id(mres) == "save_continue")
-    {
+}
+if(control_is_down() and key_pressed(KEY_S))
+{
         writedata();
 speak("game saved");
-dlgplay("savegame.ogg");
+dlgplay("sounds/misc/savegame.ogg");
 wait(200);
 last_menu_id="";
 game();
-    }
 }
-if(form.is_pressed(bcm))
-{
-last_menu_id="";
-actsmenu();
 }
 if(form.is_pressed(bsm))
 {
@@ -83,7 +146,7 @@ inftext+="Business title: " + business_name + "\r\n";
     else
         inftext+="Pitcher status: " + ceil(pitcherstat) + " liters of lemonade.";
 int infbox=form.create_input_box("Information", inftext, read_only:true, multiline:true);
-int closebox=form.create_button("close");
+int closebox=form.create_button("&close");
 form.focus(bcm);
 while(true)
 {
@@ -101,10 +164,59 @@ game();
 }
 }
 }
-if(form.is_pressed(gsp))
+if(alt_is_down() && key_pressed(KEY_F4))
+{
+        speak("Exiting the game without saving.");
+wait(500);
+mainmenu();
+}
+if(key_repeating(KEY_ESCAPE))
+{
+setupmenu();
+    m.add_item("Yes, quit the game without saving", "quit_no_save");
+    m.add_item("Yes, save the game and then quit", "quit_save");
+    m.add_item("No, continue playing", "continue");
+    m.add_item("No, save the game, but continue playing", "save_continue");
+m.intro_text = "Are you sure you want to quit? You will lose all progress for this current game session.";
+int mres = m.run();
+    if(mres==-1)
+    {
+last_menu_id="";
+game();
+    }
+if (m.get_item_id(mres) == "quit_no_save")
+    {
+        speak("Exiting the game without saving.");
+wait(500);
+mainmenu();
+    }
+if (m.get_item_id(mres) == "quit_save")
+    {
+        writedata();
+speak("game saved, Exiting.");
+dlgplay("sounds/misc/savegame.ogg");
+wait(200);
+mainmenu();
+    }
+if (m.get_item_id(mres) == "continue")
+    {
+last_menu_id="";
+game();
+    }
+if (m.get_item_id(mres) == "save_continue")
+    {
+        writedata();
+speak("game saved");
+dlgplay("sounds/misc/savegame.ogg");
+wait(200);
+last_menu_id="";
+game();
+    }
+}
+if(form.is_pressed(bcm))
 {
 last_menu_id="";
-optsmenu();
+actsmenu();
 }
 }
 }

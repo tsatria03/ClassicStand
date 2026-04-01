@@ -1,13 +1,9 @@
 void readdata()
 {
     sd.load();
-if (sd.d.exists("menumusvolume"))
+    if (sd.d.exists("business_name"))
 {
-menumusvolume = sd.read_int("menumusvolume");
-}
-    if (sd.d.exists("busprofed"))
-{
-busprofed = sd.read_bool("busprofed");
+business_name = sd.read_string("business_name");
 }
     if (sd.d.exists("cash"))
 {
@@ -105,10 +101,6 @@ pitcher = sd.read_int("pitcher");
 {
 temprature = sd.read_int("temprature");
 }
-    if (sd.d.exists("business_name"))
-{
-business_name = sd.read_string("business_name");
-}
 if (sd.d.exists("dayname"))
 {
 dayname = sd.read_string("dayname");
@@ -120,8 +112,7 @@ monthname = sd.read_string("monthname");
 }
 void writedata()
 {
-sd.add("menumusvolume", menumusvolume);
-sd.add("busprofed", busprofed);
+sd.add("business_name",business_name);
     sd.add("cash", cash);
     sd.add("fullcups", fullcups);
 sd.add("soldcups", soldcups);
@@ -146,8 +137,25 @@ sd.add("current_month_index", current_month_index);
     sd.add("daynumber", daynumber);
     sd.add("pitcher", pitcher);
     sd.add("temprature", temprature);
-sd.add("business_name",business_name);
 sd.add("dayname", dayname);
 sd.add("monthname", monthname);
     sd.save();
+}
+void readpreffs()
+{
+    st.load();
+    if (st.d.exists("menumusvolume"))
+{
+menumusvolume = st.read_int("menumusvolume");
+}
+    if (st.d.exists("busprofed"))
+{
+busprofed = st.read_bool("busprofed");
+}
+}
+void writepreffs()
+{
+    st.add("menumusvolume", menumusvolume);
+st.add("busprofed", busprofed);
+    st.save();
 }

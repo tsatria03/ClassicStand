@@ -1,23 +1,231 @@
+void mainmenu()
+{
+setupmenu(true);
+m.add_item("documentation menu", "dm");
+m.add_item("game menu", "gm");
+m.add_item("exit game", "ex");
+m.intro_text = "Main menu. Please choose an option with your arrow keys, then press enter to activate one.";
+int mres=m.run();
+string main = m.get_item_id(mres);
+if(mres==-1)
+{
+speak("exiting");
+m.fade_music();
+exit();
+}
+if(main=="dm")
+{
+docksmenu();
+}
+if (main == "gm")
+{
+gamemenu();
+}
+if (main == "ex")
+{
+speak("exiting");
+m.fade_music();
+exit();
+}
+}
+void docksmenu()
+{
+setupmenu(true);
+m.add_item("changelog", "changelog");
+m.add_item("credits", "credits");
+m.add_item("readme", "readme");
+m.add_item("todo_list", "todo_list");
+m.add_item("back", "back");
+m.intro_text="Documentation menu.";
+int mres=m.run();
+string dnm=m.get_item_id(mres);
+if(mres==-1)
+{
+mainmenu();
+}
+if(dnm=="changelog")
+{
+speak("loading");
+m.fade_music();
+dockread("docks/changelog.txt");
+}
+if(dnm=="credits")
+{
+speak("loading");
+m.fade_music();
+dockread("docks/credits.txt");
+}
+if(dnm=="readme")
+{
+speak("loading");
+m.fade_music();
+dockread("docks/readme.txt");
+}
+if(dnm=="todo_list")
+{
+speak("loading");
+m.fade_music();
+dockread("docks/todo_list.txt");
+}
+if(dnm=="back")
+{
+mainmenu();
+}
+}
+void gamemenu()
+{
+setupmenu(true);
+m.add_item("load game", "lg");
+m.add_item("new game", "ng");
+m.add_item("back", "back");
+m.intro_text = "Game menu.";
+int mres=m.run();
+string gamem = m.get_item_id(mres);
+if(mres==-1)
+{
+mainmenu();
+}
+if (gamem == "lg")
+{
+loadgamemenu();
+}
+if(gamem=="ng")
+{
+newgamemenu();
+}
+if (gamem == "back")
+{
+mainmenu();
+}
+}
+void loadgamemenu()
+{
+setupmenu(true);
+for (uint i = 1; i <= 20; i++) 
+{
+string saveFile = DIRECTORY_APPDATA + "tsatria03/ClassicStand/saves/game" + string(i) + ".clm";
+        double cash = get_save_cash(saveFile);
+        if (cash == -1)
+        {
+            m.add_item("Slot " + string(i) + ". Empty.", "sl" + string(i));
+        }
+        else
+        {
+            m.add_item("Slot " + string(i) + ". Total cash: " + string(convert_to_currency(cash)), "sl" + string(i));
+        }
+    }
+m.add_item("Back", "back");
+m.intro_text = "Select the save slot to load the game from.";
+int mres = m.run();
+string slotem = m.get_item_id(mres);
+if(mres==-1)
+{
+gamemenu();
+}
+if (slotem == "back")
+{
+gamemenu();
+}
+int slotNumber = string_to_int(slotem.substr(2));
+set_save_slot(slotNumber);
+if (file_exists(currentSaveSlot))
+{
+speak("Loading slot " + string(slotNumber));
+m.fade_music();
+readdata();
+game();
+}
+else
+{
+m.fade_music();
+alertslot=pool.play_stationary("sounds/dlg/error.ogg",false);
+dlg("Error! The data assosiated with this save slot does not exist!");
+pool.destroy_sound(alertslot);
+gamemenu();
+}
+}
+void newgamemenu()
+{
+setupmenu(true);
+for (uint i = 1; i <= 20; i++) 
+{
+string saveFile = DIRECTORY_APPDATA + "tsatria03/ClassicStand/saves/game" + string(i) + ".clm";
+        double cash = get_save_cash(saveFile);
+        if (cash == -1)
+        {
+            m.add_item("Slot " + string(i) + ". Empty.", "sl" + string(i));
+        }
+        else
+        {
+            m.add_item("Slot " + string(i) + ". Total cash: " + string(convert_to_currency(cash)), "sl" + string(i));
+        }
+    }
+m.add_item("Back", "back");
+m.intro_text = "Select the save slot to start the game from.";
+int mres = m.run();
+string slotem2 = m.get_item_id(mres);
+if(mres==-1)
+{
+gamemenu();
+}
+if (slotem2 == "back")
+{
+gamemenu();
+}
+int slotNumber = string_to_int(slotem2.substr(2));
+set_save_slot(slotNumber);
+if (file_exists(currentSaveSlot))
+{
+setupmenu();
+m.add_item("yes");
+m.add_item("no");
+m.intro_text = "Are you sure you want to start over from the beginning? This will erase all progress on the selected save slot.";
+int mres2=m.run();
+if(mres2==-1)
+{
+newgamemenu();
+}
+if(mres2==1)
+{
+speak("Loading slot " + string(slotNumber));
+m.fade_music();
+resetgame();
+game();
+}
+if (mres2==2)
+{
+newgamemenu();
+}
+}
+else
+{
+speak("Loading slot " + string(slotNumber));
+m.fade_music();
+resetgame();
+game();
+}
+}
 void actsmenu()
 {
 form.reset();
 form.create_window("Business actions", false);
-int bgn=form.create_button("Buy ingredients. You currently have " + convert_to_currency(cash) + " in cash");
-int mlm=form.create_button("Make lemonade. You currently have " + cups + " empty cup" + (cups == 1 ? "" : "s"));
+int bgn=form.create_button("Buy &ingredients. You currently have " + convert_to_currency(cash) + " in cash");
+int mlm=form.create_button("Make &lemonade. You currently have " + cups + " empty cup" + (cups == 1 ? "" : "s"));
 int plm;
 if(pitcherstat <= 0)
-plm=form.create_button("Pour lemonade. You currently have 0 liters of lemonade in the pitcher");
+plm=form.create_button("&Pour lemonade. You currently have 0 liters of lemonade in the pitcher");
 else if(pitcherstat <= 1)
-plm=form.create_button("Pour lemonade. You currently have 1 liter of lemonade in the pitcher");
+plm=form.create_button("&Pour lemonade. You currently have 1 liter of lemonade in the pitcher");
 else
-plm=form.create_button("Pour lemonade. You currently have " + ceil(pitcherstat) + " liters of lemonade in the pitcher");
-int slm=form.create_button("Sell lemonade. You currently have " + soldcups + " sold cup" + (soldcups == 1 ? "" : "s"));
+plm=form.create_button("&Pour lemonade. You currently have " + ceil(pitcherstat) + " liters of lemonade in the pitcher");
+int slm=form.create_button("&Sell lemonade. You currently have " + soldcups + " sold cup" + (soldcups == 1 ? "" : "s"));
+int bk=form.create_button("&back");
 form.focus(bgn);
 while(true)
 {
 wait(5);
 form.monitor();
-if(key_repeating(KEY_ESCAPE))
+if(key_repeating(KEY_ESCAPE) || form.is_pressed(bk))
 {
 last_menu_id="";
 game();
@@ -94,9 +302,9 @@ waters -= use_waters;
 pitcher = 1;
 pitcherstat += cupcount * 0.25;
 speak("Mixing... Please wait.");
-pool.play_stationary("sounds/misc/makestart.ogg", false);
+p.play_stationary("sounds/misc/makestart.ogg", false);
 dlgplay("sounds/misc/makeloop.ogg");
-pool.play_stationary("sounds/misc/makestop.ogg", false);
+p.play_stationary("sounds/misc/makestop.ogg", false);
 dlg("Success. You made " + cupcount + " cup" + (cupcount == 1 ? "" : "s") + " of lemonade and added it to the pitcher.");
 last_menu_id = "";
 actsmenu();
@@ -183,7 +391,7 @@ if (percup > 250 && percup <= 500)
         fullcups -= 1;
         soldcups += 1;
     }
-    if (cups_sold > 0) pool.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
+    if (cups_sold > 0) p.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
     double total_earned = percup * cups_sold;
     dlg("You sold " + cups_sold + " cup" + (cups_sold == 1 ? "" : "s") + " of lemonade to " + cups_sold + " out of " + customers + " potential customer" + (customers == 1 ? "" : "s") + " for a total of " + convert_to_currency(total_earned) + ".");
     trigger_event(60);
@@ -340,8 +548,8 @@ vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !`
     }
     cups += qty;
     cash -= total;
-pool.play_stationary("sounds/misc/buycup" + random(1, 2) + ".ogg", false);
-    pool.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
+p.play_stationary("sounds/misc/buycup" + random(1, 2) + ".ogg", false);
+    p.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
 dlg("Purchase complete. You bought " + qty + " empty cup" + (qty == 1 ? "" : "s") + " for " + convert_to_currency(total) + ". You now have " + convert_to_currency(cash) + " in cash remaining.");
         buysmenu();
 }
@@ -363,8 +571,8 @@ dlg("Error. You don't have enough cash to purchase " + qty + " bag" + (qty == 1 
     }
     ices += qty;
     cash -= total;
-pool.play_stationary("sounds/misc/buybag" + random(1, 4) + ".ogg", false);
-    pool.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
+p.play_stationary("sounds/misc/buybag" + random(1, 4) + ".ogg", false);
+    p.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
 dlg("Purchase complete. You bought " + qty + " bag" + (qty == 1 ? "" : "s") + " of ice for " + convert_to_currency(total) + ". You now have " + convert_to_currency(cash) + " in cash remaining.");
         buysmenu();
 }
@@ -386,8 +594,8 @@ vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !`
     }
     lemons += qty;
     cash -= total;
-pool.play_stationary("sounds/misc/buyfruit" + random(1, 2) + ".ogg", false);
-    pool.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
+p.play_stationary("sounds/misc/buyfruit" + random(1, 2) + ".ogg", false);
+    p.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
 dlg("Purchase complete. You bought " + qty + " ripe lemon" + (qty == 1 ? "" : "s") + " for " + convert_to_currency(total) + ". You now have " + convert_to_currency(cash) + " in cash remaining.");
         buysmenu();
 }
@@ -409,8 +617,8 @@ dlg("Error. You don't have enough cash to purchase " + qty + " packet" + (qty ==
     }
     salts += qty;
     cash -= total;
-pool.play_stationary("sounds/misc/buypack" + random(1, 2) + ".ogg", false);
-    pool.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
+p.play_stationary("sounds/misc/buypack" + random(1, 2) + ".ogg", false);
+    p.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
 dlg("Purchase complete. You bought " + qty + " packet" + (qty == 1 ? "" : "s") + " of salt for " + convert_to_currency(total) + ". You now have " + convert_to_currency(cash) + " in cash remaining.");
         buysmenu();
 }
@@ -432,8 +640,8 @@ dlg("Error. You don't have enough cash to purchase " + qty + " packet" + (qty ==
     }
     sugars += qty;
     cash -= total;
-pool.play_stationary("sounds/misc/buypack" + random(1, 2) + ".ogg", false);
-    pool.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
+p.play_stationary("sounds/misc/buypack" + random(1, 2) + ".ogg", false);
+    p.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
 dlg("Purchase complete. You bought " + qty + " packet" + (qty == 1 ? "" : "s") + " of sugar for " + convert_to_currency(total) + ". You now have " + convert_to_currency(cash) + " in cash remaining.");
         buysmenu();
 }
@@ -455,8 +663,8 @@ dlg("Error. You don't have enough cash to purchase " + qty + " liter" + (qty == 
     }
     waters += qty;
     cash -= total;
-pool.play_stationary("sounds/misc/buywater" + random(1, 2) + ".ogg", false);
-    pool.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
+p.play_stationary("sounds/misc/buywater" + random(1, 2) + ".ogg", false);
+    p.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
 dlg("Purchase complete. You bought " + qty + " liter" + (qty == 1 ? "" : "s") + " of water for " + convert_to_currency(total) + ". You now have " + convert_to_currency(cash) + " in cash remaining.");
         buysmenu();
 }
@@ -502,12 +710,12 @@ lemons += unit_qty * qty;
 if(include_salt) salts += unit_qty * qty;
 sugars += unit_qty * qty;
 waters += unit_qty * qty;
-pool.play_stationary("sounds/misc/buycup" + random(1, 2) + ".ogg", false);
-pool.play_stationary("sounds/misc/buybag" + random(1, 4) + ".ogg", false);
-pool.play_stationary("sounds/misc/buyfruit" + random(1, 2) + ".ogg", false);
-pool.play_stationary("sounds/misc/buypack" + random(1, 2) + ".ogg", false);
-pool.play_stationary("sounds/misc/buywater" + random(1, 2) + ".ogg", false);
-pool.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
+p.play_stationary("sounds/misc/buycup" + random(1, 2) + ".ogg", false);
+p.play_stationary("sounds/misc/buybag" + random(1, 4) + ".ogg", false);
+p.play_stationary("sounds/misc/buyfruit" + random(1, 2) + ".ogg", false);
+p.play_stationary("sounds/misc/buypack" + random(1, 2) + ".ogg", false);
+p.play_stationary("sounds/misc/buywater" + random(1, 2) + ".ogg", false);
+p.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
 string msg = "Purchase complete. You bought " + qty + " " + bundle_name + " bundle" + (qty == 1 ? "" : "s") + " of supplies for " + convert_to_currency(total) + ".\r\n";
 msg += "You received " + (unit_qty * qty) + " empty cups";
 if(include_ice)  msg += ", " + (unit_qty * qty) + " bags of ice";
@@ -519,129 +727,4 @@ msg += "\r\nYou now have " + convert_to_currency(cash) + " in cash remaining.";
 dlgmessage(msg);
 wait(500);
 buybmenu();
-}
-void optsmenu()
-{
-form.reset();
-form.create_window("Game options", false);
-int cbt=form.create_button("Change business title");
-int ex=form.create_button("exit game");
-int rgl=form.create_button("reload game");
-int rgm=form.create_button("reset game");
-int rgs=form.create_button("restart game");
-int sgm=form.create_button("save game");
-form.focus(cbt);
-while(true)
-{
-wait(5);
-form.monitor();
-if(key_repeating(KEY_ESCAPE))
-{
-last_menu_id="";
-game();
-}
-if(form.is_pressed(cbt))
-{
-vd.set_disallowed_chars("`@#$%^&*()[]{}\"\\|<>_/+=`~", false, "");
-    string name = vd.input_box("", "What would you like your new Business title to be?");
-    if(name == "")
-{
-last_menu_id="";
-optsmenu();
-}
-business_name=name;
-dlg("Success. Your business title has now been changed to "+business_name+".");
-writedata();
-dlgplay("sounds/misc/savegame.ogg");
-wait(200);
-last_menu_id="";
-game();
-}
-if(form.is_pressed(ex))
-{
-setupmenu();
-    m.add_item("Yes, quit the game without saving", "quit_no_save");
-    m.add_item("Yes, save the game and then quit", "quit_save");
-    m.add_item("No, continue playing", "continue");
-    m.add_item("No, save the game, but continue playing", "save_continue");
-m.intro_text = "Are you sure you want to quit? You will lose all progress for this current game session.";
-int mres = m.run();
-    if(mres==-1)
-    {
-last_menu_id="";
-optsmenu();
-    }
-if (m.get_item_id(mres) == "quit_no_save")
-    {
-        speak("Exiting the game without saving.");
-exit();
-    }
-if (m.get_item_id(mres) == "quit_save")
-    {
-        writedata();
-        speak("game saved, Exiting.");
-dlgplay("sounds/misc/savegame.ogg");
-m.fade_music();
-exit();
-    }
-if (m.get_item_id(mres) == "continue")
-    {
-last_menu_id="";
-optsmenu();
-    }
-if (m.get_item_id(mres) == "save_continue")
-    {
-        writedata();
-speak("game saved");
-dlgplay("sounds/misc/savegame.ogg");
-wait(200);
-last_menu_id="";
-optsmenu();
-    }
-}
-if(form.is_pressed(rgl))
-{
-readdata();
-speak("game reloaded");
-last_menu_id="";
-game();
-}
-if(form.is_pressed(rgm))
-{
-setupmenu();
-    m.add_item("Yes", "yes");
-    m.add_item("No", "no");
-m.intro_text="Are you sure you want to reset all of your game's progress? This action cannot be undone.";
-int mres=m.run();
-string confirm = m.get_item_id(mres);
-    if (mres == -1 or confirm == "no")
-    {
-last_menu_id="";
-        optsmenu();
-    }
-if(confirm=="yes")
-{
-if(file_exists(DIRECTORY_APPDATA + "tsatria03/ClassicStand/saves/game.clm")) file_delete(DIRECTORY_APPDATA + "tsatria03/ClassicStand/saves/game.clm");
-if(file_exists(DIRECTORY_APPDATA + "tsatria03/ClassicStand/stats/daily_summaries.txt")) file_delete(DIRECTORY_APPDATA + "tsatria03/ClassicStand/stats/daily_summaries.txt");
-resetgame();
-dlgmessage("Success. Your game progress has been reset. Press enter to restart the game.");
-speak("restarting");
-wait(500);
-restart_game();
-}
-}
-if(form.is_pressed(rgs))
-{
-speak("restarting");
-restart_game();
-}
-if(form.is_pressed(sgm))
-{
-writedata();
-speak("game saved");
-dlgplay("sounds/misc/savegame.ogg");
-last_menu_id="";
-game();
-}
-}
 }
