@@ -1,10 +1,6 @@
 void readdata()
 {
     sd.load();
-    if (sd.d.exists("business_name"))
-{
-business_name = sd.read_string("business_name");
-}
     if (sd.d.exists("cash"))
 {
 cash = sd.read_double("cash");
@@ -112,7 +108,6 @@ monthname = sd.read_string("monthname");
 }
 void writedata()
 {
-sd.add("business_name",business_name);
     sd.add("cash", cash);
     sd.add("fullcups", fullcups);
 sd.add("soldcups", soldcups);
@@ -152,10 +147,15 @@ menumusvolume = st.read_int("menumusvolume");
 {
 busprofed = st.read_bool("busprofed");
 }
+    if (st.d.exists("business_name"))
+{
+business_name = st.read_string("business_name");
+}
 }
 void writepreffs()
 {
     st.add("menumusvolume", menumusvolume);
 st.add("busprofed", busprofed);
+st.add("business_name",business_name);
     st.save();
 }

@@ -12,12 +12,13 @@ string[] monthnames = {"January", "February", "March", "April", "May", "June", "
 string dayname = daynames[current_day_index];
 string monthname = monthnames[current_month_index];
 string currentSaveSlot = DIRECTORY_APPDATA + "tsatria03/ClassicStand/saves/game1.clm";
+string preffsPath = DIRECTORY_APPDATA + "tsatria03/ClassicStand/preffs/";
 string savePath = DIRECTORY_APPDATA + "tsatria03/ClassicStand/saves/";
 string statsPath = DIRECTORY_APPDATA + "tsatria03/ClassicStand/stats/";
 string version;
 instance gamstence("cst");
 savedata sd("", "");
-savedata st(DIRECTORY_APPDATA + "tsatria03/ClassicStand/saves/gamesets.clm", "");
+savedata st(DIRECTORY_APPDATA + "tsatria03/ClassicStand/preffs/gamesets.clm", "");
 timer movetimer, runtimer, walktimer;
 audio_form form;
 file dockfile, dockver;

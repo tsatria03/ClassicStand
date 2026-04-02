@@ -5,7 +5,7 @@ form.create_window("ClassicStand", false);
 int bcm=form.create_button("Business &actions");
 int bsm=form.create_button("Business &information");
 int gm=form.create_keyboard_area("&Game keyboard area");
-form.focus(gm);
+form.focus(bcm);
 while(true)
 {
 wait(5);

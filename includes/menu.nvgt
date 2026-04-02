@@ -3,6 +3,7 @@ void mainmenu()
 setupmenu(true);
 m.add_item("documentation menu", "dm");
 m.add_item("game menu", "gm");
+m.add_item("restart game", "rg");
 m.add_item("exit game", "ex");
 m.intro_text = "Main menu. Please choose an option with your arrow keys, then press enter to activate one.";
 int mres=m.run();
@@ -20,6 +21,12 @@ docksmenu();
 if (main == "gm")
 {
 gamemenu();
+}
+if (main == "rg")
+{
+speak("restarting");
+m.fade_music();
+restart_game();
 }
 if (main == "ex")
 {
@@ -366,8 +373,8 @@ if (form.is_pressed(slm))
         dlg("Error. You can't sell a cup of lemonade for more than 10 dollars in cash.");
         actsmenu();
     }
-int base_multiplier = random(5, 10);
-int customers = int(fullcups * (base_multiplier / 100.0));
+int customers = random(5, 20) * level;
+int cups_sold = min(fullcups, customers);
     int enraged_customers = 0;
     if (percup > 500)
     {
@@ -384,7 +391,7 @@ if (percup > 250 && percup <= 500)
     dlg("Some customers hesitated at the price of " + convert_to_currency(percup) + ".");
 }
     int remaining_customers = max(0, customers - enraged_customers);
-    int cups_sold = min(fullcups, remaining_customers);
+    cups_sold = min(fullcups, remaining_customers);
     for (int i = 0; i < cups_sold; i++)
     {
         cash += percup;
@@ -693,7 +700,7 @@ m.add_item("Yes", "yes");
 m.add_item("No", "no");
 m.intro_text = "Would you like to include " + unit_qty + " packets of salt with each bundle?";
 int mres2 = m.run();
-bool include_salt = m.get_item_id(mres) == "yes";
+bool include_salt = m.get_item_id(mres2) == "yes";
 double per_bundle = ((cupcost + lemoncost + sugarcost + watercost) * unit_qty) / 6;
 if(include_ice)  per_bundle += icecost * unit_qty;
 if(include_salt) per_bundle += saltcost * unit_qty;

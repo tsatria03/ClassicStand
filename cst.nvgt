@@ -2,6 +2,7 @@
 void main()
 {
 dummy.load("dummy");
+if (!directory_exists(preffsPath)) directory_create(preffsPath);
 if (!directory_exists(savePath)) directory_create(savePath);
 if (!directory_exists(statsPath)) directory_create(statsPath);
 readdata();
@@ -56,9 +57,8 @@ dockver.close();
 }
 void resetgame()
 {
-business_name="";
-me.x=0;
-me.y=0;
+me.x=50;
+me.y=50;
 cash=100;
 fullcups=0;
 soldcups=0;
