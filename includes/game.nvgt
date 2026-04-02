@@ -3,9 +3,9 @@ void game()
 form.reset();
 form.create_window("ClassicStand", false);
 int bcm=form.create_button("Business &actions");
-int bsm=form.create_button("Business &information");
 int gm=form.create_keyboard_area("&Game keyboard area");
 form.focus(bcm);
+spawn_platform(minx, maxx, miny, maxy, "carpet");
 while(true)
 {
 wait(5);
@@ -13,6 +13,52 @@ form.monitor();
 p.update_listener_2d(me.x,me.y);
 if(form.get_current_focus()==gm)
 {
+if(key_pressed(KEY_B))
+{
+speak("Business title: " + business_name);
+}
+if(key_pressed(KEY_D))
+{
+speak("Date: " + dayname + ", " + monthname + daynumber);
+}
+if(key_pressed(KEY_T))
+{
+    int hour = clocktime % 24;
+    string hour_period = (hour >= 12 && hour < 24) ? "PM" : "AM";
+    int display_hour = hour % 12;
+    if(display_hour == 0) display_hour = 12;
+speak("Time: " + display_hour + hour_period + ". Level " + level + " of " + maxlevel + ".");
+}
+if(key_pressed(KEY_M))
+{
+    double celsius = round((temprature - 32) * 5 / 9, 0);
+speak("Temperature: " + temprature + " degrees Fahrenheit, " + celsius + " degrees Celsius.");
+}
+if(key_pressed(KEY_C))
+{
+speak("Cash: " + convert_to_currency(cash));
+}
+if(key_pressed(KEY_F))
+{
+speak("filled cups: " + fullcups);
+}
+if(key_pressed(KEY_S))
+{
+speak("sold cups: " + soldcups);
+}
+if(key_pressed(KEY_P))
+{
+    if (pitcherstat <= 0)
+        speak("Pitcher status: 0 liters of lemonade.");
+    else if (pitcherstat <= 1)
+        speak("Pitcher status: 1 liter of lemonade.");
+    else
+        speak("Pitcher status: " + ceil(pitcherstat) + " liters of lemonade.");
+}
+if(key_pressed(KEY_X))
+{
+speak(me.x+", "+me.y+" on "+gmt(me.x,me.y)+". Facing "+facing+".");
+}
     bool running = autorun;
     if (alt_is_down() or control_is_down())
         running = !running;
@@ -44,28 +90,28 @@ if(!shift_is_down() && key_pressed(KEY_LEFT) and me.x!=minx)
 {
 me.x-=1;
 facing="left";
-p.play_stationary("sounds/platforms/"+tiletype+"/step"+random(1,5)+".ogg", false);
+p.play_stationary("sounds/platforms/"+gmt(me.x,me.y)+"/step"+random(1,5)+".ogg", false);
 movetimer.restart();
 }
 if(!shift_is_down() && key_pressed(KEY_RIGHT) and me.x!=maxx)
 {
 me.x+=1;
 facing="right";
-p.play_stationary("sounds/platforms/"+tiletype+"/step"+random(1,5)+".ogg", false);
+p.play_stationary("sounds/platforms/"+gmt(me.x,me.y)+"/step"+random(1,5)+".ogg", false);
 movetimer.restart();
 }
 if(!shift_is_down() && key_pressed(KEY_DOWN) and me.y!=miny)
 {
 me.y-=1;
 facing="backward";
-p.play_stationary("sounds/platforms/"+tiletype+"/step"+random(1,5)+".ogg", false);
+p.play_stationary("sounds/platforms/"+gmt(me.x,me.y)+"/step"+random(1,5)+".ogg", false);
 movetimer.restart();
 }
 if(!shift_is_down() && key_pressed(KEY_UP) and me.y!=maxy)
 {
 me.y+=1;
 facing="forward";
-p.play_stationary("sounds/platforms/"+tiletype+"/step"+random(1,5)+".ogg", false);
+p.play_stationary("sounds/platforms/"+gmt(me.x,me.y)+"/step"+random(1,5)+".ogg", false);
 movetimer.restart();
 }
 if(movetimer.elapsed>=movetime)
@@ -74,34 +120,30 @@ if(!shift_is_down() && key_down(KEY_LEFT) and me.x!=minx)
 {
 me.x-=1;
 facing="left";
-p.play_stationary("sounds/platforms/"+tiletype+"/step"+random(1,5)+".ogg", false);
+p.play_stationary("sounds/platforms/"+gmt(me.x,me.y)+"/step"+random(1,5)+".ogg", false);
 movetimer.restart();
 }
 if(!shift_is_down() && key_down(KEY_RIGHT) and me.x!=maxx)
 {
 me.x+=1;
 facing="right";
-p.play_stationary("sounds/platforms/"+tiletype+"/step"+random(1,5)+".ogg", false);
+p.play_stationary("sounds/platforms/"+gmt(me.x,me.y)+"/step"+random(1,5)+".ogg", false);
 movetimer.restart();
 }
 if(!shift_is_down() && key_down(KEY_DOWN) and me.y!=miny)
 {
 me.y-=1;
 facing="backward";
-p.play_stationary("sounds/platforms/"+tiletype+"/step"+random(1,5)+".ogg", false);
+p.play_stationary("sounds/platforms/"+gmt(me.x,me.y)+"/step"+random(1,5)+".ogg", false);
 movetimer.restart();
 }
 if(!shift_is_down() && key_down(KEY_UP) and me.y!=maxy)
 {
 me.y+=1;
 facing="forward";
-p.play_stationary("sounds/platforms/"+tiletype+"/step"+random(1,5)+".ogg", false);
+p.play_stationary("sounds/platforms/"+gmt(me.x,me.y)+"/step"+random(1,5)+".ogg", false);
 movetimer.restart();
 }
-}
-if(key_pressed(KEY_C))
-{
-speak(me.x+", "+me.y+" on "+tiletype+". Facing "+facing+".");
 }
 if(control_is_down() and key_pressed(KEY_L))
 {
@@ -119,49 +161,6 @@ dlgplay("sounds/misc/savegame.ogg");
 wait(200);
 last_menu_id="";
 game();
-}
-}
-if(form.is_pressed(bsm))
-{
-last_menu_id="";
-form.reset();
-form.create_window("Business information", false);
-string inftext="";
-inftext+="Business title: " + business_name + "\r\n";
-    inftext+="Date: " + dayname + ", " + monthname + daynumber + "\r\n";
-    int hour = clocktime % 24;
-    string hour_period = (hour >= 12 && hour < 24) ? "PM" : "AM";
-    int display_hour = hour % 12;
-    if(display_hour == 0) display_hour = 12;
-    inftext+="Time: " + display_hour + hour_period + ". Level " + level + " of " + maxlevel + "." + "\r\n";
-    double celsius = round((temprature - 32) * 5 / 9, 0);
-    inftext+="Temperature: " + temprature + " degrees Fahrenheit, " + celsius + " degrees Celsius." + "\r\n";
-    inftext+="Cash: " + convert_to_currency(cash) + "\r\n";
-    inftext+="filled cups: " + fullcups + "\r\n";
-    inftext+="sold cups: " + soldcups + "\r\n";
-    if (pitcherstat <= 0)
-        inftext+="Pitcher status: 0 liters of lemonade." + "\r\n";
-    else if (pitcherstat <= 1)
-        inftext+="Pitcher status: 1 liter of lemonade." + "\r\n";
-    else
-        inftext+="Pitcher status: " + ceil(pitcherstat) + " liters of lemonade.";
-int infbox=form.create_input_box("Information", inftext, read_only:true, multiline:true);
-int closebox=form.create_button("&close");
-form.focus(bcm);
-while(true)
-{
-wait(5);
-form.monitor();
-if(key_repeating(KEY_ESCAPE))
-{
-last_menu_id="";
-game();
-}
-if(form.is_pressed(closebox))
-{
-last_menu_id="";
-game();
-}
 }
 }
 if(alt_is_down() && key_pressed(KEY_F4))

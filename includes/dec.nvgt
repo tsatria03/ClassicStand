@@ -6,7 +6,6 @@ int current_day_index=0, current_month_index=0, clocktime=0, daynumber=1, monthn
 string business_name="";
 string last_menu_id="";
 string facing="right";
-string tiletype="marble";
 string[] daynames = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 string[] monthnames = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 string dayname = daynames[current_day_index];

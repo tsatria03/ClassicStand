@@ -1,6 +1,14 @@
 void readdata()
 {
     sd.load();
+    if (sd.d.exists("me.x"))
+{
+me.x = sd.read_float("me.x");
+}
+    if (sd.d.exists("me.y"))
+{
+me.y = sd.read_float("me.y");
+}
     if (sd.d.exists("cash"))
 {
 cash = sd.read_double("cash");
@@ -108,6 +116,8 @@ monthname = sd.read_string("monthname");
 }
 void writedata()
 {
+sd.add("me.x", me.x);
+sd.add("me.y", me.y);
     sd.add("cash", cash);
     sd.add("fullcups", fullcups);
 sd.add("soldcups", soldcups);

@@ -46,6 +46,18 @@ float random_float(float min, float max)
     int rnd = random(scaled_min, scaled_max);
     return float(rnd) / steps;
 }
+string gmt(double x, double y)
+{
+string mt;
+for(uint i=0; i<platforms.length(); i++)
+{
+if(platforms[i].minx<=x and platforms[i].maxx>=x and platforms[i].miny<=y and platforms[i].maxy>=y)
+{
+mt=platforms[i].tile;
+}
+}
+return mt;
+}
 string format_number(double num, bool basic=false, bool scientific=false, bool short_suffix=true)
 {
     if (num == 0)

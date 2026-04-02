@@ -1,4 +1,5 @@
 New in 1.8.
+Added some keys to quicly view business information in the game keyboard area. The business information button has also been removed as well.
 Enhanced the customer system for selling lemonade. It no longer depends on how many cups you made in total.
 Added the ability to load and save multiple games. There's now a load game option in the game menu.
 Restructured the entire game. There's now an actual main menu.
