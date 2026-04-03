@@ -1,8 +1,8 @@
 @echo off
-set GAME=SimpleFighter
-set PASSWORD=SpfBuilder
+set GAME=ClassicStand
+set PASSWORD=LemonPledge
 
-set WIN_SOURCE=..\releases\windows\SimpleFighter_windows_portable_password_is_SpfBuilder\sf
+set WIN_SOURCE=..\releases\windows\ClassicStand_windows_portable_password_is_LemonPledge\cst
 
 echo.
 echo Building Windows portable 7z archive...
