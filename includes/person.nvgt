@@ -5,15 +5,42 @@ bool automatic;
 bool in_range;
 int persosound;
 int persx, persy;
+int targetx, targety;
+int steptime;
+timer steptimer;
 string text;
-person(int px, int py, string txt, bool acl)
+person(int px, int py, string txt, bool acl, int sp=300)
 {
 persx=px;
 persy=py;
+targetx=px;
+targety=py;
 text=txt;
 automatic=acl;
 in_range=false;
-persosound=personpool.play_2d("sounds/misc/person"+random(1,2)+".ogg", me.x, me.y, persx, persy, true);
+steptime=sp;
+persosound=personpool.play_2d("sounds/misc/person.ogg", me.x, me.y, persx, persy, true);
+}
+}
+void update_persons()
+{
+for(uint i=0; i<persons.length(); i++)
+{
+if(persons[i].steptimer.elapsed>=persons[i].steptime)
+{
+if(persons[i].persx<persons[i].targetx)
+persons[i].persx++;
+else if(persons[i].persx>persons[i].targetx)
+persons[i].persx--;
+if(persons[i].persy<persons[i].targety)
+persons[i].persy++;
+else if(persons[i].persy>persons[i].targety)
+persons[i].persy--;
+personpool.update_sound_2d(persons[i].persosound, persons[i].persx, persons[i].persy);
+if(persons[i].persx!=persons[i].targetx or persons[i].persy!=persons[i].targety)
+p.play_2d("sounds/platforms/"+gmt(persons[i].persx,persons[i].persy)+"/step"+random(1,5)+".ogg",me.x,me.y,persons[i].persx,persons[i].persy,false);
+persons[i].steptimer.restart();
+}
 }
 }
 void personcheck()
@@ -45,9 +72,9 @@ break;
 }
 }
 }
-void spawn_person(double px, double py, string txt, bool automatic)
+void spawn_person(int px, int py, string txt, bool automatic, int steptime=300)
 {
-person ps(px, py, txt, automatic);
+person ps(px, py, txt, automatic, steptime);
 persons.insert_last(ps);
 }
 void destroy_all_persons()

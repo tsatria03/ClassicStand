@@ -60,6 +60,8 @@ void resetgame()
 me.x=25;
 me.y=50;
 cash=100;
+reputation=100;
+peak_reputation=100;
 fullcups=0;
 soldcups=0;
 level=1;

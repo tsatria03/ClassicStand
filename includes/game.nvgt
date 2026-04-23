@@ -1,6 +1,7 @@
 void game()
 {
 draw_map("neighborhood");
+spawn_customer_wave();
 while(true)
 {
 wait(5);
@@ -9,9 +10,12 @@ ambpool.update_listener_2d(me.x,me.y);
 muspool.update_listener_2d(me.x,me.y);
 personpool.update_listener_2d(me.x,me.y);
 update_sources();
+update_persons();
+update_customers();
 checkloc();
 personcheck();
 sync_inv();
+check_customer_interaction();
 if(!shift_is_down() && key_pressed(KEY_RETURN))
 {
 string zone = gmz();
@@ -25,12 +29,6 @@ else if(zone.find("Actions station") != -1)
 {
 last_menu_id="";
 actsmenu();
-personpool.resume_all();
-}
-else if(zone.find("Selling counter") != -1)
-{
-last_menu_id="";
-sellmenu();
 personpool.resume_all();
 }
 else
@@ -73,6 +71,15 @@ if(key_pressed(KEY_T))
     int display_hour = hour % 12;
     if(display_hour == 0) display_hour = 12;
 speak("Time: " + display_hour + hour_period + ". Level " + level + " of " + maxlevel + ".");
+}
+if(key_pressed(KEY_R))
+{
+speak("Reputation: " + int(reputation) + " out of 200.");
+}
+if(key_pressed(KEY_N) and wave_ending)
+{
+speak("Advancing to the next time period.");
+advance_time_period();
 }
 if(key_pressed(KEY_M))
 {

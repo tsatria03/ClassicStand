@@ -1,0 +1,282 @@
+customer@[] customers(0);
+class customer
+{
+int cx, cy;
+int targetx, targety;
+int steptime;
+int patience;
+int soundslot;
+timer steptimer;
+timer patiencetimer;
+bool waiting;
+bool served;
+bool leaving;
+bool announced;
+customer(int sx, int sy, int sp, int pat)
+{
+cx=sx;
+cy=sy;
+targetx=32;
+targety=50;
+steptime=sp;
+patience=pat;
+waiting=false;
+served=false;
+leaving=false;
+announced=false;
+soundslot=personpool.play_2d("sounds/misc/customer.ogg", me.x, me.y, cx, cy, true);
+if(temperature > 85)
+speak("A customer is rushing to your stand. It must be the heat!");
+else if(temperature < 45)
+speak("A customer is slowly making their way to your stand.");
+else
+speak("A customer is arriving at your stand.");
+}
+}
+void serve_customer(uint idx)
+{
+personpool.pause_all();
+if(fullcups < 1)
+{
+dlg("You have no filled cups to serve. Head to the actions station to make and pour lemonade first.");
+personpool.resume_all();
+return;
+}
+fullcups -= 1;
+soldcups += 1;
+double earned = price_per_cup;
+cash += earned;
+p.play_stationary("sounds/misc/pourcup"+random(1,4)+".ogg", false);
+string feedback = get_customer_feedback(last_lemons_per_cup, last_sugars_per_cup, last_waters_per_cup, last_ices_per_cup, last_salts_per_cup);
+dlg("The customer drinks the lemonade. " + feedback + " They pay you " + convert_to_currency(earned) + ". Thank you!");
+customers[idx].served=true;
+customers[idx].leaving=true;
+customers[idx].targetx=random(1, 13);
+customers[idx].targety=random(45, 55);
+customers[idx].steptimer.restart();
+double rep_gain = 1.0 + (daynumber / 10.0);
+reputation=min(200.0, reputation+rep_gain);
+if(reputation>peak_reputation) peak_reputation=reputation;
+personpool.resume_all();
+}
+string get_customer_feedback(double lem, double sug, double wat, double ice, double sal)
+{
+double total = lem + sug + wat;
+if(total <= 0) return "Hmm, this doesn't taste like much...";
+double lemon_ratio = lem / total;
+double sugar_ratio = sug / total;
+double water_ratio = wat / total;
+bool too_sour   = lemon_ratio > 0.5;
+bool too_sweet  = sugar_ratio > 0.5;
+bool too_watery = water_ratio > 0.6;
+bool too_salty  = sal > 3;
+bool too_icy    = ice > 3;
+if(too_sour && too_sweet) return "Wow, this is both sour and sweet at the same time! Interesting...";
+if(too_sour)   return "Ooh, that's quite sour! A little less lemon next time maybe.";
+if(too_sweet)  return "That's very sweet! You might want to ease up on the sugar a bit.";
+if(too_watery) return "This tastes a bit watered down. Could use more flavor.";
+if(too_salty)  return "Whoa, that's really salty! Not what I expected from lemonade.";
+if(too_icy)    return "Brrr, that's ice cold! Maybe a little less ice next time.";
+return "Mmm, that's delicious! Perfectly balanced. Just what I needed!";
+}
+void check_reputation()
+{
+if(reputation > 0) return;
+string msg = "Game over! Your reputation has hit zero and customers have stopped coming.--";
+msg += "Here's how you did:--";
+msg += "Days survived: " + daynumber + "--";
+msg += "Total cups sold: " + soldcups + "--";
+msg += "Cash earned: " + convert_to_currency(cash) + "--";
+msg += "Peak reputation: " + int(peak_reputation) + " out of 200.--";
+msg += "Better luck next time!";
+dlgmessage(msg);
+fade_multi_pool();
+mainmenu();
+}
+void check_customer_interaction()
+{
+if(int(me.x) != 32 || int(me.y) != 50) return;
+if(shift_is_down()) return;
+if(!key_pressed(KEY_RETURN)) return;
+for(uint i=0; i<customers.length(); i++)
+{
+if(customers[i].waiting and !customers[i].served and !customers[i].leaving)
+{
+serve_customer(i);
+return;
+}
+}
+}
+void spawn_customer_wave()
+{
+wave_ending=false;
+int base = random(1, 5);
+int extra = int(min(15.0, level - 1));
+int temp_mod = 0;
+int sp_min, sp_max, pat_mod;
+if(temperature > 85)
+{
+temp_mod = random(2, 4);
+sp_min = 150; sp_max = 250;
+pat_mod = -15000;
+}
+else if(temperature < 45)
+{
+temp_mod = 0;
+sp_min = 450; sp_max = 650;
+pat_mod = 15000;
+speak("It's a cold day. Business is slow, but a few dedicated customers are still on their way.");
+}
+else
+{
+temp_mod = 0;
+sp_min = 250; sp_max = 450;
+pat_mod = 0;
+}
+int count = temperature < 45 ? random(1, 2) : min(20, max(1, base + extra + temp_mod));
+for(int i=0; i<count; i++)
+{
+int sx = random(1, 13);
+int sy = random(45, 55);
+int sp = random(sp_min, sp_max);
+int pat = max(30000, random(60000, 120000) - (daynumber * 2000) - (int(level) * 7000) + pat_mod);
+customer c(sx, sy, sp, pat);
+customers.insert_last(c);
+}
+}
+void advance_time_period()
+{
+wave_ending=false;
+p.play_stationary("sounds/misc/timeend.ogg", false);
+generate_daily_summary();
+}
+void update_customers()
+{
+if(wave_ending and waveendtimer.elapsed>=10000)
+{
+advance_time_period();
+return;
+}
+if(!wave_ending and customers.length()>0)
+{
+bool all_done=true;
+for(uint i=0; i<customers.length(); i++)
+{
+if(!customers[i].served and !customers[i].leaving)
+{ all_done=false; break; }
+if(customers[i].leaving and (customers[i].cx!=customers[i].targetx or customers[i].cy!=customers[i].targety))
+{ all_done=false; break; }
+}
+if(all_done)
+{
+wave_ending=true;
+waveendtimer.restart();
+p.play_stationary("sounds/misc/timewarn.ogg", false);
+speak("The wave is over. The time period will advance in 10 seconds. Press N to skip ahead.");
+}
+}
+for(uint i=0; i<customers.length(); i++)
+{
+if(customers[i].served)
+continue;
+if(customers[i].leaving)
+{
+if(customers[i].steptimer.elapsed>=customers[i].steptime)
+{
+if(customers[i].cx<customers[i].targetx)
+customers[i].cx++;
+else if(customers[i].cx>customers[i].targetx)
+customers[i].cx--;
+if(customers[i].cy<customers[i].targety)
+customers[i].cy++;
+else if(customers[i].cy>customers[i].targety)
+customers[i].cy--;
+personpool.update_sound_2d(customers[i].soundslot, customers[i].cx, customers[i].cy);
+if(customers[i].cx!=customers[i].targetx or customers[i].cy!=customers[i].targety)
+p.play_2d("sounds/platforms/"+gmt(customers[i].cx,customers[i].cy)+"/step"+random(1,5)+".ogg",me.x,me.y,customers[i].cx,customers[i].cy,false);
+customers[i].steptimer.restart();
+}
+if(customers[i].cx==customers[i].targetx and customers[i].cy==customers[i].targety)
+{
+personpool.destroy_sound(customers[i].soundslot);
+customers.remove_at(i);
+i--;
+}
+continue;
+}
+if(!customers[i].waiting)
+{
+if(customers[i].steptimer.elapsed>=customers[i].steptime)
+{
+if(customers[i].cx<customers[i].targetx)
+customers[i].cx++;
+else if(customers[i].cx>customers[i].targetx)
+customers[i].cx--;
+if(customers[i].cy<customers[i].targety)
+customers[i].cy++;
+else if(customers[i].cy>customers[i].targety)
+customers[i].cy--;
+personpool.update_sound_2d(customers[i].soundslot, customers[i].cx, customers[i].cy);
+if(customers[i].cx!=customers[i].targetx or customers[i].cy!=customers[i].targety)
+p.play_2d("sounds/platforms/"+gmt(customers[i].cx,customers[i].cy)+"/step"+random(1,5)+".ogg",me.x,me.y,customers[i].cx,customers[i].cy,false);
+else
+{
+customers[i].waiting=true;
+customers[i].patiencetimer.restart();
+int dx = customers[i].cx - int(me.x);
+int dy = customers[i].cy - int(me.y);
+string dir = "";
+if(dy > 0 && dx == 0) dir = "north";
+else if(dy < 0 && dx == 0) dir = "south";
+else if(dx > 0 && dy == 0) dir = "east";
+else if(dx < 0 && dy == 0) dir = "west";
+else if(dx > 0 && dy > 0) dir = "northeast";
+else if(dx < 0 && dy > 0) dir = "northwest";
+else if(dx > 0 && dy < 0) dir = "southeast";
+else if(dx < 0 && dy < 0) dir = "southwest";
+else dir = "right here";
+speak("A customer has arrived at your stand. They are to your " + dir + ".");
+string greeting;
+if(temperature > 85)
+{
+string[] hot_greetings = {"Whew, it is scorching out here! I need something cold, and fast!", "This heat is unbearable. Please tell me you have something cold!"};
+greeting = hot_greetings[random(0, hot_greetings.length()-1)];
+}
+else if(temperature < 45)
+{
+string[] cold_greetings = {"It's quite chilly today, but a nice lemonade still sounds lovely.", "Brr, not the best weather for lemonade, but here I am anyway!"};
+greeting = cold_greetings[random(0, cold_greetings.length()-1)];
+}
+else
+{
+string[] normal_greetings = {"What a lovely day for some lemonade!", "I'd love a nice cup of lemonade please."};
+greeting = normal_greetings[random(0, normal_greetings.length()-1)];
+}
+wait(500);
+speak("The customer says, " + greeting);
+}
+customers[i].steptimer.restart();
+}
+}
+else
+{
+if(customers[i].patiencetimer.elapsed>=customers[i].patience)
+{
+speak("A customer got tired of waiting and left.");
+double rep_loss = 2.0 + level + (daynumber / 5.0);
+reputation=max(0.0, reputation-rep_loss);
+check_reputation();
+customers[i].leaving=true;
+customers[i].targetx=random(1, 13);
+customers[i].targety=random(45, 55);
+customers[i].steptimer.restart();
+}
+}
+}
+}
+void destroy_all_customers()
+{
+for(uint i=0; i<customers.length(); i++)
+personpool.destroy_sound(customers[i].soundslot);
+customers.resize(0);
+}

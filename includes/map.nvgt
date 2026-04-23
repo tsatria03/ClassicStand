@@ -37,11 +37,13 @@ destroy_all_zones();
 destroy_all_sources();
 destroy_all_walls();
 destroy_all_persons();
+destroy_all_customers();
 mapname=name;
 if(name=="neighborhood")
 {
 spawn_platform(0, 100, 0, 100, "concrete2");
 spawn_platform(15, 35, 45, 55, "marble2");
+spawn_platform(32, 32, 50, 50, "marble");
 spawn_platform(35, 65, 47, 53, "concrete");
 spawn_platform(65, 80, 43, 57, "tile");
 spawn_wall(0, 100, 0, 0, "walldirt");
@@ -57,7 +59,7 @@ spawn_wall(81, 81, 42, 58, "wallbuilding");
 spawn_wall(66, 79, 43, 43, "wallwindow");
 spawn_wall(66, 79, 57, 57, "wallwindow");
 spawn_wall(80, 80, 43, 57, "wallwindow");
-spawn_person(25, 50, "Hello there, and welcome to Classic Stand!--You're currently at your lemonade stand. This is where you'll be spending most of your time.--To the east is the sidewalk, which connects your stand to the market.--At the market, head to the buying station to purchase ingredients like lemons, sugar, water, ice, and salt.--Back at your stand, use the actions station to make and pour lemonade, and the selling counter to sell your filled cups to customers.--By the way, you already have a small supply of ingredients to get you started. Press tab to check your inventory.--Good luck, and have fun!", false);
+spawn_person(25, 50, "Hello there, and welcome to Classic Stand!--You're currently at your lemonade stand. This is where you'll be spending most of your time.--To the east is the sidewalk, which connects your stand to the market.--At the market, head to the buying station to purchase ingredients like lemons, sugar, water, ice, and salt.--Back at your stand, use the actions station to make lemonade and pour it into cups.--When customers arrive, they will walk to the customer service counter to the east of your stand. Head over there and press enter to serve them a cup.--Keep your customers happy to build your reputation. Let too many walk away and it's game over.--By the way, you already have a small supply of ingredients to get you started. Press tab to check your inventory.--Good luck, and have fun!", false);
 spawn_source(0, 64, 0, 100, "residential", -20);
 spawn_source(15, 35, 45, 55, {"birds1", "birds2", "birds3", "birds4"}, -20);
 spawn_source(15, 35, 45, 55, "calm", 0);
@@ -73,7 +75,7 @@ spawn_zone(15, 35, 45, 55, "Your lemonade stand. The actions station and selling
 spawn_zone(16, 20, 45, 55, "Back wall of your lemonade stand.");
 spawn_zone(20, 24, 46, 55, "Actions station. Press enter to make or pour lemonade.");
 spawn_zone(25, 25, 50, 50, "Someone is standing here. Press enter to greet them.");
-spawn_zone(26, 30, 46, 50, "Selling counter. Press enter to sell your filled cups.");
+spawn_zone(32, 32, 50, 50, "Customer service counter. Customers will wait here to be served.");
 spawn_zone(35, 65, 47, 53, "Sidewalk. Head east to reach the market, or west to return to your stand.");
 spawn_zone(35, 65, 47, 49, "South edge of the sidewalk.");
 spawn_zone(35, 65, 51, 53, "North edge of the sidewalk.");

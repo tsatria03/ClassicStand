@@ -1,3 +1,38 @@
+New in 2.4.
+Made all individual ingredient buy prompts pre-fill with the maximum quantity you can afford based on your current cash.
+New in 2.3.
+Made the pour lemonade prompt pre-fill with the maximum number of cups you can pour from the pitcher.
+Made the ice and salt prompts in the actions station use the same "would you like to add?" phrasing as lemons, sugar, and water.
+Made the cup count prompt when making lemonade pre-fill with the maximum number of cups you can actually make based on your current ingredients, rather than your total empty cups.
+Added a 10 second warning before the time period advances after a wave ends. Press N to skip ahead immediately.
+Added a keyboard shortcut, N, to manually advance to the next time period when the wave is over.
+Added automatic time period advancement once all customers in a wave have been served or left. A warning sound plays and the game announces the period will advance in 10 seconds.
+Made it so cold days now limit customer waves to 1 or 2 dedicated customers, with a message letting you know business is slow due to the cold.
+Made customer greetings play automatically when they arrive at the counter, rather than requiring you to press enter first.
+Made customer wave size depend on temperature. Hot days bring more customers, cold days bring fewer.
+Made customer walk speed depend on temperature. Hot days make customers rush to your stand, while cold days make them move slowly.
+New in 2.2.
+Made customer patience depend on temperature. Hot customers are less patient since they are desperate for a cold drink, while cold weather customers are more willing to wait.
+Made customer dialogue reflect the current temperature. Hot customers rush in desperate for something cold, cold weather customers are more casual about it, and moderate weather customers give a standard greeting.
+Made it so temperature now affects customer behavior across wave size, walk speed, patience, arrival announcements, and serving dialogue, making it a core part of the gameplay experience.
+Removed the selling counter and the old sell menu entirely. Lemonade is now sold exclusively by serving real customers at the customer service counter.
+Separated the looping sounds for persons and customers. Persons now use person.ogg and customers use customer.ogg, with no random variants.
+Updated the greeter NPC dialogue to reflect the new customer system. The greeter now explains how to make lemonade, serve customers at the counter, and keep your reputation up.
+Added a directional hint when a customer arrives. Instead of coordinates, the game now tells you which direction the customer is relative to your current position.
+Added an announcement when a customer begins walking to your stand.
+Restored individual ingredient prompts to the actions station when making lemonade. You are now asked how many lemons, packets of sugar, liters of water, and optionally bags of ice and packets of salt to use, with your current stock pre-filled as the default.
+Fixed a logic error where the customer serving system bypassed the actions station entirely and asked for ingredients directly. Customers are now served using filled cups you have already made and poured at the actions station, which is the correct order of operations.
+New in 2.1.
+Added reputation and peak reputation to the save and load system so they persist between sessions.
+Added patience timers to customers. If you do not serve a customer before their patience runs out, they leave and your reputation drops.
+Added wave scaling. The number of customers per wave starts between 1 and 5 and grows slowly with each level, capped at 20 total.
+Added a shortcut to speak your current reputation by pressing R during gameplay.
+Added a game over condition. If your reputation reaches 0, the game ends with a summary of your days survived, cups sold, cash earned, and peak reputation.
+Added a reputation system ranging from 0 to 200, starting at 100. Serving customers raises your reputation, and letting them leave unserved lowers it. The gain and loss scale with the current level and day number, making the game progressively more challenging.
+Added customer feedback after serving. Customers react based on the balance of ingredients, with responses for too sour, too sweet, too watery, too salty, too icy, or perfectly balanced.
+Added an ingredient prompt when serving a customer. You are asked how many lemons, packets of sugar, liters of water, bags of ice, and packets of salt to use, with your current stock pre-filled as the default.
+Added a customer service counter at the east side of the stand. Customers wait here and you press enter to serve them when you are standing on the same tile.
+Added a live customer system. Customers now spawn in waves at the start of each time period, walk from the street to the customer service counter at your stand, and wait to be served.
 New in 2.0.
 Fixed a bug where purchasing items with insufficient funds would still complete the transaction and display a blank cash remaining value.
 Added a greeter NPC to the lemonade stand who welcomes new players and explains where everything is on the map.

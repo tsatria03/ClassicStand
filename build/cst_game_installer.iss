@@ -1,4 +1,4 @@
-#define MyAppId "{{8706944F-4D18-40AE-A7D8-565BAA65E672}}"
+#define MyAppId "{{2269D597-3F4F-4A25-B680-36C5EDC6E4BE}}"
 #define MyAppName "ClassicStand"
 #define MyAppVersion Trim(FileRead(FileOpen("..\docks\version.txt")))
 #define MyAppPublisher "tsatria03"

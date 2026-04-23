@@ -113,6 +113,14 @@ if (sd.d.exists("monthname"))
 {
 monthname = sd.read_string("monthname");
 }
+if (sd.d.exists("reputation"))
+{
+reputation = sd.read_double("reputation");
+}
+if (sd.d.exists("peak_reputation"))
+{
+peak_reputation = sd.read_double("peak_reputation");
+}
 }
 void writedata()
 {
@@ -144,6 +152,8 @@ sd.add("current_month_index", current_month_index);
     sd.add("temperature", temperature);
 sd.add("dayname", dayname);
 sd.add("monthname", monthname);
+sd.add("reputation", reputation);
+sd.add("peak_reputation", peak_reputation);
     sd.save();
 }
 void readpreffs()

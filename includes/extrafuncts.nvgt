@@ -310,6 +310,11 @@ void generate_daily_summary()
 {
     clocktime += 4;
     level += 1;
+    if(level <= 6)
+    {
+    destroy_all_customers();
+    spawn_customer_wave();
+    }
     if(level > 6)
     {
 string report = "Daily summary for " + business_name + ".\r\n";

@@ -6,6 +6,7 @@
 #include"sound_pool.nvgt"
 
 #include"custom_menu.nvgt"
+#include"customer.nvgt"
 #include"dec.nvgt"
 #include"dlg.nvgt"
 #include"extrafuncts.nvgt"

@@ -314,7 +314,8 @@ actsmenu();
 return;
 }
 vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !`@`$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
-string input = vd.input_box("", "How many cups of lemonade would you like to make? You have " + cups + " empty cup" + (cups == 1 ? "" : "s") + ", " + lemons + " lemon" + (lemons == 1 ? "" : "s") + ", " + sugars + " packet" + (sugars == 1 ? "" : "s") + " of sugar, and " + waters + " liter" + (waters == 1 ? "" : "s") + " of water.");
+double max_possible = min(cups, min(lemons, min(sugars, waters)));
+string input = vd.input_box("", "How many cups of lemonade would you like to make? You can make up to " + int(max_possible) + " cup" + (max_possible == 1 ? "" : "s") + " with your current ingredients.", string(int(max_possible)));
 if(input == "") { actsmenu(); return; }
 double cupcount = string_to_number(input);
 if(cupcount <= 0 || cupcount > cups)
@@ -323,18 +324,44 @@ dlg("Error. Invalid cup count. You only have " + cups + " cup" + (cups == 1 ? ""
 actsmenu();
 return;
 }
-double max_possible = min(cups, min(lemons, min(sugars, waters)));
 if(cupcount > max_possible)
 {
 dlg("Error. You can only make up to " + max_possible + " cup" + (max_possible == 1 ? "" : "s") + " with your current ingredients.");
 actsmenu();
 return;
 }
-double use_lemons = lemons;
-double use_sugars = sugars;
-double use_waters = waters;
-double use_ices   = ices;
-double use_salts  = salts;
+string lem_in = vd.input_box("", "How many lemons would you like to add? You have " + lemons + ".", string(int(lemons)));
+if(lem_in == "") { actsmenu(); return; }
+double use_lemons = string_to_number(lem_in);
+if(use_lemons <= 0 || use_lemons > lemons) { dlg("Error. Invalid lemon amount."); actsmenu(); return; }
+string sug_in = vd.input_box("", "How many packets of sugar would you like to add? You have " + sugars + ".", string(int(sugars)));
+if(sug_in == "") { actsmenu(); return; }
+double use_sugars = string_to_number(sug_in);
+if(use_sugars <= 0 || use_sugars > sugars) { dlg("Error. Invalid sugar amount."); actsmenu(); return; }
+string wat_in = vd.input_box("", "How many liters of water would you like to add? You have " + waters + ".", string(int(waters)));
+if(wat_in == "") { actsmenu(); return; }
+double use_waters = string_to_number(wat_in);
+if(use_waters <= 0 || use_waters > waters) { dlg("Error. Invalid water amount."); actsmenu(); return; }
+double use_ices = 0;
+if(ices > 0)
+{
+string ice_in = vd.input_box("", "How many bags of ice would you like to add? You have " + ices + ". Press escape to skip.", string(int(ices)));
+if(ice_in != "")
+{
+use_ices = string_to_number(ice_in);
+if(use_ices > ices) { dlg("Error. Invalid ice amount."); actsmenu(); return; }
+}
+}
+double use_salts = 0;
+if(salts > 0)
+{
+string salt_in = vd.input_box("", "How many packets of salt would you like to add? You have " + salts + ". Press escape to skip.", string(int(salts)));
+if(salt_in != "")
+{
+use_salts = string_to_number(salt_in);
+if(use_salts > salts) { dlg("Error. Invalid salt amount."); actsmenu(); return; }
+}
+}
 cups   -= cupcount;
 lemons -= use_lemons;
 sugars -= use_sugars;
@@ -373,7 +400,7 @@ actsmenu();
 return;
 }
 vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !`@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
-string input = vd.input_box("", "How many cups would you like to pour from the pitcher? You can pour up to " + maxcups + " cup" + (maxcups == 1 ? "" : "s") + ".");
+string input = vd.input_box("", "How many cups would you like to pour from the pitcher? You can pour up to " + maxcups + " cup" + (maxcups == 1 ? "" : "s") + ".", string(int(maxcups)));
 if(input == "") { actsmenu(); return; }
 double pourcount = string_to_number(input);
 if(pourcount <= 0) { actsmenu(); return; }
@@ -396,52 +423,6 @@ dlg("Success. You poured " + pourcount + " cup" + (pourcount == 1 ? "" : "s") + 
 last_menu_id="";
 actsmenu();
 }
-}
-void sellmenu()
-{
-personpool.pause_all();
-if(fullcups <= 0)
-{
-dlg("Error. You have no filled cups to sell. Head to the mixing and pouring station first.");
-return;
-}
-if(price_per_cup <= 0)
-{
-dlg("Error. Your cups have no value. Make a batch of lemonade first before trying to sell.");
-return;
-}
-double percup = price_per_cup;
-dlg("You have " + fullcups + " filled cup" + (fullcups == 1 ? "" : "s") + " of lemonade priced at " + convert_to_currency(percup) + " each based on your ingredients. Press enter to sell it now.");
-int customers = random(5, 20) * level;
-int cups_sold = min(fullcups, customers);
-int enraged_customers = 0;
-if(percup > 500)
-{
-int min_range = level * daynumber;
-int max_range = min(customers, fullcups);
-if(max_range >= min_range)
-{
-enraged_customers = random(min_range, max_range);
-dlg(enraged_customers + " customer" + (enraged_customers == 1 ? "" : "s") + " angrily stormed off when they saw the high price of " + convert_to_currency(percup) + " per cup!");
-}
-}
-if(percup > 250 && percup <= 500)
-{
-dlg("Some customers hesitated at the price of " + convert_to_currency(percup) + ".");
-}
-int remaining_customers = max(0, customers - enraged_customers);
-cups_sold = min(fullcups, remaining_customers);
-for(int i = 0; i < cups_sold; i++)
-{
-cash += percup;
-fullcups -= 1;
-soldcups += 1;
-}
-if(cups_sold > 0) p.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
-double total_earned = percup * cups_sold;
-dlg("You sold " + cups_sold + " cup" + (cups_sold == 1 ? "" : "s") + " of lemonade to " + cups_sold + " out of " + customers + " potential customer" + (customers == 1 ? "" : "s") + " for a total of " + convert_to_currency(total_earned) + ".");
-trigger_event(60);
-generate_daily_summary();
 }
 void buymenu()
 {
@@ -579,7 +560,8 @@ if(buyem== "cps")
 {
 m.fade_music();
 vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !`@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
-    string cup = vd.input_box("", "How many empty cups would you like to buy?");
+int max_cups = int(floor(cash / cupcost));
+    string cup = vd.input_box("", "How many empty cups would you like to buy? You can afford up to " + max_cups + ".", string(max_cups));
     if(cup == "")
         buysmenu();
     double qty = string_to_number(cup);
@@ -603,7 +585,8 @@ if(buyem== "ics")
 {
 m.fade_music();
 vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !`@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
-    string ice = vd.input_box("", "How many bags of ice would you like to buy?");
+int max_ices = int(floor(cash / icecost));
+    string ice = vd.input_box("", "How many bags of ice would you like to buy? You can afford up to " + max_ices + ".", string(max_ices));
     if(ice == "")
         buysmenu();
     double qty = string_to_number(ice);
@@ -627,7 +610,8 @@ if(buyem== "lms")
 {
 m.fade_music();
 vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !`@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
-    string lemon = vd.input_box("", "How many ripe lemons would you like to buy?");
+int max_lemons = int(floor(cash / lemoncost));
+    string lemon = vd.input_box("", "How many ripe lemons would you like to buy? You can afford up to " + max_lemons + ".", string(max_lemons));
     if(lemon == "")
         buysmenu();
     double qty = string_to_number(lemon);
@@ -651,7 +635,8 @@ if(buyem== "slt")
 {
 m.fade_music();
 vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !`@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
-    string salt = vd.input_box("", "How many packets of salt would you like to buy?");
+int max_salts = int(floor(cash / saltcost));
+    string salt = vd.input_box("", "How many packets of salt would you like to buy? You can afford up to " + max_salts + ".", string(max_salts));
     if(salt == "")
         buysmenu();
     double qty = string_to_number(salt);
@@ -675,7 +660,8 @@ if(buyem== "sgr")
 {
 m.fade_music();
 vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !`@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
-    string sugar = vd.input_box("", "How many packets of sugar would you like to buy?");
+int max_sugars = int(floor(cash / sugarcost));
+    string sugar = vd.input_box("", "How many packets of sugar would you like to buy? You can afford up to " + max_sugars + ".", string(max_sugars));
     if(sugar == "")
         buysmenu();
     double qty = string_to_number(sugar);
@@ -699,7 +685,8 @@ if(buyem== "swr")
 {
 m.fade_music();
 vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !`@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
-    string water = vd.input_box("", "How many liters of water would you like to buy?");
+int max_waters = int(floor(cash / watercost));
+    string water = vd.input_box("", "How many liters of water would you like to buy? You can afford up to " + max_waters + ".", string(max_waters));
     if(water == "")
         buysmenu();
     double qty = string_to_number(water);
