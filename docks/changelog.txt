@@ -1,4 +1,5 @@
 New in 2.0.
+Made it so sounds can now fade out propperly upon exiting the main game.
 Added spatially positioned ambiences to all zones of the neighborhood map. Each area plays its own distinct sounds, including residential noise on the street, random birds at the stand, distant traffic on the sidewalk, calm sounds at the actions station, crowd noise at the selling counter, and shopping center and indoor sounds at the market and buying station.
 Added a sound source system that plays spatially positioned looping ambiences on the map. Sources support random selection from a list of sounds, volume control, and automatic range calculation based on the size of the source area.
 Replaced the form-based game UI with a raw keyboard loop. The game no longer uses buttons during gameplay.

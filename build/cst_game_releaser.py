@@ -3,17 +3,17 @@ import os
 import shutil
 import subprocess
 
-GAME = "CookieCraze"
-PASSWORD = "CrazeMastery"
+GAME = "ClassicStand"
+PASSWORD = "LemonPledge"
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 REPO_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, ".."))
-WIN_SOURCE = os.path.join(REPO_DIR, "releases", "windows", f"{GAME}_windows_portable_password_is_{PASSWORD}", "cycrz")
+WIN_SOURCE = os.path.join(REPO_DIR, "releases", "windows", f"{GAME}_windows_portable_password_is_{PASSWORD}", "cst")
 ARCHIVE_DIR = os.path.join(REPO_DIR, "releases", "archives")
 ARCHIVE_NAME = f"{GAME}_windows_portable_password_is_{PASSWORD}.7z"
 ARCHIVE = os.path.join(ARCHIVE_DIR, ARCHIVE_NAME)
 INSTALLER = os.path.join(ARCHIVE_DIR, f"{GAME}_windows_installer_password_is_{PASSWORD}.exe")
 RELEASE_DIR = os.path.join(REPO_DIR, "releases", "windows", f"{GAME}_windows_portable_password_is_{PASSWORD}")
-SITE_HTML = r"C:\Users\tonys\OneDrive\Documents\github\tsatria03.github.io\projects\games\CookieCraze\index.html"
+SITE_HTML = r"C:\Users\tonys\OneDrive\Documents\github\tsatria03.github.io\projects\games\ClassicStand\index.html"
 SITE_REPO = r"C:\Users\tonys\OneDrive\Documents\github\tsatria03.github.io"
 NVGT = r"C:\nvgt\nvgt.exe"
 SEVENZIP = r"C:\Program Files\7-Zip\7z.exe"
@@ -70,15 +70,15 @@ elif skip_compile == SKIP:
 
 if do_compile:
     print("Compiling NVGT source...")
-    if not run_cmd([NVGT, "-c", "-Q", os.path.join(REPO_DIR, "cycrz.nvgt")]):
+    if not run_cmd([NVGT, "-c", "-Q", os.path.join(REPO_DIR, "cst.nvgt")]):
         error("NVGT compilation failed.")
     print("Compilation successful.\n")
     print("Replacing compiled output in release folder...")
-    cycrz_out = os.path.join(REPO_DIR, "cycrz")
-    cycrz_dest = os.path.join(RELEASE_DIR, "cycrz")
-    if os.path.exists(cycrz_dest):
-        shutil.rmtree(cycrz_dest)
-    shutil.move(cycrz_out, cycrz_dest)
+    cst_out = os.path.join(REPO_DIR, "cst")
+    cst_dest = os.path.join(RELEASE_DIR, "cst")
+    if os.path.exists(cst_dest):
+        shutil.rmtree(cst_dest)
+    shutil.move(cst_out, cst_dest)
     print("Release folder updated.\n")
 else:
     if skip_compile == SKIP:
@@ -93,7 +93,7 @@ elif skip_package == SKIP:
 
 if do_package:
     if not os.path.exists(WIN_SOURCE):
-        error("cycrz folder not found in release directory. Please compile the full project first.")
+        error("cst folder not found in release directory. Please compile the full project first.")
     print("Building Windows portable 7z archive...")
     if os.path.exists(ARCHIVE):
         os.remove(ARCHIVE)
@@ -102,7 +102,7 @@ if do_package:
         error("7z archive build failed.")
     print("Archive built successfully.\n")
     print("Building Windows installer...")
-    if not run_cmd([ISCC, "/Q", os.path.join(SCRIPT_DIR, "cycrz_game_installer.iss")]):
+    if not run_cmd([ISCC, "/Q", os.path.join(SCRIPT_DIR, "cst_game_installer.iss")]):
         error("Installer build failed.")
     print("Installer built successfully.\n")
 else:
@@ -169,7 +169,7 @@ if not do_website:
     sys.exit(0)
 
 print("Updating website...")
-ps1 = os.path.join(SCRIPT_DIR, "cycrz_site_updater.ps1")
+ps1 = os.path.join(SCRIPT_DIR, "cst_site_updater.ps1")
 if not run_cmd(["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", ps1, "-HtmlFile", SITE_HTML, "-Version", VERSION, "-Tag", TAG]):
     error("Failed to update website HTML.")
 print("Website updated.\n")
@@ -180,7 +180,7 @@ if f"Updated {GAME} to version {VERSION}." in log:
     print(f"WARNING: Commit already exists. Skipping commit.\n")
     sys.exit(0)
 
-run_cmd(["git", "add", "projects/games/CookieCraze/index.html"], cwd=SITE_REPO)
+run_cmd(["git", "add", "projects/games/ClassicStand/index.html"], cwd=SITE_REPO)
 if not run_cmd(["git", "commit", "-m", f"Updated {GAME} to version {VERSION}."], cwd=SITE_REPO):
     error("Failed to commit website changes.")
 if not run_cmd(["git", "push"], cwd=SITE_REPO):

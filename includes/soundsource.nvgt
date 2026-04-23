@@ -26,12 +26,12 @@ int forward_range  = int(maxy - cy);
 if(slot == -1)
 {
 string chosen = random_string(sourcetypes);
-slot = ampool.play_extended_2d("sounds/ambience/source/" + chosen + ".ogg", me.x, me.y, cx, cy, left_range, right_range, backward_range, forward_range, true, 0, 0, volume, 100, true);
+slot = ambpool.play_extended_2d("sounds/ambience/source/" + chosen + ".ogg", me.x, me.y, cx, cy, left_range, right_range, backward_range, forward_range, true, 0, 0, volume, 100, true);
 }
 else
 {
-ampool.update_sound_2d(slot, int(cx), int(cy));
-ampool.update_sound_range_2d(slot, left_range, right_range, backward_range, forward_range);
+ambpool.update_sound_2d(slot, int(cx), int(cy));
+ambpool.update_sound_range_2d(slot, left_range, right_range, backward_range, forward_range);
 }
 }
 }
@@ -57,7 +57,7 @@ for(uint i = 0; i < sources.length(); i++)
 {
 if(sources[i].slot != -1)
 {
-ampool.destroy_sound(sources[i].slot);
+ambpool.destroy_sound(sources[i].slot);
 sources[i].slot = -1;
 }
 }

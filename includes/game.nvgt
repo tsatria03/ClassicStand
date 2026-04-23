@@ -5,7 +5,7 @@ while(true)
 {
 wait(5);
 p.update_listener_2d(me.x,me.y);
-ampool.update_listener_2d(me.x,me.y);
+ambpool.update_listener_2d(me.x,me.y);
 update_sources();
 checkloc();
 if(!shift_is_down() && key_pressed(KEY_RETURN))
@@ -225,7 +225,7 @@ game();
 if(alt_is_down() && key_pressed(KEY_F4))
 {
 speak("Exiting the game without saving.");
-wait(500);
+fade_multi_pool();
 mainmenu();
 }
 if(key_repeating(KEY_ESCAPE))
@@ -245,7 +245,7 @@ game();
 if (m.get_item_id(mres) == "quit_no_save")
 {
 speak("Exiting the game without saving.");
-wait(500);
+fade_multi_pool();
 mainmenu();
 }
 if (m.get_item_id(mres) == "quit_save")
@@ -253,7 +253,7 @@ if (m.get_item_id(mres) == "quit_save")
 writedata();
 speak("game saved, Exiting.");
 dlgplay("sounds/misc/savegame.ogg");
-wait(200);
+fade_multi_pool();
 mainmenu();
 }
 if (m.get_item_id(mres) == "continue")

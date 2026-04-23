@@ -15,6 +15,7 @@
 #include"map.nvgt"
 #include"menu.nvgt"
 #include"platform.nvgt"
+#include"poolfuncts.nvgt"
 #include"savedata.nvgt"
 #include"savefuncks.nvgt"
 #include"setupmenu.nvgt"

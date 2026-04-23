@@ -1,9 +1,9 @@
 #define MyAppId "{{8706944F-4D18-40AE-A7D8-565BAA65E672}}"
-#define MyAppName "CookieCraze"
+#define MyAppName "ClassicStand"
 #define MyAppVersion Trim(FileRead(FileOpen("..\docks\version.txt")))
 #define MyAppPublisher "tsatria03"
-#define MyAppURL "https://tsatria03.github.io/projects/games/CookieCraze"
-#define MyAppExeName "cycrz.exe"
+#define MyAppURL "https://tsatria03.github.io/projects/games/ClassicStand"
+#define MyAppExeName "cst.exe"
 
 [Setup]
 AppId={#MyAppId}
@@ -13,7 +13,7 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-DefaultDirName={autopf}\{#MyAppPublisher}\{#MyAppName}\cycrz
+DefaultDirName={autopf}\{#MyAppPublisher}\{#MyAppName}\cst
 DefaultGroupName={#MyAppName}
 UninstallDisplayIcon={app}\{#MyAppExeName}
 ArchitecturesAllowed=x64compatible
@@ -22,8 +22,8 @@ PrivilegesRequired=admin
 UninstallDisplayName={#MyAppName} {#MyAppVersion}
 AppMutex={#MyAppName}_Mutex
 OutputDir=..\releases\archives
-OutputBaseFilename=CookieCraze_windows_installer_password_is_CrazeMastery
-Password=CrazeMastery
+OutputBaseFilename=ClassicStand_windows_installer_password_is_LemonPledge
+Password=LemonPledge
 Encryption=yes
 SolidCompression=yes
 WizardStyle=modern
@@ -36,7 +36,7 @@ Name: "desktopicon"; Description: "Create a desktop shortcut"; GroupDescription:
 Name: "startmenuicon"; Description: "Create a Start Menu shortcut"; GroupDescription: "Additional icons:"
 
 [Files]
-Source: "C:\Users\tonys\OneDrive\Documents\GitHub\CookieCraze\releases\windows\CookieCraze_windows_portable_password_is_CrazeMastery\cycrz\*"; \
+Source: "C:\Users\tonys\OneDrive\Documents\GitHub\ClassicStand\releases\windows\ClassicStand_windows_portable_password_is_LemonPledge\cst\*"; \
   DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
