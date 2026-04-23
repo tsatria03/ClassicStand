@@ -408,7 +408,7 @@ dlg("Error. Your cups have no value. Make a batch of lemonade first before tryin
 return;
 }
 double percup = price_per_cup;
-dlg("You have " + fullcups + " filled cup" + (fullcups == 1 ? "" : "s") + " of lemonade priced at " + convert_to_currency(percup) + " each based on your ingredients. Selling now.");
+dlg("You have " + fullcups + " filled cup" + (fullcups == 1 ? "" : "s") + " of lemonade priced at " + convert_to_currency(percup) + " each based on your ingredients. Press enter to sell it now.");
 int customers = random(5, 20) * level;
 int cups_sold = min(fullcups, customers);
 int enraged_customers = 0;

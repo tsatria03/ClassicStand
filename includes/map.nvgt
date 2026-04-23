@@ -57,7 +57,7 @@ spawn_wall(81, 81, 42, 58, "wallbuilding");
 spawn_wall(66, 79, 43, 43, "wallwindow");
 spawn_wall(66, 79, 57, 57, "wallwindow");
 spawn_wall(80, 80, 43, 57, "wallwindow");
-spawn_person(25, 50, "Hello there, and welcome to Classic Stand!--You're currently at your lemonade stand. This is where you'll be spending most of your time.--To the east is the sidewalk, which connects your stand to the market.--At the market, head to the buying station to purchase ingredients like lemons, sugar, water, ice, and salt.--Back at your stand, use the actions station to make and pour lemonade, and the selling counter to sell your filled cups to customers.--Good luck, and have fun!", true);
+spawn_person(25, 50, "Hello there, and welcome to Classic Stand!--You're currently at your lemonade stand. This is where you'll be spending most of your time.--To the east is the sidewalk, which connects your stand to the market.--At the market, head to the buying station to purchase ingredients like lemons, sugar, water, ice, and salt.--Back at your stand, use the actions station to make and pour lemonade, and the selling counter to sell your filled cups to customers.--By the way, you already have a small supply of ingredients to get you started. Press tab to check your inventory.--Good luck, and have fun!", true);
 spawn_source(0, 64, 0, 100, "residential", -20);
 spawn_source(15, 35, 45, 55, {"birds1", "birds2", "birds3", "birds4"}, -20);
 spawn_source(15, 35, 45, 55, "calm", 0);
