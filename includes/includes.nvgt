@@ -11,6 +11,8 @@
 #include"extrafuncts.nvgt"
 #include"form.nvgt"
 #include"game.nvgt"
+#include"inventory.nvgt"
+#include"map.nvgt"
 #include"menu.nvgt"
 #include"platform.nvgt"
 #include"savedata.nvgt"
@@ -18,5 +20,7 @@
 #include"setupmenu.nvgt"
 #include"speech.nvgt"
 #include"virtual_dialogs.nvgt"
+#include"soundsource.nvgt"
+#include"zone.nvgt"
 
 typedef uint8 usmall; typedef int8 small;

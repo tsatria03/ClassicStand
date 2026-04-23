@@ -1,18 +1,51 @@
 void game()
 {
-form.reset();
-form.create_window("ClassicStand", false);
-int bcm=form.create_button("Business &actions");
-int gm=form.create_keyboard_area("&Game keyboard area");
-form.focus(bcm);
-spawn_platform(minx, maxx, miny, maxy, "carpet");
+draw_map("neighborhood");
 while(true)
 {
 wait(5);
-form.monitor();
 p.update_listener_2d(me.x,me.y);
-if(form.get_current_focus()==gm)
+ampool.update_listener_2d(me.x,me.y);
+update_sources();
+checkloc();
+if(!shift_is_down() && key_pressed(KEY_RETURN))
 {
+string zone = gmz();
+if(zone == "Buying station")
+{
+last_menu_id="";
+buymenu();
+}
+else if(zone == "Actions station")
+{
+last_menu_id="";
+actsmenu();
+}
+else if(zone == "Selling counter")
+{
+last_menu_id="";
+sellmenu();
+}
+else
+{
+speak("There's nothing to interact with in this area.");
+}
+}
+if(key_repeating(KEY_TAB) and key_up(KEY_LMENU) and key_up(KEY_RMENU))
+{
+if (shift_is_down())
+cycle_inv(0);
+else
+cycle_inv(1);
+}
+if(key_repeating(KEY_RETURN) and shift_is_down() and usetimer.elapsed>=usetime)
+{
+usetimer.restart();
+if (inv.get_keys().length()>0 and invpos<inv.get_size())
+useitem(inv.get_keys()[invpos]);
+else
+speak("No item in focus.");
+}
 if(key_pressed(KEY_B))
 {
 speak("Business title: " + business_name);
@@ -31,8 +64,8 @@ speak("Time: " + display_hour + hour_period + ". Level " + level + " of " + maxl
 }
 if(key_pressed(KEY_M))
 {
-    double celsius = round((temprature - 32) * 5 / 9, 0);
-speak("Temperature: " + temprature + " degrees Fahrenheit, " + celsius + " degrees Celsius.");
+    double celsius = round(double(temperature - 32) * 5.0 / 9.0, 0);
+speak("Temperature: " + temperature + " degrees Fahrenheit, " + celsius + " degrees Celsius.");
 }
 if(key_pressed(KEY_C))
 {
@@ -59,7 +92,34 @@ if(key_pressed(KEY_X))
 {
 speak(me.x+", "+me.y+" on "+gmt(me.x,me.y)+". Facing "+facing+".");
 }
-    bool running = autorun;
+if(key_repeating(KEY_Z))
+{
+if (zonestatus==1)
+{
+p.play_stationary("sounds/misc/switchoff.ogg",false);
+speak("Zones will no longer be spoken.");
+zonestatus=0;
+}
+else if (zonestatus==0)
+{
+p.play_stationary("sounds/misc/switchon.ogg",false);
+speak("Zones will now be spoken.");
+zonestatus=1;
+}
+}
+if(key_pressed(KEY_Q))
+{
+if(get_zone_at(me.x, me.y)!="")
+{
+string locate=get_zone_at(me.x,me.y);
+speak("Current location, "+locate+" of "+mapname);
+}
+else
+{
+speak("Current location, unknown area "+"of "+mapname);
+}
+}
+bool running = autorun;
     if (alt_is_down() or control_is_down())
         running = !running;
     movetime = running ? runtime : walktime;
@@ -155,67 +215,61 @@ game();
 }
 if(control_is_down() and key_pressed(KEY_S))
 {
-        writedata();
+writedata();
 speak("game saved");
 dlgplay("sounds/misc/savegame.ogg");
 wait(200);
 last_menu_id="";
 game();
 }
-}
 if(alt_is_down() && key_pressed(KEY_F4))
 {
-        speak("Exiting the game without saving.");
+speak("Exiting the game without saving.");
 wait(500);
 mainmenu();
 }
 if(key_repeating(KEY_ESCAPE))
 {
 setupmenu();
-    m.add_item("Yes, quit the game without saving", "quit_no_save");
-    m.add_item("Yes, save the game and then quit", "quit_save");
-    m.add_item("No, continue playing", "continue");
-    m.add_item("No, save the game, but continue playing", "save_continue");
+m.add_item("Yes, quit the game without saving", "quit_no_save");
+m.add_item("Yes, save the game and then quit", "quit_save");
+m.add_item("No, continue playing", "continue");
+m.add_item("No, save the game, but continue playing", "save_continue");
 m.intro_text = "Are you sure you want to quit? You will lose all progress for this current game session.";
 int mres = m.run();
-    if(mres==-1)
-    {
+if(mres==-1)
+{
 last_menu_id="";
 game();
-    }
+}
 if (m.get_item_id(mres) == "quit_no_save")
-    {
-        speak("Exiting the game without saving.");
+{
+speak("Exiting the game without saving.");
 wait(500);
 mainmenu();
-    }
+}
 if (m.get_item_id(mres) == "quit_save")
-    {
-        writedata();
+{
+writedata();
 speak("game saved, Exiting.");
 dlgplay("sounds/misc/savegame.ogg");
 wait(200);
 mainmenu();
-    }
+}
 if (m.get_item_id(mres) == "continue")
-    {
+{
 last_menu_id="";
 game();
-    }
+}
 if (m.get_item_id(mres) == "save_continue")
-    {
-        writedata();
+{
+writedata();
 speak("game saved");
 dlgplay("sounds/misc/savegame.ogg");
 wait(200);
 last_menu_id="";
 game();
-    }
 }
-if(form.is_pressed(bcm))
-{
-last_menu_id="";
-actsmenu();
 }
 }
 }

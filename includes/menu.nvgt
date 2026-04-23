@@ -214,43 +214,32 @@ game();
 }
 void actsmenu()
 {
-form.reset();
-form.create_window("Business actions", false);
-int bgn=form.create_button("Buy &ingredients. You currently have " + convert_to_currency(cash) + " in cash");
-int mlm=form.create_button("Make &lemonade. You currently have " + cups + " empty cup" + (cups == 1 ? "" : "s"));
-int plm;
+setupmenu();
+m.add_item("Make lemonade. You have " + cups + " empty cup" + (cups == 1 ? "" : "s"), "make");
 if(pitcherstat <= 0)
-plm=form.create_button("&Pour lemonade. You currently have 0 liters of lemonade in the pitcher");
+m.add_item("Pour lemonade. Pitcher is empty.", "pour");
 else if(pitcherstat <= 1)
-plm=form.create_button("&Pour lemonade. You currently have 1 liter of lemonade in the pitcher");
+m.add_item("Pour lemonade. You have 1 liter in the pitcher.", "pour");
 else
-plm=form.create_button("&Pour lemonade. You currently have " + ceil(pitcherstat) + " liters of lemonade in the pitcher");
-int slm=form.create_button("&Sell lemonade. You currently have " + soldcups + " sold cup" + (soldcups == 1 ? "" : "s"));
-int bk=form.create_button("&back");
-form.focus(bgn);
-while(true)
-{
-wait(5);
-form.monitor();
-if(key_repeating(KEY_ESCAPE) || form.is_pressed(bk))
+m.add_item("Pour lemonade. You have " + ceil(pitcherstat) + " liters in the pitcher.", "pour");
+m.add_item("Back", "back");
+m.intro_text = "Actions station.";
+int mres = m.run();
+string choice = m.get_item_id(mres);
+if(mres == -1 || choice == "back")
 {
 last_menu_id="";
 game();
 }
-if(form.is_pressed(bgn))
-{
-last_menu_id="";
-buymenu();
-}
-if(form.is_pressed(mlm))
+if(choice == "make")
 {
 if(cups < 1 || lemons < 1 || sugars < 1 || waters < 1)
 {
-dlg("Error. You need at least one empty cup, 1 ripe lemon, 1 packet of sugar, and 1 liter of water to make lemonade.");
+dlg("Error. You need at least 1 empty cup, 1 ripe lemon, 1 packet of sugar, and 1 liter of water to make lemonade.");
 actsmenu();
 }
 vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !`@`$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
-string input = vd.input_box("", "How many cups of lemonade would you like to make?");
+string input = vd.input_box("", "How many cups of lemonade would you like to make? You have " + cups + " empty cup" + (cups == 1 ? "" : "s") + ", " + lemons + " lemon" + (lemons == 1 ? "" : "s") + ", " + sugars + " packet" + (sugars == 1 ? "" : "s") + " of sugar, and " + waters + " liter" + (waters == 1 ? "" : "s") + " of water.");
 if(input == "") actsmenu();
 double cupcount = string_to_number(input);
 if(cupcount <= 0 || cupcount > cups)
@@ -258,153 +247,120 @@ if(cupcount <= 0 || cupcount > cups)
 dlg("Error. Invalid cup count. You only have " + cups + " cup" + (cups == 1 ? "" : "s") + ".");
 actsmenu();
 }
-double use_ices = string_to_number(vd.input_box("", "How many bags of ice would you like to use? Press enter or escape to use the default amount.", "0"));
-double use_lemons = string_to_number(vd.input_box("", "How many ripe lemons would you like to use?"));
-if(use_lemons <= 0)
+double max_possible = min(cups, min(lemons, min(sugars, waters)));
+if(cupcount > max_possible)
 {
-dlg("Error. You must use at least 1 ripe lemon to make this lemonade.");
+dlg("Error. You can only make up to " + max_possible + " cup" + (max_possible == 1 ? "" : "s") + " with your current ingredients.");
 actsmenu();
 }
-double use_salts = string_to_number(vd.input_box("", "How many packets of salt would you like to use? Press enter or escape to use the default amount.", "0"));
-double use_sugars = string_to_number(vd.input_box("", "How many packets of sugar would you like to use?"));
-if(use_sugars <= 0)
-{
-dlg("Error. You must use at least 1 packet of sugar to make this lemonade.");
-actsmenu();
-}
-double use_waters = string_to_number(vd.input_box("", "How many liters of water would you like to use?"));
-if(use_waters <= 0)
-{
-dlg("Error. You must use at least 1 liter of water to make this lemonade.");
-actsmenu();
-}
-string[] overuse;
-if(use_ices > ices) overuse.insert_last("bags of ice");
-if(use_lemons > lemons) overuse.insert_last("ripe lemons");
-if(use_salts > salts) overuse.insert_last("packets of salt");
-if(use_sugars > sugars) overuse.insert_last("packets of sugar");
-if(use_waters > waters) overuse.insert_last("liters of water");
-if(overuse.length() > 0)
-{
-string msg = format_list(overuse);
-dlg("Error. You don't have enough " + msg + " to make that much lemonade.");
-actsmenu();
-}
-string[] low = {};
-if(use_lemons < cupcount) low.insert_last((cupcount - use_lemons) + " ripe lemon" + ((cupcount - use_lemons) == 1 ? "" : "s"));
-if(use_sugars < cupcount) low.insert_last((cupcount - use_sugars) + " packet" + ((cupcount - use_sugars) == 1 ? "" : "s") + " of sugar");
-if(use_waters < cupcount) low.insert_last((cupcount - use_waters) + " liter" + ((cupcount - use_waters) == 1 ? "" : "s") + " of water");
-if(low.length() > 0)
-{
-string list = format_list(low);
-dlg("Error. You must use at least " + cupcount + " of each required ingredient to make " + cupcount + " cup" + (cupcount == 1 ? "" : "s") + " of lemonade. You're short on " + list + ".");
-actsmenu();
-}
-cups -= cupcount;
-ices -= use_ices;
+double use_lemons = lemons;
+double use_sugars = sugars;
+double use_waters = waters;
+double use_ices   = ices;
+double use_salts  = salts;
+cups   -= cupcount;
 lemons -= use_lemons;
-salts -= use_salts;
 sugars -= use_sugars;
 waters -= use_waters;
+ices   -= use_ices;
+salts  -= use_salts;
+last_lemons_per_cup = use_lemons / cupcount;
+last_sugars_per_cup = use_sugars / cupcount;
+last_waters_per_cup = use_waters / cupcount;
+last_ices_per_cup   = use_ices   / cupcount;
+last_salts_per_cup  = use_salts  / cupcount;
+calculate_cup_price();
 pitcher = 1;
 pitcherstat += cupcount * 0.25;
 speak("Mixing... Please wait.");
 p.play_stationary("sounds/misc/makestart.ogg", false);
 dlgplay("sounds/misc/makeloop.ogg");
 p.play_stationary("sounds/misc/makestop.ogg", false);
-dlg("Success. You made " + cupcount + " cup" + (cupcount == 1 ? "" : "s") + " of lemonade and added it to the pitcher.");
+dlg("Success. You made " + cupcount + " cup" + (cupcount == 1 ? "" : "s") + " of lemonade. Each cup is worth " + convert_to_currency(price_per_cup) + " based on your ingredients.");
 last_menu_id = "";
 actsmenu();
 }
-if(form.is_pressed(plm))
+if(choice == "pour")
 {
-    if(pitcher < 1 || pitcherstat <= 0)
-    {
-        dlg("Error. The pitcher is currently empty. Please make some lemonade first to pour into a cup.");
-        actsmenu();
-    }
-    double maxcups = floor(pitcherstat / 0.25);
-    if(maxcups < 1)
-    {
-        dlg("Error. The pitcher doesn't have enough lemonade to pour a single cup.");
-        actsmenu();
-    }
-vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !`@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
-    string input = vd.input_box("", "How many cups would you like to pour from the pitcher?");
-    if(input == "") actsmenu();
-    double pourcount = string_to_number(input);
-    if(pourcount <= 0) actsmenu();
-    if(pourcount > maxcups)
-    {
-        dlg("Error. You can't pour more than " + maxcups + " cup" + (maxcups == 1 ? "" : "s") + " of lemonade out of the pitcher.");
-        actsmenu();
-    }
-    pitcherstat -= pourcount * 0.25;
-    fullcups += pourcount;
-    if(pitcherstat <= 0)
-    {
-        pitcherstat = 0;
-        pitcher = 0;
-    }
-speak("Pouring... Please wait.");
-dlgplay("sounds/misc/pourcup"+random(1 ,4)+".ogg");
-    dlg("Success. You poured " + pourcount + " cup" + (pourcount == 1 ? "" : "s") + " of lemonade into sellable serving cups.");
-last_menu_id="";
-        actsmenu();
+if(pitcher < 1 || pitcherstat <= 0)
+{
+dlg("Error. The pitcher is currently empty. Make some lemonade first.");
+actsmenu();
 }
-if (form.is_pressed(slm))
+double maxcups = floor(pitcherstat / 0.25);
+if(maxcups < 1)
 {
-    if (fullcups <= 0)
-    {
-        dlg("Error. You need at least one cup of lemonade made in order to sell it for cash.");
-        actsmenu();
-    }
-    vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !`@#$%^&*()[]{};:'\"\\|,<>_?/+-=`~", false, "");
-    string price = vd.input_box("", "How much money would you like to sell each cup of lemonade for? You currently have " + fullcups + " filled cup" + (fullcups == 1 ? "" : "s") + ".");
-    if (price == "" || price == "0") actsmenu();
-    double percup = string_to_number(price) * 100;
-    if (percup <25)
-    {
-        dlg("Error. You can't sell a cup of lemonade for less than 25 sents in cash.");
-        actsmenu();
-    }
-    if (percup > 1000)
-    {
-        dlg("Error. You can't sell a cup of lemonade for more than 10 dollars in cash.");
-        actsmenu();
-    }
+dlg("Error. The pitcher doesn't have enough lemonade to pour a single cup.");
+actsmenu();
+}
+vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !`@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
+string input = vd.input_box("", "How many cups would you like to pour from the pitcher? You can pour up to " + maxcups + " cup" + (maxcups == 1 ? "" : "s") + ".");
+if(input == "") actsmenu();
+double pourcount = string_to_number(input);
+if(pourcount <= 0) actsmenu();
+if(pourcount > maxcups)
+{
+dlg("Error. You can't pour more than " + maxcups + " cup" + (maxcups == 1 ? "" : "s") + " from the pitcher.");
+actsmenu();
+}
+pitcherstat -= pourcount * 0.25;
+fullcups += pourcount;
+if(pitcherstat <= 0)
+{
+pitcherstat = 0;
+pitcher = 0;
+}
+speak("Pouring... Please wait.");
+dlgplay("sounds/misc/pourcup"+random(1,4)+".ogg");
+dlg("Success. You poured " + pourcount + " cup" + (pourcount == 1 ? "" : "s") + " of lemonade into sellable serving cups.");
+last_menu_id="";
+actsmenu();
+}
+}
+void sellmenu()
+{
+if(fullcups <= 0)
+{
+dlg("Error. You have no filled cups to sell. Head to the mixing and pouring station first.");
+game();
+}
+if(price_per_cup <= 0)
+{
+dlg("Error. Your cups have no value. Make a batch of lemonade first before trying to sell.");
+game();
+}
+double percup = price_per_cup;
+dlg("You have " + fullcups + " filled cup" + (fullcups == 1 ? "" : "s") + " of lemonade priced at " + convert_to_currency(percup) + " each based on your ingredients. Selling now.");
 int customers = random(5, 20) * level;
 int cups_sold = min(fullcups, customers);
-    int enraged_customers = 0;
-    if (percup > 500)
-    {
-        int min_range = level * daynumber;
-        int max_range = min(customers, fullcups);
-        if (max_range >= min_range)
-        {
-            enraged_customers = random(min_range, max_range);
-            dlg(enraged_customers + " customer" + (enraged_customers == 1 ? "" : "s") + " angrily stormed off when they saw the high price of " + convert_to_currency(percup) + " per cup!");
-        }
-    }
-if (percup > 250 && percup <= 500)
+int enraged_customers = 0;
+if(percup > 500)
 {
-    dlg("Some customers hesitated at the price of " + convert_to_currency(percup) + ".");
-}
-    int remaining_customers = max(0, customers - enraged_customers);
-    cups_sold = min(fullcups, remaining_customers);
-    for (int i = 0; i < cups_sold; i++)
-    {
-        cash += percup;
-        fullcups -= 1;
-        soldcups += 1;
-    }
-    if (cups_sold > 0) p.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
-    double total_earned = percup * cups_sold;
-    dlg("You sold " + cups_sold + " cup" + (cups_sold == 1 ? "" : "s") + " of lemonade to " + cups_sold + " out of " + customers + " potential customer" + (customers == 1 ? "" : "s") + " for a total of " + convert_to_currency(total_earned) + ".");
-    trigger_event(60);
-    generate_daily_summary();
+int min_range = level * daynumber;
+int max_range = min(customers, fullcups);
+if(max_range >= min_range)
+{
+enraged_customers = random(min_range, max_range);
+dlg(enraged_customers + " customer" + (enraged_customers == 1 ? "" : "s") + " angrily stormed off when they saw the high price of " + convert_to_currency(percup) + " per cup!");
 }
 }
+if(percup > 250 && percup <= 500)
+{
+dlg("Some customers hesitated at the price of " + convert_to_currency(percup) + ".");
+}
+int remaining_customers = max(0, customers - enraged_customers);
+cups_sold = min(fullcups, remaining_customers);
+for(int i = 0; i < cups_sold; i++)
+{
+cash += percup;
+fullcups -= 1;
+soldcups += 1;
+}
+if(cups_sold > 0) p.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
+double total_earned = percup * cups_sold;
+dlg("You sold " + cups_sold + " cup" + (cups_sold == 1 ? "" : "s") + " of lemonade to " + cups_sold + " out of " + customers + " potential customer" + (customers == 1 ? "" : "s") + " for a total of " + convert_to_currency(total_earned) + ".");
+trigger_event(60);
+generate_daily_summary();
 }
 void buymenu()
 {
@@ -429,7 +385,7 @@ string buyem = m.get_item_id(mres);
 if(mres==-1 || buyem == "back")
 {
 last_menu_id="";
-actsmenu();
+game();
 }
 if(buyem == "bgs")
 {

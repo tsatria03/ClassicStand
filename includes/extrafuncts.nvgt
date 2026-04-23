@@ -46,18 +46,6 @@ float random_float(float min, float max)
     int rnd = random(scaled_min, scaled_max);
     return float(rnd) / steps;
 }
-string gmt(double x, double y)
-{
-string mt;
-for(uint i=0; i<platforms.length(); i++)
-{
-if(platforms[i].minx<=x and platforms[i].maxx>=x and platforms[i].miny<=y and platforms[i].maxy>=y)
-{
-mt=platforms[i].tile;
-}
-}
-return mt;
-}
 string format_number(double num, bool basic=false, bool scientific=false, bool short_suffix=true)
 {
     if (num == 0)
@@ -134,17 +122,63 @@ string format_number(double num, bool basic=false, bool scientific=false, bool s
     else
         return round(value,2) + suffix_short[tier];
 }
+double convert_to_pan(double length, double index, double range1, double range2)
+{
+try
+{
+double range = range2 - range1;
+double percent = index / (length - 1);
+double value = range1 + range * percent;
+return value;
+}
+catch
+{
+return 0;
+}
+}
+double convert_to_volume(double length,double index,double min_volume=-100,double max_volume=0)
+{
+try
+{
+double range=max_volume-min_volume;
+double percent=index/(length-1);
+double value=min_volume+range*percent;
+return value;
+}
+catch
+{
+return 0;
+}
+}
+double convert_to_pitch(double length,double index,double min_pitch=0,double max_pitch=200)
+{
+try
+{
+double range=max_pitch-min_pitch;
+double percent=index/(length-1);
+double value=min_pitch+range*percent;
+return value;
+}
+catch
+{
+return 100;
+}
+}
+
+
 string convert_to_currency(double number, string currency_symbol = "$")
 {
-if (number < 0) return "";
-int64 num = int64(number + 0.5);
-int64 dollars = num / 100;
-int64 cents = num % 100;
-if (dollars == 0)
-return cents + " cent" + (cents == 1 ? "" : "s");
-string cents_str = "" + cents;
-if (string_len(cents_str) == 1) cents_str = "0" + cents_str;
-return currency_symbol + dollars + "." + cents_str;
+    if (number < 0) return "";
+    double rounded = floor(number + 0.5);
+    double dollars = floor(rounded / 100.0);
+    int cents = int(rounded - (dollars * 100.0));
+    if (dollars == 0)
+        return cents + " cent" + (cents == 1 ? "" : "s");
+    if (dollars >= 1000)
+        return currency_symbol + format_number(dollars);
+    string cents_str = "" + cents;
+    if (string_len(cents_str) == 1) cents_str = "0" + cents_str;
+    return currency_symbol + format_number(dollars) + "." + cents_str;
 }
 double get_save_cash(string saveFile)
 {
@@ -199,6 +233,13 @@ for(uint i = 0; i < items.length() - 1; i++)
 result += items[i] + ", ";
 return result + "and " + items[items.length() - 1];
 }
+
+string random_string(string[] array)
+{
+string retval=array[random(0,array.length()-1)];
+return retval;
+}
+
 void apply_pitch_pool_settings()
 {
 int pitchValue = behind_pitch ? 5 : 0;
@@ -241,22 +282,34 @@ docksmenu();
 }
 }
 }
+void calculate_cup_price()
+{
+double scale = level * daynumber;
+price_per_cup = 0;
+price_per_cup += last_lemons_per_cup * lemoncost * scale * 0.1;
+price_per_cup += last_sugars_per_cup * sugarcost * scale * 0.1;
+price_per_cup += last_waters_per_cup * watercost * scale * 0.05;
+price_per_cup += last_ices_per_cup   * icecost   * scale * 0.05;
+price_per_cup += last_salts_per_cup  * saltcost  * scale * 0.03;
+if(price_per_cup < 25) price_per_cup = 25;
+price_per_cup = floor(price_per_cup);
+}
 void calculate_new_day_conditions()
 {
 int daily_min = clamp(20 + daynumber * 1, 20, 90);
 int daily_max = clamp(70 + daynumber * 2, 70, 120);
 if(level == 1)
-temprature = random(daily_min, daily_min + 5);
+temperature = random(daily_min, daily_min + 5);
 else if(level == 2)
-temprature = random(daily_min + 5, daily_min + 15);
+temperature = random(daily_min + 5, daily_min + 15);
 else if(level == 3)
-temprature = random(daily_min + 15, daily_max - 15);
+temperature = random(daily_min + 15, daily_max - 15);
 else if(level == 4)
-temprature = random(daily_max - 10, daily_max);
+temperature = random(daily_max - 10, daily_max);
 else if(level == 5)
-temprature = random(daily_max - 20, daily_max - 5);
+temperature = random(daily_max - 20, daily_max - 5);
 else
-temprature = random(daily_min + 5, daily_min + 15);
+temperature = random(daily_min + 5, daily_min + 15);
 cupcost   = 1 * level * daynumber;
 icecost   = 2 * level * daynumber;
 lemoncost = 3 * level * daynumber;
@@ -351,12 +404,12 @@ void trigger_event(int probability_chance)
     if (random(0, 99) >= probability_chance)
         return;
     string[] possible_events;
-    if (temprature > 85)
+    if (temperature > 85)
     {
         possible_events.insert_last("free_water");
         possible_events.insert_last("heatstroke");
     }
-    else if (temprature < 45)
+    else if (temperature < 45)
     {
         possible_events.insert_last("slow_day");
         possible_events.insert_last("ingredient_freeze");

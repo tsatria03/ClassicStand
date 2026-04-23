@@ -57,7 +57,7 @@ dockver.close();
 }
 void resetgame()
 {
-me.x=50;
+me.x=25;
 me.y=50;
 cash=100;
 fullcups=0;
@@ -65,12 +65,12 @@ soldcups=0;
 level=1;
 maxlevel=6;
 pitcherstat=0;
-cups=0;
-ices=0;
-lemons=0;
-salts=0;
-sugars=0;
-waters=0;
+cups=random(3, 6);
+ices=random(0, 2);
+lemons=random(2, 4);
+salts=random(0, 1);
+sugars=random(2, 4);
+waters=random(2, 4);
 cupcost=1;
 icecost=2;
 lemoncost=3;
@@ -82,7 +82,7 @@ current_day_index=0;
 current_month_index=0;
 daynumber=1;
 pitcher=0;
-temprature=20;
+temperature=20;
 dayname = daynames[current_day_index];
 monthname = monthnames[current_month_index];
 }

@@ -1,3 +1,19 @@
+New in 2.0.
+Added spatially positioned ambiences to all zones of the neighborhood map. Each area plays its own distinct sounds, including residential noise on the street, random birds at the stand, distant traffic on the sidewalk, calm sounds at the actions station, crowd noise at the selling counter, and shopping center and indoor sounds at the market and buying station.
+Added a sound source system that plays spatially positioned looping ambiences on the map. Sources support random selection from a list of sounds, volume control, and automatic range calculation based on the size of the source area.
+Replaced the form-based game UI with a raw keyboard loop. The game no longer uses buttons during gameplay.
+Added 3 interactable stations to the neighborhood map. Press enter at each one to interact. The buying station is located in the market. The actions station is located at your lemonade stand, where you can make and pour lemonade. The selling counter is also located at your lemonade stand, where you can sell your filled cups.
+New in 1.9.
+Reworked the lemonade pricing system. The price per cup is now automatically calculated based on the ingredients used in the batch, scaled with the current level and day number.
+Reworked the make lemonade system. All ingredients are now automatically divided evenly across the cups being made, rather than asking you to type each quantity manually.
+Removed the manual price prompt when selling lemonade. The price is now shown to you before selling based on what went into the batch.
+Added zone gating so that buying ingredients only works at the market, and making, pouring, and selling lemonade only works at your stand.
+Made it so players now start a new game with a small randomized inventory of ingredients.
+Made it so the game keyboard area is now automatically focused when entering the game.
+Added a neighborhood map with 4 zones: your lemonade stand, the sidewalk, the market, and the neighborhood street.
+Added a shortcut to speak your current zone by pressing Q.
+Added a toggle to enable or disable zone announcements by pressing Z.
+Added a zone system that announces your current location as you walk around the map.
 New in 1.8.
 Added some keys to quicly view business information in the game keyboard area. The business information button has also been removed as well.
 Enhanced the customer system for selling lemonade. It no longer depends on how many cups you made in total.
@@ -7,7 +23,7 @@ Removed the options menu from the main game. This will be added back later on.
 Added map based navigation support to the game. This will be used later on.
 Added the ability to quickly load and save your game progress by pressing Control L or Control S. You can also quickly exit the game by pressing Alt F4.
 Revamped the user interface in the game. The game's action, information, main, and option menus are now converted to use the audio forms system.
-The sounds for the game are no longer encrypted from now on.
+Made it so the sounds for the game are no longer encripted from now on.
 Removed the auto-filled price values for selling lemonade from the sell prompt.
 New in 1.7.
 Made it so the number of customers that show up when selling lemonade is determined by how many cups that are poured out of the piture prior to selling it.

@@ -1,0 +1,109 @@
+int invslot;
+int invpos;
+dictionary inv;
+
+void give(string item, int amount)
+{
+int a;
+if (!inv.exists(item))
+{
+inv.set(item,amount);
+}
+else
+{
+inv.get(item,a);
+if (a+amount<=0)
+inv.delete(item);
+else
+inv.set(item,a+amount);
+}
+}
+void focus_item(const string&in item)
+{
+    string[] keys = inv.get_keys();
+    keys.sort_ascending();
+    for (uint i = 0; i < keys.length(); i++)
+    {
+        if (keys[i] == item)
+        {
+            invpos = i;
+            return;
+        }
+    }
+}
+void clear_inv()
+{
+inv.delete_all();
+}
+void cycle_inv(int dir)
+{
+    if (inv.get_size() == 0)
+    {
+        p.destroy_sound(invslot);
+        speak("empty");
+        return;
+    }
+    string[] keys = inv.get_keys();
+    keys.sort_ascending();
+    if (dir == 1)
+        invpos += 1;
+    else
+        invpos -= 1;
+    if (invpos >= keys.length())
+        invpos = 0;
+    else if (invpos < 0)
+        invpos = keys.length() - 1;
+    double invpan = convert_to_pan(keys.length(), invpos, -25, 25);
+    invslot = p.play_stationary_extended("sounds/misc/inv"+random(1,6)+".ogg", false, 0, invpan, 0, 100, false);
+    int a;
+    inv.get(keys[invpos], a);
+    if (a == 1)
+        speak(keys[invpos] + ". Item " + (invpos + 1) + " of " + keys.length());
+    else
+        speak(keys[invpos] + "s, " + a + ". Item " + (invpos + 1) + " of " + keys.length());
+}
+void useitem(string current)
+{
+if (inv.get_size()<=0)
+{
+speak("No items");
+return;
+}
+else
+{
+string[] keys = inv.get_keys();
+keys.sort_ascending();
+if (invpos < 0 || invpos >= keys.length())
+    return;
+current = keys[invpos];
+}
+}
+int count_total_items()
+{
+return inv.get_keys().length();
+}
+string getitem()
+{
+if (inv.get_size()<=0)
+{
+return "";
+}
+else
+{
+string current=inv.get_keys()[invpos];
+return current;
+}
+}
+int item_exists(string item)
+{
+string[] current=inv.get_keys();
+int index=current.find(item);
+if (index>-1)
+{
+int ab;
+inv.get(current[index],ab);
+return ab;
+}
+else
+return -1;
+}

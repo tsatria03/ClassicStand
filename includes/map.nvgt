@@ -1,0 +1,47 @@
+string gmt(double x, double y)
+{
+string mt;
+for(uint i=0; i<platforms.length(); i++)
+{
+if(platforms[i].minx<=x and platforms[i].maxx>=x and platforms[i].miny<=y and platforms[i].maxy>=y)
+{
+mt=platforms[i].tile;
+}
+}
+return mt;
+}
+
+void draw_map(string name)
+{
+destroy_all_platforms();
+destroy_all_zones();
+destroy_all_sources();
+mapname=name;
+if(name=="neighborhood")
+{
+// Background: bare ground across the whole map
+spawn_platform(0, 100, 0, 100, "concrete2");
+// Your lemonade stand: carpet, centered at 25,50
+spawn_platform(15, 35, 45, 55, "carpet");
+// Sidewalk connecting stand to market
+spawn_platform(35, 65, 47, 53, "concrete");
+// The market: tile floor, to the east
+spawn_platform(65, 80, 43, 57, "tile");
+// Sound sources
+spawn_source(0, 100, 0, 100, "residential", -35);
+spawn_source(15, 35, 45, 55, {"birds1", "birds2", "birds3", "birds4"}, -20);
+spawn_source(35, 65, 47, 53, "distant_traffic", -30);
+spawn_source(20, 24, 46, 55, "calm", -25);
+spawn_source(26, 30, 46, 50, {"crowd", "crowd2"}, -20);
+spawn_source(65, 80, 43, 57, "big_shopping_center", -20);
+spawn_source(70, 74, 48, 52, "inside", -25);
+// Zone announcements
+spawn_zone(0, 100, 0, 100, "Neighborhood street");
+spawn_zone(15, 35, 45, 55, "Your lemonade stand");
+spawn_zone(20, 24, 46, 55, "Actions station");
+spawn_zone(26, 30, 46, 50, "Selling counter");
+spawn_zone(35, 65, 47, 53, "Sidewalk");
+spawn_zone(65, 80, 43, 57, "The market");
+spawn_zone(70, 74, 48, 52, "Buying station");
+}
+}

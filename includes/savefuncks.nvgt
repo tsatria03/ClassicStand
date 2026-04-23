@@ -101,9 +101,9 @@ daynumber = sd.read_int("daynumber");
 {
 pitcher = sd.read_int("pitcher");
 }
-    if (sd.d.exists("temprature"))
+    if (sd.d.exists("temperature"))
 {
-temprature = sd.read_int("temprature");
+temperature = sd.read_int("temperature");
 }
 if (sd.d.exists("dayname"))
 {
@@ -141,7 +141,7 @@ sd.add("current_day_index", current_day_index);
 sd.add("current_month_index", current_month_index);
     sd.add("daynumber", daynumber);
     sd.add("pitcher", pitcher);
-    sd.add("temprature", temprature);
+    sd.add("temperature", temperature);
 sd.add("dayname", dayname);
 sd.add("monthname", monthname);
     sd.save();
