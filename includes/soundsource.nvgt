@@ -4,8 +4,9 @@ class sound_source
 double minx, maxx, miny, maxy;
 string[] sourcetypes;
 double volume;
+bool ambient;
 int slot;
-sound_source(double mx, double mx2, double my, double my2, string[] st, double vol)
+sound_source(double mx, double mx2, double my, double my2, string[] st, double vol, bool amb)
 {
 minx=mx;
 maxx=mx2;
@@ -13,6 +14,7 @@ miny=my;
 maxy=my2;
 sourcetypes=st;
 volume=vol;
+ambient=amb;
 slot=-1;
 }
 void sorceloop()
@@ -23,27 +25,37 @@ int left_range     = int(cx - minx);
 int right_range    = int(maxx - cx);
 int backward_range = int(cy - miny);
 int forward_range  = int(maxy - cy);
+bool in_range = (me.x >= minx && me.x <= maxx && me.y >= miny && me.y <= maxy);
 if(slot == -1)
 {
 string chosen = random_string(sourcetypes);
 slot = ambpool.play_extended_2d("sounds/ambience/source/" + chosen + ".ogg", me.x, me.y, cx, cy, left_range, right_range, backward_range, forward_range, true, 0, 0, volume, 100, true);
+if(ambient && !in_range)
+ambpool.pause_sound(slot);
 }
 else
 {
+if(ambient)
+{
+if(in_range)
+ambpool.resume_sound(slot);
+else
+ambpool.pause_sound(slot);
+}
 ambpool.update_sound_2d(slot, int(cx), int(cy));
 ambpool.update_sound_range_2d(slot, left_range, right_range, backward_range, forward_range);
 }
 }
 }
-void spawn_source(double x1, double x2, double y1, double y2, string[] sourcetypes, double volume=0)
+void spawn_source(double x1, double x2, double y1, double y2, string[] sourcetypes, double volume=0, bool ambient=true)
 {
-sound_source sr1(x1, x2, y1, y2, sourcetypes, volume);
+sound_source sr1(x1, x2, y1, y2, sourcetypes, volume, ambient);
 sources.insert_last(sr1);
 }
-void spawn_source(double x1, double x2, double y1, double y2, string sourcetype, double volume=0)
+void spawn_source(double x1, double x2, double y1, double y2, string sourcetype, double volume=0, bool ambient=true)
 {
 string[] st = {sourcetype};
-sound_source sr2(x1, x2, y1, y2, st, volume);
+sound_source sr2(x1, x2, y1, y2, st, volume, ambient);
 sources.insert_last(sr2);
 }
 void update_sources()

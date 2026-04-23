@@ -1,0 +1,41 @@
+wall@[]walls(0);
+class wall
+{
+double minx, maxx, miny, maxy;
+string wall;
+wall(double mx, double mx2, double my, double my2, string wl)
+{
+minx=mx;
+maxx=mx2;
+miny=my;
+maxy=my2;
+wall=wl;
+}
+}
+int spawn_wall(double x1, double x2, double y1, double y2, string wall)
+{
+wall wl1(x1, x2, y1, y2, wall);
+walls.insert_last(wl1);
+return walls.length() - 1;
+}
+void update_wall(int id, double x1, double x2, double y1, double y2)
+{
+if (id >= 0 && id < walls.length())
+{
+walls[id].minx = x1;
+walls[id].maxx = x2;
+walls[id].miny = y1;
+walls[id].maxy = y2;
+}
+}
+void remove_wall(int id)
+{
+if (id >= 0 && id < walls.length())
+{
+walls.remove_at(id);
+}
+}
+void destroy_all_walls()
+{
+walls.resize(0);
+}

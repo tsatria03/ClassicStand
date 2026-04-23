@@ -1,0 +1,60 @@
+person@[] persons(0);
+class person
+{
+bool automatic;
+bool in_range;
+int persosound;
+int persx, persy;
+string text;
+person(int px, int py, string txt, bool acl)
+{
+persx=px;
+persy=py;
+text=txt;
+automatic=acl;
+in_range=false;
+persosound=personpool.play_2d("sounds/misc/person.ogg", me.x, me.y, persx, persy, true);
+}
+}
+void personcheck()
+{
+for(uint i=0; i<persons.length(); i++)
+{
+bool in_area=persons[i].persx==me.x and persons[i].persy==me.y;
+if(persons[i].automatic)
+{
+if(in_area and !persons[i].in_range)
+{
+persons[i].in_range=true;
+personpool.pause_sound(persons[i].persosound);
+dlgmessage(persons[i].text);
+personpool.resume_sound(persons[i].persosound);
+}
+else if(!in_area)
+persons[i].in_range=false;
+}
+else
+{
+if(in_area and !shift_is_down() and key_pressed(KEY_RETURN))
+{
+personpool.pause_sound(persons[i].persosound);
+dlgmessage(persons[i].text);
+personpool.resume_sound(persons[i].persosound);
+break;
+}
+}
+}
+}
+void spawn_person(double px, double py, string txt, bool automatic)
+{
+person ps(px, py, txt, automatic);
+persons.insert_last(ps);
+}
+void destroy_all_persons()
+{
+for(uint i=0; i<persons.length(); i++)
+{
+personpool.destroy_sound(persons[i].persosound);
+}
+persons.resize(0);
+}

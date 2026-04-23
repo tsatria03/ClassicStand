@@ -1,9 +1,24 @@
 New in 2.0.
+Fixed a bug where purchasing items with insufficient funds would still complete the transaction and display a blank cash remaining value.
+Added a greeter NPC to the lemonade stand who welcomes new players and explains where everything is on the map.
+Added a person system. People are placed on the map at a single tile, play a looping spatial sound, and can either greet you automatically when you step onto their tile or respond when you press enter. Each person displays multiline dialogues using the double dash separator.
+Tightened all sound source areas to match their platform boundaries exactly, preventing ambiences from bleeding into neighboring areas.
+Shrunk the residential street ambience so it no longer plays inside the market.
+Opened up the lemonade stand and market so they are no longer fully enclosed. The stand now only has a back wall, and the market is open on the west side so you can walk in from the sidewalk.
+Added a wall system to the map. Walking into a wall blocks your movement and plays a spatial bump sound based on the wall type.
+Fixed a bug in the pour lemonade screen where validation errors would fall through and allow pouring 0 cups.
+Fixed a bug in the make lemonade screen where validation errors would fall through and cause a divide by zero crash.
+Rewrote the readme to reflect the current state of the game. It now covers map navigation, the three interactable stations, and some new keyboard shortcuts.
+Fixed a bug where pressing tab would skip the first item and start at the second one instead.
+Added the current inventory to the tab cycling system. You can now press tab to browse your cups, lemons, sugar, water, ice, salt, and filled cups.
+Added descriptions to all zone announcements so players know where they are, what they can do, and where to go next.
+Fixed a bug where the game would stack recursive calls when saving, loading, or dismissing the escape menu during gameplay.
+Added a business information screen that can be opened by pressing the letter I during gameplay. It displays your business title, date, time, temperature, cash, filled cups, sold cups, pitcher status, and current inventory all in one place.
 Made it so sounds can now fade out propperly upon exiting the main game.
 Added spatially positioned ambiences to all zones of the neighborhood map. Each area plays its own distinct sounds, including residential noise on the street, random birds at the stand, distant traffic on the sidewalk, calm sounds at the actions station, crowd noise at the selling counter, and shopping center and indoor sounds at the market and buying station.
 Added a sound source system that plays spatially positioned looping ambiences on the map. Sources support random selection from a list of sounds, volume control, and automatic range calculation based on the size of the source area.
 Replaced the form-based game UI with a raw keyboard loop. The game no longer uses buttons during gameplay.
-Added 3 interactable stations to the neighborhood map. Press enter at each one to interact. The buying station is located in the market. The actions station is located at your lemonade stand, where you can make and pour lemonade. The selling counter is also located at your lemonade stand, where you can sell your filled cups.
+Added 3 interactable stations to the neighborhood map, each activated by pressing enter. The buying station is in the market, while the actions station and selling counter are both located at your lemonade stand.
 New in 1.9.
 Reworked the lemonade pricing system. The price per cup is now automatically calculated based on the ingredients used in the batch, scaled with the current level and day number.
 Reworked the make lemonade system. All ingredients are now automatically divided evenly across the cups being made, rather than asking you to type each quantity manually.

@@ -240,17 +240,6 @@ string retval=array[random(0,array.length()-1)];
 return retval;
 }
 
-void apply_pitch_pool_settings()
-{
-int pitchValue = behind_pitch ? 5 : 0;
-p.behind_pitch_decrease = pitchValue;
-}
-void apply_misc_pool_settings()
-{
-p.max_distance = 0;
-p.pan_step = 2.5;
-p.volume_step = 2.5;
-}
 void set_save_slot(int slot)
 {
     currentSaveSlot = DIRECTORY_APPDATA + "tsatria03/ClassicStand/saves/game" + string(slot) + ".clm";
@@ -367,7 +356,7 @@ writedata();
 dlgplay("savegame.ogg");
 wait(200);
 last_menu_id="";
-game();
+return;
 }
             if (choice == "copy")
             {
@@ -378,7 +367,7 @@ writedata();
 dlgplay("savegame.ogg");
 wait(200);
 last_menu_id="";
-                game();
+                return;
             }
             if (choice == "export")
             {
@@ -392,12 +381,11 @@ writedata();
 dlgplay("savegame.ogg");
 wait(200);
 last_menu_id="";
-game();
+                return;
             }
         }
 calculate_new_day_conditions();
 last_menu_id="";
-game();
     }
 void trigger_event(int probability_chance)
 {

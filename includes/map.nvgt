@@ -8,7 +8,26 @@ if(platforms[i].minx<=x and platforms[i].maxx>=x and platforms[i].miny<=y and pl
 mt=platforms[i].tile;
 }
 }
+for(uint i=0; i<walls.length(); i++)
+{
+if(walls[i].minx<=x and walls[i].maxx>=x and walls[i].miny<=y and walls[i].maxy>=y)
+{
+mt=walls[i].wall;
+}
+}
 return mt;
+}
+
+void pbounce(int steps = 1)
+{
+if (facing == "right")
+me.x -= steps;
+else if (facing == "left")
+me.x += steps;
+else if (facing == "forward")
+me.y -= steps;
+else if (facing == "backward")
+me.y += steps;
 }
 
 void draw_map(string name)
@@ -16,32 +35,52 @@ void draw_map(string name)
 destroy_all_platforms();
 destroy_all_zones();
 destroy_all_sources();
+destroy_all_walls();
+destroy_all_persons();
 mapname=name;
 if(name=="neighborhood")
 {
-// Background: bare ground across the whole map
 spawn_platform(0, 100, 0, 100, "concrete2");
-// Your lemonade stand: carpet, centered at 25,50
-spawn_platform(15, 35, 45, 55, "carpet");
-// Sidewalk connecting stand to market
+spawn_platform(15, 35, 45, 55, "marble2");
 spawn_platform(35, 65, 47, 53, "concrete");
-// The market: tile floor, to the east
 spawn_platform(65, 80, 43, 57, "tile");
-// Sound sources
-spawn_source(0, 100, 0, 100, "residential", -35);
+spawn_wall(0, 100, 0, 0, "walldirt");
+spawn_wall(0, 100, 100, 100, "walldirt");
+spawn_wall(0, 0, 0, 100, "walldirt");
+spawn_wall(100, 100, 0, 100, "walldirt");
+spawn_wall(14, 14, 44, 56, "wallwood");
+spawn_wall(35, 65, 46, 46, "wallpole");
+spawn_wall(35, 65, 54, 54, "wallpole");
+spawn_wall(65, 80, 42, 42, "wallbuilding");
+spawn_wall(65, 80, 58, 58, "wallbuilding");
+spawn_wall(81, 81, 42, 58, "wallbuilding");
+spawn_wall(66, 79, 43, 43, "wallwindow");
+spawn_wall(66, 79, 57, 57, "wallwindow");
+spawn_wall(80, 80, 43, 57, "wallwindow");
+spawn_person(25, 50, "Hello there, and welcome to Classic Stand!--You're currently at your lemonade stand. This is where you'll be spending most of your time.--To the east is the sidewalk, which connects your stand to the market.--At the market, head to the buying station to purchase ingredients like lemons, sugar, water, ice, and salt.--Back at your stand, use the actions station to make and pour lemonade, and the selling counter to sell your filled cups to customers.--Good luck, and have fun!", true);
+spawn_source(0, 64, 0, 100, "residential", -20);
 spawn_source(15, 35, 45, 55, {"birds1", "birds2", "birds3", "birds4"}, -20);
-spawn_source(35, 65, 47, 53, "distant_traffic", -30);
-spawn_source(20, 24, 46, 55, "calm", -25);
-spawn_source(26, 30, 46, 50, {"crowd", "crowd2"}, -20);
-spawn_source(65, 80, 43, 57, "big_shopping_center", -20);
-spawn_source(70, 74, 48, 52, "inside", -25);
-// Zone announcements
-spawn_zone(0, 100, 0, 100, "Neighborhood street");
-spawn_zone(15, 35, 45, 55, "Your lemonade stand");
-spawn_zone(20, 24, 46, 55, "Actions station");
-spawn_zone(26, 30, 46, 50, "Selling counter");
-spawn_zone(35, 65, 47, 53, "Sidewalk");
-spawn_zone(65, 80, 43, 57, "The market");
-spawn_zone(70, 74, 48, 52, "Buying station");
+spawn_source(15, 35, 45, 55, "calm", 0);
+spawn_source(15, 35, 45, 55, {"crowd", "crowd2"}, -10);
+spawn_source(35, 65, 47, 53, "distant_traffic", -10);
+spawn_source(65, 80, 43, 57, "big_shopping_center", -10);
+spawn_source(65, 80, 43, 57, "inside", 0);
+spawn_zone(0, 100, 0, 100, "Neighborhood street. Head east to find your lemonade stand.");
+spawn_zone(15, 35, 45, 55, "Your lemonade stand. The actions station and selling counter are here.");
+spawn_zone(20, 24, 46, 55, "Actions station. Press enter to make or pour lemonade.");
+spawn_zone(26, 30, 46, 50, "Selling counter. Press enter to sell your filled cups.");
+spawn_zone(35, 65, 47, 53, "Sidewalk. Head east to reach the market, or west to return to your stand.");
+spawn_zone(65, 80, 43, 57, "The market. Head inside to find the buying station.");
+spawn_zone(70, 74, 48, 52, "Buying station. Press enter to buy ingredients.");
+spawn_zone(0, 100, 1, 5, "South boundary approaching.");
+spawn_zone(0, 100, 95, 99, "North boundary approaching.");
+spawn_zone(1, 5, 0, 100, "West boundary approaching.");
+spawn_zone(95, 99, 0, 100, "East boundary approaching.");
+spawn_zone(16, 20, 45, 55, "Back wall of your lemonade stand.");
+spawn_zone(35, 65, 47, 49, "South edge of the sidewalk.");
+spawn_zone(35, 65, 51, 53, "North edge of the sidewalk.");
+spawn_zone(65, 80, 43, 47, "South wall of the market.");
+spawn_zone(65, 80, 53, 57, "North wall of the market.");
+spawn_zone(76, 80, 43, 57, "East wall of the market.");
 }
 }

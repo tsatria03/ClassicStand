@@ -1,6 +1,19 @@
 int invslot;
-int invpos;
+int invpos = -1;
 dictionary inv;
+
+void sync_inv()
+{
+inv.delete_all();
+if(cups > 0)     inv.set("empty cup", int(cups));
+if(lemons > 0)   inv.set("lemon", int(lemons));
+if(sugars > 0)   inv.set("packet of sugar", int(sugars));
+if(waters > 0)   inv.set("liter of water", int(waters));
+if(ices > 0)     inv.set("bag of ice", int(ices));
+if(salts > 0)    inv.set("packet of salt", int(salts));
+if(fullcups > 0) inv.set("filled cup", int(fullcups));
+if(invpos >= int(inv.get_size())) invpos = -1;
+}
 
 void give(string item, int amount)
 {

@@ -21,7 +21,9 @@
 #include"setupmenu.nvgt"
 #include"speech.nvgt"
 #include"virtual_dialogs.nvgt"
+#include"person.nvgt"
 #include"soundsource.nvgt"
+#include"wall.nvgt"
 #include"zone.nvgt"
 
 typedef uint8 usmall; typedef int8 small;

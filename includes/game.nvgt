@@ -6,22 +6,26 @@ while(true)
 wait(5);
 p.update_listener_2d(me.x,me.y);
 ambpool.update_listener_2d(me.x,me.y);
+muspool.update_listener_2d(me.x,me.y);
+personpool.update_listener_2d(me.x,me.y);
 update_sources();
 checkloc();
+personcheck();
+sync_inv();
 if(!shift_is_down() && key_pressed(KEY_RETURN))
 {
 string zone = gmz();
-if(zone == "Buying station")
+if(zone.find("Buying station") != -1)
 {
 last_menu_id="";
 buymenu();
 }
-else if(zone == "Actions station")
+else if(zone.find("Actions station") != -1)
 {
 last_menu_id="";
 actsmenu();
 }
-else if(zone == "Selling counter")
+else if(zone.find("Selling counter") != -1)
 {
 last_menu_id="";
 sellmenu();
@@ -45,6 +49,10 @@ if (inv.get_keys().length()>0 and invpos<inv.get_size())
 useitem(inv.get_keys()[invpos]);
 else
 speak("No item in focus.");
+}
+if(key_pressed(KEY_I))
+{
+infomenu();
 }
 if(key_pressed(KEY_B))
 {
@@ -75,7 +83,7 @@ if(key_pressed(KEY_F))
 {
 speak("filled cups: " + fullcups);
 }
-if(key_pressed(KEY_S))
+if(!control_is_down() && key_pressed(KEY_S))
 {
 speak("sold cups: " + soldcups);
 }
@@ -150,29 +158,69 @@ if(!shift_is_down() && key_pressed(KEY_LEFT) and me.x!=minx)
 {
 me.x-=1;
 facing="left";
-p.play_stationary("sounds/platforms/"+gmt(me.x,me.y)+"/step"+random(1,5)+".ogg", false);
+if(string_contains(gmt(me.x,me.y),"wall",1)>-1)
+{
+string wt=gmt(me.x,me.y);
+wallslot=p.play_2d("sounds/walls/"+wt+"/bump.ogg",me.x,me.y,me.x,me.y,false);
 movetimer.restart();
+pbounce();
+}
+else
+{
+tileslot=p.play_stationary("sounds/platforms/"+gmt(me.x,me.y)+"/step"+random(1,5)+".ogg",false);
+movetimer.restart();
+}
 }
 if(!shift_is_down() && key_pressed(KEY_RIGHT) and me.x!=maxx)
 {
 me.x+=1;
 facing="right";
-p.play_stationary("sounds/platforms/"+gmt(me.x,me.y)+"/step"+random(1,5)+".ogg", false);
+if(string_contains(gmt(me.x,me.y),"wall",1)>-1)
+{
+string wt=gmt(me.x,me.y);
+wallslot=p.play_2d("sounds/walls/"+wt+"/bump.ogg",me.x,me.y,me.x,me.y,false);
 movetimer.restart();
+pbounce();
+}
+else
+{
+tileslot=p.play_stationary("sounds/platforms/"+gmt(me.x,me.y)+"/step"+random(1,5)+".ogg",false);
+movetimer.restart();
+}
 }
 if(!shift_is_down() && key_pressed(KEY_DOWN) and me.y!=miny)
 {
 me.y-=1;
 facing="backward";
-p.play_stationary("sounds/platforms/"+gmt(me.x,me.y)+"/step"+random(1,5)+".ogg", false);
+if(string_contains(gmt(me.x,me.y),"wall",1)>-1)
+{
+string wt=gmt(me.x,me.y);
+wallslot=p.play_2d("sounds/walls/"+wt+"/bump.ogg",me.x,me.y,me.x,me.y,false);
 movetimer.restart();
+pbounce();
+}
+else
+{
+tileslot=p.play_stationary("sounds/platforms/"+gmt(me.x,me.y)+"/step"+random(1,5)+".ogg",false);
+movetimer.restart();
+}
 }
 if(!shift_is_down() && key_pressed(KEY_UP) and me.y!=maxy)
 {
 me.y+=1;
 facing="forward";
-p.play_stationary("sounds/platforms/"+gmt(me.x,me.y)+"/step"+random(1,5)+".ogg", false);
+if(string_contains(gmt(me.x,me.y),"wall",1)>-1)
+{
+string wt=gmt(me.x,me.y);
+wallslot=p.play_2d("sounds/walls/"+wt+"/bump.ogg",me.x,me.y,me.x,me.y,false);
 movetimer.restart();
+pbounce();
+}
+else
+{
+tileslot=p.play_stationary("sounds/platforms/"+gmt(me.x,me.y)+"/step"+random(1,5)+".ogg",false);
+movetimer.restart();
+}
 }
 if(movetimer.elapsed>=movetime)
 {
@@ -180,29 +228,69 @@ if(!shift_is_down() && key_down(KEY_LEFT) and me.x!=minx)
 {
 me.x-=1;
 facing="left";
-p.play_stationary("sounds/platforms/"+gmt(me.x,me.y)+"/step"+random(1,5)+".ogg", false);
+if(string_contains(gmt(me.x,me.y),"wall",1)>-1)
+{
+string wt=gmt(me.x,me.y);
+wallslot=p.play_2d("sounds/walls/"+wt+"/bump.ogg",me.x,me.y,me.x,me.y,false);
 movetimer.restart();
+pbounce();
+}
+else
+{
+tileslot=p.play_stationary("sounds/platforms/"+gmt(me.x,me.y)+"/step"+random(1,5)+".ogg",false);
+movetimer.restart();
+}
 }
 if(!shift_is_down() && key_down(KEY_RIGHT) and me.x!=maxx)
 {
 me.x+=1;
 facing="right";
-p.play_stationary("sounds/platforms/"+gmt(me.x,me.y)+"/step"+random(1,5)+".ogg", false);
+if(string_contains(gmt(me.x,me.y),"wall",1)>-1)
+{
+string wt=gmt(me.x,me.y);
+wallslot=p.play_2d("sounds/walls/"+wt+"/bump.ogg",me.x,me.y,me.x,me.y,false);
 movetimer.restart();
+pbounce();
+}
+else
+{
+tileslot=p.play_stationary("sounds/platforms/"+gmt(me.x,me.y)+"/step"+random(1,5)+".ogg",false);
+movetimer.restart();
+}
 }
 if(!shift_is_down() && key_down(KEY_DOWN) and me.y!=miny)
 {
 me.y-=1;
 facing="backward";
-p.play_stationary("sounds/platforms/"+gmt(me.x,me.y)+"/step"+random(1,5)+".ogg", false);
+if(string_contains(gmt(me.x,me.y),"wall",1)>-1)
+{
+string wt=gmt(me.x,me.y);
+wallslot=p.play_2d("sounds/walls/"+wt+"/bump.ogg",me.x,me.y,me.x,me.y,false);
 movetimer.restart();
+pbounce();
+}
+else
+{
+tileslot=p.play_stationary("sounds/platforms/"+gmt(me.x,me.y)+"/step"+random(1,5)+".ogg",false);
+movetimer.restart();
+}
 }
 if(!shift_is_down() && key_down(KEY_UP) and me.y!=maxy)
 {
 me.y+=1;
 facing="forward";
-p.play_stationary("sounds/platforms/"+gmt(me.x,me.y)+"/step"+random(1,5)+".ogg", false);
+if(string_contains(gmt(me.x,me.y),"wall",1)>-1)
+{
+string wt=gmt(me.x,me.y);
+wallslot=p.play_2d("sounds/walls/"+wt+"/bump.ogg",me.x,me.y,me.x,me.y,false);
 movetimer.restart();
+pbounce();
+}
+else
+{
+tileslot=p.play_stationary("sounds/platforms/"+gmt(me.x,me.y)+"/step"+random(1,5)+".ogg",false);
+movetimer.restart();
+}
 }
 }
 if(control_is_down() and key_pressed(KEY_L))
@@ -211,7 +299,7 @@ readdata();
 speak("game reloaded");
 wait(500);
 last_menu_id="";
-game();
+continue;
 }
 if(control_is_down() and key_pressed(KEY_S))
 {
@@ -220,13 +308,14 @@ speak("game saved");
 dlgplay("sounds/misc/savegame.ogg");
 wait(200);
 last_menu_id="";
-game();
+continue;
 }
 if(alt_is_down() && key_pressed(KEY_F4))
 {
 speak("Exiting the game without saving.");
 fade_multi_pool();
 mainmenu();
+return;
 }
 if(key_repeating(KEY_ESCAPE))
 {
@@ -237,16 +326,17 @@ m.add_item("No, continue playing", "continue");
 m.add_item("No, save the game, but continue playing", "save_continue");
 m.intro_text = "Are you sure you want to quit? You will lose all progress for this current game session.";
 int mres = m.run();
-if(mres==-1)
+if(mres==-1 || m.get_item_id(mres) == "continue")
 {
 last_menu_id="";
-game();
+continue;
 }
 if (m.get_item_id(mres) == "quit_no_save")
 {
 speak("Exiting the game without saving.");
 fade_multi_pool();
 mainmenu();
+return;
 }
 if (m.get_item_id(mres) == "quit_save")
 {
@@ -255,11 +345,7 @@ speak("game saved, Exiting.");
 dlgplay("sounds/misc/savegame.ogg");
 fade_multi_pool();
 mainmenu();
-}
-if (m.get_item_id(mres) == "continue")
-{
-last_menu_id="";
-game();
+return;
 }
 if (m.get_item_id(mres) == "save_continue")
 {
@@ -268,7 +354,7 @@ speak("game saved");
 dlgplay("sounds/misc/savegame.ogg");
 wait(200);
 last_menu_id="";
-game();
+continue;
 }
 }
 }

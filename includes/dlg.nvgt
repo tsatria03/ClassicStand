@@ -17,6 +17,7 @@ clipboard_copy_text(message);
 }
 if (key_repeating(KEY_LEFT) or key_repeating(KEY_RIGHT) or key_repeating(KEY_UP) or key_repeating(KEY_DOWN))
 {
+temp.play_stationary("sounds/dlg/scroll.ogg", false);
 speak(message);
 }
 if (key_repeating(KEY_ESCAPE))
@@ -35,8 +36,8 @@ return false;
 void dlgmessage(string messages)
 {
 temp.play_stationary("sounds/dlg/open.ogg", false);
-string[] d = string_split(messages, "\r\n", true);
-bool escaped = dlg(d[0], dlgsound: false);
+string[] d = string_split(messages, "--", true);
+bool escaped = dlg(d[0], dlgsound:false);
 if (escaped)
 {
 temp.play_stationary("sounds/dlg/close.ogg", false);
@@ -45,7 +46,7 @@ return;
 for (uint i = 1; i < d.length(); i++)
 {
 temp.play_stationary("sounds/dlg/scroll.ogg", false);
-escaped = dlg(d[i], dlgsound: false);
+escaped = dlg(d[i], dlgsound:false);
 if (escaped)
 {
 temp.play_stationary("sounds/dlg/close.ogg", false);
