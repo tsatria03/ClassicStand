@@ -245,6 +245,7 @@ game();
 }
 void infomenu()
 {
+personpool.pause_all();
 int hour = clocktime % 24;
 string hour_period = (hour >= 12 && hour < 24) ? "PM" : "AM";
 int display_hour = hour % 12;
@@ -286,6 +287,7 @@ return;
 }
 void actsmenu()
 {
+personpool.pause_all();
 setupmenu();
 m.add_item("Make lemonade. You have " + cups + " empty cup" + (cups == 1 ? "" : "s"), "make");
 if(pitcherstat <= 0)
@@ -397,6 +399,7 @@ actsmenu();
 }
 void sellmenu()
 {
+personpool.pause_all();
 if(fullcups <= 0)
 {
 dlg("Error. You have no filled cups to sell. Head to the mixing and pouring station first.");
@@ -442,6 +445,7 @@ generate_daily_summary();
 }
 void buymenu()
 {
+personpool.pause_all();
 setupmenu();
 m.add_item("Bundled ingredients", "bgs");
 m.add_item("Single ingredients", "sgs");

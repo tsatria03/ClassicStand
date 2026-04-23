@@ -13,7 +13,7 @@ persy=py;
 text=txt;
 automatic=acl;
 in_range=false;
-persosound=personpool.play_2d("sounds/misc/person.ogg", me.x, me.y, persx, persy, true);
+persosound=personpool.play_2d("sounds/misc/person"+random(1,2)+".ogg", me.x, me.y, persx, persy, true);
 }
 }
 void personcheck()

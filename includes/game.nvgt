@@ -19,16 +19,19 @@ if(zone.find("Buying station") != -1)
 {
 last_menu_id="";
 buymenu();
+personpool.resume_all();
 }
 else if(zone.find("Actions station") != -1)
 {
 last_menu_id="";
 actsmenu();
+personpool.resume_all();
 }
 else if(zone.find("Selling counter") != -1)
 {
 last_menu_id="";
 sellmenu();
+personpool.resume_all();
 }
 else
 {
@@ -53,6 +56,7 @@ speak("No item in focus.");
 if(key_pressed(KEY_I))
 {
 infomenu();
+personpool.resume_all();
 }
 if(key_pressed(KEY_B))
 {
