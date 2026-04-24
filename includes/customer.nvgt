@@ -185,18 +185,22 @@ else
 speak("You hand the customer a cup of lemonade.");
 p.play_stationary("sounds/misc/givecup.ogg", false);
 wait(random(500,1000));
+bool extreme = string_starts_with(feedback, "EXTREME:");
+if(extreme) feedback = feedback.substr(8);
 int drinkslot = personpool.play_stationary("sounds/misc/drinkcup.ogg", true);
 if(bad)
 {
 wait(random(1000,2000));
 personpool.destroy_sound(drinkslot);
+if(extreme)
+{
 p.play_stationary("sounds/misc/spillcup.ogg", false);
 wait(random(500,1000));
 string bad_outro = "";
 if(ctype == "mean") bad_outro = "They were clearly looking for something to complain about. They pay you " + convert_to_currency(earned) + " and storm off.";
-else bad_outro = "The customer takes a sip. " + feedback + " They reluctantly pay you " + convert_to_currency(earned) + " and storm off.";
+else bad_outro = feedback + " They refuse to pay and storm off in a fury!";
 dlg(bad_outro);
-cups += cups_needed;
+if(ctype != "mean") { cash -= earned; soldcups -= cups_needed; }
 customers[idx].spilled=true;
 floor_spilled=true;
 string wet = (random(0, 1) == 0) ? "spring" : "spring2";
@@ -206,10 +210,25 @@ if(napkin_giver_index>=0 and napkin_giver_index<int(persons.length()))
 napkin_giver_default_text=persons[napkin_giver_index].text;
 persons[napkin_giver_index].text="Oh my, it looks like somebody made quite the mess! Here's a napkin that you can use to clean it up.";
 }
-double rep_loss = 1.0 + (daynumber / 10.0);
+double rep_loss = (1.0 + (daynumber / 10.0)) * 2.0;
 if(ctype == "critic") rep_loss *= 3.0;
 reputation=max(0.0, reputation-rep_loss);
 check_reputation();
+}
+else
+{
+p.play_stationary("sounds/misc/takecup.ogg", false);
+wait(random(500,1000));
+string bad_outro = "";
+if(ctype == "mean") bad_outro = "They were clearly looking for something to complain about. They pay you " + convert_to_currency(earned) + " and storm off.";
+else bad_outro = "The customer takes a sip and grimaces. " + feedback + " They reluctantly pay you " + convert_to_currency(earned) + " and leave.";
+dlg(bad_outro);
+cups += cups_needed;
+double rep_loss = 0.5 + (daynumber / 20.0);
+if(ctype == "critic") rep_loss *= 2.0;
+reputation=max(0.0, reputation-rep_loss);
+check_reputation();
+}
 }
 else
 {
@@ -266,15 +285,26 @@ open_serve_menu();
 string get_customer_feedback(double lem, double sug, double wat, double ice, double sal)
 {
 double total = lem + sug + wat;
-if(total <= 0) return "Hmm, this doesn't taste like much...";
+if(total <= 0) return "EXTREME:This doesn't taste like anything! Did you even put anything in this?!";
 double lemon_ratio = lem / total;
 double sugar_ratio = sug / total;
 double water_ratio = wat / total;
-bool too_sour   = lemon_ratio > 0.35;
-bool too_sweet  = sugar_ratio > 0.35;
-bool too_watery = water_ratio > 0.5;
-bool too_salty  = sal > 0.3;
-bool too_icy    = ice > 0.3;
+bool too_sour      = lemon_ratio > 0.35;
+bool too_sweet     = sugar_ratio > 0.35;
+bool too_watery    = water_ratio > 0.5;
+bool too_salty     = sal > 0.3;
+bool too_icy       = ice > 0.3;
+bool extreme_sour  = lemon_ratio > 0.6;
+bool extreme_sweet = sugar_ratio > 0.6;
+bool extreme_watery= water_ratio > 0.75;
+bool extreme_salty = sal > 1.0;
+bool extreme_icy   = ice > 1.0;
+if(extreme_sour && extreme_sweet) return "EXTREME:This is unbearably sour AND sickeningly sweet at the same time! What is this?!";
+if(extreme_sour)   return "EXTREME:This is pure lemon juice! My face is inside out! That is disgusting!";
+if(extreme_sweet)  return "EXTREME:This is liquid sugar! I can't even drink this! Did you add any lemon at all?!";
+if(extreme_watery) return "EXTREME:This is just water! I paid for lemonade, not tap water!";
+if(extreme_salty)  return "EXTREME:This tastes like the ocean! Are you trying to poison me?!";
+if(extreme_icy)    return "EXTREME:This is basically a block of ice! I can't even drink this!";
 if(too_sour && too_sweet) return "Wow, this is both sour and sweet at the same time! Interesting...";
 if(too_sour)   return "Ooh, that's quite sour! A little less lemon next time maybe.";
 if(too_sweet)  return "That's very sweet! You might want to ease up on the sugar a bit.";
@@ -516,24 +546,40 @@ if(cup_sugars.length() > 0) cup_sugars.remove_at(0);
 if(cup_waters.length() > 0) cup_waters.remove_at(0);
 if(cup_ices.length() > 0)   cup_ices.remove_at(0);
 if(cup_salts.length() > 0)  cup_salts.remove_at(0);
-string feedback = get_customer_feedback(this_lem, this_sug, this_wat, this_ice, this_sal);
-bool bad = (feedback != "Mmm, that's delicious! Perfectly balanced. Just what I needed!");
+string feedback_all = get_customer_feedback(this_lem, this_sug, this_wat, this_ice, this_sal);
+bool extreme_all = string_starts_with(feedback_all, "EXTREME:");
+if(extreme_all) feedback_all = feedback_all.substr(8);
+bool bad = (feedback_all != "Mmm, that's delicious! Perfectly balanced. Just what I needed!");
 string ctype_all = customers[idx].type;
 if(ctype_all == "returning") bad = false;
 if(ctype_all == "mean") bad = true;
-if(ctype_all != "charitable") cups += 1;
+if(ctype_all != "charitable" && !extreme_all) cups += 1;
 if(bad)
 {
 unhappy++;
+if(extreme_all)
+{
 customers[idx].spilled=true;
 floor_spilled=true;
 string wet = (random(0, 1) == 0) ? "spring" : "spring2";
 spawn_platform(32, 32, 50, 50, wet);
 if(napkin_giver_index>=0 and napkin_giver_index<int(persons.length()))
 persons[napkin_giver_index].text="Oh my, it looks like somebody made quite the mess! Here's a napkin that you can use to clean it up.";
-double rep_loss = 1.0 + (daynumber / 10.0);
+double rep_loss = (1.0 + (daynumber / 10.0)) * 2.0;
+if(ctype_all == "critic") rep_loss *= 3.0;
+reputation=max(0.0, reputation-rep_loss);
+cash -= earned;
+total_earned -= earned;
+check_reputation();
+}
+else
+{
+cups += 1;
+double rep_loss = 0.5 + (daynumber / 20.0);
+if(ctype_all == "critic") rep_loss *= 2.0;
 reputation=max(0.0, reputation-rep_loss);
 check_reputation();
+}
 }
 else
 {
@@ -706,9 +752,10 @@ if(customers[i].leaving)
 {
 if(customers[i].type == "thief" && customers[i].stolen_amount > 0 && int(me.x)==customers[i].cx && int(me.y)==customers[i].cy)
 {
-string recovered = "";
 int amt = customers[i].stolen_amount;
-if(customers[i].stolen_item == "lemon") { lemons += amt; recovered = amt == 1 ? "1 lemon" : amt + " lemons"; }
+string recovered = "";
+if(customers[i].stolen_item == "cash") { cash += amt; recovered = convert_to_currency(amt); }
+else if(customers[i].stolen_item == "lemon") { lemons += amt; recovered = amt == 1 ? "1 lemon" : amt + " lemons"; }
 else if(customers[i].stolen_item == "sugar") { sugars += amt; recovered = amt == 1 ? "1 packet of sugar" : amt + " packets of sugar"; }
 else if(customers[i].stolen_item == "water") { waters += amt; recovered = amt == 1 ? "1 liter of water" : amt + " liters of water"; }
 else if(customers[i].stolen_item == "ice") { ices += amt; recovered = amt == 1 ? "1 bag of ice" : amt + " bags of ice"; }
@@ -777,6 +824,9 @@ customers[i].steptimer.restart();
 }
 else
 {
+int dist = abs(int(me.x) - customers[i].cx) + abs(int(me.y) - customers[i].cy);
+if(dist <= 10)
+{
 string[] stealable;
 if(lemons > 0) stealable.insert_last("lemon");
 if(sugars > 0) stealable.insert_last("sugar");
@@ -805,7 +855,28 @@ else if(item == "salt") { amt = min(amt, int(salts)); salts -= amt; item_name = 
 else if(item == "cup") { amt = min(amt, int(cups)); cups -= amt; item_name = amt == 1 ? "1 empty cup" : amt + " empty cups"; customers[i].stolen_item = "cup"; }
 customers[i].stolen_amount = amt;
 customers[i].steptime = int(customers[i].steptime * 0.5);
-dlg("A thief snatched " + item_name + " from your stand and is making a run for it! Chase them down to get your goods back!");
+dlg("A thief snatched " + item_name + " from your stand! Chase them down to get it back!");
+customers[i].leaving=true;
+customers[i].targetx=random(1, 13);
+customers[i].targety=random(45, 55);
+customers[i].steptimer.restart();
+}
+}
+else
+{
+if(random(0, 1) == 0 && cash > 0)
+{
+int stolen_cash = int(min(cash, random(50 * level * daynumber, 200 * level * daynumber)));
+cash -= stolen_cash;
+customers[i].stolen_item = "cash";
+customers[i].stolen_amount = stolen_cash;
+customers[i].steptime = int(customers[i].steptime * 0.5);
+dlg("While you were away, a thief raided your cash box and made off with " + convert_to_currency(stolen_cash) + "!");
+}
+else
+{
+dlg("While you were away, a shifty person was seen lurking around your stand. It doesn't look like they took anything this time.");
+}
 customers[i].leaving=true;
 customers[i].targetx=random(1, 13);
 customers[i].targety=random(45, 55);

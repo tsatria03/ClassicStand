@@ -13,7 +13,6 @@ void trigger_event(int probability_chance)
         possible_events.insert_last("slow_day");
         possible_events.insert_last("ingredient_freeze");
     }
-    possible_events.insert_last("thief");
     possible_events.insert_last("lucky_bonus");
     possible_events.insert_last("nothing");
     string event = possible_events[random(0, possible_events.length() - 1)];
@@ -53,12 +52,6 @@ void trigger_event(int probability_chance)
         if(freeze_msg == "")
             freeze_msg = "The cold weather almost ruined your supplies, but you got lucky this time.";
         dlg(freeze_msg);
-    }
-    else if (event == "thief")
-    {
-        double stolen = min(cash, random(100 * level * daynumber, 500 * level * daynumber));
-        cash -= stolen;
-        dlg("A thief stole " + convert_to_currency(stolen) + " from your cash box overnight!");
     }
     else if (event == "lucky_bonus")
     {
