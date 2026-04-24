@@ -1,4 +1,5 @@
 New in 2.6.
+Fixed a bug where the wet tile after a customer spill would not appear until the customer finished walking away. It now spawns immediately when the spill occurs.
 Fixed a bug where the bundle shop quantity prompt would fall through and process a purchase when pressing escape.
 Made it so the bundle shop quantity prompt pre-fills with the maximum number of bundles you can afford based on your current cash.
 New in 2.5.

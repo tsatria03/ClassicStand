@@ -62,6 +62,8 @@ dlg("The customer takes a sip. " + feedback + " They reluctantly pay you " + con
 cups += 1;
 customers[idx].spilled=true;
 floor_spilled=true;
+string wet = (random(0, 1) == 0) ? "spring" : "spring2";
+spawn_platform(32, 32, 50, 50, wet);
 if(napkin_giver_index>=0 and napkin_giver_index<int(persons.length()))
 {
 napkin_giver_default_text=persons[napkin_giver_index].text;
@@ -234,11 +236,6 @@ customers[i].steptimer.restart();
 }
 if(customers[i].cx==customers[i].targetx and customers[i].cy==customers[i].targety)
 {
-if(customers[i].spilled)
-{
-string wet = (random(0, 1) == 0) ? "spring" : "spring2";
-spawn_platform(32, 32, 50, 50, wet);
-}
 personpool.destroy_sound(customers[i].soundslot);
 customers.remove_at(i);
 i--;
