@@ -16,9 +16,20 @@ checkloc();
 personcheck();
 sync_inv();
 if(int(me.x)==32 and int(me.y)==50)
-personpool.pause_all();
+{
+for(uint i=0; i<customers.length(); i++)
+{
+if(customers[i].waiting and !customers[i].leaving)
+personpool.pause_sound(customers[i].soundslot);
 else
-personpool.resume_all();
+personpool.resume_sound(customers[i].soundslot);
+}
+}
+else
+{
+for(uint i=0; i<customers.length(); i++)
+personpool.resume_sound(customers[i].soundslot);
+}
 check_customer_interaction();
 if(!shift_is_down() && key_pressed(KEY_RETURN))
 {

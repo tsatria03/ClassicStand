@@ -1,3 +1,5 @@
+New in 2.5.
+Refined the customer sound pausing so that only waiting customers at the counter have their sounds paused when you are standing there. Customers still walking toward you continue playing so you can hear them approaching.
 New in 2.4.
 Made it so customer related sounds are now paused when standing at the customer service counter, and resumed when stepping off, preventing multiple customer sounds from overlapping during interactions.
 Fixed a bug where timestop would play at the same time as timestart when a new period began.
