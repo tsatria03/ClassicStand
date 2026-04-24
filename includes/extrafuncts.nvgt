@@ -285,8 +285,8 @@ price_per_cup = floor(price_per_cup);
 }
 void calculate_new_day_conditions()
 {
-int daily_min = clamp(20 + daynumber * 1, 20, 90);
-int daily_max = clamp(70 + daynumber * 2, 70, 120);
+int daily_min = clamp(32 + daynumber * 1, 32, 90);
+int daily_max = clamp(70 + daynumber * 2, 70, 122);
 if(level == 1)
 temperature = random(daily_min, daily_min + 5);
 else if(level == 2)

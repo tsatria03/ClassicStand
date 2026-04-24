@@ -4,7 +4,7 @@ double last_lemons_per_cup=0, last_sugars_per_cup=0, last_waters_per_cup=0, last
 double reputation=100, max_reputation=200, peak_reputation=100;
 double minx=0, maxx=100, miny=0, maxy=100;
 int alertslot, tileslot, wallslot;
-int current_day_index=0, current_month_index=0, clocktime=0, daynumber=1, monthnumber=1, yearnumber=1, pitcher=0, temperature=20, movetime, runtime=100, walktime=200, zonestatus=1;
+int current_day_index=0, current_month_index=0, clocktime=0, daynumber=1, monthnumber=1, yearnumber=1, pitcher=0, temperature=32, movetime, runtime=100, walktime=200, zonestatus=1;
 int usetime=100;
 string business_name="";
 string last_menu_id="";

@@ -1,4 +1,13 @@
 New in 2.4.
+Made it so customer related sounds are now paused when standing at the customer service counter, and resumed when stepping off, preventing multiple customer sounds from overlapping during interactions.
+Fixed a bug where timestop would play at the same time as timestart when a new period began.
+Added timestart and timeend sounds. Timestart plays when a new wave begins, and timestop plays when the wave is over.
+Fixed a bug where pressing escape on any individual ingredient buy prompt would fall through and process a purchase of 0 items.
+Added a drinking sequence when serving customers. You hand over the cup, the customer drinks, and they either finish happily and return the empty cup, or spit it out and spill the lemonade if the recipe is off. Bad lemonade now slightly lowers your reputation.
+Fixed a bug where the wave end detection never triggered once all customers had walked away, preventing N from working. The time period now advances correctly after the last customer leaves.
+Added a message when pressing N mid-wave to let you know customers are still present.
+Clamped the temperature range so it never drops below 32 degrees Fahrenheit and never exceeds 122 degrees Fahrenheit.
+Fixed a bug where served customers would not walk away after being served. Their looping sound now moves with them as they walk back to the street.
 Made all individual ingredient buy prompts pre-fill with the maximum quantity you can afford based on your current cash.
 New in 2.3.
 Made the pour lemonade prompt pre-fill with the maximum number of cups you can pour from the pitcher.

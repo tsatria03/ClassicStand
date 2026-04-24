@@ -9,7 +9,6 @@ int soundslot;
 timer steptimer;
 timer patiencetimer;
 bool waiting;
-bool served;
 bool leaving;
 bool announced;
 customer(int sx, int sy, int sp, int pat)
@@ -21,7 +20,6 @@ targety=50;
 steptime=sp;
 patience=pat;
 waiting=false;
-served=false;
 leaving=false;
 announced=false;
 soundslot=personpool.play_2d("sounds/misc/customer.ogg", me.x, me.y, cx, cy, true);
@@ -46,17 +44,38 @@ fullcups -= 1;
 soldcups += 1;
 double earned = price_per_cup;
 cash += earned;
-p.play_stationary("sounds/misc/pourcup"+random(1,4)+".ogg", false);
 string feedback = get_customer_feedback(last_lemons_per_cup, last_sugars_per_cup, last_waters_per_cup, last_ices_per_cup, last_salts_per_cup);
-dlg("The customer drinks the lemonade. " + feedback + " They pay you " + convert_to_currency(earned) + ". Thank you!");
-customers[idx].served=true;
+bool bad = (feedback != "Mmm, that's delicious! Perfectly balanced. Just what I needed!");
+speak("You hand the customer a cup of lemonade.");
+p.play_stationary("sounds/misc/givecup.ogg", false);
+wait(800);
+int drinkslot = personpool.play_stationary("sounds/misc/drinkcup.ogg", true);
+if(bad)
+{
+wait(1500);
+personpool.destroy_sound(drinkslot);
+p.play_stationary("sounds/misc/spillcup.ogg", false);
+wait(600);
+dlg("The customer takes a sip. " + feedback + " They reluctantly pay you " + convert_to_currency(earned) + " and storm off.");
+double rep_loss = 1.0 + (daynumber / 10.0);
+reputation=max(0.0, reputation-rep_loss);
+check_reputation();
+}
+else
+{
+wait(2500);
+personpool.destroy_sound(drinkslot);
+p.play_stationary("sounds/misc/takecup.ogg", false);
+wait(600);
+dlg("The customer finishes their lemonade. " + feedback + " They pay you " + convert_to_currency(earned) + ". Thank you!");
+double rep_gain = 1.0 + (daynumber / 10.0);
+reputation=min(200.0, reputation+rep_gain);
+if(reputation>peak_reputation) peak_reputation=reputation;
+}
 customers[idx].leaving=true;
 customers[idx].targetx=random(1, 13);
 customers[idx].targety=random(45, 55);
 customers[idx].steptimer.restart();
-double rep_gain = 1.0 + (daynumber / 10.0);
-reputation=min(200.0, reputation+rep_gain);
-if(reputation>peak_reputation) peak_reputation=reputation;
 personpool.resume_all();
 }
 string get_customer_feedback(double lem, double sug, double wat, double ice, double sal)
@@ -100,7 +119,7 @@ if(shift_is_down()) return;
 if(!key_pressed(KEY_RETURN)) return;
 for(uint i=0; i<customers.length(); i++)
 {
-if(customers[i].waiting and !customers[i].served and !customers[i].leaving)
+if(customers[i].waiting and !customers[i].leaving)
 {
 serve_customer(i);
 return;
@@ -110,6 +129,7 @@ return;
 void spawn_customer_wave()
 {
 wave_ending=false;
+p.play_stationary("sounds/misc/timestart.ogg", false);
 int base = random(1, 5);
 int extra = int(min(15.0, level - 1));
 int temp_mod = 0;
@@ -124,7 +144,7 @@ else if(temperature < 45)
 {
 temp_mod = 0;
 sp_min = 450; sp_max = 650;
-pat_mod = 15000;
+pat_mod = -15000;
 speak("It's a cold day. Business is slow, but a few dedicated customers are still on their way.");
 }
 else
@@ -147,7 +167,6 @@ customers.insert_last(c);
 void advance_time_period()
 {
 wave_ending=false;
-p.play_stationary("sounds/misc/timeend.ogg", false);
 generate_daily_summary();
 }
 void update_customers()
@@ -157,28 +176,30 @@ if(wave_ending and waveendtimer.elapsed>=10000)
 advance_time_period();
 return;
 }
-if(!wave_ending and customers.length()>0)
+if(!wave_ending)
 {
-bool all_done=true;
+bool all_done=customers.length()==0;
+if(!all_done)
+{
+all_done=true;
 for(uint i=0; i<customers.length(); i++)
 {
-if(!customers[i].served and !customers[i].leaving)
+if(!customers[i].leaving)
 { all_done=false; break; }
 if(customers[i].leaving and (customers[i].cx!=customers[i].targetx or customers[i].cy!=customers[i].targety))
 { all_done=false; break; }
+}
 }
 if(all_done)
 {
 wave_ending=true;
 waveendtimer.restart();
-p.play_stationary("sounds/misc/timewarn.ogg", false);
+p.play_stationary("sounds/misc/timestop.ogg", false);
 speak("The wave is over. The time period will advance in 10 seconds. Press N to skip ahead.");
 }
 }
 for(uint i=0; i<customers.length(); i++)
 {
-if(customers[i].served)
-continue;
 if(customers[i].leaving)
 {
 if(customers[i].steptimer.elapsed>=customers[i].steptime)

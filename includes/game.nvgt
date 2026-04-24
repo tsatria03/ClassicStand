@@ -15,6 +15,10 @@ update_customers();
 checkloc();
 personcheck();
 sync_inv();
+if(int(me.x)==32 and int(me.y)==50)
+personpool.pause_all();
+else
+personpool.resume_all();
 check_customer_interaction();
 if(!shift_is_down() && key_pressed(KEY_RETURN))
 {
@@ -76,10 +80,15 @@ if(key_pressed(KEY_R))
 {
 speak("Reputation: " + int(reputation) + " out of 200.");
 }
-if(key_pressed(KEY_N) and wave_ending)
+if(key_pressed(KEY_N))
+{
+if(wave_ending)
 {
 speak("Advancing to the next time period.");
 advance_time_period();
+}
+else
+speak("The wave is still in progress. Wait until all customers have been served or left.");
 }
 if(key_pressed(KEY_M))
 {
