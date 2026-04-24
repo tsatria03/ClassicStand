@@ -44,20 +44,20 @@ return;
 }
 fullcups -= 1;
 soldcups += 1;
-double earned = price_per_cup;
+double earned = selling_price;
 cash += earned;
 string feedback = get_customer_feedback(last_lemons_per_cup, last_sugars_per_cup, last_waters_per_cup, last_ices_per_cup, last_salts_per_cup);
 bool bad = (feedback != "Mmm, that's delicious! Perfectly balanced. Just what I needed!");
 speak("You hand the customer a cup of lemonade.");
 p.play_stationary("sounds/misc/givecup.ogg", false);
-wait(800);
+wait(random(500,1000));
 int drinkslot = personpool.play_stationary("sounds/misc/drinkcup.ogg", true);
 if(bad)
 {
-wait(1500);
+wait(random(1000,2000));
 personpool.destroy_sound(drinkslot);
 p.play_stationary("sounds/misc/spillcup.ogg", false);
-wait(600);
+wait(random(500,1000));
 dlg("The customer takes a sip. " + feedback + " They reluctantly pay you " + convert_to_currency(earned) + " and storm off.");
 cups += 1;
 customers[idx].spilled=true;
@@ -79,11 +79,21 @@ double drink_length = personpool.get_sound_length(drinkslot);
 if(drink_length > 0)
 wait(int(drink_length));
 else
-wait(2500);
+wait(random(1000,2000));
 personpool.destroy_sound(drinkslot);
 p.play_stationary("sounds/misc/takecup.ogg", false);
-wait(600);
-dlg("The customer finishes their lemonade. " + feedback + " They pay you " + convert_to_currency(earned) + ". Thank you!");
+wait(random(500,1000));
+double tip = 0;
+int tip_chance = int(reputation / 2);
+if(random(0, 99) < tip_chance)
+{
+double tip_min = selling_price * 0.05;
+double tip_max = selling_price * 0.25 * (reputation / 100.0);
+tip = random(int(tip_min), int(max(tip_min+1, tip_max)));
+cash += tip;
+}
+string tip_msg = tip > 0 ? " They also leave you a " + convert_to_currency(tip) + " tip!" : "";
+dlg("The customer finishes their lemonade. " + feedback + " They pay you " + convert_to_currency(earned) + "." + tip_msg);
 cups += 1;
 double rep_gain = 1.0 + (daynumber / 10.0);
 reputation=min(200.0, reputation+rep_gain);
@@ -146,6 +156,7 @@ return;
 void spawn_customer_wave()
 {
 wave_ending=false;
+wave_started=false;
 p.play_stationary("sounds/misc/timestart.ogg", false);
 int base = random(1, 5);
 int extra = int(min(15.0, level - 1));
@@ -176,7 +187,7 @@ for(int i=0; i<count; i++)
 int sx = random(1, 13);
 int sy = random(45, 55);
 int sp = random(sp_min, sp_max);
-int pat = max(30000, random(60000, 120000) - (daynumber * 2000) - (int(level) * 7000) + pat_mod);
+int pat = max(30000, int((random(60000, 120000) - (daynumber * 2000) - (int(level) * 7000) + pat_mod) / price_multiplier));
 customer c(sx, sy, sp, pat);
 customers.insert_last(c);
 }
@@ -195,7 +206,7 @@ return;
 }
 if(!wave_ending)
 {
-bool all_done=customers.length()==0;
+bool all_done=customers.length()==0 and wave_started;
 if(!all_done)
 {
 all_done=true;
@@ -260,6 +271,7 @@ p.play_2d("sounds/platforms/"+gmt(customers[i].cx,customers[i].cy)+"/step"+rando
 else
 {
 customers[i].waiting=true;
+wave_started=true;
 customers[i].patiencetimer.restart();
 int dx = customers[i].cx - int(me.x);
 int dy = customers[i].cy - int(me.y);

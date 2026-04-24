@@ -99,6 +99,30 @@ if(key_pressed(KEY_R))
 {
 speak("Reputation: " + int(reputation) + " out of 200.");
 }
+if(key_pressed(KEY_A))
+{
+int arriving = 0;
+for(uint i=0; i<customers.length(); i++)
+if(!customers[i].waiting and !customers[i].leaving)
+arriving++;
+speak("Arriving customers: " + arriving + ".");
+}
+if(key_pressed(KEY_W))
+{
+int waiting = 0;
+for(uint i=0; i<customers.length(); i++)
+if(customers[i].waiting and !customers[i].leaving)
+waiting++;
+speak("Waiting customers: " + waiting + ".");
+}
+if(key_pressed(KEY_L))
+{
+int leaving = 0;
+for(uint i=0; i<customers.length(); i++)
+if(customers[i].leaving)
+leaving++;
+speak("Leaving customers: " + leaving + ".");
+}
 if(key_pressed(KEY_N))
 {
 if(wave_ending)

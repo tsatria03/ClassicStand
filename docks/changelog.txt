@@ -1,4 +1,11 @@
 New in 2.6.
+Added ingredient spoilage overnight. Ice melts significantly, lemons rot partially, and water evaporates slightly each night. Sugar, salt, and cups are unaffected. A message at the start of each day tells you what was lost.
+Added a price setting prompt at the start of each new day. You can set your own price per cup, with a suggested price based on your current day and level. Charging more earns more cash per cup but makes customers less patient.
+Added a daily weather announcement at the start of each new day. It includes the date, temperature, and a hint about what kind of crowd to expect based on the weather.
+Added a customer tipping system. Happy customers now occasionally leave a tip on top of the cup price. Both the chance and amount of a tip scale with your reputation, so keeping customers satisfied pays off more over time.
+Fixed a bug where returning from the daily summary on day 2 and beyond would immediately trigger the wave end announcement instead of starting a fresh wave of customers.
+Added keyboard shortcuts to check customer status. Press A for arriving customers, W for waiting customers, and L for leaving customers.
+Restored random events. Events were accidentally removed during the customer system rewrite. They now fire with a 60% chance at the end of each time period before the next wave begins.
 Fixed a bug where the wet tile after a customer spill would not appear until the customer finished walking away. It now spawns immediately when the spill occurs.
 Fixed a bug where the bundle shop quantity prompt would fall through and process a purchase when pressing escape.
 Made it so the bundle shop quantity prompt pre-fills with the maximum number of bundles you can afford based on your current cash.

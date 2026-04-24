@@ -10,6 +10,7 @@
 #include"customer.nvgt"
 #include"dec.nvgt"
 #include"dlg.nvgt"
+#include"events.nvgt"
 #include"extrafuncts.nvgt"
 #include"form.nvgt"
 #include"game.nvgt"
