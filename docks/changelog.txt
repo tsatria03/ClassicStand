@@ -1,6 +1,17 @@
+New in 2.8.
+Added suggested ingredient amounts when making lemonade. Each ingredient prompt now prefills a balanced suggested amount based on how many cups you are making, targeting one of each main ingredient per cup and a small conservative amount of ice and salt. If you enter an amount that differs from the suggestion, a confirmation menu warns you of the likely result, such as too sour, too sweet, or too watery, and lets you revert to the suggestion or proceed anyway.
+Tightened the customer feedback thresholds so unbalanced recipes are more likely to produce complaints. Customers will now react negatively to recipes that are only moderately off rather than requiring extreme imbalance.
+Fixed a bug where the serve all option would send customers back to the street immediately when selected, before the drink sequence had played. Customers now wait until after the sounds finish before heading off.
+Improved the serve all flow. It now plays a single give cup, drink, and take cup sequence for the whole group rather than individual sounds per customer. Customers are sent off together afterward with a single announcement.
+Fixed a bug where charitable customers were receiving an empty cup back after being served, even though they take the cup away to deliver it elsewhere.
+Added a price sensitivity system. Setting your price above the suggested price for the day now affects customer behavior. The minimum price is now the suggested price for the day, and the maximum is 4x the suggested price.
+Fixed a bug where the serve menu would refuse to open if you had no filled cups ready, preventing you from talking to waiting customers. The menu now always opens, and only the serve and serve all options show the no cups message if you try to use them without any lemonade prepared.
+Added a rare thief customer type. A shifty-looking person occasionally shows up and attempts to steal ingredients from your stand. Chase them down by stepping on their tile to recover the stolen goods and earn a small reputation boost for successfully catching them.
+Added random pitch variations to customer looping sounds. Each customer now has a unique pitch between 80 and 120, making it easier to distinguish individual customers by ear as they walk around.
+Fixed a bug where charitable customers would drink the lemonade at the stand instead of taking it to deliver to someone in need. They now take the cup and head off immediately, skipping the drink sequence entirely.
 New in 2.7.
 Added the ability to talk to individual customers from the serve menu. Selecting a customer opens a submenu with options to talk or serve them. Each customer has unique things to say depending on their type, and talking too many times makes them lose patience and leave with a small reputation penalty. Mean and desperate customers tolerate the least conversation, while elderly customers enjoy the chat the most.
-Added 9 customer types, each with unique behavior. Each type has unique arrival announcements, greetings, and serve reactions.
+Added some new customer types, each with unique behavior. Each type has unique arrival announcements, greetings, and serve reactions.
 Improved the serve all summary. It now shows how many customers were happy or complained, total earnings from cup sales, how many tipped and the total tip amount, and a grand total of everything collected.
 Fixed a bug where running out of cups during serve all would silently skip remaining customers. They now get disappointed and storm off with a reputation penalty, and the summary tells you how many were turned away.
 Made it so the serve all option only appears in the serve menu when there are 2 or more customers waiting.

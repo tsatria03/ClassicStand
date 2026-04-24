@@ -330,36 +330,86 @@ dlg("Error. You can only make up to " + max_possible + " cup" + (max_possible ==
 actsmenu();
 return;
 }
-string lem_in = vd.input_box("", "How many lemons would you like to add? You have " + lemons + ". Press enter to add the maximum amount.", string(int(lemons)));
+double sug_lem = min(lemons, cupcount);
+double sug_sug = min(sugars, cupcount);
+double sug_wat = min(waters, cupcount);
+double sug_ice = ices > 0 ? min(ices, cupcount * 0.25) : 0;
+double sug_sal = salts > 0 ? min(salts, cupcount * 0.25) : 0;
+string lem_in = vd.input_box("", "How many lemons would you like to add? You have " + lemons + ". Suggested amount is " + int(sug_lem) + ". Press enter to use the suggested amount.", string(int(sug_lem)));
 if(lem_in == "") { actsmenu(); return; }
 double use_lemons = string_to_number(lem_in);
 if(use_lemons <= 0 || use_lemons > lemons) { dlg("Error. Invalid lemon amount."); actsmenu(); return; }
-string sug_in = vd.input_box("", "How many packets of sugar would you like to add? You have " + sugars + ". Press enter to add the maximum amount.", string(int(sugars)));
+if(use_lemons != sug_lem)
+{
+setupmenu();
+m.add_item("Yes, use " + use_lemons + " lemon" + (use_lemons == 1 ? "" : "s"), "yes");
+m.add_item("No, use the suggested amount of " + int(sug_lem), "no");
+m.intro_text = use_lemons > sug_lem ? "That's more lemons than suggested. Your lemonade may turn out too sour. Are you sure?" : "That's fewer lemons than suggested. Your lemonade may taste watery or bland. Are you sure?";
+int mres = m.run();
+if(mres == -1 || m.get_item_id(mres) == "no") use_lemons = sug_lem;
+}
+string sug_in = vd.input_box("", "How many packets of sugar would you like to add? You have " + sugars + ". Suggested amount is " + int(sug_sug) + ". Press enter to use the suggested amount.", string(int(sug_sug)));
 if(sug_in == "") { actsmenu(); return; }
 double use_sugars = string_to_number(sug_in);
 if(use_sugars <= 0 || use_sugars > sugars) { dlg("Error. Invalid sugar amount."); actsmenu(); return; }
-string wat_in = vd.input_box("", "How many liters of water would you like to add? You have " + waters + ". Press enter to add the maximum amount.", string(int(waters)));
+if(use_sugars != sug_sug)
+{
+setupmenu();
+m.add_item("Yes, use " + use_sugars + " packet" + (use_sugars == 1 ? "" : "s") + " of sugar", "yes");
+m.add_item("No, use the suggested amount of " + int(sug_sug), "no");
+m.intro_text = use_sugars > sug_sug ? "That's more sugar than suggested. Your lemonade may turn out too sweet. Are you sure?" : "That's less sugar than suggested. Your lemonade may taste sour or bland. Are you sure?";
+int mres = m.run();
+if(mres == -1 || m.get_item_id(mres) == "no") use_sugars = sug_sug;
+}
+string wat_in = vd.input_box("", "How many liters of water would you like to add? You have " + waters + ". Suggested amount is " + int(sug_wat) + ". Press enter to use the suggested amount.", string(int(sug_wat)));
 if(wat_in == "") { actsmenu(); return; }
 double use_waters = string_to_number(wat_in);
 if(use_waters <= 0 || use_waters > waters) { dlg("Error. Invalid water amount."); actsmenu(); return; }
+if(use_waters != sug_wat)
+{
+setupmenu();
+m.add_item("Yes, use " + use_waters + " liter" + (use_waters == 1 ? "" : "s") + " of water", "yes");
+m.add_item("No, use the suggested amount of " + int(sug_wat), "no");
+m.intro_text = use_waters > sug_wat ? "That's more water than suggested. Your lemonade may turn out too watery. Are you sure?" : "That's less water than suggested. Your lemonade may be very concentrated. Are you sure?";
+int mres = m.run();
+if(mres == -1 || m.get_item_id(mres) == "no") use_waters = sug_wat;
+}
 double use_ices = 0;
 if(ices > 0)
 {
-string ice_in = vd.input_box("", "How many bags of ice would you like to add? You have " + ices + ". Press enter to add the maximum amount, or escape to skip.", string(int(ices)));
+string ice_in = vd.input_box("", "How many bags of ice would you like to add? You have " + ices + ". Suggested amount is " + int(sug_ice) + ". Press enter to use the suggested amount, or escape to skip.", string(int(sug_ice)));
 if(ice_in != "")
 {
 use_ices = string_to_number(ice_in);
 if(use_ices > ices) { dlg("Error. Invalid ice amount."); actsmenu(); return; }
+if(use_ices != sug_ice && use_ices > 0)
+{
+setupmenu();
+m.add_item("Yes, use " + use_ices + " bag" + (use_ices == 1 ? "" : "s") + " of ice", "yes");
+m.add_item("No, use the suggested amount of " + int(sug_ice), "no");
+m.intro_text = use_ices > sug_ice ? "That's more ice than suggested. Your lemonade may turn out too icy. Are you sure?" : "That's less ice than suggested. Are you sure?";
+int mres = m.run();
+if(mres == -1 || m.get_item_id(mres) == "no") use_ices = sug_ice;
+}
 }
 }
 double use_salts = 0;
 if(salts > 0)
 {
-string salt_in = vd.input_box("", "How many packets of salt would you like to add? You have " + salts + ". Press enter to add the maximum amount, or escape to skip.", string(int(salts)));
+string salt_in = vd.input_box("", "How many packets of salt would you like to add? You have " + salts + ". Suggested amount is " + int(sug_sal) + ". Press enter to use the suggested amount, or escape to skip.", string(int(sug_sal)));
 if(salt_in != "")
 {
 use_salts = string_to_number(salt_in);
 if(use_salts > salts) { dlg("Error. Invalid salt amount."); actsmenu(); return; }
+if(use_salts != sug_sal && use_salts > 0)
+{
+setupmenu();
+m.add_item("Yes, use " + use_salts + " packet" + (use_salts == 1 ? "" : "s") + " of salt", "yes");
+m.add_item("No, use the suggested amount of " + int(sug_sal), "no");
+m.intro_text = use_salts > sug_sal ? "That's more salt than suggested. Your lemonade may turn out too salty. Are you sure?" : "That's less salt than suggested. Are you sure?";
+int mres = m.run();
+if(mres == -1 || m.get_item_id(mres) == "no") use_salts = sug_sal;
+}
 }
 }
 cups   -= cupcount;

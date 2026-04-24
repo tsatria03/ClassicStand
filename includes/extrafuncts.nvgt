@@ -421,17 +421,22 @@ else
 weather_msg += "It's a freezing " + temperature + " degrees out there. Only the most dedicated customers will brave this cold.";
 dlg(weather_msg);
 int suggested_price = 25 + (daynumber * 5) + (int(level) * 2);
-int price_cap = int(max(200, suggested_price * 2.0));
+int hesitation_threshold = int(suggested_price * 2.0);
+int price_cap = int(suggested_price * 4.0);
 double suggested_dollars = suggested_price / 100.0;
 vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,<>_?/+-=~", false, "");
-string price_input = vd.input_box("", "Set your price per cup for today in dollars. The suggested price is " + convert_to_currency(suggested_price) + ". Maximum price is " + convert_to_currency(price_cap) + ". Higher prices earn more but make customers less patient. Press enter to use the suggested price.", string(suggested_dollars));
+string price_input = vd.input_box("", "Set your price per cup for today in dollars. The suggested price is " + convert_to_currency(suggested_price) + ". Minimum price is " + convert_to_currency(suggested_price) + ". Maximum price is " + convert_to_currency(price_cap) + ". Prices above " + convert_to_currency(hesitation_threshold) + " may cause customers to hesitate or refuse. Press enter to use the suggested price.", string(suggested_dollars));
 int chosen_price = suggested_price;
 if(price_input != "" and string_to_number(price_input) > 0)
-chosen_price = int(string_to_number(price_input) * 100.0);
-if(chosen_price < 1) chosen_price = 1;
+chosen_price = int(round(string_to_number(price_input) * 100.0, 0));
+if(chosen_price < suggested_price)
+{
+dlg("That price is too low. The minimum price you can charge today is " + convert_to_currency(suggested_price) + ". Your price has been set to the minimum.");
+chosen_price = suggested_price;
+}
 if(chosen_price > price_cap)
 {
-dlg("That price is too high. The maximum price you can charge is " + convert_to_currency(price_cap) + ". Your price has been set to the maximum.");
+dlg("That price is too high. The maximum price you can charge today is " + convert_to_currency(price_cap) + ". Your price has been set to the maximum.");
 chosen_price = price_cap;
 }
 selling_price = chosen_price;
