@@ -417,6 +417,19 @@ if(pitcherstat <= 0)
 pitcherstat = 0;
 pitcher = 0;
 }
+for(int ci = 0; ci < int(pourcount); ci++)
+{
+double vary = random_float(0.85, 1.15);
+cup_lemons.insert_last(max(0, last_lemons_per_cup * vary));
+vary = random_float(0.85, 1.15);
+cup_sugars.insert_last(max(0, last_sugars_per_cup * vary));
+vary = random_float(0.85, 1.15);
+cup_waters.insert_last(max(0, last_waters_per_cup * vary));
+vary = random_float(0.85, 1.15);
+cup_ices.insert_last(max(0, last_ices_per_cup * vary));
+vary = random_float(0.85, 1.15);
+cup_salts.insert_last(max(0, last_salts_per_cup * vary));
+}
 speak("Pouring... Please wait.");
 dlgplay("sounds/misc/pourcup"+random(1,4)+".ogg");
 dlg("Success. You poured " + pourcount + " cup" + (pourcount == 1 ? "" : "s") + " of lemonade into sellable serving cups.");

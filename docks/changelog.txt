@@ -1,3 +1,14 @@
+New in 2.7.
+Added the ability to talk to individual customers from the serve menu. Selecting a customer opens a submenu with options to talk or serve them. Each customer has unique things to say depending on their type, and talking too many times makes them lose patience and leave with a small reputation penalty. Mean and desperate customers tolerate the least conversation, while elderly customers enjoy the chat the most.
+Added 9 customer types, each with unique behavior. Each type has unique arrival announcements, greetings, and serve reactions.
+Improved the serve all summary. It now shows how many customers were happy or complained, total earnings from cup sales, how many tipped and the total tip amount, and a grand total of everything collected.
+Fixed a bug where running out of cups during serve all would silently skip remaining customers. They now get disappointed and storm off with a reputation penalty, and the summary tells you how many were turned away.
+Made it so the serve all option only appears in the serve menu when there are 2 or more customers waiting.
+Replaced the single customer serve with a serve menu. Pressing enter at the counter now opens a menu listing all waiting customers with their direction, along with options to serve them one at a time or all at once. Patience timers are frozen while the menu is open, so you can take your time deciding who to serve. After serving a single customer the menu reopens automatically so you never lose track of who is left.
+Added the ability to recycle unused ingredients and empty cups from your inventory. Press shift enter on any item to discard them.
+Fixed a bug where reloading a saved game with filled cups would show no cup data available when inspecting them. Cups are now reconstructed from the last known recipe on load so the inspection menu and serving both work correctly.
+Added a filled cup inspection menu. Using a filled cup from your inventory now brings up a menu listing every cup you have ready to serve, along with the exact ingredient amounts each one contains.
+Added per-cup ingredient variation. Each cup poured from the pitcher now has its own slightly different ingredient amounts, with up to 15 percent variation per ingredient. This means customers in the same wave can now get genuinely different reactions, rather than all reacting the same way.
 New in 2.6.
 Added ingredient spoilage overnight. Ice melts significantly, lemons rot partially, and water evaporates slightly each night. Sugar, salt, and cups are unaffected. A message at the start of each day tells you what was lost.
 Added a price setting prompt at the start of each new day. You can set your own price per cup, with a suggested price based on your current day and level. Charging more earns more cash per cup but makes customers less patient.

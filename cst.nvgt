@@ -87,4 +87,9 @@ pitcher=0;
 temperature=32;
 dayname = daynames[current_day_index];
 monthname = monthnames[current_month_index];
+cup_lemons.resize(0);
+cup_sugars.resize(0);
+cup_waters.resize(0);
+cup_ices.resize(0);
+cup_salts.resize(0);
 }

@@ -33,9 +33,7 @@ void trigger_event(int probability_chance)
     }
     else if (event == "slow_day")
     {
-        double unsold = min(soldcups, random(1 * level * daynumber, 5 * level * daynumber));
-        soldcups -= unsold;
-        dlg("It was too chilly. Customers stayed home, and " + unsold + " cup" + (unsold == 1 ? "" : "s") + " went unsold.");
+        dlg("It was a slow period. The cold kept most people indoors, and fewer customers than usual showed up.");
     }
     else if (event == "ingredient_freeze")
     {

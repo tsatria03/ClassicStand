@@ -121,6 +121,16 @@ if (sd.d.exists("peak_reputation"))
 {
 peak_reputation = sd.read_double("peak_reputation");
 }
+if (sd.d.exists("last_lemons_per_cup"))
+last_lemons_per_cup = sd.read_double("last_lemons_per_cup");
+if (sd.d.exists("last_sugars_per_cup"))
+last_sugars_per_cup = sd.read_double("last_sugars_per_cup");
+if (sd.d.exists("last_waters_per_cup"))
+last_waters_per_cup = sd.read_double("last_waters_per_cup");
+if (sd.d.exists("last_ices_per_cup"))
+last_ices_per_cup = sd.read_double("last_ices_per_cup");
+if (sd.d.exists("last_salts_per_cup"))
+last_salts_per_cup = sd.read_double("last_salts_per_cup");
 }
 void writedata()
 {
@@ -154,6 +164,11 @@ sd.add("dayname", dayname);
 sd.add("monthname", monthname);
 sd.add("reputation", reputation);
 sd.add("peak_reputation", peak_reputation);
+sd.add("last_lemons_per_cup", last_lemons_per_cup);
+sd.add("last_sugars_per_cup", last_sugars_per_cup);
+sd.add("last_waters_per_cup", last_waters_per_cup);
+sd.add("last_ices_per_cup", last_ices_per_cup);
+sd.add("last_salts_per_cup", last_salts_per_cup);
     sd.save();
 }
 void readpreffs()

@@ -94,7 +94,37 @@ if (invpos < 0 || invpos >= keys.length())
     return;
 current = keys[invpos];
 }
-if(current == "napkin")
+if(current == "empty cup")
+{
+cups -= 1;
+speak("You recycle 1 empty cup.");
+}
+else if(current == "lemon")
+{
+lemons -= 1;
+speak("You recycle 1 lemon.");
+}
+else if(current == "packet of sugar")
+{
+sugars -= 1;
+speak("You recycle 1 packet of sugar.");
+}
+else if(current == "liter of water")
+{
+waters -= 1;
+speak("You recycle 1 liter of water.");
+}
+else if(current == "bag of ice")
+{
+ices -= 1;
+speak("You recycle 1 bag of ice.");
+}
+else if(current == "packet of salt")
+{
+salts -= 1;
+speak("You recycle 1 packet of salt.");
+}
+else if(current == "napkin")
 {
 if(int(me.x)==32 and int(me.y)==50)
 {
@@ -124,6 +154,39 @@ else if(current == "used_napkin")
 p.play_stationary("sounds/misc/takenapkin.ogg", false);
 give("used_napkin", -1);
 speak("You toss the used napkin in the trash.");
+}
+else if(current == "filled cup")
+{
+if(cup_lemons.length() == 0 && fullcups > 0)
+{
+for(uint i = 0; i < uint(fullcups); i++)
+{
+cup_lemons.insert_last(last_lemons_per_cup);
+cup_sugars.insert_last(last_sugars_per_cup);
+cup_waters.insert_last(last_waters_per_cup);
+cup_ices.insert_last(last_ices_per_cup);
+cup_salts.insert_last(last_salts_per_cup);
+}
+}
+if(cup_lemons.length() == 0)
+{
+speak("No cup data available.");
+return;
+}
+setupmenu();
+for(uint i = 0; i < cup_lemons.length(); i++)
+{
+bool has_ice = cup_ices[i] > 0;
+bool has_salt = cup_salts[i] > 0;
+string water_suffix = (has_ice || has_salt) ? ", " : ", and ";
+string desc = "Cup " + (i + 1) + ": contains " + round(cup_lemons[i], 2) + " lemon" + (cup_lemons[i] == 1 ? "" : "s") + ", " + round(cup_sugars[i], 2) + " packet" + (cup_sugars[i] == 1 ? "" : "s") + " of sugar" + water_suffix + round(cup_waters[i], 2) + " liter" + (cup_waters[i] == 1 ? "" : "s") + " of water";
+if(has_ice) desc += (has_salt ? ", " : ", and ") + round(cup_ices[i], 2) + " bag" + (cup_ices[i] == 1 ? "" : "s") + " of ice";
+if(has_salt) desc += ", and " + round(cup_salts[i], 2) + " packet" + (cup_salts[i] == 1 ? "" : "s") + " of salt";
+m.add_item(desc, "cup" + (i + 1));
+}
+m.add_item("Back", "back");
+m.intro_text = "Filled cups. You have " + cup_lemons.length() + " cup" + (cup_lemons.length() == 1 ? "" : "s") + " ready to serve.";
+int mres=m.run();
 }
 }
 int count_total_items()

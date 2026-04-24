@@ -115,7 +115,7 @@ if(customers[i].waiting and !customers[i].leaving)
 waiting++;
 speak("Waiting customers: " + waiting + ".");
 }
-if(key_pressed(KEY_L))
+if(!control_is_down() && key_pressed(KEY_L))
 {
 int leaving = 0;
 for(uint i=0; i<customers.length(); i++)

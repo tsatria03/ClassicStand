@@ -6,13 +6,16 @@ int targetx, targety;
 int steptime;
 int patience;
 int soundslot;
+string type;
+int group_size;
+int talk_count;
 timer steptimer;
 timer patiencetimer;
 bool waiting;
 bool leaving;
 bool announced;
 bool spilled;
-customer(int sx, int sy, int sp, int pat)
+customer(int sx, int sy, int sp, int pat, string t="normal", int gs=1)
 {
 cx=sx;
 cy=sy;
@@ -24,8 +27,29 @@ waiting=false;
 leaving=false;
 announced=false;
 spilled=false;
+type=t;
+group_size=gs;
+talk_count=0;
 soundslot=personpool.play_2d("sounds/misc/customer.ogg", me.x, me.y, cx, cy, true);
-if(temperature > 85)
+if(type == "desperate")
+speak("Someone is sprinting toward your stand in a panic! They look absolutely parched!");
+else if(type == "charitable")
+speak("A kind-looking person is making their way to your stand. They seem to be on a mission.");
+else if(type == "group")
+speak("A group of " + group_size + " people is heading your way!");
+else if(type == "returning")
+speak("Someone is walking back toward your stand. They look familiar!");
+else if(type == "critic")
+speak("A well-dressed stranger is approaching your stand. They're taking notes...");
+else if(type == "nice")
+speak("A friendly-looking customer is on their way to your stand.");
+else if(type == "mean")
+speak("Someone is stomping toward your stand. They look like they're in a bad mood.");
+else if(type == "elderly")
+speak("An elderly customer is slowly making their way to your stand.");
+else if(type == "child")
+speak("A child is running toward your stand!");
+else if(temperature > 85)
 speak("A customer is rushing to your stand. It must be the heat!");
 else if(temperature < 45)
 speak("A customer is slowly making their way to your stand.");
@@ -35,19 +59,45 @@ speak("A customer is arriving at your stand.");
 }
 void serve_customer(uint idx)
 {
-personpool.pause_all();
 if(fullcups < 1)
 {
 dlg("You have no filled cups to serve. Head to the actions station to make and pour lemonade first.");
-personpool.resume_all();
 return;
 }
-fullcups -= 1;
-soldcups += 1;
-double earned = selling_price;
+string ctype = customers[idx].type;
+int cgroup = customers[idx].group_size;
+int cups_needed = (ctype == "group") ? cgroup : 1;
+if(fullcups < cups_needed)
+{
+dlg("You don't have enough filled cups for this customer. You need " + cups_needed + " but only have " + int(fullcups) + ".");
+return;
+}
+fullcups -= cups_needed;
+soldcups += cups_needed;
+double earned = selling_price * cups_needed;
+if(ctype == "desperate") earned = int(earned * 1.5);
+else if(ctype == "child") earned = int(earned * 0.6);
 cash += earned;
-string feedback = get_customer_feedback(last_lemons_per_cup, last_sugars_per_cup, last_waters_per_cup, last_ices_per_cup, last_salts_per_cup);
+double this_lem = cup_lemons.length() > 0 ? cup_lemons[0] : last_lemons_per_cup;
+double this_sug = cup_sugars.length() > 0 ? cup_sugars[0] : last_sugars_per_cup;
+double this_wat = cup_waters.length() > 0 ? cup_waters[0] : last_waters_per_cup;
+double this_ice = cup_ices.length() > 0 ? cup_ices[0] : last_ices_per_cup;
+double this_sal = cup_salts.length() > 0 ? cup_salts[0] : last_salts_per_cup;
+for(int ci = 0; ci < cups_needed; ci++)
+{
+if(cup_lemons.length() > 0) cup_lemons.remove_at(0);
+if(cup_sugars.length() > 0) cup_sugars.remove_at(0);
+if(cup_waters.length() > 0) cup_waters.remove_at(0);
+if(cup_ices.length() > 0)   cup_ices.remove_at(0);
+if(cup_salts.length() > 0)  cup_salts.remove_at(0);
+}
+string feedback = get_customer_feedback(this_lem, this_sug, this_wat, this_ice, this_sal);
 bool bad = (feedback != "Mmm, that's delicious! Perfectly balanced. Just what I needed!");
+if(ctype == "returning" || ctype == "charitable") bad = false;
+if(ctype == "mean") bad = true;
+if(ctype == "group")
+speak("You hand the group " + cgroup + " cups of lemonade.");
+else
 speak("You hand the customer a cup of lemonade.");
 p.play_stationary("sounds/misc/givecup.ogg", false);
 wait(random(500,1000));
@@ -58,8 +108,11 @@ wait(random(1000,2000));
 personpool.destroy_sound(drinkslot);
 p.play_stationary("sounds/misc/spillcup.ogg", false);
 wait(random(500,1000));
-dlg("The customer takes a sip. " + feedback + " They reluctantly pay you " + convert_to_currency(earned) + " and storm off.");
-cups += 1;
+string bad_outro = "";
+if(ctype == "mean") bad_outro = "They were clearly looking for something to complain about. They pay you " + convert_to_currency(earned) + " and storm off.";
+else bad_outro = "The customer takes a sip. " + feedback + " They reluctantly pay you " + convert_to_currency(earned) + " and storm off.";
+dlg(bad_outro);
+cups += cups_needed;
 customers[idx].spilled=true;
 floor_spilled=true;
 string wet = (random(0, 1) == 0) ? "spring" : "spring2";
@@ -70,6 +123,7 @@ napkin_giver_default_text=persons[napkin_giver_index].text;
 persons[napkin_giver_index].text="Oh my, it looks like somebody made quite the mess! Here's a napkin that you can use to clean it up.";
 }
 double rep_loss = 1.0 + (daynumber / 10.0);
+if(ctype == "critic") rep_loss *= 3.0;
 reputation=max(0.0, reputation-rep_loss);
 check_reputation();
 }
@@ -85,17 +139,36 @@ p.play_stationary("sounds/misc/takecup.ogg", false);
 wait(random(500,1000));
 double tip = 0;
 int tip_chance = int(reputation / 2);
+if(ctype == "nice") tip_chance = min(99, tip_chance + 30);
+else if(ctype == "charitable") tip_chance = 100;
+else if(ctype == "returning") tip_chance = min(99, tip_chance + 20);
+else if(ctype == "mean") tip_chance = 0;
+else if(ctype == "child") tip_chance = int(tip_chance * 0.3);
 if(random(0, 99) < tip_chance)
 {
 double tip_min = selling_price * 0.05;
 double tip_max = selling_price * 0.25 * (reputation / 100.0);
+if(ctype == "charitable") { tip_min = selling_price * 0.2; tip_max = selling_price * 0.5; }
+else if(ctype == "nice") tip_max = selling_price * 0.35 * (reputation / 100.0);
 tip = random(int(tip_min), int(max(tip_min+1, tip_max)));
 cash += tip;
 }
 string tip_msg = tip > 0 ? " They also leave you a " + convert_to_currency(tip) + " tip!" : "";
-dlg("The customer finishes their lemonade. " + feedback + " They pay you " + convert_to_currency(earned) + "." + tip_msg);
-cups += 1;
+string good_msg = "";
+if(ctype == "desperate") good_msg = "The customer gulps it down in seconds. Oh thank goodness, that saved me! They pay you " + convert_to_currency(earned) + "." + tip_msg;
+else if(ctype == "charitable") good_msg = "The customer smiles warmly. This is for someone who really needed it. Thank you for what you do! They pay you " + convert_to_currency(earned) + "." + tip_msg;
+else if(ctype == "group") good_msg = "The group enjoys their lemonade together. " + feedback + " They pay you " + convert_to_currency(earned) + " for all " + cgroup + " cups." + tip_msg;
+else if(ctype == "returning") good_msg = "The customer beams. Just as good as I remembered! They pay you " + convert_to_currency(earned) + "." + tip_msg;
+else if(ctype == "critic") good_msg = "The critic scribbles in their notebook. Impressive balance. I'll be recommending this stand. They pay you " + convert_to_currency(earned) + "." + tip_msg;
+else if(ctype == "elderly") good_msg = "The elderly customer smiles contentedly. Oh that's just lovely, dear. They pay you " + convert_to_currency(earned) + "." + tip_msg;
+else if(ctype == "child") good_msg = "The child's eyes light up. This is the best lemonade EVER! They pay you " + convert_to_currency(earned) + "." + tip_msg;
+else good_msg = "The customer finishes their lemonade. " + feedback + " They pay you " + convert_to_currency(earned) + "." + tip_msg;
+dlg(good_msg);
+cups += cups_needed;
 double rep_gain = 1.0 + (daynumber / 10.0);
+if(ctype == "critic") rep_gain *= 3.0;
+else if(ctype == "charitable") rep_gain *= 1.5;
+else if(ctype == "returning") rep_gain *= 1.2;
 reputation=min(200.0, reputation+rep_gain);
 if(reputation>peak_reputation) peak_reputation=reputation;
 }
@@ -103,7 +176,8 @@ customers[idx].leaving=true;
 customers[idx].targetx=random(1, 13);
 customers[idx].targety=random(45, 55);
 customers[idx].steptimer.restart();
-personpool.resume_all();
+speak("The customer is heading back to the street.");
+open_serve_menu();
 }
 string get_customer_feedback(double lem, double sug, double wat, double ice, double sal)
 {
@@ -139,19 +213,291 @@ dlgmessage(msg);
 fade_multi_pool();
 mainmenu();
 }
+string get_customer_talk(uint idx)
+{
+string t = customers[idx].type;
+int tc = customers[idx].talk_count;
+if(t == "mean")
+{
+if(tc == 0) return "What? Just give me my lemonade already.";
+return "I said give me my lemonade! Stop wasting my time!";
+}
+else if(t == "desperate")
+{
+if(tc == 0) return "Please, I'm absolutely parched! Can we hurry this up?";
+return "I am literally dying of thirst here! Just serve me!";
+}
+else if(t == "nice")
+{
+if(tc == 0) return "What a lovely stand you have! You must work very hard at this.";
+if(tc == 1) return "I do hope business is going well for you today!";
+if(tc == 2) return "You know, I've been meaning to tell you, this really is a wonderful spot.";
+return "Ha, I do enjoy a good chat, but I'm getting a little thirsty now!";
+}
+else if(t == "elderly")
+{
+if(tc == 0) return "Oh what a treat! I used to run a little stand myself when I was young, you know.";
+if(tc == 1) return "Back in my day we made lemonade fresh every morning. The smell was wonderful.";
+if(tc == 2) return "You remind me of my grandchildren. So full of energy and ambition!";
+if(tc == 3) return "I could talk all day, dear, I really could. But my throat is getting a bit dry!";
+return "Oh you are a sweetheart for chatting with an old soul like me!";
+}
+else if(t == "charitable")
+{
+if(tc == 0) return "There's a family down the street who hasn't had much today. I like to help where I can.";
+if(tc == 1) return "Kindness costs nothing, as they say. I hope you have a wonderful day.";
+if(tc == 2) return "I should get moving soon. The sooner I get that cup, the sooner someone gets helped.";
+return "I appreciate the chat, but someone is waiting on me. Shall we wrap this up?";
+}
+else if(t == "returning")
+{
+if(tc == 0) return "I came back just for your lemonade. It was honestly the best I've had in ages.";
+if(tc == 1) return "I told a few friends about your stand. Hopefully they stop by soon!";
+return "I'm getting thirsty just thinking about it. Ready when you are!";
+}
+else if(t == "critic")
+{
+if(tc == 0) return "I review establishments across town. I try to keep an open mind before forming an opinion.";
+if(tc == 1) return "Presentation matters, but taste is everything in this business.";
+if(tc == 2) return "I've seen many stands. Yours has a certain charm. Now, shall we get to it?";
+return "My time is valuable. I'd like that cup now, please.";
+}
+else if(t == "group")
+{
+if(tc == 0) return "We've heard great things about this place! We're all pretty excited.";
+if(tc == 1) return "There are " + customers[idx].group_size + " of us, so we're counting on you to come through!";
+return "We're getting a little restless over here. Ready when you are!";
+}
+else if(t == "child")
+{
+if(tc == 0) return "Do you have any flavors? I like strawberry but lemon is okay too I guess.";
+if(tc == 1) return "My mom says I have to use my manners. So, please can I have a lemonade?";
+return "I'm sooooo thirsty. Can we please go faster?";
+}
+else
+{
+if(tc == 0) return "Just stopping by for a refreshing drink. Looks like a great stand!";
+if(tc == 1) return "Taking my time today. No rush, no rush.";
+return "I'm starting to get a little thirsty though, not gonna lie!";
+}
+}
+int get_talk_limit(string t)
+{
+if(t == "mean" || t == "desperate") return 2;
+if(t == "nice" || t == "charitable" || t == "critic" || t == "group") return 4;
+if(t == "elderly") return 5;
+return 3;
+}
+void customer_submenu(int idx)
+{
+if(idx < 0 || idx >= int(customers.length()) || customers[idx].leaving)
+{
+open_serve_menu();
+return;
+}
+setupmenu();
+m.add_item("Talk to this customer", "talk");
+m.add_item("Serve this customer", "serve");
+m.add_item("Back", "back");
+string tlabel = customers[idx].type == "normal" ? "customer" : customers[idx].type + " customer";
+m.intro_text = "What would you like to do with this " + tlabel + "?";
+int mres = m.run();
+string choice = m.get_item_id(mres);
+if(mres == -1 || choice == "back")
+{
+open_serve_menu();
+return;
+}
+if(choice == "serve")
+{
+serve_customer(idx);
+return;
+}
+if(choice == "talk")
+{
+int limit = get_talk_limit(customers[idx].type);
+if(customers[idx].talk_count >= limit)
+{
+string angry = "";
+if(customers[idx].type == "mean") angry = "That's it! I'm done waiting. This is absolutely ridiculous!";
+else if(customers[idx].type == "desperate") angry = "I can't take it anymore! I'm finding water somewhere else!";
+else if(customers[idx].type == "child") angry = "UGH! I'm telling my mom! I'm leaving!";
+else if(customers[idx].type == "elderly") angry = "Oh dear, I really must be going now. My feet aren't what they used to be.";
+else angry = "I've had enough chatting. I'm going somewhere else!";
+dlg(angry);
+double rep_loss = 1.0 + (daynumber / 10.0);
+reputation = max(0.0, reputation - rep_loss);
+check_reputation();
+customers[idx].leaving = true;
+customers[idx].targetx = random(1, 13);
+customers[idx].targety = random(45, 55);
+customers[idx].steptimer.restart();
+speak("The customer has left.");
+open_serve_menu();
+return;
+}
+string line = get_customer_talk(idx);
+customers[idx].talk_count++;
+dlg("The customer says, " + line);
+customer_submenu(idx);
+return;
+}
+}
+void open_serve_menu()
+{
+personpool.pause_all();
+uint[] waiting_indices;
+for(uint i=0; i<customers.length(); i++)
+if(customers[i].waiting and !customers[i].leaving)
+waiting_indices.insert_last(i);
+if(waiting_indices.length() == 0)
+{
+personpool.resume_all();
+return;
+}
+if(fullcups < 1)
+{
+dlg("You have no filled cups to serve. Head to the actions station to make and pour lemonade first.");
+personpool.resume_all();
+return;
+}
+setupmenu();
+for(uint i=0; i<waiting_indices.length(); i++)
+{
+uint idx = waiting_indices[i];
+int dx = customers[idx].cx - int(me.x);
+int dy = customers[idx].cy - int(me.y);
+string dir = "";
+if(dy > 0 && dx == 0) dir = "north";
+else if(dy < 0 && dx == 0) dir = "south";
+else if(dx > 0 && dy == 0) dir = "east";
+else if(dx < 0 && dy == 0) dir = "west";
+else if(dx > 0 && dy > 0) dir = "northeast";
+else if(dx < 0 && dy > 0) dir = "northwest";
+else if(dx > 0 && dy < 0) dir = "southeast";
+else if(dx < 0 && dy < 0) dir = "southwest";
+else dir = "right here";
+string tlabel = customers[idx].type == "normal" ? "" : " (" + customers[idx].type + ")";
+m.add_item("Customer " + (i + 1) + tlabel + ", waiting to the " + dir, "c" + idx);
+}
+if(waiting_indices.length() > 1) m.add_item("Serve all customers", "all");
+m.add_item("Cancel", "cancel");
+m.intro_text = "Serve menu. " + waiting_indices.length() + " customer" + (waiting_indices.length() == 1 ? "" : "s") + " waiting. You have " + int(fullcups) + " filled cup" + (fullcups == 1 ? "" : "s") + ".";
+int mres = m.run();
+string choice = m.get_item_id(mres);
+if(mres == -1 || choice == "cancel")
+{
+personpool.resume_all();
+return;
+}
+if(choice == "all")
+{
+int served = 0, happy = 0, unhappy = 0, turned_away = 0, tipped = 0;
+double total_earned = 0, total_tips = 0;
+for(uint i=0; i<waiting_indices.length(); i++)
+{
+uint idx = waiting_indices[i];
+if(customers[idx].leaving) continue;
+if(fullcups < 1)
+{
+turned_away++;
+double rep_loss = 2.0 + level + (daynumber / 5.0);
+reputation=max(0.0, reputation-rep_loss);
+check_reputation();
+customers[idx].leaving=true;
+customers[idx].targetx=random(1, 13);
+customers[idx].targety=random(45, 55);
+customers[idx].steptimer.restart();
+speak("A customer got nothing and stormed off.");
+continue;
+}
+fullcups -= 1;
+soldcups += 1;
+double earned = selling_price;
+cash += earned;
+total_earned += earned;
+double this_lem = cup_lemons.length() > 0 ? cup_lemons[0] : last_lemons_per_cup;
+double this_sug = cup_sugars.length() > 0 ? cup_sugars[0] : last_sugars_per_cup;
+double this_wat = cup_waters.length() > 0 ? cup_waters[0] : last_waters_per_cup;
+double this_ice = cup_ices.length() > 0 ? cup_ices[0] : last_ices_per_cup;
+double this_sal = cup_salts.length() > 0 ? cup_salts[0] : last_salts_per_cup;
+if(cup_lemons.length() > 0) cup_lemons.remove_at(0);
+if(cup_sugars.length() > 0) cup_sugars.remove_at(0);
+if(cup_waters.length() > 0) cup_waters.remove_at(0);
+if(cup_ices.length() > 0)   cup_ices.remove_at(0);
+if(cup_salts.length() > 0)  cup_salts.remove_at(0);
+string feedback = get_customer_feedback(this_lem, this_sug, this_wat, this_ice, this_sal);
+bool bad = (feedback != "Mmm, that's delicious! Perfectly balanced. Just what I needed!");
+cups += 1;
+if(bad)
+{
+unhappy++;
+customers[idx].spilled=true;
+floor_spilled=true;
+string wet = (random(0, 1) == 0) ? "spring" : "spring2";
+spawn_platform(32, 32, 50, 50, wet);
+if(napkin_giver_index>=0 and napkin_giver_index<int(persons.length()))
+persons[napkin_giver_index].text="Oh my, it looks like somebody made quite the mess! Here's a napkin that you can use to clean it up.";
+double rep_loss = 1.0 + (daynumber / 10.0);
+reputation=max(0.0, reputation-rep_loss);
+check_reputation();
+}
+else
+{
+happy++;
+double tip = 0;
+int tip_chance = int(reputation / 2);
+if(random(0, 99) < tip_chance)
+{
+double tip_min = selling_price * 0.05;
+double tip_max = selling_price * 0.25 * (reputation / 100.0);
+tip = random(int(tip_min), int(max(tip_min+1, tip_max)));
+cash += tip;
+total_tips += tip;
+tipped++;
+}
+double rep_gain = 1.0 + (daynumber / 10.0);
+reputation=min(200.0, reputation+rep_gain);
+if(reputation>peak_reputation) peak_reputation=reputation;
+}
+customers[idx].leaving=true;
+customers[idx].targetx=random(1, 13);
+customers[idx].targety=random(45, 55);
+customers[idx].steptimer.restart();
+speak("Customer " + (i + 1) + " is heading back to the street.");
+served++;
+}
+p.play_stationary("sounds/misc/givecup.ogg", false);
+string summary = "You served " + served + " customer" + (served == 1 ? "" : "s") + ".--";
+if(served > 0)
+{
+if(happy > 0 && unhappy == 0) summary += "Everyone loved it!--";
+else if(unhappy > 0 && happy == 0) summary += "Nobody was happy with their lemonade.--";
+else summary += happy + " " + (happy == 1 ? "was" : "were") + " happy and " + unhappy + " complained.--";
+summary += "You earned " + convert_to_currency(total_earned) + " from cup sales.--";
+if(tipped > 0) summary += tipped + " customer" + (tipped == 1 ? "" : "s") + " left a tip, totaling " + convert_to_currency(total_tips) + ".--";
+else summary += "No customers left a tip this time.--";
+summary += "Total collected: " + convert_to_currency(total_earned + total_tips) + ".";
+}
+if(turned_away > 0) summary += "--You ran out of cups, so " + turned_away + " customer" + (turned_away == 1 ? "" : "s") + " got disappointed and stormed off.";
+dlgmessage(summary);
+personpool.resume_all();
+return;
+}
+int picked = string_to_int(choice.substr(1));
+customer_submenu(picked);
+}
 void check_customer_interaction()
 {
 if(int(me.x) != 32 || int(me.y) != 50) return;
 if(shift_is_down()) return;
 if(!key_pressed(KEY_RETURN)) return;
+bool any_waiting = false;
 for(uint i=0; i<customers.length(); i++)
-{
 if(customers[i].waiting and !customers[i].leaving)
-{
-serve_customer(i);
-return;
-}
-}
+{ any_waiting = true; break; }
+if(any_waiting)
+open_serve_menu();
 }
 void spawn_customer_wave()
 {
@@ -182,13 +528,23 @@ sp_min = 250; sp_max = 450;
 pat_mod = 0;
 }
 int count = temperature < 45 ? random(1, 2) : min(20, max(1, base + extra + temp_mod));
+string[] types = {"normal", "normal", "normal", "normal", "nice", "mean", "desperate", "charitable", "group", "returning", "critic", "elderly", "child"};
 for(int i=0; i<count; i++)
 {
 int sx = random(1, 13);
 int sy = random(45, 55);
 int sp = random(sp_min, sp_max);
 int pat = max(30000, int((random(60000, 120000) - (daynumber * 2000) - (int(level) * 7000) + pat_mod) / price_multiplier));
-customer c(sx, sy, sp, pat);
+string t = types[random(0, types.length() - 1)];
+int gs = 1;
+if(t == "desperate") { sp = int(sp * 0.5); pat = int(pat * 0.5); }
+else if(t == "nice") pat = int(pat * 1.5);
+else if(t == "mean") pat = int(pat * 0.7);
+else if(t == "elderly") { sp = int(sp * 1.8); pat = int(pat * 2.0); }
+else if(t == "child") { sp = int(sp * 0.6); pat = int(pat * 0.6); }
+else if(t == "returning") pat = int(pat * 1.8);
+else if(t == "group") { gs = random(2, 4); }
+customer c(sx, sy, sp, pat, t, gs);
 customers.insert_last(c);
 }
 }
@@ -285,23 +641,52 @@ else if(dx < 0 && dy > 0) dir = "northwest";
 else if(dx > 0 && dy < 0) dir = "southeast";
 else if(dx < 0 && dy < 0) dir = "southwest";
 else dir = "right here";
+string ctype = customers[i].type;
+if(ctype == "group")
+speak("A group of " + customers[i].group_size + " people has arrived at your stand. They are to your " + dir + ".");
+else if(ctype == "desperate")
+speak("A desperate customer has arrived at your stand, gasping for a drink. They are to your " + dir + ".");
+else if(ctype == "charitable")
+speak("A charitable customer has arrived at your stand. They are to your " + dir + ".");
+else if(ctype == "critic")
+speak("A well-dressed stranger has arrived at your stand. They are to your " + dir + ".");
+else if(ctype == "elderly")
+speak("An elderly customer has arrived at your stand. They are to your " + dir + ".");
+else if(ctype == "child")
+speak("A child has arrived at your stand. They are to your " + dir + ".");
+else if(ctype == "returning")
+speak("A returning customer has arrived at your stand. They are to your " + dir + ".");
+else if(ctype == "nice")
+speak("A friendly customer has arrived at your stand. They are to your " + dir + ".");
+else if(ctype == "mean")
+speak("An irritated-looking customer has arrived at your stand. They are to your " + dir + ".");
+else
 speak("A customer has arrived at your stand. They are to your " + dir + ".");
 string greeting;
-if(temperature > 85)
-{
-string[] hot_greetings = {"Whew, it is scorching out here! I need something cold, and fast!", "This heat is unbearable. Please tell me you have something cold!"};
-greeting = hot_greetings[random(0, hot_greetings.length()-1)];
-}
+if(ctype == "desperate")
+{ string[] g = {"Please, I'm absolutely dying of thirst! Give me anything cold!", "I've been walking for hours! I need lemonade, now!"}; greeting = g[random(0, g.length()-1)]; }
+else if(ctype == "charitable")
+{ string[] g = {"Hi there! I'd like to buy a cup for someone in need nearby.", "Could I get a cup? There's someone down the street who really needs it."}; greeting = g[random(0, g.length()-1)]; }
+else if(ctype == "group")
+{ string[] g = {"Hi! There are " + customers[i].group_size + " of us, we'd all love a cup!", "We heard this is the best lemonade stand around. " + customers[i].group_size + " cups please!"}; greeting = g[random(0, g.length()-1)]; }
+else if(ctype == "returning")
+{ string[] g = {"I was here earlier and your lemonade was amazing! I had to come back.", "Your lemonade is the best I've had all day. One more please!"}; greeting = g[random(0, g.length()-1)]; }
+else if(ctype == "critic")
+{ string[] g = {"Interesting establishment. I'll have one cup, please.", "I've been reviewing lemonade stands across town. Let's see what you've got."}; greeting = g[random(0, g.length()-1)]; }
+else if(ctype == "nice")
+{ string[] g = {"What a wonderful stand you have here! I'd love a lemonade please!", "You're doing a great job! Could I get a cup of lemonade?"}; greeting = g[random(0, g.length()-1)]; }
+else if(ctype == "mean")
+{ string[] g = {"Finally! I've been waiting forever. Just give me a lemonade.", "This better be worth it. I'll take one cup."}; greeting = g[random(0, g.length()-1)]; }
+else if(ctype == "elderly")
+{ string[] g = {"Hello dear, could I trouble you for a nice cup of lemonade?", "What a lovely little stand! A cup of lemonade would be wonderful, thank you."}; greeting = g[random(0, g.length()-1)]; }
+else if(ctype == "child")
+{ string[] g = {"Ooh ooh! Can I have a lemonade? Please please please!", "I have some coins! Can I have a lemonade?"}; greeting = g[random(0, g.length()-1)]; }
+else if(temperature > 85)
+{ string[] g = {"Whew, it is scorching out here! I need something cold, and fast!", "This heat is unbearable. Please tell me you have something cold!"}; greeting = g[random(0, g.length()-1)]; }
 else if(temperature < 45)
-{
-string[] cold_greetings = {"It's quite chilly today, but a nice lemonade still sounds lovely.", "Brr, not the best weather for lemonade, but here I am anyway!"};
-greeting = cold_greetings[random(0, cold_greetings.length()-1)];
-}
+{ string[] g = {"It's quite chilly today, but a nice lemonade still sounds lovely.", "Brr, not the best weather for lemonade, but here I am anyway!"}; greeting = g[random(0, g.length()-1)]; }
 else
-{
-string[] normal_greetings = {"What a lovely day for some lemonade!", "I'd love a nice cup of lemonade please."};
-greeting = normal_greetings[random(0, normal_greetings.length()-1)];
-}
+{ string[] g = {"What a lovely day for some lemonade!", "I'd love a nice cup of lemonade please."}; greeting = g[random(0, g.length()-1)]; }
 wait(500);
 speak("The customer says, " + greeting);
 }
@@ -312,7 +697,13 @@ else
 {
 if(customers[i].patiencetimer.elapsed>=customers[i].patience)
 {
-speak("A customer got tired of waiting and left.");
+string leave_msg = "";
+if(customers[i].type == "mean") leave_msg = "The irritated customer stormed off. What a waste of time!";
+else if(customers[i].type == "desperate") leave_msg = "The desperate customer couldn't wait any longer and ran off!";
+else if(customers[i].type == "child") leave_msg = "The child got bored and ran off.";
+else if(customers[i].type == "elderly") leave_msg = "The elderly customer sighed and slowly walked away.";
+else leave_msg = "A customer got tired of waiting and left.";
+speak(leave_msg);
 double rep_loss = 2.0 + level + (daynumber / 5.0);
 reputation=max(0.0, reputation-rep_loss);
 check_reputation();
