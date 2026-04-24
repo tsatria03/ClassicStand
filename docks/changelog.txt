@@ -1,5 +1,10 @@
+New in 2.6.
+Fixed a bug where the bundle shop quantity prompt would fall through and process a purchase when pressing escape.
+Made it so the bundle shop quantity prompt pre-fills with the maximum number of bundles you can afford based on your current cash.
 New in 2.5.
+Fixed a bug where customers would not return their empty cup after being served. The cup is now added back to your inventory after each customer finishes.
 Added a napkin system. When a customer spills, the counter turns wet and the greeter offers you a napkin. Use on the wet tile to clean it up, then recycle the used napkin from your inventory with shift enter.
+Fixed some bugs with menu triggers so they now work correctly using the menu trigger system rather than zone name matching.
 Made it so bad lemonade causes the customer to spill their drink on the counter, leaving a wet tile behind.
 Made the drinkcup sound play for its full actual length when a customer enjoys their lemonade, rather than a hardcoded duration.
 Added menu triggers to the map format. Menus are now defined in the map file using the menu directive rather than being hardcoded to zone name strings, making it possible to add or move interactive areas without touching code.

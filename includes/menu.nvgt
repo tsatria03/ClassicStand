@@ -698,15 +698,20 @@ dlg("Purchase complete. You bought " + qty + " liter" + (qty == 1 ? "" : "s") + 
 void purchase_ingredient_bundle(string bundle_id, string bundle_name, double unit_qty)
 {
 vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=~", false, "");
-string qty_input = vd.input_box("", "How many " + bundle_name + (bundle_name == "booth" ? " bundles" : " bundles") + " would you like to buy?");
+double per_bundle_base = ((cupcost + lemoncost + sugarcost + watercost) * unit_qty) / 6;
+int max_qty = (per_bundle_base > 0) ? int(cash / per_bundle_base) : 1;
+if(max_qty < 1) max_qty = 1;
+string qty_input = vd.input_box("", "How many " + bundle_name + " bundles would you like to buy? You can afford up to " + max_qty + ". Press enter to buy the maximum amount.", string(max_qty));
 if(qty_input == "")
 {
 buybmenu();
+return;
 }
 double qty = string_to_number(qty_input);
 if(qty <= 0)
 {
 buybmenu();
+return;
 }
 setupmenu();
 m.add_item("Yes", "yes");
