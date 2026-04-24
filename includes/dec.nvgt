@@ -1,4 +1,6 @@
 bool autorun=false, hrtf=true, behind_pitch=true, y_is_elevation=true, busprofed=false, intro=true;
+bool wave_ending=false;
+
 double cash=100, fullcups=0, soldcups=0, level=1, maxlevel=6, pitcherstat=0, cups=0, ices=0, lemons=0, salts=0, sugars=0, waters=0, cupcost=1, icecost=2, lemoncost=3, saltcost=4, sugarcost=5, watercost=6;
 double last_lemons_per_cup=0, last_sugars_per_cup=0, last_waters_per_cup=0, last_ices_per_cup=0, last_salts_per_cup=0, price_per_cup=0;
 double reputation=100, max_reputation=200, peak_reputation=100;
@@ -17,15 +19,15 @@ string currentSaveSlot = DIRECTORY_APPDATA + "tsatria03/ClassicStand/saves/game1
 string preffsPath = DIRECTORY_APPDATA + "tsatria03/ClassicStand/preffs/";
 string savePath = DIRECTORY_APPDATA + "tsatria03/ClassicStand/saves/";
 string statsPath = DIRECTORY_APPDATA + "tsatria03/ClassicStand/stats/";
+string mapdata;
 string mapname;
 string version;
 string newzone;
-timer usetimer;
+file mapper;
 instance gamstence("cst");
 savedata sd("", "");
 savedata st(DIRECTORY_APPDATA + "tsatria03/ClassicStand/preffs/gamesets.clm", "");
-timer movetimer, runtimer, walktimer, waveendtimer;
-bool wave_ending=false;
+timer movetimer, usetimer, runtimer, walktimer, waveendtimer;
 audio_form form;
 file dockfile, dockver;
 sound dummy;

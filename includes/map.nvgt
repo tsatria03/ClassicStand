@@ -1,3 +1,66 @@
+bool string_starts_with(const string& in str, const string& in start)
+{
+if (str.length()>=start.length())
+{
+return (str.substr(0, start.length()) == start);
+}
+return false;
+}
+bool string_ends_with(const string& in str,const string& in ending)
+{
+if (str.length()>=ending.length())
+{
+return (str.substr(str.length()-ending.length())==ending);
+}
+return false;
+}
+bool string_to_bool(string str)
+{
+return str.trim_whitespace().lower()=="true"? true:false;
+}
+
+float stn(string str)
+{
+if (string_contains(str,"random",1)>-1)
+{
+string a=string_replace(str,"random(","",true);
+a=string_replace(a,")","",true);
+string[] b=string_split(a,",",true);
+double c=0;
+c=random(string_to_number(b[0]),string_to_number(b[1]));
+return c;
+}
+else
+return string_to_number(str);
+}
+
+string join_string_array(string[] arr, uint start, uint end)
+{
+string result = "";
+for(uint i = start; i < end; i++)
+{
+if(i>start) result+=" ";
+result+=arr[i];
+}
+return result;
+}
+
+string[] delinear(string a)
+{
+    a = string_replace(a, "\r\n", "\n", true);
+    a = string_replace(a, "\r", "\n", true);
+    return string_split(a, "\n", false);
+}
+string linear(string[] a)
+{
+string final;
+for(uint i=0; i<a.length(); i++)
+{
+final+=(a[i]+"\r\n");
+}
+return final;
+}
+
 string gmt(double x, double y)
 {
 string mt;
@@ -30,7 +93,8 @@ else if (facing == "backward")
 me.y += steps;
 }
 
-void draw_map(string name)
+
+void clearmap()
 {
 destroy_all_platforms();
 destroy_all_zones();
@@ -38,52 +102,85 @@ destroy_all_sources();
 destroy_all_walls();
 destroy_all_persons();
 destroy_all_customers();
-mapname=name;
-if(name=="neighborhood")
+}
+void load_map(string name, bool instent_update=true)
 {
-spawn_platform(0, 100, 0, 100, "concrete2");
-spawn_platform(15, 35, 45, 55, "marble2");
-spawn_platform(32, 32, 50, 50, "marble");
-spawn_platform(35, 65, 47, 53, "concrete");
-spawn_platform(65, 80, 43, 57, "tile");
-spawn_wall(0, 100, 0, 0, "walldirt");
-spawn_wall(0, 100, 100, 100, "walldirt");
-spawn_wall(0, 0, 0, 100, "walldirt");
-spawn_wall(100, 100, 0, 100, "walldirt");
-spawn_wall(14, 14, 44, 56, "wallwood");
-spawn_wall(35, 65, 46, 46, "wallpole");
-spawn_wall(35, 65, 54, 54, "wallpole");
-spawn_wall(65, 80, 42, 42, "wallbuilding");
-spawn_wall(65, 80, 58, 58, "wallbuilding");
-spawn_wall(81, 81, 42, 58, "wallbuilding");
-spawn_wall(66, 79, 43, 43, "wallwindow");
-spawn_wall(66, 79, 57, 57, "wallwindow");
-spawn_wall(80, 80, 43, 57, "wallwindow");
-spawn_person(25, 50, "Hello there, and welcome to Classic Stand!--You're currently at your lemonade stand. This is where you'll be spending most of your time.--To the east is the sidewalk, which connects your stand to the market.--At the market, head to the buying station to purchase ingredients like lemons, sugar, water, ice, and salt.--Back at your stand, use the actions station to make lemonade and pour it into cups.--When customers arrive, they will walk to the customer service counter to the east of your stand. Head over there and press enter to serve them a cup.--Keep your customers happy to build your reputation. Let too many walk away and it's game over.--By the way, you already have a small supply of ingredients to get you started. Press tab to check your inventory.--Good luck, and have fun!", false);
-spawn_source(0, 64, 0, 100, "residential", -20);
-spawn_source(15, 35, 45, 55, {"birds1", "birds2", "birds3", "birds4"}, -20);
-spawn_source(15, 35, 45, 55, "calm", 0);
-spawn_source(15, 35, 45, 55, {"crowd", "crowd2"}, -10);
-spawn_source(35, 65, 47, 53, "distant_traffic", -10);
-spawn_source(65, 80, 43, 57, "big_shopping_center", -10);
-spawn_source(65, 80, 43, 57, "inside", 0);
-spawn_zone(0, 100, 0, 100, "Neighborhood street. Head east to find your lemonade stand.");
-spawn_zone(0, 100, 1, 5, "South boundary approaching.");
-spawn_zone(0, 100, 95, 99, "North boundary approaching.");
-spawn_zone(1, 5, 0, 100, "West boundary approaching.");
-spawn_zone(15, 35, 45, 55, "Your lemonade stand. The actions station and selling counter are here.");
-spawn_zone(16, 20, 45, 55, "Back wall of your lemonade stand.");
-spawn_zone(20, 24, 46, 55, "Actions station. Press enter to make or pour lemonade.");
-spawn_zone(25, 25, 50, 50, "Someone is standing here. Press enter to greet them.");
-spawn_zone(32, 32, 50, 50, "Customer service counter. Customers will wait here to be served.");
-spawn_zone(35, 65, 47, 53, "Sidewalk. Head east to reach the market, or west to return to your stand.");
-spawn_zone(35, 65, 47, 49, "South edge of the sidewalk.");
-spawn_zone(35, 65, 51, 53, "North edge of the sidewalk.");
-spawn_zone(65, 80, 43, 57, "The market. Head inside to find the buying station.");
-spawn_zone(65, 80, 43, 47, "South wall of the market.");
-spawn_zone(65, 80, 53, 57, "North wall of the market.");
-spawn_zone(70, 74, 48, 52, "Buying station. Press enter to buy ingredients.");
-spawn_zone(76, 80, 43, 57, "East wall of the market.");
-spawn_zone(95, 99, 0, 100, "East boundary approaching.");
+mapname = name;
+clearmap();
+if(string_ends_with(mapname, ".map"))
+mapname = string_replace(mapname, ".map", "", true);
+mapper.open("data/maps/" + mapname + ".map", "r");
+mapdata = mapper.read();
+mapper.close();
+string[] lines = delinear(mapdata);
+for(uint i = 0; i < lines.length(); i++)
+{
+string line = lines[i].trim_whitespace();
+if(line == "" || string_starts_with(line, "#")) continue;
+if(!instent_update)
+wait(5);
+string[] sd = string_split(line, " ", true);
+if(sd[0]=="minx" && sd.length()==2)
+minx=stn(sd[1]);
+else if(sd[0]=="maxx" && sd.length()==2)
+maxx=stn(sd[1]);
+else if(sd[0]=="miny" && sd.length()==2)
+miny=stn(sd[1]);
+else if(sd[0]=="maxy" && sd.length()==2)
+maxy=stn(sd[1]);
+else if(sd[0]=="platform" && sd.length()==6)
+{
+double mx=stn(sd[1]);
+double mx2=stn(sd[2]);
+double my=stn(sd[3]);
+double my2=stn(sd[4]);
+spawn_platform(mx, mx2, my, my2, sd[5]);
+}
+else if(sd[0]=="wall" && sd.length()==6)
+{
+double mx=stn(sd[1]);
+double mx2=stn(sd[2]);
+double my=stn(sd[3]);
+double my2=stn(sd[4]);
+spawn_wall(mx, mx2, my, my2, sd[5]);
+}
+else if(sd[0]=="zone" && sd.length()>=6)
+{
+double mx=stn(sd[1]);
+double mx2=stn(sd[2]);
+double my=stn(sd[3]);
+double my2=stn(sd[4]);
+string txt=join_string_array(sd, 5, sd.length());
+spawn_zone(mx, mx2, my, my2, txt);
+}
+else if(sd[0]=="source" && sd.length()==7)
+{
+double mx=stn(sd[1]);
+double mx2=stn(sd[2]);
+double my=stn(sd[3]);
+double my2=stn(sd[4]);
+double vol=stn(sd[6]);
+if(string_contains(sd[5], "|", 1) > -1)
+{
+string[] sounds = string_split(sd[5], "|", true);
+spawn_source(mx, mx2, my, my2, sounds, vol);
+}
+else
+spawn_source(mx, mx2, my, my2, sd[5], vol);
+}
+else if(sd[0]=="person" && sd.length()>=5)
+{
+int px=stn(sd[1]);
+int py=stn(sd[2]);
+string txt=join_string_array(sd, 3, sd.length()-1);
+bool automatic=string_to_bool(sd[sd.length()-1]);
+spawn_person(px, py, txt, automatic);
+}
+else if(sd[0]=="customer_counter" && sd.length()==3)
+{
+int cx=stn(sd[1]);
+int cy=stn(sd[2]);
+spawn_platform(cx, cx, cy, cy, "marble");
+}
 }
 }

@@ -1,0 +1,75 @@
+# Neighborhood map
+
+minx 0
+maxx 100
+miny 0
+maxy 100
+
+# Platforms
+
+platform 0 100 0 100 concrete2
+platform 15 35 45 55 marble2
+platform 32 32 50 50 marble
+platform 35 65 47 53 concrete
+platform 65 80 43 57 tile
+
+# Boundary walls
+
+wall 0 100 0 0 walldirt
+wall 0 100 100 100 walldirt
+wall 0 0 0 100 walldirt
+wall 100 100 0 100 walldirt
+
+# Stand back wall
+
+wall 14 14 44 56 wallwood
+
+# Sidewalk poles
+
+wall 35 65 46 46 wallpole
+wall 35 65 54 54 wallpole
+
+# Market walls
+
+wall 65 80 42 42 wallbuilding
+wall 65 80 58 58 wallbuilding
+wall 81 81 42 58 wallbuilding
+wall 66 79 43 43 wallwindow
+wall 66 79 57 57 wallwindow
+wall 80 80 43 57 wallwindow
+
+# Person (greeter)
+
+person 25 50 Hello there, and welcome to Classic Stand!--You're currently at your lemonade stand. This is where you'll be spending most of your time.--To the east is the sidewalk, which connects your stand to the market.--At the market, head to the buying station to purchase ingredients like lemons, sugar, water, ice, and salt.--Back at your stand, use the actions station to make lemonade and pour it into cups.--When customers arrive, they will walk to the customer service counter to the east of your stand. Head over there and press enter to serve them a cup.--Keep your customers happy to build your reputation. Let too many walk away and it's game over.--By the way, you already have a small supply of ingredients to get you started. Press tab to check your inventory.--Good luck, and have fun! false
+
+# Sound sources
+
+source 15 35 45 55 calm 0
+source 65 80 43 57 inside 0
+source 15 35 45 55 birds1|birds2|birds3|birds4 -10
+source 15 35 45 55 crowd|crowd2 -10
+source 65 80 43 57 big_shopping_center -10
+source 0 100 0 100 city1|city2 -20
+source 0 64 0 100 residential -20
+source 35 65 47 53 distant_traffic -20
+
+# Zones
+
+zone 0 100 0 100 Neighborhood street. Head east to find your lemonade stand.
+zone 0 100 1 5 South boundary approaching.
+zone 0 100 95 99 North boundary approaching.
+zone 1 5 0 100 West boundary approaching.
+zone 15 35 45 55 Your lemonade stand. The actions station and selling counter are here.
+zone 16 20 45 55 Back wall of your lemonade stand.
+zone 20 24 46 55 Actions station. Press enter to make or pour lemonade.
+zone 25 25 50 50 Someone is standing here. Press enter to greet them.
+zone 32 32 50 50 Customer service counter. Customers will wait here to be served.
+zone 35 65 47 53 Sidewalk. Head east to reach the market, or west to return to your stand.
+zone 35 65 47 49 South edge of the sidewalk.
+zone 35 65 51 53 North edge of the sidewalk.
+zone 65 80 43 57 The market. Head inside to find the buying station.
+zone 65 80 43 47 South wall of the market.
+zone 65 80 53 57 North wall of the market.
+zone 70 74 48 52 Buying station. Press enter to buy ingredients.
+zone 76 80 43 57 East wall of the market.
+zone 95 99 0 100 East boundary approaching.

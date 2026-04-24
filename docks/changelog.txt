@@ -1,4 +1,7 @@
 New in 2.5.
+Added the neighborhood.map file containing all platforms, walls, zones, sound sources, and persons for the neighborhood map.
+Replaced the hardcoded draw_map function with a data-driven load_map system. Maps are now loaded from external .map files stored in data/maps/, making it possible to create and edit maps without touching code.
+Made it so person sounds pause when you step onto their tile and resume when you walk away.
 Refined the customer sound pausing so that only waiting customers at the counter have their sounds paused when you are standing there. Customers still walking toward you continue playing so you can hear them approaching.
 New in 2.4.
 Made it so customer related sounds are now paused when standing at the customer service counter, and resumed when stepping off, preventing multiple customer sounds from overlapping during interactions.
@@ -10,21 +13,21 @@ Fixed a bug where the wave end detection never triggered once all customers had 
 Added a message when pressing N mid-wave to let you know customers are still present.
 Clamped the temperature range so it never drops below 32 degrees Fahrenheit and never exceeds 122 degrees Fahrenheit.
 Fixed a bug where served customers would not walk away after being served. Their looping sound now moves with them as they walk back to the street.
-Made all individual ingredient buy prompts pre-fill with the maximum quantity you can afford based on your current cash.
+Made it so all individual ingredient buy prompts pre-fill with the maximum quantity you can afford based on your current cash.
 New in 2.3.
-Made the pour lemonade prompt pre-fill with the maximum number of cups you can pour from the pitcher.
-Made the ice and salt prompts in the actions station use the same "would you like to add?" phrasing as lemons, sugar, and water.
-Made the cup count prompt when making lemonade pre-fill with the maximum number of cups you can actually make based on your current ingredients, rather than your total empty cups.
+Made it so the pour lemonade prompt pre-fills with the maximum number of cups you can pour from the pitcher.
+Made it so the ice and salt prompts in the actions station now use the same phrasing as lemons, sugar, and water.
+Made it so the cup count prompt when making lemonade pre-fills with the maximum number of cups you can actually make based on your current ingredients, rather than your total empty cups.
 Added a 10 second warning before the time period advances after a wave ends. Press N to skip ahead immediately.
 Added a keyboard shortcut, N, to manually advance to the next time period when the wave is over.
 Added automatic time period advancement once all customers in a wave have been served or left. A warning sound plays and the game announces the period will advance in 10 seconds.
 Made it so cold days now limit customer waves to 1 or 2 dedicated customers, with a message letting you know business is slow due to the cold.
-Made customer greetings play automatically when they arrive at the counter, rather than requiring you to press enter first.
-Made customer wave size depend on temperature. Hot days bring more customers, cold days bring fewer.
-Made customer walk speed depend on temperature. Hot days make customers rush to your stand, while cold days make them move slowly.
+Made it so customer greetings now play automatically when they arrive at the counter, rather than requiring you to press enter first.
+Made it so customer wave size now depends on temperature. Hot days bring more customers, while cold days bring fewer.
+Made it so customer walk speed now depends on temperature. Hot days make customers rush to your stand, while cold days make them move slowly.
 New in 2.2.
-Made customer patience depend on temperature. Hot customers are less patient since they are desperate for a cold drink, while cold weather customers are more willing to wait.
-Made customer dialogue reflect the current temperature. Hot customers rush in desperate for something cold, cold weather customers are more casual about it, and moderate weather customers give a standard greeting.
+Made it so customer patience now depends on temperature. Hot customers are less patient since they are desperate for a cold drink, while cold weather customers are more willing to wait.
+Made it so customer dialogues reflect the current temperature. Hot customers rush in desperate for something cold, cold weather customers are more casual about it, and moderate weather customers give a standard greeting.
 Made it so temperature now affects customer behavior across wave size, walk speed, patience, arrival announcements, and serving dialogue, making it a core part of the gameplay experience.
 Removed the selling counter and the old sell menu entirely. Lemonade is now sold exclusively by serving real customers at the customer service counter.
 Separated the looping sounds for persons and customers. Persons now use person.ogg and customers use customer.ogg, with no random variants.

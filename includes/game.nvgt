@@ -1,6 +1,6 @@
 void game()
 {
-draw_map("neighborhood");
+load_map("neighborhood");
 spawn_customer_wave();
 while(true)
 {
@@ -29,6 +29,13 @@ else
 {
 for(uint i=0; i<customers.length(); i++)
 personpool.resume_sound(customers[i].soundslot);
+}
+for(uint i=0; i<persons.length(); i++)
+{
+if(int(me.x)==persons[i].persx and int(me.y)==persons[i].persy)
+personpool.pause_sound(persons[i].persosound);
+else
+personpool.resume_sound(persons[i].persosound);
 }
 check_customer_interaction();
 if(!shift_is_down() && key_pressed(KEY_RETURN))
