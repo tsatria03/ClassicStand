@@ -67,6 +67,14 @@ if(in_area and !shift_is_down() and key_pressed(KEY_RETURN))
 personpool.pause_sound(persons[i].persosound);
 dlgmessage(persons[i].text);
 personpool.resume_sound(persons[i].persosound);
+if(floor_spilled and int(i)==napkin_giver_index and item_exists("napkin")==-1)
+{
+p.play_stationary("sounds/misc/givenapkin.ogg", false);
+give("napkin", 1);
+focus_item("napkin");
+speak("You received a napkin.");
+persons[i].text=napkin_giver_default_text;
+}
 break;
 }
 }

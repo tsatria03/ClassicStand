@@ -1,6 +1,7 @@
 void game()
 {
 load_map("neighborhood");
+napkin_giver_index = 0;
 spawn_customer_wave();
 while(true)
 {

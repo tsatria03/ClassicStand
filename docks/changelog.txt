@@ -1,4 +1,5 @@
 New in 2.5.
+Added a napkin system. When a customer spills, the counter turns wet and the greeter offers you a napkin. Use on the wet tile to clean it up, then recycle the used napkin from your inventory with shift enter.
 Made it so bad lemonade causes the customer to spill their drink on the counter, leaving a wet tile behind.
 Made the drinkcup sound play for its full actual length when a customer enjoys their lemonade, rather than a hardcoded duration.
 Added menu triggers to the map format. Menus are now defined in the map file using the menu directive rather than being hardcoded to zone name strings, making it possible to add or move interactive areas without touching code.

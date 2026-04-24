@@ -4,6 +4,8 @@ dictionary inv;
 
 void sync_inv()
 {
+int napkin_count = item_exists("napkin");
+int used_napkin_count = item_exists("used_napkin");
 inv.delete_all();
 if(cups > 0)     inv.set("empty cup", int(cups));
 if(lemons > 0)   inv.set("lemon", int(lemons));
@@ -12,6 +14,8 @@ if(waters > 0)   inv.set("liter of water", int(waters));
 if(ices > 0)     inv.set("bag of ice", int(ices));
 if(salts > 0)    inv.set("packet of salt", int(salts));
 if(fullcups > 0) inv.set("filled cup", int(fullcups));
+if(napkin_count > 0) inv.set("napkin", napkin_count);
+if(used_napkin_count > 0) inv.set("used_napkin", used_napkin_count);
 if(invpos >= int(inv.get_size())) invpos = -1;
 }
 
@@ -89,6 +93,37 @@ keys.sort_ascending();
 if (invpos < 0 || invpos >= keys.length())
     return;
 current = keys[invpos];
+}
+if(current == "napkin")
+{
+if(int(me.x)==32 and int(me.y)==50)
+{
+if(!floor_spilled)
+{
+speak("This part of the floor is not wet.");
+}
+else
+{
+p.play_stationary("sounds/misc/usenapkin.ogg", false);
+wait(500);
+spawn_platform(32, 32, 50, 50, "marble");
+floor_spilled=false;
+give("napkin", -1);
+give("used_napkin", 1);
+focus_item("used_napkin");
+speak("You clean up the spill. The counter is back to normal. You now have a used napkin.");
+}
+}
+else
+{
+speak("You are holding a napkin. Head to the customer counter to clean up the spill.");
+}
+}
+else if(current == "used_napkin")
+{
+p.play_stationary("sounds/misc/takenapkin.ogg", false);
+give("used_napkin", -1);
+speak("You toss the used napkin in the trash.");
 }
 }
 int count_total_items()

@@ -60,6 +60,12 @@ p.play_stationary("sounds/misc/spillcup.ogg", false);
 wait(600);
 dlg("The customer takes a sip. " + feedback + " They reluctantly pay you " + convert_to_currency(earned) + " and storm off.");
 customers[idx].spilled=true;
+floor_spilled=true;
+if(napkin_giver_index>=0 and napkin_giver_index<int(persons.length()))
+{
+napkin_giver_default_text=persons[napkin_giver_index].text;
+persons[napkin_giver_index].text="Oh my, it looks like somebody made quite the mess! Here's a napkin that you can use to clean it up.";
+}
 double rep_loss = 1.0 + (daynumber / 10.0);
 reputation=max(0.0, reputation-rep_loss);
 check_reputation();
