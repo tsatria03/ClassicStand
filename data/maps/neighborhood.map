@@ -55,8 +55,8 @@ source 35 65 47 53 distant_traffic -20
 
 # Menu triggers
 
-menu 70 74 48 52 buymenu
 menu 20 24 46 55 actsmenu
+menu 70 74 48 52 buymenu
 
 # Zones
 

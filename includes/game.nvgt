@@ -40,14 +40,14 @@ personpool.resume_sound(persons[i].persosound);
 check_customer_interaction();
 if(!shift_is_down() && key_pressed(KEY_RETURN))
 {
-string zone = gmz();
-if(zone.find("Buying station") != -1)
+string triggered = get_menu_trigger_at(me.x, me.y);
+if(triggered == "buymenu")
 {
 last_menu_id="";
 buymenu();
 personpool.resume_all();
 }
-else if(zone.find("Actions station") != -1)
+else if(triggered == "actsmenu")
 {
 last_menu_id="";
 actsmenu();
