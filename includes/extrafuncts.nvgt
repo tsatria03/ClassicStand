@@ -22,6 +22,28 @@ return true;
 }
 return false;
 }
+bool string_starts_with(const string& in str, const string& in start)
+{
+if (str.length()>=start.length())
+{
+return (str.substr(0, start.length()) == start);
+}
+return false;
+}
+bool string_ends_with(const string& in str,const string& in ending)
+{
+if (str.length()>=ending.length())
+{
+return (str.substr(str.length()-ending.length())==ending);
+}
+return false;
+}
+bool string_to_bool(string str)
+{
+return str.trim_whitespace().lower()=="true"? true:false;
+}
+
+
 double clamp(double value, double min, double max)
 {
 value=value<min? min:value;
@@ -46,6 +68,48 @@ float random_float(float min, float max)
     int rnd = random(scaled_min, scaled_max);
     return float(rnd) / steps;
 }
+float stn(string str)
+{
+if (string_contains(str,"random",1)>-1)
+{
+string a=string_replace(str,"random(","",true);
+a=string_replace(a,")","",true);
+string[] b=string_split(a,",",true);
+double c=0;
+c=random(string_to_number(b[0]),string_to_number(b[1]));
+return c;
+}
+else
+return string_to_number(str);
+}
+
+string join_string_array(string[] arr, uint start, uint end)
+{
+string result = "";
+for(uint i = start; i < end; i++)
+{
+if(i>start) result+=" ";
+result+=arr[i];
+}
+return result;
+}
+
+string[] delinear(string a)
+{
+    a = string_replace(a, "\r\n", "\n", true);
+    a = string_replace(a, "\r", "\n", true);
+    return string_split(a, "\n", false);
+}
+string linear(string[] a)
+{
+string final;
+for(uint i=0; i<a.length(); i++)
+{
+final+=(a[i]+"\r\n");
+}
+return final;
+}
+
 string format_number(double num, bool basic=false, bool scientific=false, bool short_suffix=true)
 {
     if (num == 0)

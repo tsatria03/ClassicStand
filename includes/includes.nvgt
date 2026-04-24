@@ -16,6 +16,7 @@
 #include"inventory.nvgt"
 #include"map.nvgt"
 #include"menu.nvgt"
+#include"menu_trigger.nvgt"
 #include"platform.nvgt"
 #include"poolfuncts.nvgt"
 #include"savedata.nvgt"

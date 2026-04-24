@@ -11,6 +11,7 @@ timer patiencetimer;
 bool waiting;
 bool leaving;
 bool announced;
+bool spilled;
 customer(int sx, int sy, int sp, int pat)
 {
 cx=sx;
@@ -22,6 +23,7 @@ patience=pat;
 waiting=false;
 leaving=false;
 announced=false;
+spilled=false;
 soundslot=personpool.play_2d("sounds/misc/customer.ogg", me.x, me.y, cx, cy, true);
 if(temperature > 85)
 speak("A customer is rushing to your stand. It must be the heat!");
@@ -57,12 +59,17 @@ personpool.destroy_sound(drinkslot);
 p.play_stationary("sounds/misc/spillcup.ogg", false);
 wait(600);
 dlg("The customer takes a sip. " + feedback + " They reluctantly pay you " + convert_to_currency(earned) + " and storm off.");
+customers[idx].spilled=true;
 double rep_loss = 1.0 + (daynumber / 10.0);
 reputation=max(0.0, reputation-rep_loss);
 check_reputation();
 }
 else
 {
+double drink_length = personpool.get_sound_length(drinkslot);
+if(drink_length > 0)
+wait(int(drink_length));
+else
 wait(2500);
 personpool.destroy_sound(drinkslot);
 p.play_stationary("sounds/misc/takecup.ogg", false);
@@ -219,6 +226,11 @@ customers[i].steptimer.restart();
 }
 if(customers[i].cx==customers[i].targetx and customers[i].cy==customers[i].targety)
 {
+if(customers[i].spilled)
+{
+string wet = (random(0, 1) == 0) ? "spring" : "spring2";
+spawn_platform(32, 32, 50, 50, wet);
+}
 personpool.destroy_sound(customers[i].soundslot);
 customers.remove_at(i);
 i--;

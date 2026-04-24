@@ -1,0 +1,32 @@
+menu_trigger@[] menu_triggers(0);
+class menu_trigger
+{
+double minx, maxx, miny, maxy;
+string menu;
+menu_trigger(double mx, double mx2, double my, double my2, string mn)
+{
+minx=mx;
+maxx=mx2;
+miny=my;
+maxy=my2;
+menu=mn;
+}
+}
+string get_menu_trigger_at(double x, double y)
+{
+for(uint i=0; i<menu_triggers.length(); i++)
+{
+if(menu_triggers[i].minx<=x and menu_triggers[i].maxx>=x and menu_triggers[i].miny<=y and menu_triggers[i].maxy>=y)
+return menu_triggers[i].menu;
+}
+return "";
+}
+void spawn_menu_trigger(double x1, double x2, double y1, double y2, string mn)
+{
+menu_trigger mt1(x1, x2, y1, y2, mn);
+menu_triggers.insert_last(mt1);
+}
+void destroy_all_menu_triggers()
+{
+menu_triggers.resize(0);
+}

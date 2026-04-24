@@ -1,4 +1,7 @@
 New in 2.5.
+Made it so bad lemonade causes the customer to spill their drink on the counter, leaving a wet tile behind.
+Made the drinkcup sound play for its full actual length when a customer enjoys their lemonade, rather than a hardcoded duration.
+Added menu triggers to the map format. Menus are now defined in the map file using the menu directive rather than being hardcoded to zone name strings, making it possible to add or move interactive areas without touching code.
 Added the neighborhood.map file containing all platforms, walls, zones, sound sources, and persons for the neighborhood map.
 Replaced the hardcoded draw_map function with a data-driven load_map system. Maps are now loaded from external .map files stored in data/maps/, making it possible to create and edit maps without touching code.
 Made it so person sounds pause when you step onto their tile and resume when you walk away.

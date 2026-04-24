@@ -84,7 +84,7 @@ current_day_index=0;
 current_month_index=0;
 daynumber=1;
 pitcher=0;
-temperature=20;
+temperature=32;
 dayname = daynames[current_day_index];
 monthname = monthnames[current_month_index];
 }
