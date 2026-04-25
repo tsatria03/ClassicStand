@@ -30,3 +30,19 @@ b.description  = p[6].trim_whitespace();
 poster_bundles.insert_last(b);
 }
 }
+
+string get_poster_bundle_description(string id)
+{
+for(uint i = 0; i < poster_bundles.length(); i++)
+{
+if(poster_bundles[i].id == id)
+{
+dictionary@ r = dictionary();
+r.set("basic", string(poster_bundles[i].basic_qty));
+r.set("colorful", string(poster_bundles[i].colorful_qty));
+r.set("premium", string(poster_bundles[i].premium_qty));
+return format_template(poster_bundles[i].description, r);
+}
+}
+return "";
+}

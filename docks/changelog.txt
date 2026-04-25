@@ -1,9 +1,20 @@
+New in 3.2.
+Fixed a bug where customers would walk in a straight diagonal line from their spawn point, cutting directly through the market walls and interior. Customers now walk west along the street first, then turn at the sidewalk entrance to approach the counter.
+Changed customer spawn and departure points to the open street, matching where passerbys roam. The sidewalk and market are now reserved for the player.
+Fixed a bug where passerbys could walk through walls. They now have the same wall awareness as the player and will bounce off walls instead of passing through them.
+Fixed a bug where passerbys convinced by a poster would spawn a customer immediately at their current street position while also continuing to walk to the counter themselves, resulting in two walkers. The customer is now only spawned when the passerby physically arrives at the counter.
+Fixed a bug where passerbys could wander into the stand, sidewalk, or market. Waypoints are now validated against the actual map tile and will always land on open street.
+Made it so person and passerby loop sounds are now silenced while you are standing at the customer counter. They resume as soon as you step away.
+Made it so all NPC related sounds are now properly paused and resumed when entering any menu. This includes customers, persons, and passerbys.
+Made it so salt can now clump overnight due to cold and moisture. When this happens, several packets fuse into a single clumped salt item that is added to your inventory and must be discarded.
+Made it so all store menus now read descriptions from config instead of using hardcoded strings. Ingredient, bundle, poster, and poster bundle menus all display the description text defined in their respective store files.
+Made it so all sounds stop before the daily summary and game over screen appear. The game now goes silent before showing either dialog, so nothing is playing in the background while you read the results.
 New in 3.1.
 Made it so passerby behavior is now fully data-driven. Wave sizing, level and day scaling, convince chance per poster, and movement speed are all loaded from data/config/tables/passers.table.
 Fixed a bug where the poster read sound would play once for every passerby that noticed a poster, causing it to stack up when multiple passers were convinced at the same time. It now plays once per wave at most.
 Made it so the serve menu and customer submenu now remember their position. When you return from serving or talking, the menu reopens focused on the same customer you were on.
 Made it so all menus now pause customer, person, and passerby sounds while open, and resume when you close or exit.
-Made it so spoiled and evaporated ingredients are now added to your inventory overnight so you can discard them with shift enter. Melted ice, rotted lemons, and evaporated water each show up as their own recycleable item.
+Made it so spoiled and evaporated ingredients are now added to your inventory overnight so you can discard them with shift enter. Melted ice, rotted lemons, evaporated water, and clumped salt each show up as their own recycleable item.
 Made it so you can no longer place a poster on a tile that already has one. Attempting to do so tells you there is already a poster there and to place it somewhere else on the street.
 Made it so the talk menu item now shows the customer's current mood before you speak to them. For example, it will say talk to this customer, current mood: restless.
 Fixed a bug where passerbys were roaming the sidewalk, market, and lemonade stand instead of the actual neighborhood street. They now walk along the open street on both sides of the neighborhood, which is also where posters are placed.

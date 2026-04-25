@@ -19,17 +19,29 @@ bool announced;
 bool spilled;
 bool read_poster;
 bool use_patience;
+bool at_entrance;
 customer(int sx, int sy, int sp, int pat, string t="normal", int gs=1)
 {
 super(sx, sy, sp);
+if(sx <= 15)
+{
+at_entrance=true;
 targetx=14;
 targety=25;
+}
+else
+{
+at_entrance=false;
+targetx=15;
+targety=sy;
+}
 patience=pat;
 waiting=false;
 leaving=false;
 announced=false;
 spilled=false;
 read_poster=false;
+at_entrance=false;
 use_patience = (t != "thief");
 type=t;
 group_size=gs;
@@ -66,6 +78,12 @@ speak("A customer is arriving at your stand.");
 }
 void update_extra()
 {
+if(!at_entrance && !waiting && !leaving && nx <= 15)
+{
+at_entrance = true;
+targetx = 14;
+targety = 25;
+}
 if(leaving)
 {
 if(type == "thief" && stolen_amount > 0 && int(me.x)==nx && int(me.y)==ny)
@@ -107,7 +125,7 @@ if(int(me.x)==14 && int(me.y)==25)
 speak("The shifty person spotted you at the counter and bolted!");
 leaving=true;
 targetx=random(47, 49);
-targety=random(21, 29);
+targety=random_street_y();
 steptimer.restart();
 }
 else
@@ -127,7 +145,7 @@ if(stealable.length() == 0)
 speak("The thief reached your stand but found nothing worth stealing and left.");
 leaving=true;
 targetx=random(47, 49);
-targety=random(21, 29);
+targety=random_street_y();
 steptimer.restart();
 }
 else
@@ -146,7 +164,7 @@ steptime = int(steptime * 0.5);
 dlg("A thief snatched " + item_name + " from your stand! Chase them down to get it back!");
 leaving=true;
 targetx=random(47, 49);
-targety=random(21, 29);
+targety=random_street_y();
 steptimer.restart();
 }
 }
@@ -167,7 +185,7 @@ dlg("While you were away, a shifty person was seen lurking around your stand. It
 }
 leaving=true;
 targetx=random(47, 49);
-targety=random(21, 29);
+targety=random_street_y();
 steptimer.restart();
 }
 }
@@ -253,7 +271,7 @@ reputation = max(0.0, reputation - rep_loss);
 check_reputation();
 leaving = true;
 targetx = random(47, 49);
-targety = random(21, 29);
+targety = random_street_y();
 steptimer.restart();
 }
 }
@@ -305,7 +323,7 @@ reputation = max(0.0, reputation - rep_loss);
 check_reputation();
 customers[idx].leaving = true;
 customers[idx].targetx = random(45, 50);
-customers[idx].targety = random(21, 29);
+customers[idx].targety = random_street_y();
 customers[idx].steptimer.restart();
 speak("The customer is heading back to the street.");
 open_serve_menu();
@@ -367,7 +385,7 @@ reputation=min(200.0, reputation+rep_gain);
 if(reputation>peak_reputation) peak_reputation=reputation;
 customers[idx].leaving=true;
 customers[idx].targetx=random(47, 49);
-customers[idx].targety=random(21, 29);
+customers[idx].targety=random_street_y();
 customers[idx].steptimer.restart();
 speak("The customer is heading back to the street.");
 open_serve_menu();
@@ -471,7 +489,7 @@ if(reputation>peak_reputation) peak_reputation=reputation;
 }
 customers[idx].leaving=true;
 customers[idx].targetx=random(47, 49);
-customers[idx].targety=random(21, 29);
+customers[idx].targety=random_street_y();
 customers[idx].steptimer.restart();
 speak("The customer is heading back to the street.");
 open_serve_menu();
@@ -510,6 +528,7 @@ return "Mmm, that's delicious! Perfectly balanced. Just what I needed!";
 void check_reputation()
 {
 if(reputation > 0) return;
+destroymap();
 string msg = "Game over! Your reputation has hit zero and customers have stopped coming.--";
 msg += "Here's how you did:--";
 msg += "Days survived: " + daynumber + "--";
@@ -518,7 +537,11 @@ msg += "Cash earned: " + convert_to_currency(cash) + "--";
 msg += "Peak reputation: " + int(peak_reputation) + " out of 200.--";
 msg += "Better luck next time!";
 dlgmessage(msg);
-fade_multi_pool();
+wait(500);
+me.x=0;
+me.y=0;
+clearmap();
+destroymap();
 mainmenu();
 }
 string get_customer_talk(uint idx)
@@ -623,7 +646,7 @@ reputation = max(0.0, reputation - rep_loss);
 check_reputation();
 customers[idx].leaving = true;
 customers[idx].targetx = random(45, 50);
-customers[idx].targety = random(21, 29);
+customers[idx].targety = random_street_y();
 customers[idx].steptimer.restart();
 speak("The customer has left.");
 open_serve_menu();
@@ -713,7 +736,7 @@ reputation=max(0.0, reputation-rep_loss);
 check_reputation();
 customers[idx].leaving=true;
 customers[idx].targetx=random(47, 49);
-customers[idx].targety=random(21, 29);
+customers[idx].targety=random_street_y();
 customers[idx].steptimer.restart();
 speak("A customer got nothing and stormed off.");
 continue;
@@ -814,7 +837,7 @@ uint idx = waiting_indices[i];
 if(!customers[idx].waiting) continue;
 customers[idx].leaving=true;
 customers[idx].targetx=random(47, 49);
-customers[idx].targety=random(21, 29);
+customers[idx].targety=random_street_y();
 customers[idx].steptimer.restart();
 }
 speak("The customers are heading back to the street.");
@@ -898,7 +921,7 @@ string[] pool = customer_type_pool.length() > 0 ? customer_type_pool : {"normal"
 for(int i=0; i<count; i++)
 {
 int sx = random(47, 49);
-int sy = random(21, 29);
+int sy = random_street_y();
 int sp = random(sp_min, sp_max);
 int pat = max(30000, int((random(60000, 120000) - (daynumber * 2000) - (int(level) * 7000) + pat_mod + poster_pat_bonus) / price_multiplier));
 string t = pool[random(0, pool.length() - 1)];

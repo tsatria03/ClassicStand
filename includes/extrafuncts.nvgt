@@ -77,7 +77,6 @@ return raw;
 }
 double eval_amount(string raw, double level_val, double day_val, double placed_val=0)
 {
-// Tokenize left to right, resolving level/day variables and applying operators
 string[] tokens;
 string[] ops;
 string cur = "";
@@ -86,7 +85,6 @@ for(uint i = 0; i < raw.length(); i++)
 string ch = raw.substr(i, 1);
 if(ch == "+" || ch == "-" || ch == "*" || ch == "/")
 {
-// Handle negative numbers at the start or after an operator
 if(ch == "-" && cur == "")
 { cur += ch; continue; }
 tokens.insert_last(cur);
@@ -97,7 +95,6 @@ else
 cur += ch;
 }
 tokens.insert_last(cur);
-// Resolve each token to a number
 double[] vals(tokens.length());
 for(uint i = 0; i < tokens.length(); i++)
 {
@@ -107,7 +104,6 @@ else if(t == "day") vals[i] = day_val;
 else if(t == "placed") vals[i] = placed_val;
 else vals[i] = string_to_number(t);
 }
-// Apply operators left to right
 double result = vals[0];
 for(uint i = 0; i < ops.length(); i++)
 {
@@ -519,6 +515,17 @@ give("evaporated water", int(water_lost));
 spoilage_msg += "Some of your water evaporated overnight. You lost " + int(water_lost) + " liter" + (water_lost == 1 ? "" : "s") + " of water. The evaporated water has been added to your inventory to discard.--";
 }
 }
+if(salts > 0)
+{
+double salt_lost = floor(salts * random_float(0.1, 0.3));
+if(salt_lost > 0)
+{
+salts -= salt_lost;
+if(salts < 0) salts = 0;
+give("clumped salt", int(salt_lost));
+spoilage_msg += "The cold and moisture clumped " + int(salt_lost) + " packet" + (salt_lost == 1 ? "" : "s") + " of salt together overnight, making " + (salt_lost == 1 ? "it" : "them") + " unusable. The clumped salt has been added to your inventory to discard.--";
+}
+}
 if(spoilage_msg != "")
 dlgmessage(spoilage_msg);
 }
@@ -597,6 +604,7 @@ void generate_daily_summary()
     }
     if(level > 6)
     {
+destroymap();
 string report = "Daily summary for " + business_name + ".--";
 report += "For the date of " + dayname + ", " + monthname + daynumber + ", you ended with a total of " + convert_to_currency(cash) + " in cash.--";
 report += "You sold a total of " + soldcups + " cup" + (soldcups == 1 ? "" : "s") + " of lemonade.--";

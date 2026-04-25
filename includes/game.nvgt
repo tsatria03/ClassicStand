@@ -31,18 +31,24 @@ custpool.pause_sound(customers[i].soundslot);
 else
 custpool.resume_sound(customers[i].soundslot);
 }
+for(uint i=0; i<persons.length(); i++)
+personpool.pause_sound(persons[i].soundslot);
+for(uint i=0; i<passers.length(); i++)
+passerpool.pause_sound(passers[i].soundslot);
 }
 else
 {
 for(uint i=0; i<customers.length(); i++)
 custpool.resume_sound(customers[i].soundslot);
-}
 for(uint i=0; i<persons.length(); i++)
 {
 if(int(me.x)==persons[i].nx and int(me.y)==persons[i].ny)
 personpool.pause_sound(persons[i].soundslot);
 else
 personpool.resume_sound(persons[i].soundslot);
+}
+for(uint i=0; i<passers.length(); i++)
+passerpool.resume_sound(passers[i].soundslot);
 }
 check_customer_interaction();
 if(!shift_is_down() && key_pressed(KEY_RETURN))

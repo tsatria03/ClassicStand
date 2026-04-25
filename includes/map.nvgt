@@ -32,19 +32,23 @@ me.y += steps;
 
 void clearmap()
 {
+destroy_all_menu_triggers();
+destroy_all_platforms();
+destroy_all_walls();
+destroy_all_zones();
+}
+void destroymap()
+{
 destroy_all_customers();
 destroy_all_persons();
-destroy_all_menu_triggers();
-
-destroy_all_platforms();
 destroy_all_sources();
-destroy_all_zones();
-destroy_all_walls();
 }
+
 void load_map(string name, bool instent_update=true)
 {
 mapname = name;
 clearmap();
+destroymap();
 if(string_ends_with(mapname, ".map"))
 mapname = string_replace(mapname, ".map", "", true);
 mapper.open("data/maps/" + mapname + ".map", "r");

@@ -202,7 +202,13 @@ m.add_item(desc, "cup" + (i + 1));
 }
 m.add_item("Back", "back");
 m.intro_text = "Filled cups. You have " + cup_lemons.length() + " cup" + (cup_lemons.length() == 1 ? "" : "s") + " ready to serve.";
+custpool.pause_all();
+personpool.pause_all();
+passerpool.pause_all();
 int mres=m.run();
+custpool.resume_all();
+personpool.resume_all();
+passerpool.resume_all();
 }
 }
 int count_total_items()

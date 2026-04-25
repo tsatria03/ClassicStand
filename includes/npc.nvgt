@@ -5,6 +5,7 @@ int targetx, targety;
 int steptime;
 int soundslot;
 int pitch;
+string npc_facing;
 timer steptimer;
 npc(int x, int y, int sp)
 {
@@ -15,14 +16,31 @@ targety = y;
 steptime = sp;
 soundslot = 0;
 pitch = random(80, 120);
+npc_facing = "right";
+}
+void npc_bounce()
+{
+if(npc_facing == "right") nx--;
+else if(npc_facing == "left") nx++;
+else if(npc_facing == "forward") ny--;
+else if(npc_facing == "backward") ny++;
 }
 void move_step()
 {
 if(steptimer.elapsed < steptime) return;
-if(nx < targetx) nx++;
-else if(nx > targetx) nx--;
-if(ny < targety) ny++;
-else if(ny > targety) ny--;
+int dx = 0, dy = 0;
+if(nx < targetx) dx = 1;
+else if(nx > targetx) dx = -1;
+if(ny < targety) dy = 1;
+else if(ny > targety) dy = -1;
+if(dx == 1 && dy == 0) npc_facing = "right";
+else if(dx == -1 && dy == 0) npc_facing = "left";
+else if(dx == 0 && dy == 1) npc_facing = "forward";
+else if(dx == 0 && dy == -1) npc_facing = "backward";
+else if(dx == 1) npc_facing = "right";
+else if(dx == -1) npc_facing = "left";
+nx += dx;
+ny += dy;
 update_sound_pos(nx, ny);
 if(nx != targetx || ny != targety)
 p.play_2d("sounds/platforms/"+gmt(nx, ny)+"/step"+random(1,5)+".ogg", me.x, me.y, nx, ny, false);

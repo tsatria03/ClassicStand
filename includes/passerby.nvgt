@@ -5,20 +5,52 @@ class passer : npc
 int poster_score;
 bool convinced;
 bool read_poster;
+string spawn_type;
+int spawn_group;
+int spawn_pat;
 int get_psx() { return nx; }
 void set_psx(int v) { nx = v; }
 int get_psy() { return ny; }
 void set_psy(int v) { ny = v; }
 void update_sound_pos(int x, int y) override { passerpool.update_sound_2d(soundslot, x, y); }
+void move_step() override
+{
+if(steptimer.elapsed < steptime) return;
+int dx = 0, dy = 0;
+if(nx < targetx) dx = 1;
+else if(nx > targetx) dx = -1;
+if(ny < targety) dy = 1;
+else if(ny > targety) dy = -1;
+if(dx == 1 && dy == 0) npc_facing = "right";
+else if(dx == -1 && dy == 0) npc_facing = "left";
+else if(dx == 0 && dy == 1) npc_facing = "forward";
+else if(dx == 0 && dy == -1) npc_facing = "backward";
+else if(dx == 1) npc_facing = "right";
+else if(dx == -1) npc_facing = "left";
+nx += dx;
+ny += dy;
+if(string_contains(gmt(nx, ny), "wall", 1) > -1)
+{
+npc_bounce();
+targety = safe_street_y(nx);
+}
+update_sound_pos(nx, ny);
+if(nx != targetx || ny != targety)
+p.play_2d("sounds/platforms/"+gmt(nx, ny)+"/step"+random(1,5)+".ogg", me.x, me.y, nx, ny, false);
+steptimer.restart();
+}
 passer(int x, int y)
 {
 super(x, y, random(int(passer_behavior_get("speed_min", 300)), int(passer_behavior_get("speed_max", 500))));
 poster_score = 0;
 convinced = false;
 read_poster = false;
+spawn_type = "";
+spawn_group = 1;
+spawn_pat = 0;
 soundslot = passerpool.play_extended_2d("sounds/misc/person.ogg", me.x, me.y, nx, ny, 0, 0, 0, 0, true, 0, 0, 0, pitch, false);
 targetx = (x > 25) ? 1 : 49;
-targety = random_street_y();
+targety = safe_street_y(targetx);
 }
 void update_extra()
 {
@@ -34,8 +66,8 @@ convinced = true;
 targetx = 14;
 targety = 25;
 steptime = random(250, 450);
-string[] types = {"normal", "normal", "normal", "nice", "mean", "desperate", "charitable", "group", "returning", "critic", "elderly", "child"};
-string t = types[random(0, types.length() - 1)];
+string[] pool = customer_type_pool.length() > 0 ? customer_type_pool : {"normal"};
+string t = pool[random(0, pool.length() - 1)];
 int gs = t == "group" ? random(2, 4) : 1;
 int pat = max(30000, int((random(60000, 120000) - (daynumber * 2000) - (int(level) * 7000)) / price_multiplier));
 if(t == "desperate") { steptime = int(steptime * 0.5); pat = int(pat * 0.5); }
@@ -44,8 +76,11 @@ else if(t == "mean") pat = int(pat * 0.7);
 else if(t == "elderly") { steptime = int(steptime * 1.8); pat = int(pat * 2.0); }
 else if(t == "child") { steptime = int(steptime * 0.6); pat = int(pat * 0.6); }
 else if(t == "returning") pat = int(pat * 1.8);
-customer c(nx, ny, steptime, pat, t, gs);
-customers.insert_last(c);
+int mvi = get_customer_movement_index(t);
+if(mvi >= 0) { steptime = int(steptime * customer_movements[mvi].speed); pat = int(pat * customer_movements[mvi].patience); }
+spawn_type = t;
+spawn_group = gs;
+spawn_pat = pat;
 speak("Someone on the street noticed your poster and is heading to your stand!");
 }
 }
@@ -58,13 +93,22 @@ void flip_waypoint()
 {
 if(targetx <= 25) targetx = 49;
 else targetx = 1;
-targety = random_street_y();
+targety = safe_street_y(targetx);
 }
 }
 int random_street_y()
 {
 if(random(0, 1) == 0) return random(1, 17);
 return random(33, 49);
+}
+int safe_street_y(int x)
+{
+for(int attempt = 0; attempt < 20; attempt++)
+{
+int y = random_street_y();
+if(gmt(x, y) == "concrete2") return y;
+}
+return random(0, 1) == 0 ? 5 : 45;
 }
 
 void spawn_passers()
@@ -79,7 +123,7 @@ int count = clamp(random(base_min, base_max) + int(floor(level * lbonus)) + int(
 for(int i = 0; i < count; i++)
 {
 int sx = random(1, 49);
-int sy = random_street_y();
+int sy = safe_street_y(sx);
 passer ps(sx, sy);
 passers.insert_last(ps);
 }
@@ -92,6 +136,11 @@ if(passers[i].convinced)
 {
 if(passers[i].nx == passers[i].targetx && passers[i].ny == passers[i].targety)
 {
+if(passers[i].spawn_type != "")
+{
+customer c(passers[i].nx, passers[i].ny, passers[i].steptime, passers[i].spawn_pat, passers[i].spawn_type, passers[i].spawn_group);
+customers.insert_last(c);
+}
 passerpool.destroy_sound(passers[i].soundslot);
 passers.remove_at(i);
 i--;

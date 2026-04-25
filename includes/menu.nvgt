@@ -245,7 +245,9 @@ game();
 }
 void infomenu()
 {
+custpool.pause_all();
 personpool.pause_all();
+passerpool.pause_all();
 int hour = clocktime % 24;
 string hour_period = (hour >= 12 && hour < 24) ? "PM" : "AM";
 int display_hour = hour % 12;
@@ -282,12 +284,19 @@ while(true)
 wait(5);
 form.monitor();
 if(form.is_pressed(infoclose))
+{
+custpool.resume_all();
+personpool.resume_all();
+passerpool.resume_all();
 return;
+}
 }
 }
 void actsmenu()
 {
+custpool.pause_all();
 personpool.pause_all();
+passerpool.pause_all();
 setupmenu();
 m.add_item("Make lemonade. You have " + cups + " empty cup" + (cups == 1 ? "" : "s"), "make");
 if(pitcherstat <= 0)
@@ -303,6 +312,9 @@ string choice = m.get_item_id(mres);
 if(mres == -1 || choice == "back")
 {
 last_menu_id="";
+custpool.resume_all();
+personpool.resume_all();
+passerpool.resume_all();
 return;
 }
 if(choice == "make")
@@ -489,7 +501,9 @@ actsmenu();
 }
 void buymenu()
 {
+custpool.pause_all();
 personpool.pause_all();
+passerpool.pause_all();
 setupmenu();
 m.add_item("Bundled ingredients", "bgs");
 m.add_item("Single ingredients", "sgs");
@@ -511,6 +525,9 @@ string buyem = m.get_item_id(mres);
 if(mres==-1 || buyem == "back")
 {
 last_menu_id="";
+custpool.resume_all();
+personpool.resume_all();
+passerpool.resume_all();
 return;
 }
 if(buyem == "bgs")
@@ -528,17 +545,17 @@ void buybmenu()
 {
 setupmenu();
 double booth_cost     = ((cupcost + lemoncost + sugarcost + watercost) * 4) / 6;
-m.add_item("Booth bundle: costs " + convert_to_currency(booth_cost) + ". This ingredient bundle contains 4 empty cups, 4 ripe lemons, 4 packets of sugar, and 4 liters of water. Ice and salt is optional.", "tbl");
+m.add_item("Booth bundle: costs " + convert_to_currency(booth_cost) + ". " + get_bundle_description("booth", 4), "tbl");
 double community_cost = ((cupcost + lemoncost + sugarcost + watercost) * 8) / 6;
-m.add_item("Community bundle: costs " + convert_to_currency(community_cost) + ". This ingredient bundle contains 8 empty cups, 8 ripe lemons, 8 packets of sugar, and 8 liters of water. Ice and salt is optional.", "cbl");
+m.add_item("Community bundle: costs " + convert_to_currency(community_cost) + ". " + get_bundle_description("community", 8), "cbl");
 double carnival_cost  = ((cupcost + lemoncost + sugarcost + watercost) * 12) / 6;
-m.add_item("Carnival bundle: costs " + convert_to_currency(carnival_cost) + ". This ingredient bundle contains 12 empty cups, 12 ripe lemons, 12 packets of sugar, and 12 liters of water. Ice and salt is optional.", "rbl");
+m.add_item("Carnival bundle: costs " + convert_to_currency(carnival_cost) + ". " + get_bundle_description("carnival", 12), "rbl");
 double festival_cost  = ((cupcost + lemoncost + sugarcost + watercost) * 16) / 6;
-m.add_item("Festival bundle: costs " + convert_to_currency(festival_cost) + ". This ingredient bundle contains 16 empty cups, 16 ripe lemons, 16 packets of sugar, and 16 liters of water. Ice and salt is optional.", "fbl");
+m.add_item("Festival bundle: costs " + convert_to_currency(festival_cost) + ". " + get_bundle_description("festival", 16), "fbl");
 double market_cost    = ((cupcost + lemoncost + sugarcost + watercost) * 20) / 6;
-m.add_item("Market bundle: costs " + convert_to_currency(market_cost) + ". This ingredient bundle contains 20 empty cups, 20 ripe lemons, 20 packets of sugar, and 20 liters of water. Ice and salt is optional.", "mbl");
+m.add_item("Market bundle: costs " + convert_to_currency(market_cost) + ". " + get_bundle_description("market", 20), "mbl");
 double parade_cost    = ((cupcost + lemoncost + sugarcost + watercost) * 24) / 6;
-m.add_item("Parade bundle: costs " + convert_to_currency(parade_cost) + ". This ingredient bundle contains 24 empty cups, 24 ripe lemons, 24 packets of sugar, and 24 liters of water. Ice and salt is optional.", "pbl");
+m.add_item("Parade bundle: costs " + convert_to_currency(parade_cost) + ". " + get_bundle_description("parade", 24), "pbl");
 m.add_item("back", "back");
 m.intro_text = "Bundled ingredients menu.";
     int start_pos = 0;
@@ -593,12 +610,12 @@ purchase_ingredient_bundle("pbl", "parade", 24);
 void buysmenu()
 {
 setupmenu();
-m.add_item("Cup: costs " + convert_to_currency(cupcost) + ". You have " + cups + " empty cup" + (cups == 1 ? "" : "s"), "cps");
-m.add_item("Ice: costs " + convert_to_currency(icecost) + ". You have " + ices + " bag" + (ices == 1 ? "" : "s") + " of ice", "ics");
-m.add_item("Lemon: costs " + convert_to_currency(lemoncost) + ". You have " + lemons + " ripe lemon" + (lemons == 1 ? "" : "s"), "lms");
-m.add_item("Salt: costs " + convert_to_currency(saltcost) + ". You have " + salts + " packet" + (salts == 1 ? "" : "s") + " of salt", "slt");
-m.add_item("Sugar: costs " + convert_to_currency(sugarcost) + ". You have " + sugars + " packet" + (sugars == 1 ? "" : "s") + " of sugar", "sgr");
-m.add_item("Water: costs " + convert_to_currency(watercost) + ". You have " + waters + " liter" + (waters == 1 ? "" : "s") + " of water", "swr");
+m.add_item("Empty cups: costs " + convert_to_currency(cupcost) + ". " + get_ingredient_description("cups", cups), "cps");
+m.add_item("Bags of ice: costs " + convert_to_currency(icecost) + ". " + get_ingredient_description("ice", ices), "ics");
+m.add_item("Ripe lemons: costs " + convert_to_currency(lemoncost) + ". " + get_ingredient_description("lemons", lemons), "lms");
+m.add_item("Salt packets: costs " + convert_to_currency(saltcost) + ". " + get_ingredient_description("salt", salts), "slt");
+m.add_item("Sugar packets: costs " + convert_to_currency(sugarcost) + ". " + get_ingredient_description("sugar", sugars), "sgr");
+m.add_item("Water: costs " + convert_to_currency(watercost) + ". " + get_ingredient_description("water", waters), "swr");
 m.add_item("back", "back");
 m.intro_text = "Single ingredients menu.";
     int start_pos = 0;
@@ -825,7 +842,9 @@ buybmenu();
 }
 void postermenu()
 {
+custpool.pause_all();
 personpool.pause_all();
+passerpool.pause_all();
 setupmenu();
 m.add_item("Bundled posters", "pbg");
 m.add_item("Single posters", "psg");
@@ -840,16 +859,16 @@ if(found != -1) start_pos = found;
 int mres = m.run(start_pos, true);
 string postem = m.get_item_id(mres);
 if(mres != -1) last_menu_id = postem;
-if(mres == -1 || postem == "back") { last_menu_id = ""; return; }
+if(mres == -1 || postem == "back") { last_menu_id = ""; custpool.resume_all(); personpool.resume_all(); passerpool.resume_all(); return; }
 if(postem == "pbg") { last_menu_id = ""; posterbmenu(); }
 if(postem == "psg") { last_menu_id = ""; postersmenu(); }
 }
 void postersmenu()
 {
 setupmenu();
-m.add_item("Basic poster: costs " + convert_to_currency(poster_basic_cost) + ". Small boost to wave size and patience. You have " + poster_basic, "pb");
-m.add_item("Colorful poster: costs " + convert_to_currency(poster_colorful_cost) + ". Moderate boost to wave size and patience. You have " + poster_colorful, "pc");
-m.add_item("Premium poster: costs " + convert_to_currency(poster_premium_cost) + ". Strong boost to wave size and patience. You have " + poster_premium, "pp");
+m.add_item("Basic poster: costs " + convert_to_currency(poster_basic_cost) + ". " + get_poster_description("basic", poster_basic), "pb");
+m.add_item("Colorful poster: costs " + convert_to_currency(poster_colorful_cost) + ". " + get_poster_description("colorful", poster_colorful), "pc");
+m.add_item("Premium poster: costs " + convert_to_currency(poster_premium_cost) + ". " + get_poster_description("premium", poster_premium), "pp");
 m.add_item("back", "back");
 m.intro_text = "Single posters.";
 int start_pos = 0;
@@ -882,7 +901,7 @@ else if(ptype == "colorful") poster_colorful += qty;
 else poster_premium += qty;
 p.play_stationary("sounds/misc/buypost" + random(1, 2) + ".ogg", false);
 p.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
-dlg("Purchase complete. You bought " + qty + " " + ptype + " poster" + (qty == 1 ? "" : "s") + " for " + convert_to_currency(total) + ". Head to the neighborhood street and use them from your inventory to hang them up. You now have " + convert_to_currency(cash) + " remaining.");
+dlg("Purchase complete. You bought " + qty + " " + ptype + " poster" + (qty == 1 ? "" : "s") + " for " + convert_to_currency(total) + ". You now have " + convert_to_currency(cash) + " remaining.");
 postersmenu();
 }
 void posterbmenu()
@@ -891,9 +910,9 @@ setupmenu();
 int small_qty = 3; double small_cost = (poster_basic_cost * 2 + poster_colorful_cost) * 0.9;
 int medium_qty = 6; double medium_cost = (poster_basic_cost * 3 + poster_colorful_cost * 2 + poster_premium_cost) * 0.85;
 int large_qty = 10; double large_cost = (poster_basic_cost * 4 + poster_colorful_cost * 3 + poster_premium_cost * 3) * 0.8;
-m.add_item("Starter pack: costs " + convert_to_currency(small_cost) + ". Contains 2 basic posters and 1 colorful poster.", "psm");
-m.add_item("Advertiser pack: costs " + convert_to_currency(medium_cost) + ". Contains 3 basic, 2 colorful, and 1 premium poster.", "pmd");
-m.add_item("Campaign pack: costs " + convert_to_currency(large_cost) + ". Contains 4 basic, 3 colorful, and 3 premium posters.", "plg");
+m.add_item("Starter pack: costs " + convert_to_currency(small_cost) + ". " + get_poster_bundle_description("starter"), "psm");
+m.add_item("Advertiser pack: costs " + convert_to_currency(medium_cost) + ". " + get_poster_bundle_description("advertiser"), "pmd");
+m.add_item("Campaign pack: costs " + convert_to_currency(large_cost) + ". " + get_poster_bundle_description("campaign"), "plg");
 m.add_item("back", "back");
 m.intro_text = "Bundled posters.";
 int start_pos = 0;
@@ -934,6 +953,6 @@ msg = "You bought the campaign pack for " + convert_to_currency(total) + ". You 
 }
 p.play_stationary("sounds/misc/buypost" + random(1, 2) + ".ogg", false);
 p.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
-dlg(msg + " Head to the neighborhood street and use them from your inventory to hang them up. You now have " + convert_to_currency(cash) + " remaining.");
+dlg(msg + " You now have " + convert_to_currency(cash) + " remaining.");
 posterbmenu();
 }
