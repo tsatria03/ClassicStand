@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(\"C:\\\\nvgt\\\\nvgt.exe\" -c cst.nvgt)"
+      "Bash(\"C:\\\\nvgt\\\\nvgt.exe\" -c cst.nvgt)",
+      "Bash(git rm *)"
     ]
   }
 }
