@@ -1,0 +1,93 @@
+class game_event
+{
+string id;
+string sound;
+int polarity;
+string target;
+string min_expr;
+string max_expr;
+bool use_percent;
+string condition;
+int chance;
+string description;
+}
+
+game_event@[] events_pool;
+
+void load_events()
+{
+events_pool.resize(0);
+string[] lines = load_config_file("data/config/events/main.event");
+for(uint i = 0; i < lines.length(); i++)
+{
+string[] p = parse_delimited_line(lines[i], 9);
+if(p.length() < 10) continue;
+game_event e;
+e.id          = p[0].trim_whitespace();
+e.sound       = p[1].trim_whitespace();
+e.polarity    = string_to_int(p[2].trim_whitespace());
+e.target      = p[3].trim_whitespace();
+e.min_expr    = p[4].trim_whitespace();
+e.max_expr    = p[5].trim_whitespace();
+e.use_percent = string_to_bool(p[6].trim_whitespace());
+e.condition   = p[7].trim_whitespace();
+e.chance      = string_to_int(p[8].trim_whitespace());
+e.description = p[9].trim_whitespace();
+events_pool.insert_last(e);
+}
+}
+
+void trigger_event(int probability_chance)
+{
+if(random(0, 99) >= probability_chance) return;
+game_event@[] possible;
+for(uint i = 0; i < events_pool.length(); i++)
+{
+game_event@ e = events_pool[i];
+string cond = e.condition;
+if(cond == "hot" && temperature <= 85) continue;
+if(cond == "cold" && temperature >= 45) continue;
+if(cond == "posters" && placed_posters <= 0) continue;
+possible.insert_last(e);
+}
+if(possible.length() == 0) return;
+game_event@ ev = possible[random(0, possible.length() - 1)];
+if(random(0, 99) >= ev.chance) return;
+double rolled = random(int(eval_amount(ev.min_expr, level, daynumber, placed_posters)), int(eval_amount(ev.max_expr, level, daynumber, placed_posters)));
+double actual = rolled;
+if(ev.use_percent)
+{
+double current = 0;
+if(ev.target == "cash") current = cash;
+else if(ev.target == "water") current = waters;
+else if(ev.target == "sugar") current = sugars;
+else if(ev.target == "salt") current = salts;
+else if(ev.target == "posters") current = placed_posters;
+actual = floor(current * (rolled / 100.0));
+}
+if(ev.sound != "none")
+p.play_stationary("sounds/misc/" + resolve_sound(ev.sound), false);
+if(ev.polarity == 1)
+{
+if(ev.target == "cash") cash += actual;
+else if(ev.target == "water") waters += actual;
+else if(ev.target == "sugar") sugars += actual;
+else if(ev.target == "salt") salts += actual;
+}
+else if(ev.polarity == 2)
+{
+if(ev.target == "cash") cash = max(0, cash - actual);
+else if(ev.target == "water") waters = max(0, waters - actual);
+else if(ev.target == "sugar") sugars = max(0, sugars - actual);
+else if(ev.target == "salt") salts = max(0, salts - actual);
+else if(ev.target == "posters")
+{
+placed_posters = max(0, placed_posters - int(actual));
+actual = int(actual);
+}
+}
+dictionary@ replacements = dictionary();
+replacements.set("amount", ev.use_percent ? string(int(rolled)) : (ev.target == "cash" ? convert_to_currency(actual) : string(int(actual))));
+replacements.set("remaining", string(placed_posters));
+dlg(format_template(ev.description, replacements));
+}

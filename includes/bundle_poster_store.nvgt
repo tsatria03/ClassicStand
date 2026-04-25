@@ -1,0 +1,32 @@
+class poster_bundle
+{
+string id;
+string display_name;
+int basic_qty;
+int colorful_qty;
+int premium_qty;
+double discount;
+string description;
+}
+
+poster_bundle@[] poster_bundles;
+
+void load_bundle_poster_store()
+{
+poster_bundles.resize(0);
+string[] lines = load_config_file("data/config/stores/bundle_posters.store");
+for(uint i = 0; i < lines.length(); i++)
+{
+string[] p = parse_delimited_line(lines[i], 6);
+if(p.length() < 7) continue;
+poster_bundle b;
+b.id           = p[0].trim_whitespace();
+b.display_name = p[1].trim_whitespace();
+b.basic_qty    = string_to_int(p[2].trim_whitespace());
+b.colorful_qty = string_to_int(p[3].trim_whitespace());
+b.premium_qty  = string_to_int(p[4].trim_whitespace());
+b.discount     = string_to_number(p[5].trim_whitespace());
+b.description  = p[6].trim_whitespace();
+poster_bundles.insert_last(b);
+}
+}

@@ -1,0 +1,40 @@
+class ingredient_bundle
+{
+string id;
+string display_name;
+int quantity;
+string description;
+}
+
+ingredient_bundle@[] ingredient_bundles;
+
+void load_bundle_ingredient_store()
+{
+ingredient_bundles.resize(0);
+string[] lines = load_config_file("data/config/stores/bundle_ingredients.store");
+for(uint i = 0; i < lines.length(); i++)
+{
+string[] p = parse_delimited_line(lines[i], 3);
+if(p.length() < 4) continue;
+ingredient_bundle b;
+b.id           = p[0].trim_whitespace();
+b.display_name = p[1].trim_whitespace();
+b.quantity     = string_to_int(p[2].trim_whitespace());
+b.description  = p[3].trim_whitespace();
+ingredient_bundles.insert_last(b);
+}
+}
+
+string get_bundle_description(string id, int qty)
+{
+for(uint i = 0; i < ingredient_bundles.length(); i++)
+{
+if(ingredient_bundles[i].id == id)
+{
+dictionary@ r = dictionary();
+r.set("quantity", string(qty));
+return format_template(ingredient_bundles[i].description, r);
+}
+}
+return "";
+}

@@ -1,0 +1,52 @@
+class poster_item
+{
+string id;
+string display_name;
+double base_cost;
+string cost_expr;
+string description;
+}
+
+poster_item@[] poster_store;
+
+void load_single_poster_store()
+{
+poster_store.resize(0);
+string[] lines = load_config_file("data/config/stores/single_posters.store");
+for(uint i = 0; i < lines.length(); i++)
+{
+string[] p = parse_delimited_line(lines[i], 4);
+if(p.length() < 5) continue;
+poster_item item;
+item.id           = p[0].trim_whitespace();
+item.display_name = p[1].trim_whitespace();
+item.base_cost    = string_to_number(p[2].trim_whitespace());
+item.cost_expr    = p[3].trim_whitespace();
+item.description  = p[4].trim_whitespace();
+poster_store.insert_last(item);
+}
+}
+
+double get_poster_cost(string id)
+{
+for(uint i = 0; i < poster_store.length(); i++)
+{
+if(poster_store[i].id == id)
+return eval_amount(poster_store[i].cost_expr, level, daynumber) * poster_store[i].base_cost;
+}
+return 0;
+}
+
+string get_poster_description(string id, int stock)
+{
+for(uint i = 0; i < poster_store.length(); i++)
+{
+if(poster_store[i].id == id)
+{
+dictionary@ r = dictionary();
+r.set("stock", string(stock));
+return format_template(poster_store[i].description, r);
+}
+}
+return "";
+}

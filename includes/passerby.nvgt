@@ -14,7 +14,7 @@ super(x, y, random(300, 500));
 poster_score = 0;
 convinced = false;
 read_poster = false;
-soundslot = personpool.play_extended_2d("sounds/misc/person.ogg", me.x, me.y, nx, ny, 0, 0, 0, 0, true, 0, 0, 0, pitch, false);
+soundslot = passerpool.play_extended_2d("sounds/misc/person.ogg", me.x, me.y, nx, ny, 0, 0, 0, 0, true, 0, 0, 0, pitch, false);
 targetx = (x > 25) ? 1 : 49;
 targety = random(1, 49);
 }
@@ -78,7 +78,7 @@ if(passers[i].convinced)
 {
 if(passers[i].nx == passers[i].targetx && passers[i].ny == passers[i].targety)
 {
-personpool.destroy_sound(passers[i].soundslot);
+passerpool.destroy_sound(passers[i].soundslot);
 passers.remove_at(i);
 i--;
 continue;
@@ -95,6 +95,6 @@ passers[i].update_extra();
 void destroy_all_passers()
 {
 for(uint i = 0; i < passers.length(); i++)
-personpool.destroy_sound(passers[i].soundslot);
+passerpool.destroy_sound(passers[i].soundslot);
 passers.resize(0);
 }

@@ -8,8 +8,7 @@ if (!directory_exists(statsPath)) directory_create(statsPath);
 readdata();
 readpreffs();
 sound_global_hrtf=hrtf;
-apply_pitch_pool_settings();
-apply_misc_pool_settings();
+initialize_sound_pools();
 getver();
 show_window("ClassicStand, version "+version);
 if(gamstence.is_already_running)
@@ -57,22 +56,23 @@ dockver.close();
 }
 void resetgame()
 {
+load_main_table_newgame();
 me.x=11;
 me.y=25;
-cash=100;
-reputation=100;
-peak_reputation=100;
+cash=newgame_get("cash", 100);
+reputation=newgame_get("reputation", 100);
+peak_reputation=newgame_get("reputation", 100);
 fullcups=0;
 soldcups=0;
 level=1;
 maxlevel=6;
 pitcherstat=0;
-cups=random(3, 6);
-ices=random(0, 2);
-lemons=random(2, 4);
-salts=random(0, 1);
-sugars=random(2, 4);
-waters=random(2, 4);
+cups=random(int(newgame_get("cups_min", 3)), int(newgame_get("cups_max", 6)));
+ices=random(int(newgame_get("ices_min", 0)), int(newgame_get("ices_max", 2)));
+lemons=random(int(newgame_get("lemons_min", 2)), int(newgame_get("lemons_max", 4)));
+salts=random(int(newgame_get("salts_min", 0)), int(newgame_get("salts_max", 1)));
+sugars=random(int(newgame_get("sugars_min", 2)), int(newgame_get("sugars_max", 4)));
+waters=random(int(newgame_get("waters_min", 2)), int(newgame_get("waters_max", 4)));
 cupcost=1;
 icecost=2;
 lemoncost=3;

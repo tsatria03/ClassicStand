@@ -1,5 +1,13 @@
 void game()
 {
+load_events();
+load_single_ingredient_store();
+load_bundle_ingredient_store();
+load_single_poster_store();
+load_bundle_poster_store();
+load_main_table_thresholds();
+load_main_table_items();
+load_customer_table();
 load_map("neighborhood");
 napkin_giver_index = 0;
 spawn_customer_wave();
@@ -7,10 +15,7 @@ spawn_passers();
 while(true)
 {
 wait(5);
-p.update_listener_2d(me.x,me.y);
-ambpool.update_listener_2d(me.x,me.y);
-muspool.update_listener_2d(me.x,me.y);
-personpool.update_listener_2d(me.x,me.y);
+update_sound_pools();
 update_sources();
 update_npcs();
 checkloc();
@@ -21,15 +26,15 @@ if(int(me.x)==14 and int(me.y)==25)
 for(uint i=0; i<customers.length(); i++)
 {
 if(customers[i].waiting and !customers[i].leaving)
-personpool.pause_sound(customers[i].soundslot);
+custpool.pause_sound(customers[i].soundslot);
 else
-personpool.resume_sound(customers[i].soundslot);
+custpool.resume_sound(customers[i].soundslot);
 }
 }
 else
 {
 for(uint i=0; i<customers.length(); i++)
-personpool.resume_sound(customers[i].soundslot);
+custpool.resume_sound(customers[i].soundslot);
 }
 for(uint i=0; i<persons.length(); i++)
 {

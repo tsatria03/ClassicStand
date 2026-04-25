@@ -35,7 +35,7 @@ group_size=gs;
 talk_count=0;
 stolen_item="";
 stolen_amount=0;
-soundslot=personpool.play_extended_2d("sounds/misc/customer.ogg", me.x, me.y, nx, ny, 0, 0, 0, 0, true, 0, 0, 0, pitch, false);
+soundslot=custpool.play_extended_2d("sounds/misc/customer.ogg", me.x, me.y, nx, ny, 0, 0, 0, 0, true, 0, 0, 0, pitch, false);
 if(type == "desperate")
 speak("Someone is sprinting toward your stand in a panic! They look absolutely parched!");
 else if(type == "charitable")
@@ -98,7 +98,7 @@ if(nx == targetx && ny == targety)
 waiting = true;
 wave_started = true;
 patiencetimer.restart();
-personpool.play_extended_2d("sounds/misc/customer.ogg", me.x, me.y, nx, ny, 0, 0, 0, 0, false, 0, 0, 0, pitch, false);
+custpool.play_extended_2d("sounds/misc/customer.ogg", me.x, me.y, nx, ny, 0, 0, 0, 0, false, 0, 0, 0, pitch, false);
 if(type == "thief")
 {
 if(int(me.x)==14 && int(me.y)==25)
@@ -380,11 +380,11 @@ p.play_stationary("sounds/misc/givecup.ogg", false);
 wait(random(500,1000));
 bool extreme = string_starts_with(feedback, "EXTREME:");
 if(extreme) feedback = feedback.substr(8);
-int drinkslot = personpool.play_stationary("sounds/misc/drinkcup.ogg", true);
+int drinkslot = custpool.play_stationary("sounds/misc/drinkcup.ogg", true);
 if(bad)
 {
 wait(random(1000,2000));
-personpool.destroy_sound(drinkslot);
+custpool.destroy_sound(drinkslot);
 if(extreme)
 {
 p.play_stationary("sounds/misc/spillcup.ogg", false);
@@ -425,12 +425,12 @@ check_reputation();
 }
 else
 {
-double drink_length = personpool.get_sound_length(drinkslot);
+double drink_length = custpool.get_sound_length(drinkslot);
 if(drink_length > 0)
 wait(int(drink_length));
 else
 wait(random(1000,2000));
-personpool.destroy_sound(drinkslot);
+custpool.destroy_sound(drinkslot);
 p.play_stationary("sounds/misc/takecup.ogg", false);
 wait(random(500,1000));
 double tip = 0;
@@ -482,16 +482,16 @@ if(total <= 0) return "EXTREME:This doesn't taste like anything! Did you even pu
 double lemon_ratio = lem / total;
 double sugar_ratio = sug / total;
 double water_ratio = wat / total;
-bool too_sour      = lemon_ratio > 0.35;
-bool too_sweet     = sugar_ratio > 0.35;
-bool too_watery    = water_ratio > 0.5;
-bool too_salty     = sal > 0.3;
-bool too_icy       = ice > 0.3;
-bool extreme_sour  = lemon_ratio > 0.6;
-bool extreme_sweet = sugar_ratio > 0.6;
-bool extreme_watery= water_ratio > 0.75;
-bool extreme_salty = sal > 1.0;
-bool extreme_icy   = ice > 1.0;
+bool too_sour      = lemon_ratio > threshold_get("sour", 0.35);
+bool too_sweet     = sugar_ratio > threshold_get("sweet", 0.35);
+bool too_watery    = water_ratio > threshold_get("watery", 0.5);
+bool too_salty     = sal > threshold_get("salty", 0.3);
+bool too_icy       = ice > threshold_get("icy", 0.3);
+bool extreme_sour  = lemon_ratio > threshold_get("extreme_sour", 0.6);
+bool extreme_sweet = sugar_ratio > threshold_get("extreme_sweet", 0.6);
+bool extreme_watery= water_ratio > threshold_get("extreme_watery", 0.75);
+bool extreme_salty = sal > threshold_get("extreme_salty", 1.0);
+bool extreme_icy   = ice > threshold_get("extreme_icy", 1.0);
 if(extreme_sour && extreme_sweet) return "EXTREME:This is unbearably sour AND sickeningly sweet at the same time! What is this?!";
 if(extreme_sour)   return "EXTREME:This is pure lemon juice! My face is inside out! That is disgusting!";
 if(extreme_sweet)  return "EXTREME:This is liquid sugar! I can't even drink this! Did you add any lemon at all?!";
@@ -524,77 +524,30 @@ string get_customer_talk(uint idx)
 {
 string t = customers[idx].type;
 int tc = customers[idx].talk_count;
-if(t == "mean")
+int si = get_customer_speeches_index(t);
+if(si < 0) return "...";
+int line_num = tc + 1;
+if(line_num > customer_speeches[si].count) line_num = customer_speeches[si].count;
+for(uint i = 0; i < customer_speeches[si].lines.length(); i++)
 {
-if(tc == 0) return "What? Just give me my lemonade already.";
-return "I said give me my lemonade! Stop wasting my time!";
-}
-else if(t == "desperate")
+if(customer_speeches[si].lines[i].number == line_num)
 {
-if(tc == 0) return "Please, I'm absolutely parched! Can we hurry this up?";
-return "I am literally dying of thirst here! Just serve me!";
-}
-else if(t == "nice")
+string text = customer_speeches[si].lines[i].text;
+if(t == "group")
 {
-if(tc == 0) return "What a lovely stand you have! You must work very hard at this.";
-if(tc == 1) return "I do hope business is going well for you today!";
-if(tc == 2) return "You know, I've been meaning to tell you, this really is a wonderful spot.";
-return "Ha, I do enjoy a good chat, but I'm getting a little thirsty now!";
+dictionary@ rep = dictionary();
+rep.set("group_size", string(customers[idx].group_size));
+text = format_template(text, rep);
 }
-else if(t == "elderly")
-{
-if(tc == 0) return "Oh what a treat! I used to run a little stand myself when I was young, you know.";
-if(tc == 1) return "Back in my day we made lemonade fresh every morning. The smell was wonderful.";
-if(tc == 2) return "You remind me of my grandchildren. So full of energy and ambition!";
-if(tc == 3) return "I could talk all day, dear, I really could. But my throat is getting a bit dry!";
-return "Oh you are a sweetheart for chatting with an old soul like me!";
+return text;
 }
-else if(t == "charitable")
-{
-if(tc == 0) return "There's a family down the street who hasn't had much today. I like to help where I can.";
-if(tc == 1) return "Kindness costs nothing, as they say. I hope you have a wonderful day.";
-if(tc == 2) return "I should get moving soon. The sooner I get that cup, the sooner someone gets helped.";
-return "I appreciate the chat, but someone is waiting on me. Shall we wrap this up?";
 }
-else if(t == "returning")
-{
-if(tc == 0) return "I came back just for your lemonade. It was honestly the best I've had in ages.";
-if(tc == 1) return "I told a few friends about your stand. Hopefully they stop by soon!";
-return "I'm getting thirsty just thinking about it. Ready when you are!";
-}
-else if(t == "critic")
-{
-if(tc == 0) return "I review establishments across town. I try to keep an open mind before forming an opinion.";
-if(tc == 1) return "Presentation matters, but taste is everything in this business.";
-if(tc == 2) return "I've seen many stands. Yours has a certain charm. Now, shall we get to it?";
-if(tc == 3) return "My time is valuable. I'd like that cup now, please.";
-return "I'm going to have to mention the wait time in my review. Please, the cup.";
-}
-else if(t == "group")
-{
-if(tc == 0) return "We've heard great things about this place! We're all pretty excited.";
-if(tc == 1) return "There are " + customers[idx].group_size + " of us, so we're counting on you to come through!";
-if(tc == 2) return "We're getting a little restless over here. Ready when you are!";
-return "Okay, we've been waiting long enough. Either serve us or we're finding somewhere else!";
-}
-else if(t == "child")
-{
-if(tc == 0) return "Do you have any flavors? I like strawberry but lemon is okay too I guess.";
-if(tc == 1) return "My mom says I have to use my manners. So, please can I have a lemonade?";
-return "I'm sooooo thirsty. Can we please go faster?";
-}
-else
-{
-if(tc == 0) return "Just stopping by for a refreshing drink. Looks like a great stand!";
-if(tc == 1) return "Taking my time today. No rush, no rush.";
-return "I'm starting to get a little thirsty though, not gonna lie!";
-}
+return "...";
 }
 int get_talk_limit(string t)
 {
-if(t == "mean" || t == "desperate") return 2;
-if(t == "nice" || t == "charitable" || t == "critic" || t == "group") return 4;
-if(t == "elderly") return 5;
+int si = get_customer_speeches_index(t);
+if(si >= 0) return customer_speeches[si].count;
 return 3;
 }
 void customer_submenu(int idx)
@@ -633,12 +586,14 @@ if(choice == "talk")
 int limit = get_talk_limit(customers[idx].type);
 if(customers[idx].talk_count >= limit)
 {
-string angry = "";
-if(customers[idx].type == "mean") angry = "That's it! I'm done waiting. This is absolutely ridiculous!";
-else if(customers[idx].type == "desperate") angry = "I can't take it anymore! I'm finding water somewhere else!";
-else if(customers[idx].type == "child") angry = "UGH! I'm telling my mom! I'm leaving!";
-else if(customers[idx].type == "elderly") angry = "Oh dear, I really must be going now. My feet aren't what they used to be.";
-else angry = "I've had enough chatting. I'm going somewhere else!";
+string angry = "I've had enough chatting. I'm going somewhere else!";
+int wsi = get_customer_speeches_index(customers[idx].type);
+if(wsi >= 0)
+{
+int walkoff_num = customer_speeches[wsi].count + 1;
+for(uint wi = 0; wi < customer_speeches[wsi].lines.length(); wi++)
+if(customer_speeches[wsi].lines[wi].number == walkoff_num) { angry = customer_speeches[wsi].lines[wi].text; break; }
+}
 dlg(angry);
 double rep_loss = 1.0 + (daynumber / 10.0);
 reputation = max(0.0, reputation - rep_loss);
@@ -660,14 +615,14 @@ return;
 }
 void open_serve_menu()
 {
-personpool.pause_all();
+custpool.pause_all();
 uint[] waiting_indices;
 for(uint i=0; i<customers.length(); i++)
 if(customers[i].waiting and !customers[i].leaving and customers[i].type != "thief")
 waiting_indices.insert_last(i);
 if(waiting_indices.length() == 0)
 {
-personpool.resume_all();
+custpool.resume_all();
 return;
 }
 setupmenu();
@@ -696,7 +651,7 @@ int mres = m.run();
 string choice = m.get_item_id(mres);
 if(mres == -1 || choice == "back")
 {
-personpool.resume_all();
+custpool.resume_all();
 return;
 }
 if(choice == "all")
@@ -809,11 +764,11 @@ if(served > 0)
 speak("You hand the customers " + served + " cup" + (served == 1 ? "" : "s") + " of lemonade.");
 p.play_stationary("sounds/misc/givecup.ogg", false);
 wait(random(500, 1000));
-int drinkslot_all = personpool.play_stationary("sounds/misc/drinkcup.ogg", true);
-double drink_length = personpool.get_sound_length(drinkslot_all);
+int drinkslot_all = custpool.play_stationary("sounds/misc/drinkcup.ogg", true);
+double drink_length = custpool.get_sound_length(drinkslot_all);
 if(drink_length > 0) wait(int(drink_length));
 else wait(random(1000, 2000));
-personpool.destroy_sound(drinkslot_all);
+custpool.destroy_sound(drinkslot_all);
 p.play_stationary("sounds/misc/takecup.ogg", false);
 wait(random(500, 1000));
 for(uint i=0; i<waiting_indices.length(); i++)
@@ -840,7 +795,7 @@ summary += "Total collected: " + convert_to_currency(total_earned + total_tips) 
 }
 if(turned_away > 0) summary += "--You ran out of cups, so " + turned_away + " customer" + (turned_away == 1 ? "" : "s") + " got disappointed and stormed off.";
 dlgmessage(summary);
-personpool.resume_all();
+custpool.resume_all();
 return;
 }
 int picked = string_to_int(choice.substr(1));
@@ -863,17 +818,19 @@ void spawn_customer_wave()
 wave_ending=false;
 wave_started=false;
 p.play_stationary("sounds/misc/timestart.ogg", false);
-int base = random(1, 5);
-int extra = int(min(15.0, level - 1));
+int base = random(1, int(wave_get("base_max", 5)));
+int extra = int(min(wave_get("extra_max", 15), level - 1));
 int temp_mod = 0;
 int sp_min, sp_max, pat_mod;
-if(temperature > 85)
+int hot_temp  = int(wave_get("hot_temp",  85));
+int cold_temp = int(wave_get("cold_temp", 45));
+if(temperature > hot_temp)
 {
 temp_mod = random(2, 4);
 sp_min = 150; sp_max = 250;
 pat_mod = -15000;
 }
-else if(temperature < 45)
+else if(temperature < cold_temp)
 {
 temp_mod = 0;
 sp_min = 450; sp_max = 650;
@@ -886,27 +843,30 @@ temp_mod = 0;
 sp_min = 250; sp_max = 450;
 pat_mod = 0;
 }
-int poster_wave_bonus = int(placed_posters * 0.75);
+double bonus_rate = wave_get("poster_wave_bonus", 0.75);
+int poster_wave_bonus = int(placed_posters * bonus_rate);
 int poster_pat_bonus = placed_posters * 3000;
-int guaranteed = temperature < 45 ? random(1, 2) : random(1, 2);
-int count = min(20, guaranteed + poster_wave_bonus + (temperature < 45 ? 0 : temp_mod + max(0, (base + extra) / 3)));
-string[] types = {"normal", "normal", "normal", "normal", "normal", "normal", "nice", "mean", "desperate", "charitable", "group", "returning", "critic", "elderly", "child", "thief"};
+int cold_min = int(wave_get("cold_guaranteed_min", 1));
+int cold_max = int(wave_get("cold_guaranteed_max", 2));
+int guaranteed = temperature < cold_temp ? random(cold_min, cold_max) : random(int(wave_get("base_min", 1)), int(wave_get("base_max", 5)));
+int max_c = int(wave_get("max_customers", 20));
+int count = min(max_c, guaranteed + poster_wave_bonus + (temperature < cold_temp ? 0 : temp_mod + max(0, (base + extra) / 3)));
+string[] pool = customer_type_pool.length() > 0 ? customer_type_pool : {"normal"};
 for(int i=0; i<count; i++)
 {
 int sx = random(47, 49);
 int sy = random(21, 29);
 int sp = random(sp_min, sp_max);
 int pat = max(30000, int((random(60000, 120000) - (daynumber * 2000) - (int(level) * 7000) + pat_mod + poster_pat_bonus) / price_multiplier));
-string t = types[random(0, types.length() - 1)];
+string t = pool[random(0, pool.length() - 1)];
 int gs = 1;
-if(t == "desperate") { sp = int(sp * 0.5); pat = int(pat * 0.5); }
-else if(t == "nice") pat = int(pat * 1.5);
-else if(t == "mean") pat = int(pat * 0.7);
-else if(t == "elderly") { sp = int(sp * 1.8); pat = int(pat * 2.0); }
-else if(t == "child") { sp = int(sp * 0.6); pat = int(pat * 0.6); }
-else if(t == "returning") pat = int(pat * 1.8);
-else if(t == "group") { gs = random(2, 4); }
-else if(t == "thief") { sp = int(sp * 0.55); }
+int mvi = get_customer_movement_index(t);
+if(mvi >= 0)
+{
+sp  = int(sp  * customer_movements[mvi].speed);
+pat = int(pat * customer_movements[mvi].patience);
+}
+if(t == "group") gs = random(2, 4);
 customer c(sx, sy, sp, pat, t, gs);
 customers.insert_last(c);
 }
@@ -951,7 +911,7 @@ if(customers[i].leaving)
 customers[i].move_step();
 if(customers[i].nx==customers[i].targetx and customers[i].ny==customers[i].targety)
 {
-personpool.destroy_sound(customers[i].soundslot);
+custpool.destroy_sound(customers[i].soundslot);
 customers.remove_at(i);
 i--;
 }
@@ -964,6 +924,6 @@ customers[i].move_step();
 void destroy_all_customers()
 {
 for(uint i=0; i<customers.length(); i++)
-personpool.destroy_sound(customers[i].soundslot);
+custpool.destroy_sound(customers[i].soundslot);
 customers.resize(0);
 }

@@ -1,0 +1,157 @@
+// [types] section
+string[] customer_type_pool;
+
+// [waves] section
+dictionary wave_settings;
+
+// [movements] section
+class customer_movement
+{
+string type;
+double speed;
+double patience;
+bool use_patience;
+}
+customer_movement[] customer_movements;
+
+// [speeches] section
+class customer_speech_line
+{
+int number;
+string mood;
+string text;
+}
+class customer_speech_set
+{
+string type;
+int count;
+customer_speech_line[] lines;
+}
+customer_speech_set[] customer_speeches;
+
+void load_customer_table_types()
+{
+customer_type_pool.resize(0);
+string[] lines = load_config_file("data/config/tables/customers.table");
+bool in_section = false;
+for(uint i = 0; i < lines.length(); i++)
+{
+string line = lines[i];
+if(line == "[types]") { in_section = true; continue; }
+if(string_starts_with(line, "[")) { in_section = false; continue; }
+if(!in_section) continue;
+int eq = line.find("=");
+if(eq == -1) continue;
+string type = line.substr(0, eq).trim_whitespace();
+int weight = string_to_int(line.substr(eq + 1).trim_whitespace());
+for(int w = 0; w < weight; w++)
+customer_type_pool.insert_last(type);
+}
+}
+
+void load_customer_table_waves()
+{
+wave_settings.delete_all();
+string[] lines = load_config_file("data/config/tables/customers.table");
+bool in_section = false;
+for(uint i = 0; i < lines.length(); i++)
+{
+string line = lines[i];
+if(line == "[waves]") { in_section = true; continue; }
+if(string_starts_with(line, "[")) { in_section = false; continue; }
+if(!in_section) continue;
+int eq = line.find("=");
+if(eq == -1) continue;
+string key = line.substr(0, eq).trim_whitespace();
+string val = line.substr(eq + 1).trim_whitespace();
+wave_settings.set(key, val);
+}
+}
+
+double wave_get(string key, double fallback)
+{
+if(!wave_settings.exists(key)) return fallback;
+string v;
+wave_settings.get(key, v);
+return string_to_number(v);
+}
+
+void load_customer_table_movements()
+{
+customer_movements.resize(0);
+string[] lines = load_config_file("data/config/tables/customers.table");
+bool in_section = false;
+for(uint i = 0; i < lines.length(); i++)
+{
+string line = lines[i];
+if(line == "[movements]") { in_section = true; continue; }
+if(string_starts_with(line, "[")) { in_section = false; continue; }
+if(!in_section) continue;
+string[] p = parse_delimited_line(line, 3);
+if(p.length() < 4) continue;
+customer_movement mv;
+mv.type        = p[0].trim_whitespace();
+mv.speed       = string_to_number(p[1].trim_whitespace());
+mv.patience    = string_to_number(p[2].trim_whitespace());
+mv.use_patience = string_to_bool(p[3].trim_whitespace());
+customer_movements.insert_last(mv);
+}
+}
+
+int get_customer_movement_index(string type)
+{
+for(uint i = 0; i < customer_movements.length(); i++)
+if(customer_movements[i].type == type)
+return int(i);
+return -1;
+}
+
+void load_customer_table_speeches()
+{
+customer_speeches.resize(0);
+string[] lines = load_config_file("data/config/tables/customers.table");
+bool in_section = false;
+int current_idx = -1;
+for(uint i = 0; i < lines.length(); i++)
+{
+string line = lines[i];
+if(line == "[speeches]") { in_section = true; continue; }
+if(string_starts_with(line, "[")) { in_section = false; current_idx = -1; continue; }
+if(!in_section) continue;
+int eq = line.find("=");
+int colon = line.find(":");
+if(eq != -1 && (colon == -1 || eq < colon))
+{
+customer_speech_set s;
+s.type  = line.substr(0, eq).trim_whitespace();
+s.count = string_to_int(line.substr(eq + 1).trim_whitespace());
+customer_speeches.insert_last(s);
+current_idx = int(customer_speeches.length()) - 1;
+continue;
+}
+if(current_idx < 0) continue;
+string[] p = parse_delimited_line(line, 2);
+if(p.length() < 3) continue;
+customer_speech_line sl;
+sl.number = string_to_int(p[0].trim_whitespace());
+sl.mood   = p[1].trim_whitespace();
+sl.text   = p[2].trim_whitespace();
+customer_speeches[current_idx].lines.insert_last(sl);
+}
+}
+
+int get_customer_speeches_index(string type)
+{
+for(uint i = 0; i < customer_speeches.length(); i++)
+if(customer_speeches[i].type == type)
+return int(i);
+return -1;
+}
+
+void load_customer_table()
+{
+load_customer_table_types();
+load_customer_table_waves();
+load_customer_table_movements();
+load_customer_table_speeches();
+}

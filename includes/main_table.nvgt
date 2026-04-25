@@ -1,0 +1,98 @@
+dictionary main_newgame;
+dictionary main_thresholds;
+
+void load_main_table_newgame()
+{
+main_newgame.delete_all();
+string[] lines = load_config_file("data/config/tables/main.table");
+bool in_section = false;
+for(uint i = 0; i < lines.length(); i++)
+{
+string line = lines[i];
+if(line == "[newgame]") { in_section = true; continue; }
+if(string_starts_with(line, "[")) { in_section = false; continue; }
+if(!in_section) continue;
+int eq = line.find("=");
+if(eq == -1) continue;
+string key = line.substr(0, eq).trim_whitespace();
+string val = line.substr(eq + 1).trim_whitespace();
+main_newgame.set(key, val);
+}
+}
+
+double newgame_get(string key, double fallback)
+{
+if(!main_newgame.exists(key)) return fallback;
+string v;
+main_newgame.get(key, v);
+return string_to_number(v);
+}
+
+void load_main_table_thresholds()
+{
+main_thresholds.delete_all();
+string[] lines = load_config_file("data/config/tables/main.table");
+bool in_section = false;
+for(uint i = 0; i < lines.length(); i++)
+{
+string line = lines[i];
+if(line == "[thresholds]") { in_section = true; continue; }
+if(string_starts_with(line, "[")) { in_section = false; continue; }
+if(!in_section) continue;
+int eq = line.find("=");
+if(eq == -1) continue;
+string key = line.substr(0, eq).trim_whitespace();
+string val = line.substr(eq + 1).trim_whitespace();
+main_thresholds.set(key, val);
+}
+}
+
+double threshold_get(string key, double fallback)
+{
+if(!main_thresholds.exists(key)) return fallback;
+string v;
+main_thresholds.get(key, v);
+return string_to_number(v);
+}
+
+class item_def
+{
+string id;
+string display_name;
+bool useable;
+bool recycleable;
+string use_action;
+}
+
+item_def@[] item_definitions;
+
+void load_main_table_items()
+{
+item_definitions.resize(0);
+string[] lines = load_config_file("data/config/tables/main.table");
+bool in_section = false;
+for(uint i = 0; i < lines.length(); i++)
+{
+string line = lines[i];
+if(line == "[items]") { in_section = true; continue; }
+if(string_starts_with(line, "[")) { in_section = false; continue; }
+if(!in_section) continue;
+string[] p = parse_delimited_line(line, 4);
+if(p.length() < 5) continue;
+item_def def;
+def.id           = p[0].trim_whitespace();
+def.display_name = p[1].trim_whitespace();
+def.useable      = string_to_bool(p[2].trim_whitespace());
+def.recycleable  = string_to_bool(p[3].trim_whitespace());
+def.use_action   = p[4].trim_whitespace();
+item_definitions.insert_last(def);
+}
+}
+
+item_def@ get_item_def(string id)
+{
+for(uint i = 0; i < item_definitions.length(); i++)
+if(item_definitions[i].id == id)
+return item_definitions[i];
+return null;
+}

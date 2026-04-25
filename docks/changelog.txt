@@ -1,13 +1,14 @@
 New in 3.0.
 Updated the readme to reflect the current state of the game, and added a full configuration files section documenting all config file formats, fields, placeholders, and section headers.
 Added mood tags to all customer dialogue lines. Each line now carries an internal tag such as happy, restless, impatient, or stern that describes the customer's emotional state at that point in the conversation. These tags are purely cosmetic for now, but will be used in the future.
-Added data/config/tables/customers.table, which defines customer type spawn weights, wave sizing rules, per-type movement speed and patience multipliers, and per-type dialogue lines including mood tags and walkoff lines.
-Added data/config/tables/main.table, which defines starting inventory values for a new game, lemonade quality thresholds, and all item definitions including whether each item is useable, recycleable, and what action it performs.
-Added data/config/stores/bundle_posters.store, which defines all poster bundle packs available in the poster shop, including their quantities, discount, and description.
-Added data/config/stores/posters.store, which defines all poster types available in the poster shop, including their display name, base cost, cost expression, and description.
-Added data/config/stores/bundle_ingredients.store, which defines all ingredient bundle tiers available in the market, including their quantity and description.
-Added data/config/stores/ingredients.store, which defines all single ingredients available in the market, including their display name, cost target, cost expression, and description.
-Added data/config/events/main.event, which defines all random events that can fire at the end of a time period, including their sound, polarity, target stat, amount range, condition, and description.
+Made it so lemonade quality thresholds are now fully data-driven. The ratios that determine whether a recipe is too sour, too sweet, too watery, too salty, or too icy are loaded from the config file, making it possible to tune customer feedback without touching any code.
+Made it so starting inventory for a new game is now fully data-driven. The amount of cash, ingredients, and cups you begin with are loaded from the config file.
+Made it so customer behavior is now fully data-driven. Spawn weights, wave sizing rules, per-type movement speed and patience multipliers, and all dialogue lines including mood tags and walkoff lines are loaded from the config file. Adjusting any of these values changes what you see and hear in game without touching any code.
+Made it so store prices and descriptions are now fully data-driven. Ingredient and poster costs, bundle quantities, and all shop descriptions are loaded from the config files. Changing what the market sells or what it costs only requires editing a store file.
+Made it so random events are now fully data-driven. The target stat, amount range, trigger condition, chance, sound, and description for every event are loaded from the config file. Adding, removing, or tweaking events requires no code changes.
+Added the data/config/tables folder, containing customers.table for spawn weights, wave sizing, movement, and dialogue, and main.table for starting inventory, lemonade quality thresholds, and item definitions.
+Added the data/config/stores folder, containing files for single ingredients, ingredient bundles, single posters, and poster bundles sold in the market and poster shop.
+Added the data/config/events folder, containing main.event which defines all random events that can fire at the end of a time period.
 Added a data-driven configuration system. Game behavior is now defined in external config files located in data/config, split into three subfolders: events, stores, and tables. This makes it possible to adjust events, store items, bundles, customer behavior, lemonade thresholds, starting inventory, and item properties without touching any code.
 Fixed a bug where the thief customer used a hardcoded patience value of 999999 to prevent the patience timer from expiring. Thieves now have a proper use_patience flag set to false, so the timer is never checked for them at all.
 Made it so poster counts get propperly reset on a fresh game.

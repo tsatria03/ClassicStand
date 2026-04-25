@@ -87,7 +87,7 @@ Lines starting with a semicolon, hash, or double slash are treated as comments a
 
 Four files, main.table and customers.table, use section headers in square brackets such as [newgame], [thresholds], [items], [types], [waves], [movements], and [speeches]. These are not cosmetic. The parser uses them to know which format to expect. Do not remove or rename these headers or the parser will not read the file correctly.
 
-The remaining files, main.event, ingredients.store, bundle_ingredients.store, posters.store, and bundle_posters.store, do not use functional section headers. Every line in those files follows the same format throughout.
+The remaining files, main.event, single_ingredients.store, bundle_ingredients.store, single_posters.store, and bundle_posters.store, do not use functional section headers. Every line in those files follows the same format throughout.
 
 Sections that use key=value pairs are for flat settings with a single value per entry. Sections that use colon-delimited rows are for data entries with multiple fields per line.
 
@@ -144,9 +144,9 @@ The probability of this event firing when selected, from 1 to 100. Set to 0 to d
 description
 The message spoken to the player when this event fires. Use %amount% as a placeholder for the rolled value.
 
-ingredients.store
+single_ingredients.store
 
-Location: data/config/stores/ingredients.store
+Location: data/config/stores/single_ingredients.store
 
 Defines all single ingredients available for purchase in the market.
 
@@ -190,9 +190,9 @@ How many of each core ingredient (cups, lemons, sugar, water) the bundle contain
 description
 Shown in the bundle menu. Use %quantity% as a placeholder for the bundle quantity.
 
-posters.store
+single_posters.store
 
-Location: data/config/stores/posters.store
+Location: data/config/stores/single_posters.store
 
 Defines all poster types available in the poster shop.
 

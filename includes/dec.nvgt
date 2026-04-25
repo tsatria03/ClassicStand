@@ -40,5 +40,5 @@ file dockfile, dockver;
 sound dummy;
 custom_menu m;
 virtual_dialogs vd;
-sound_pool ambpool, muspool, personpool, p, pool, spool, temp;
+sound_pool ambpool, muspool, custpool, passerpool, personpool, p, pool, spool, temp;
 vector me;

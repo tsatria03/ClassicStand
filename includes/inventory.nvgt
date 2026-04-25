@@ -97,37 +97,19 @@ if (invpos < 0 || invpos >= keys.length())
     return;
 current = keys[invpos];
 }
-if(current == "empty cup")
+item_def@ def = get_item_def(current);
+if(def !is null && def.recycleable && !def.useable)
 {
-cups -= 1;
-speak("You recycle 1 empty cup.");
+if(current == "empty cup") cups -= 1;
+else if(current == "lemon") lemons -= 1;
+else if(current == "packet of sugar") sugars -= 1;
+else if(current == "liter of water") waters -= 1;
+else if(current == "bag of ice") ices -= 1;
+else if(current == "packet of salt") salts -= 1;
+speak("You recycle 1 " + current + ".");
+return;
 }
-else if(current == "lemon")
-{
-lemons -= 1;
-speak("You recycle 1 lemon.");
-}
-else if(current == "packet of sugar")
-{
-sugars -= 1;
-speak("You recycle 1 packet of sugar.");
-}
-else if(current == "liter of water")
-{
-waters -= 1;
-speak("You recycle 1 liter of water.");
-}
-else if(current == "bag of ice")
-{
-ices -= 1;
-speak("You recycle 1 bag of ice.");
-}
-else if(current == "packet of salt")
-{
-salts -= 1;
-speak("You recycle 1 packet of salt.");
-}
-else if(current == "napkin")
+if(current == "napkin")
 {
 if(int(me.x)==14 and int(me.y)==25)
 {

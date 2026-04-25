@@ -120,6 +120,26 @@ else if(op == "-") result -= rhs;
 }
 return result;
 }
+string[] load_config_file(string path)
+{
+string[] result;
+if(!file_exists(path)) return result;
+file f;
+f.open(path, "rb");
+string raw = f.read();
+f.close();
+string[] lines = delinear(raw);
+for(uint i = 0; i < lines.length(); i++)
+{
+string line = lines[i].trim_whitespace();
+if(line == "") continue;
+if(string_starts_with(line, ";")) continue;
+if(string_starts_with(line, "#")) continue;
+if(string_starts_with(line, "//")) continue;
+result.insert_last(line);
+}
+return result;
+}
 bool string_starts_with(const string& in str, const string& in start)
 {
 if (str.length()>=start.length())
@@ -509,12 +529,15 @@ else if(level == 5)
 temperature = random(daily_max - 20, daily_max - 5);
 else
 temperature = random(daily_min + 5, daily_min + 15);
-cupcost   = 1 * level * daynumber;
-icecost   = 2 * level * daynumber;
-lemoncost = 3 * level * daynumber;
-saltcost  = 4 * level * daynumber;
-sugarcost = 5 * level * daynumber;
-watercost = 6 * level * daynumber;
+cupcost   = get_ingredient_cost("cups");
+icecost   = get_ingredient_cost("ice");
+lemoncost = get_ingredient_cost("lemons");
+saltcost  = get_ingredient_cost("salt");
+sugarcost = get_ingredient_cost("sugar");
+watercost = get_ingredient_cost("water");
+poster_basic_cost    = int(get_poster_cost("basic"));
+poster_colorful_cost = int(get_poster_cost("colorful"));
+poster_premium_cost  = int(get_poster_cost("premium"));
 if(level == 1)
 {
 string weather_msg = "Good morning! Today is " + dayname + ", " + monthname + " " + daynumber + ". ";
