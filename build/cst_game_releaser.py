@@ -102,6 +102,8 @@ if do_package:
         error("7z archive build failed.")
     print("Archive built successfully.\n")
     print("Building Windows installer...")
+    if os.path.exists(INSTALLER):
+        os.remove(INSTALLER)
     if not run_cmd([ISCC, "/Q", os.path.join(SCRIPT_DIR, "cst_game_installer.iss")]):
         error("Installer build failed.")
     print("Installer built successfully.\n")

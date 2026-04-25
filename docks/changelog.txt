@@ -1,3 +1,6 @@
+New in 3.0.
+Added a passerby system. Pedestrians now walk back and forth along the street outside your stand. If you have posters placed, passers have a chance to notice one and head over to your stand as a customer. The more posters you have up, the higher the chance of convincing someone to stop by.
+Refactored all NPC types, including customers, persons, and passersby, to share a common base class. Movement, step timing, pitch variation, and sound positioning are now handled in one place, eliminating duplicated code across the three systems.
 New in 2.9.
 Made it so customers now play a spatial sound when they pass your posters on the street on their way to your stand. The sound only plays once per customer, and only if you have posters placed.
 Changed the wave spawning system so that posters now drive the bulk of your customer count. A small guaranteed base of 1 or 2 customers always shows up, with additional customers added based on how many posters you have placed. Placing more posters is now the main way to grow your crowd.
