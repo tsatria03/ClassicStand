@@ -158,12 +158,7 @@ speak("sold cups: " + soldcups);
 }
 if(key_pressed(KEY_P))
 {
-    if (pitcherstat <= 0)
-        speak("Pitcher status: 0 liters of lemonade.");
-    else if (pitcherstat <= 1)
-        speak("Pitcher status: 1 liter of lemonade.");
-    else
-        speak("Pitcher status: " + ceil(pitcherstat) + " liters of lemonade.");
+speak("Passerbys: " + passers.length() + ".");
 }
 if(key_pressed(KEY_O))
 {
@@ -172,7 +167,7 @@ string[] parts;
 if(poster_basic > 0) parts.insert_last(poster_basic + " basic");
 if(poster_colorful > 0) parts.insert_last(poster_colorful + " colorful");
 if(poster_premium > 0) parts.insert_last(poster_premium + " premium");
-if(parts.length() == 0) poster_msg += "none in inventory. ";
+if(parts.length() == 0) poster_msg += "none. ";
 else poster_msg += format_list(parts) + ". ";
 poster_msg += "You have placed " + placed_posters + " out of 10.";
 speak(poster_msg);

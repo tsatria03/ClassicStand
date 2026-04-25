@@ -1,0 +1,41 @@
+[newgame]
+cash=100
+reputation=100
+cups_min=3
+cups_max=6
+lemons_min=2
+lemons_max=4
+sugars_min=2
+sugars_max=4
+waters_min=2
+waters_max=4
+ices_min=0
+ices_max=2
+salts_min=0
+salts_max=1
+
+[thresholds]
+sour=0.35
+extreme_sour=0.6
+sweet=0.35
+extreme_sweet=0.6
+watery=0.5
+extreme_watery=0.75
+salty=0.3
+extreme_salty=1.0
+icy=0.3
+extreme_icy=1.0
+
+[items]
+empty cup:Empty cup:false:true:none
+lemon:Lemon:false:true:none
+packet of sugar:Packet of sugar:false:true:none
+liter of water:Liter of water:false:true:none
+bag of ice:Bag of ice:false:true:none
+packet of salt:Packet of salt:false:true:none
+filled cup:Filled cup:true:false:inspect_cup
+napkin:Napkin:true:false:clean_spill
+used_napkin:Used napkin:true:false:toss
+basic poster:Basic poster:true:false:place_poster
+colorful poster:Colorful poster:true:false:place_poster
+premium poster:Premium poster:true:false:place_poster

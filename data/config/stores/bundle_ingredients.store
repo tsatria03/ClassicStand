@@ -1,0 +1,6 @@
+booth:Booth bundle:4:A small starter bundle containing %quantity% empty cups, %quantity% ripe lemons, %quantity% packets of sugar, and %quantity% liters of water.
+community:Community bundle:8:A medium bundle containing %quantity% empty cups, %quantity% ripe lemons, %quantity% packets of sugar, and %quantity% liters of water.
+carnival:Carnival bundle:12:A larger bundle containing %quantity% empty cups, %quantity% ripe lemons, %quantity% packets of sugar, and %quantity% liters of water.
+festival:Festival bundle:16:A generous bundle containing %quantity% empty cups, %quantity% ripe lemons, %quantity% packets of sugar, and %quantity% liters of water.
+market:Market bundle:20:A large bundle containing %quantity% empty cups, %quantity% ripe lemons, %quantity% packets of sugar, and %quantity% liters of water.
+parade:Parade bundle:24:A bulk bundle containing %quantity% empty cups, %quantity% ripe lemons, %quantity% packets of sugar, and %quantity% liters of water.

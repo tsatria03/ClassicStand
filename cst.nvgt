@@ -92,4 +92,8 @@ cup_sugars.resize(0);
 cup_waters.resize(0);
 cup_ices.resize(0);
 cup_salts.resize(0);
+poster_basic=0;
+poster_colorful=0;
+poster_premium=0;
+placed_posters=0;
 }

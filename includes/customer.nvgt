@@ -17,6 +17,7 @@ bool leaving;
 bool announced;
 bool spilled;
 bool read_poster;
+bool use_patience;
 customer(int sx, int sy, int sp, int pat, string t="normal", int gs=1)
 {
 super(sx, sy, sp);
@@ -28,6 +29,7 @@ leaving=false;
 announced=false;
 spilled=false;
 read_poster=false;
+use_patience = (t != "thief");
 type=t;
 group_size=gs;
 talk_count=0;
@@ -236,7 +238,7 @@ speak("The customer says, " + greeting);
 }
 else
 {
-if(patiencetimer.elapsed >= patience)
+if(use_patience && patiencetimer.elapsed >= patience)
 {
 string leave_msg = "";
 if(type == "mean") leave_msg = "The irritated customer stormed off. What a waste of time!";
@@ -565,13 +567,15 @@ else if(t == "critic")
 if(tc == 0) return "I review establishments across town. I try to keep an open mind before forming an opinion.";
 if(tc == 1) return "Presentation matters, but taste is everything in this business.";
 if(tc == 2) return "I've seen many stands. Yours has a certain charm. Now, shall we get to it?";
-return "My time is valuable. I'd like that cup now, please.";
+if(tc == 3) return "My time is valuable. I'd like that cup now, please.";
+return "I'm going to have to mention the wait time in my review. Please, the cup.";
 }
 else if(t == "group")
 {
 if(tc == 0) return "We've heard great things about this place! We're all pretty excited.";
 if(tc == 1) return "There are " + customers[idx].group_size + " of us, so we're counting on you to come through!";
-return "We're getting a little restless over here. Ready when you are!";
+if(tc == 2) return "We're getting a little restless over here. Ready when you are!";
+return "Okay, we've been waiting long enough. Either serve us or we're finding somewhere else!";
 }
 else if(t == "child")
 {
@@ -902,7 +906,7 @@ else if(t == "elderly") { sp = int(sp * 1.8); pat = int(pat * 2.0); }
 else if(t == "child") { sp = int(sp * 0.6); pat = int(pat * 0.6); }
 else if(t == "returning") pat = int(pat * 1.8);
 else if(t == "group") { gs = random(2, 4); }
-else if(t == "thief") { sp = int(sp * 0.55); pat = 999999; }
+else if(t == "thief") { sp = int(sp * 0.55); }
 customer c(sx, sy, sp, pat, t, gs);
 customers.insert_last(c);
 }

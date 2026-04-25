@@ -22,6 +22,104 @@ return true;
 }
 return false;
 }
+string[] parse_delimited_line(string line, int max_parts, string delimiter = ":")
+{
+string[] parts;
+int lastPos = 0;
+int count = 0;
+for(uint i = 0; i < line.length(); i++)
+{
+if(line.substr(i, 1) == delimiter && count < max_parts)
+{
+parts.insert_last(line.substr(lastPos, int(i) - lastPos));
+lastPos = int(i) + 1;
+count++;
+}
+}
+parts.insert_last(line.substr(lastPos));
+return parts;
+}
+string format_template(string msg, dictionary@ replacements)
+{
+string[] keys = replacements.get_keys();
+for(uint k = 0; k < keys.length(); k++)
+{
+string key = "%" + keys[k] + "%";
+string val;
+replacements.get(keys[k], val);
+int ph = msg.find(key);
+while(ph != -1)
+{
+msg = msg.substr(0, ph) + val + msg.substr(ph + key.length());
+ph = msg.find(key);
+}
+}
+return msg;
+}
+string resolve_sound(string raw)
+{
+int open = raw.find("(");
+int close = raw.find(")");
+if(open != -1 && close != -1 && close > open)
+{
+string before = raw.substr(0, open);
+string after = raw.substr(close + 1);
+string range = raw.substr(open + 1, close - open - 1);
+int comma = range.find(",");
+if(comma != -1)
+{
+int minVal = string_to_number(range.substr(0, comma));
+int maxVal = string_to_number(range.substr(comma + 1));
+return before + random(minVal, maxVal) + after;
+}
+}
+return raw;
+}
+double eval_amount(string raw, double level_val, double day_val, double placed_val=0)
+{
+// Tokenize left to right, resolving level/day variables and applying operators
+string[] tokens;
+string[] ops;
+string cur = "";
+for(uint i = 0; i < raw.length(); i++)
+{
+string ch = raw.substr(i, 1);
+if(ch == "+" || ch == "-" || ch == "*" || ch == "/")
+{
+// Handle negative numbers at the start or after an operator
+if(ch == "-" && cur == "")
+{ cur += ch; continue; }
+tokens.insert_last(cur);
+ops.insert_last(ch);
+cur = "";
+}
+else
+cur += ch;
+}
+tokens.insert_last(cur);
+// Resolve each token to a number
+double[] vals(tokens.length());
+for(uint i = 0; i < tokens.length(); i++)
+{
+string t = tokens[i];
+if(t == "level") vals[i] = level_val;
+else if(t == "day") vals[i] = day_val;
+else if(t == "placed") vals[i] = placed_val;
+else vals[i] = string_to_number(t);
+}
+// Apply operators left to right
+double result = vals[0];
+for(uint i = 0; i < ops.length(); i++)
+{
+string op = ops[i];
+double rhs = vals[i + 1];
+if(op == "*") result *= rhs;
+else if(op == "/") result /= (rhs == 0 ? 1 : rhs);
+else if(op == "+") result += rhs;
+else if(op == "-") result -= rhs;
+}
+return result;
+}
 bool string_starts_with(const string& in str, const string& in start)
 {
 if (str.length()>=start.length())

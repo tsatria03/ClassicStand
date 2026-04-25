@@ -15,8 +15,8 @@ poster_score = 0;
 convinced = false;
 read_poster = false;
 soundslot = personpool.play_extended_2d("sounds/misc/person.ogg", me.x, me.y, nx, ny, 0, 0, 0, 0, true, 0, 0, 0, pitch, false);
-targetx = (x > 25) ? random(1, 10) : random(40, 49);
-targety = ny;
+targetx = (x > 25) ? 1 : 49;
+targety = random(1, 49);
 }
 void update_extra()
 {
@@ -54,8 +54,9 @@ return nx == targetx && ny == targety;
 }
 void flip_waypoint()
 {
-if(targetx <= 10) targetx = random(40, 49);
-else targetx = random(1, 10);
+if(targetx <= 25) targetx = 49;
+else targetx = 1;
+targety = random(1, 49);
 }
 }
 void spawn_passers()
@@ -63,8 +64,8 @@ void spawn_passers()
 int count = random(2, 4);
 for(int i = 0; i < count; i++)
 {
-int sx = random(0, 1) == 0 ? random(1, 10) : random(40, 49);
-int sy = random(0, 1) == 0 ? random(2, 17) : random(33, 48);
+int sx = random(1, 49);
+int sy = random(1, 49);
 passer ps(sx, sy);
 passers.insert_last(ps);
 }

@@ -1,0 +1,101 @@
+[types]
+normal=6
+nice=1
+mean=1
+desperate=1
+charitable=1
+group=1
+returning=1
+critic=1
+elderly=1
+child=1
+thief=1
+
+[waves]
+base_min=1
+base_max=5
+extra_max=15
+poster_wave_bonus=0.75
+max_customers=20
+cold_guaranteed_min=1
+cold_guaranteed_max=2
+cold_temp=45
+hot_temp=85
+
+[movements]
+normal:1.0:1.0:true
+nice:1.0:1.5:true
+mean:1.0:0.7:true
+desperate:0.5:0.5:true
+charitable:1.0:1.0:true
+group:1.0:1.0:true
+returning:1.0:1.8:true
+critic:1.0:1.0:true
+elderly:1.8:2.0:true
+child:0.6:0.6:true
+thief:0.55:1.0:false
+
+[speeches]
+normal=3
+1:happy:Just stopping by for a refreshing drink. Looks like a great stand!
+2:fine:Taking my time today. No rush, no rush.
+3:restless:I'm starting to get a little thirsty though, not gonna lie!
+4:angry:I've had enough chatting. I'm going somewhere else!
+
+nice=4
+1:happy:What a lovely stand you have! You must work very hard at this.
+2:happy:I do hope business is going well for you today!
+3:happy:You know, I've been meaning to tell you, this really is a wonderful spot.
+4:restless:Ha, I do enjoy a good chat, but I'm getting a little thirsty now!
+5:rushed:I really wanted to stay and chat, but I simply must have that lemonade!
+
+mean=2
+1:irritated:What? Just give me my lemonade already.
+2:angry:I said give me my lemonade! Stop wasting my time!
+3:angry:That's it! I'm done waiting. This is absolutely ridiculous!
+
+desperate=2
+1:panicked:Please, I'm absolutely parched! Can we hurry this up?
+2:panicked:I am literally dying of thirst here! Just serve me!
+3:angry:I can't take it anymore! I'm finding water somewhere else!
+
+charitable=4
+1:kind:There's a family down the street who hasn't had much today. I like to help where I can.
+2:kind:Kindness costs nothing, as they say. I hope you have a wonderful day.
+3:concerned:I should get moving soon. The sooner I get that cup, the sooner someone gets helped.
+4:restless:I appreciate the chat, but someone is waiting on me. Shall we wrap this up?
+5:urgent:I really must go. That family can't wait any longer!
+
+group=4
+1:excited:We've heard great things about this place! We're all pretty excited.
+2:eager:There are %group_size% of us, so we're counting on you to come through!
+3:restless:We're getting a little restless over here. Ready when you are!
+4:impatient:Okay, we've been waiting long enough. Either serve us or we're finding somewhere else!
+5:angry:We've had enough chatting. We're going somewhere else!
+
+returning=3
+1:happy:I came back just for your lemonade. It was honestly the best I've had in ages.
+2:cheerful:I told a few friends about your stand. Hopefully they stop by soon!
+3:restless:I'm getting thirsty just thinking about it. Ready when you are!
+4:angry:I came back for lemonade, not a conversation. I'm leaving!
+
+critic=4
+1:neutral:I review establishments across town. I try to keep an open mind before forming an opinion.
+2:neutral:Presentation matters, but taste is everything in this business.
+3:impatient:I've seen many stands. Yours has a certain charm. Now, shall we get to it?
+4:impatient:My time is valuable. I'd like that cup now, please.
+5:stern:I'm going to have to mention the wait time in my review. Please, the cup.
+
+elderly=5
+1:nostalgic:Oh what a treat! I used to run a little stand myself when I was young, you know.
+2:nostalgic:Back in my day we made lemonade fresh every morning. The smell was wonderful.
+3:warm:You remind me of my grandchildren. So full of energy and ambition!
+4:restless:I could talk all day, dear, I really could. But my throat is getting a bit dry!
+5:cheerful:Oh you are a sweetheart for chatting with an old soul like me!
+6:weary:Oh dear, I really must be going now. My feet aren't what they used to be.
+
+child=3
+1:curious:Do you have any flavors? I like strawberry but lemon is okay too I guess.
+2:polite:My mom says I have to use my manners. So, please can I have a lemonade?
+3:impatient:I'm sooooo thirsty. Can we please go faster?
+4:angry:UGH! I'm telling my mom! I'm leaving!

@@ -1,6 +1,19 @@
 New in 3.0.
+Added mood tags to all customer dialogue lines. Each line now carries an internal tag such as happy, restless, impatient, or stern that describes the customer's emotional state at that point in the conversation. These tags are purely cosmetic for now, but will be used in the future.
+Added data/config/tables/customers.table, which defines customer type spawn weights, wave sizing rules, per-type movement speed and patience multipliers, and per-type dialogue lines including mood tags and walkoff lines.
+Added data/config/tables/main.table, which defines starting inventory values for a new game, lemonade quality thresholds, and all item definitions including whether each item is useable, recycleable, and what action it performs.
+Added data/config/stores/bundle_posters.store, which defines all poster bundle packs available in the poster shop, including their quantities, discount, and description.
+Added data/config/stores/posters.store, which defines all poster types available in the poster shop, including their display name, base cost, cost expression, and description.
+Added data/config/stores/bundle_ingredients.store, which defines all ingredient bundle tiers available in the market, including their quantity and description.
+Added data/config/stores/ingredients.store, which defines all single ingredients available in the market, including their display name, cost target, cost expression, and description.
+Added data/config/events/main.event, which defines all random events that can fire at the end of a time period, including their sound, polarity, target stat, amount range, condition, and description.
+Added a data-driven configuration system. Game behavior is now defined in external config files located in data/config, split into three subfolders: events, stores, and tables. This makes it possible to adjust events, store items, bundles, customer behavior, lemonade thresholds, starting inventory, and item properties without touching any code.
+Fixed a bug where the thief customer used a hardcoded patience value of 999999 to prevent the patience timer from expiring. Thieves now have a proper use_patience flag set to false, so the timer is never checked for them at all.
+Made it so poster counts get propperly reset on a fresh game.
+Added a keyboard shortcut, P, to check how many passerbys are currently roaming the map.
+Changed passerbys to roam the entire concrete2 street area rather than staying on one side of the map. They now spawn anywhere on the street and pick random destinations across the full map, so they naturally pass through all areas including near any posters you have placed.
 Added a passerby system. Pedestrians now walk back and forth along the street outside your stand. If you have posters placed, passers have a chance to notice one and head over to your stand as a customer. The more posters you have up, the higher the chance of convincing someone to stop by.
-Refactored all NPC types, including customers, persons, and passersby, to share a common base class. Movement, step timing, pitch variation, and sound positioning are now handled in one place, eliminating duplicated code across the three systems.
+Refactored all NPC types, including customers, persons, and passerbys, to share a common base class. Movement, step timing, pitch variation, and sound positioning are now handled in one place, eliminating duplicated code across the three systems.
 New in 2.9.
 Made it so customers now play a spatial sound when they pass your posters on the street on their way to your stand. The sound only plays once per customer, and only if you have posters placed.
 Changed the wave spawning system so that posters now drive the bulk of your customer count. A small guaranteed base of 1 or 2 customers always shows up, with additional customers added based on how many posters you have placed. Placing more posters is now the main way to grow your crowd.
