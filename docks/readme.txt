@@ -67,6 +67,7 @@ M: Speak the current temperature.
 C: Speak your current cash.
 F: Speak your filled cup count.
 S: Speak your sold cup count.
+O: Speak your poster inventory and placement count.
 P: Speak your passerby count.
 N: Skip to the next time period when the wave is over.
 Q: Speak your current location.
@@ -349,6 +350,9 @@ Flat key=value settings controlling passer movement and poster interaction.
 
 convince_chance = the percent chance per placed poster that a passer gets convinced to become a customer.
 speed_min and speed_max = the random step time range in milliseconds. Higher values are slower.
+speed_cap = the fastest a passer can ever move, in milliseconds. Prevents them from becoming unrealistically fast regardless of level or day.
+speed_level_bonus = milliseconds subtracted from the speed range per level. Makes passers walk faster as you progress.
+speed_day_bonus = milliseconds subtracted from the speed range per day. Makes passers walk faster as each day passes.
 
 Game conclusion
 

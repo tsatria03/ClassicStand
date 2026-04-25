@@ -41,7 +41,10 @@ steptimer.restart();
 }
 passer(int x, int y)
 {
-super(x, y, random(int(passer_behavior_get("speed_min", 300)), int(passer_behavior_get("speed_max", 500))));
+int speed_bonus = int(passer_behavior_get("speed_level_bonus", 10)) * int(level) + int(passer_behavior_get("speed_day_bonus", 5)) * daynumber;
+int sp_min = max(int(passer_behavior_get("speed_cap", 100)), int(passer_behavior_get("speed_min", 300)) - speed_bonus);
+int sp_max = max(int(passer_behavior_get("speed_cap", 100)), int(passer_behavior_get("speed_max", 500)) - speed_bonus);
+super(x, y, random(sp_min, sp_max));
 poster_score = 0;
 convinced = false;
 read_poster = false;

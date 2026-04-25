@@ -15,3 +15,6 @@ max_passers=10
 convince_chance=10
 speed_min=300
 speed_max=500
+speed_cap=100
+speed_level_bonus=10
+speed_day_bonus=5
