@@ -41,7 +41,6 @@ leaving=false;
 announced=false;
 spilled=false;
 read_poster=false;
-at_entrance=false;
 use_patience = (t != "thief");
 type=t;
 group_size=gs;

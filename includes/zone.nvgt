@@ -45,7 +45,7 @@ else
 {
 if (newzone!="")
 {
-if (zonestatus==1) speak("leving "+newzone);
+if (zonestatus==1) speak("leaving "+newzone);
 newzone="";
 }
 }
