@@ -15,6 +15,7 @@ void trigger_event(int probability_chance)
     }
     possible_events.insert_last("lucky_bonus");
     possible_events.insert_last("nothing");
+    if(placed_posters > 0) possible_events.insert_last("poster_damage");
     string event = possible_events[random(0, possible_events.length() - 1)];
     if (event == "free_water")
     {
@@ -63,5 +64,12 @@ p.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
     else if (event == "nothing")
     {
         dlg("Nothing unusual happened today. Just another boring hour at the stand.");
+    }
+    else if (event == "poster_damage")
+    {
+        int lost = random(1, max(1, placed_posters / 2));
+        placed_posters = max(0, placed_posters - lost);
+        p.play_stationary("sounds/misc/destpost.ogg", false);
+        dlg("Some of your posters were torn down or damaged by the weather! You lost " + lost + " poster" + (lost == 1 ? "" : "s") + ". You now have " + placed_posters + " remaining.");
     }
 }

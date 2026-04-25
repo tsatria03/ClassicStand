@@ -352,6 +352,14 @@ void calculate_new_day_conditions()
 wave_ending=false;
 wave_started=false;
 destroy_all_customers();
+if(placed_posters > 0 && daynumber > 1)
+{
+p.play_stationary("sounds/misc/destpost.ogg", false);
+dlg("Overnight, all " + placed_posters + " of your posters were taken down or wore out. You'll need to hang new ones today if you want the boost.");
+placed_posters = 0;
+}
+else
+placed_posters = 0;
 if(daynumber > 1)
 {
 string spoilage_msg = "";

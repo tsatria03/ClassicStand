@@ -16,7 +16,7 @@ update_customers();
 checkloc();
 personcheck();
 sync_inv();
-if(int(me.x)==32 and int(me.y)==50)
+if(int(me.x)==14 and int(me.y)==25)
 {
 for(uint i=0; i<customers.length(); i++)
 {
@@ -52,6 +52,12 @@ else if(triggered == "actsmenu")
 {
 last_menu_id="";
 actsmenu();
+personpool.resume_all();
+}
+else if(triggered == "postermenu")
+{
+last_menu_id="";
+postermenu();
 personpool.resume_all();
 }
 else
@@ -158,6 +164,18 @@ if(key_pressed(KEY_P))
         speak("Pitcher status: 1 liter of lemonade.");
     else
         speak("Pitcher status: " + ceil(pitcherstat) + " liters of lemonade.");
+}
+if(key_pressed(KEY_O))
+{
+string poster_msg = "Posters: ";
+string[] parts;
+if(poster_basic > 0) parts.insert_last(poster_basic + " basic");
+if(poster_colorful > 0) parts.insert_last(poster_colorful + " colorful");
+if(poster_premium > 0) parts.insert_last(poster_premium + " premium");
+if(parts.length() == 0) poster_msg += "none in inventory. ";
+else poster_msg += format_list(parts) + ". ";
+poster_msg += "You have placed " + placed_posters + " out of 10.";
+speak(poster_msg);
 }
 if(key_pressed(KEY_X))
 {

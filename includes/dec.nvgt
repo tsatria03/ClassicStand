@@ -6,6 +6,8 @@ int napkin_giver_index=-1;
 string napkin_giver_default_text="";
 
 double cash=100, fullcups=0, soldcups=0, level=1, maxlevel=6, pitcherstat=0, cups=0, ices=0, lemons=0, salts=0, sugars=0, waters=0, cupcost=1, icecost=2, lemoncost=3, saltcost=4, sugarcost=5, watercost=6;
+int poster_basic=0, poster_colorful=0, poster_premium=0, placed_posters=0;
+int poster_basic_cost=50, poster_colorful_cost=150, poster_premium_cost=400;
 double last_lemons_per_cup=0, last_sugars_per_cup=0, last_waters_per_cup=0, last_ices_per_cup=0, last_salts_per_cup=0, price_per_cup=0, selling_price=25, price_multiplier=1.0;
 double[] cup_lemons(0), cup_sugars(0), cup_waters(0), cup_ices(0), cup_salts(0);
 double reputation=100, max_reputation=200, peak_reputation=100;

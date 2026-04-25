@@ -16,6 +16,9 @@ if(salts > 0)    inv.set("packet of salt", int(salts));
 if(fullcups > 0) inv.set("filled cup", int(fullcups));
 if(napkin_count > 0) inv.set("napkin", napkin_count);
 if(used_napkin_count > 0) inv.set("used_napkin", used_napkin_count);
+if(poster_basic > 0) inv.set("basic poster", poster_basic);
+if(poster_colorful > 0) inv.set("colorful poster", poster_colorful);
+if(poster_premium > 0) inv.set("premium poster", poster_premium);
 if(invpos >= int(inv.get_size())) invpos = -1;
 }
 
@@ -126,7 +129,7 @@ speak("You recycle 1 packet of salt.");
 }
 else if(current == "napkin")
 {
-if(int(me.x)==32 and int(me.y)==50)
+if(int(me.x)==14 and int(me.y)==25)
 {
 if(!floor_spilled)
 {
@@ -154,6 +157,27 @@ else if(current == "used_napkin")
 p.play_stationary("sounds/misc/takenapkin.ogg", false);
 give("used_napkin", -1);
 speak("You toss the used napkin in the trash.");
+}
+else if(current == "basic poster" || current == "colorful poster" || current == "premium poster")
+{
+string zone = get_zone_at(int(me.x), int(me.y));
+if(string_contains(zone, "Neighborhood street", 1) == -1)
+{
+speak("You can only place posters on the neighborhood street. Head outside the stand and market area.");
+return;
+}
+if(placed_posters >= 10)
+{
+speak("You already have 10 posters placed around the neighborhood. That's the maximum.");
+return;
+}
+p.play_stationary("sounds/misc/placepost.ogg", false);
+placed_posters += 1;
+if(current == "basic poster") poster_basic -= 1;
+else if(current == "colorful poster") poster_colorful -= 1;
+else poster_premium -= 1;
+string bonus_desc = current == "premium poster" ? "a strong boost" : (current == "colorful poster" ? "a moderate boost" : "a small boost");
+speak("You hang a " + current + " on a nearby lamppost. That's " + placed_posters + " poster" + (placed_posters == 1 ? "" : "s") + " placed.");
 }
 else if(current == "filled cup")
 {

@@ -131,6 +131,14 @@ if (sd.d.exists("last_ices_per_cup"))
 last_ices_per_cup = sd.read_double("last_ices_per_cup");
 if (sd.d.exists("last_salts_per_cup"))
 last_salts_per_cup = sd.read_double("last_salts_per_cup");
+if (sd.d.exists("poster_basic"))
+poster_basic = sd.read_int("poster_basic");
+if (sd.d.exists("poster_colorful"))
+poster_colorful = sd.read_int("poster_colorful");
+if (sd.d.exists("poster_premium"))
+poster_premium = sd.read_int("poster_premium");
+if (sd.d.exists("placed_posters"))
+placed_posters = sd.read_int("placed_posters");
 }
 void writedata()
 {
@@ -169,6 +177,10 @@ sd.add("last_sugars_per_cup", last_sugars_per_cup);
 sd.add("last_waters_per_cup", last_waters_per_cup);
 sd.add("last_ices_per_cup", last_ices_per_cup);
 sd.add("last_salts_per_cup", last_salts_per_cup);
+sd.add("poster_basic", poster_basic);
+sd.add("poster_colorful", poster_colorful);
+sd.add("poster_premium", poster_premium);
+sd.add("placed_posters", placed_posters);
     sd.save();
 }
 void readpreffs()

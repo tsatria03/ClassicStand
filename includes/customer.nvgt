@@ -18,18 +18,20 @@ bool waiting;
 bool leaving;
 bool announced;
 bool spilled;
+bool read_poster;
 customer(int sx, int sy, int sp, int pat, string t="normal", int gs=1)
 {
 cx=sx;
 cy=sy;
-targetx=32;
-targety=50;
+targetx=14;
+targety=25;
 steptime=sp;
 patience=pat;
 waiting=false;
 leaving=false;
 announced=false;
 spilled=false;
+read_poster=false;
 type=t;
 group_size=gs;
 talk_count=0;
@@ -110,8 +112,8 @@ double rep_loss = 0.5 + (daynumber / 20.0);
 reputation = max(0.0, reputation - rep_loss);
 check_reputation();
 customers[idx].leaving = true;
-customers[idx].targetx = random(1, 13);
-customers[idx].targety = random(45, 55);
+customers[idx].targetx = random(45, 50);
+customers[idx].targety = random(21, 29);
 customers[idx].steptimer.restart();
 speak("The customer is heading back to the street.");
 open_serve_menu();
@@ -172,8 +174,8 @@ double rep_gain = (1.0 + (daynumber / 10.0)) * 1.5;
 reputation=min(200.0, reputation+rep_gain);
 if(reputation>peak_reputation) peak_reputation=reputation;
 customers[idx].leaving=true;
-customers[idx].targetx=random(1, 13);
-customers[idx].targety=random(45, 55);
+customers[idx].targetx=random(47, 49);
+customers[idx].targety=random(21, 29);
 customers[idx].steptimer.restart();
 speak("The customer is heading back to the street.");
 open_serve_menu();
@@ -204,7 +206,7 @@ if(ctype != "mean") { cash -= earned; soldcups -= cups_needed; }
 customers[idx].spilled=true;
 floor_spilled=true;
 string wet = (random(0, 1) == 0) ? "spring" : "spring2";
-spawn_platform(32, 32, 50, 50, wet);
+spawn_platform(14, 14, 25, 25, wet);
 if(napkin_giver_index>=0 and napkin_giver_index<int(persons.length()))
 {
 napkin_giver_default_text=persons[napkin_giver_index].text;
@@ -276,8 +278,8 @@ reputation=min(200.0, reputation+rep_gain);
 if(reputation>peak_reputation) peak_reputation=reputation;
 }
 customers[idx].leaving=true;
-customers[idx].targetx=random(1, 13);
-customers[idx].targety=random(45, 55);
+customers[idx].targetx=random(47, 49);
+customers[idx].targety=random(21, 29);
 customers[idx].steptimer.restart();
 speak("The customer is heading back to the street.");
 open_serve_menu();
@@ -449,8 +451,8 @@ double rep_loss = 1.0 + (daynumber / 10.0);
 reputation = max(0.0, reputation - rep_loss);
 check_reputation();
 customers[idx].leaving = true;
-customers[idx].targetx = random(1, 13);
-customers[idx].targety = random(45, 55);
+customers[idx].targetx = random(45, 50);
+customers[idx].targety = random(21, 29);
 customers[idx].steptimer.restart();
 speak("The customer has left.");
 open_serve_menu();
@@ -490,9 +492,9 @@ else if(dx > 0 && dy > 0) dir = "northeast";
 else if(dx < 0 && dy > 0) dir = "northwest";
 else if(dx > 0 && dy < 0) dir = "southeast";
 else if(dx < 0 && dy < 0) dir = "southwest";
-else dir = "right here";
+else dir = "at the counter";
 string tlabel = customers[idx].type == "normal" ? "" : " (" + customers[idx].type + ")";
-m.add_item("Customer " + (i + 1) + tlabel + ", waiting to the " + dir, "c" + idx);
+m.add_item("Customer " + (i + 1) + tlabel + (dir == "at the counter" ? ", waiting " + dir : ", waiting to the " + dir), "c" + idx);
 }
 if(waiting_indices.length() > 1) m.add_item("Serve all customers", "all");
 m.add_item("Back", "back");
@@ -525,8 +527,8 @@ double rep_loss = 2.0 + level + (daynumber / 5.0);
 reputation=max(0.0, reputation-rep_loss);
 check_reputation();
 customers[idx].leaving=true;
-customers[idx].targetx=random(1, 13);
-customers[idx].targety=random(45, 55);
+customers[idx].targetx=random(47, 49);
+customers[idx].targety=random(21, 29);
 customers[idx].steptimer.restart();
 speak("A customer got nothing and stormed off.");
 continue;
@@ -562,7 +564,7 @@ if(extreme_all)
 customers[idx].spilled=true;
 floor_spilled=true;
 string wet = (random(0, 1) == 0) ? "spring" : "spring2";
-spawn_platform(32, 32, 50, 50, wet);
+spawn_platform(14, 14, 25, 25, wet);
 if(napkin_giver_index>=0 and napkin_giver_index<int(persons.length()))
 persons[napkin_giver_index].text="Oh my, it looks like somebody made quite the mess! Here's a napkin that you can use to clean it up.";
 double rep_loss = (1.0 + (daynumber / 10.0)) * 2.0;
@@ -611,6 +613,7 @@ served++;
 }
 if(served > 0)
 {
+speak("You hand the customers " + served + " cup" + (served == 1 ? "" : "s") + " of lemonade.");
 p.play_stationary("sounds/misc/givecup.ogg", false);
 wait(random(500, 1000));
 int drinkslot_all = personpool.play_stationary("sounds/misc/drinkcup.ogg", true);
@@ -625,8 +628,8 @@ for(uint i=0; i<waiting_indices.length(); i++)
 uint idx = waiting_indices[i];
 if(!customers[idx].waiting) continue;
 customers[idx].leaving=true;
-customers[idx].targetx=random(1, 13);
-customers[idx].targety=random(45, 55);
+customers[idx].targetx=random(47, 49);
+customers[idx].targety=random(21, 29);
 customers[idx].steptimer.restart();
 }
 speak("The customers are heading back to the street.");
@@ -652,7 +655,7 @@ customer_submenu(picked);
 }
 void check_customer_interaction()
 {
-if(int(me.x) != 32 || int(me.y) != 50) return;
+if(int(me.x) != 14 || int(me.y) != 25) return;
 if(shift_is_down()) return;
 if(!key_pressed(KEY_RETURN)) return;
 bool any_waiting = false;
@@ -690,14 +693,17 @@ temp_mod = 0;
 sp_min = 250; sp_max = 450;
 pat_mod = 0;
 }
-int count = temperature < 45 ? random(1, 2) : min(20, max(1, base + extra + temp_mod));
+int poster_wave_bonus = int(placed_posters * 0.75);
+int poster_pat_bonus = placed_posters * 3000;
+int guaranteed = temperature < 45 ? random(1, 2) : random(1, 2);
+int count = min(20, guaranteed + poster_wave_bonus + (temperature < 45 ? 0 : temp_mod + max(0, (base + extra) / 3)));
 string[] types = {"normal", "normal", "normal", "normal", "normal", "normal", "nice", "mean", "desperate", "charitable", "group", "returning", "critic", "elderly", "child", "thief"};
 for(int i=0; i<count; i++)
 {
-int sx = random(1, 13);
-int sy = random(45, 55);
+int sx = random(47, 49);
+int sy = random(21, 29);
 int sp = random(sp_min, sp_max);
-int pat = max(30000, int((random(60000, 120000) - (daynumber * 2000) - (int(level) * 7000) + pat_mod) / price_multiplier));
+int pat = max(30000, int((random(60000, 120000) - (daynumber * 2000) - (int(level) * 7000) + pat_mod + poster_pat_bonus) / price_multiplier));
 string t = types[random(0, types.length() - 1)];
 int gs = 1;
 if(t == "desperate") { sp = int(sp * 0.5); pat = int(pat * 0.5); }
@@ -804,6 +810,11 @@ customers[i].cy++;
 else if(customers[i].cy>customers[i].targety)
 customers[i].cy--;
 personpool.update_sound_2d(customers[i].soundslot, customers[i].cx, customers[i].cy);
+if(!customers[i].read_poster && placed_posters > 0 && customers[i].cx <= 44 && customers[i].cx >= 30)
+{
+customers[i].read_poster = true;
+p.play_2d("sounds/misc/readpost.ogg", me.x, me.y, customers[i].cx, customers[i].cy, false);
+}
 if(customers[i].cx!=customers[i].targetx or customers[i].cy!=customers[i].targety)
 p.play_2d("sounds/platforms/"+gmt(customers[i].cx,customers[i].cy)+"/step"+random(1,5)+".ogg",me.x,me.y,customers[i].cx,customers[i].cy,false);
 else
@@ -814,12 +825,12 @@ customers[i].patiencetimer.restart();
 personpool.play_extended_2d("sounds/misc/customer.ogg", me.x, me.y, customers[i].cx, customers[i].cy, 0, 0, 0, 0, false, 0, 0, 0, customers[i].pitch, false);
 if(customers[i].type == "thief")
 {
-if(int(me.x)==32 and int(me.y)==50)
+if(int(me.x)==14 and int(me.y)==25)
 {
 speak("The shifty person spotted you at the counter and bolted!");
 customers[i].leaving=true;
-customers[i].targetx=random(1, 13);
-customers[i].targety=random(45, 55);
+customers[i].targetx=random(47, 49);
+customers[i].targety=random(21, 29);
 customers[i].steptimer.restart();
 }
 else
@@ -838,8 +849,8 @@ if(stealable.length() == 0)
 {
 speak("The thief reached your stand but found nothing worth stealing and left.");
 customers[i].leaving=true;
-customers[i].targetx=random(1, 13);
-customers[i].targety=random(45, 55);
+customers[i].targetx=random(47, 49);
+customers[i].targety=random(21, 29);
 customers[i].steptimer.restart();
 }
 else
@@ -857,8 +868,8 @@ customers[i].stolen_amount = amt;
 customers[i].steptime = int(customers[i].steptime * 0.5);
 dlg("A thief snatched " + item_name + " from your stand! Chase them down to get it back!");
 customers[i].leaving=true;
-customers[i].targetx=random(1, 13);
-customers[i].targety=random(45, 55);
+customers[i].targetx=random(47, 49);
+customers[i].targety=random(21, 29);
 customers[i].steptimer.restart();
 }
 }
@@ -878,8 +889,8 @@ else
 dlg("While you were away, a shifty person was seen lurking around your stand. It doesn't look like they took anything this time.");
 }
 customers[i].leaving=true;
-customers[i].targetx=random(1, 13);
-customers[i].targety=random(45, 55);
+customers[i].targetx=random(47, 49);
+customers[i].targety=random(21, 29);
 customers[i].steptimer.restart();
 }
 }
@@ -896,28 +907,29 @@ else if(dx > 0 && dy > 0) dir = "northeast";
 else if(dx < 0 && dy > 0) dir = "northwest";
 else if(dx > 0 && dy < 0) dir = "southeast";
 else if(dx < 0 && dy < 0) dir = "southwest";
-else dir = "right here";
+else dir = "at the counter";
+string dir_phrase = (dir == "at the counter") ? "They are " + dir + "." : "They are to your " + dir + ".";
 string ctype = customers[i].type;
 if(ctype == "group")
-speak("Someone ordering for a group of " + customers[i].group_size + " has arrived at your stand. They are to your " + dir + ".");
+speak("Someone ordering for a group of " + customers[i].group_size + " has arrived at your stand. " + dir_phrase);
 else if(ctype == "desperate")
-speak("A desperate customer has arrived at your stand, gasping for a drink. They are to your " + dir + ".");
+speak("A desperate customer has arrived at your stand, gasping for a drink. " + dir_phrase);
 else if(ctype == "charitable")
-speak("A charitable customer has arrived at your stand. They are to your " + dir + ".");
+speak("A charitable customer has arrived at your stand. " + dir_phrase);
 else if(ctype == "critic")
-speak("A well-dressed stranger has arrived at your stand. They are to your " + dir + ".");
+speak("A well-dressed stranger has arrived at your stand. " + dir_phrase);
 else if(ctype == "elderly")
-speak("An elderly customer has arrived at your stand. They are to your " + dir + ".");
+speak("An elderly customer has arrived at your stand. " + dir_phrase);
 else if(ctype == "child")
-speak("A child has arrived at your stand. They are to your " + dir + ".");
+speak("A child has arrived at your stand. " + dir_phrase);
 else if(ctype == "returning")
-speak("A returning customer has arrived at your stand. They are to your " + dir + ".");
+speak("A returning customer has arrived at your stand. " + dir_phrase);
 else if(ctype == "nice")
-speak("A friendly customer has arrived at your stand. They are to your " + dir + ".");
+speak("A friendly customer has arrived at your stand. " + dir_phrase);
 else if(ctype == "mean")
-speak("An irritated-looking customer has arrived at your stand. They are to your " + dir + ".");
+speak("An irritated-looking customer has arrived at your stand. " + dir_phrase);
 else
-speak("A customer has arrived at your stand. They are to your " + dir + ".");
+speak("A customer has arrived at your stand. " + dir_phrase);
 string greeting;
 if(ctype == "desperate")
 { string[] g = {"Please, I'm absolutely dying of thirst! Give me anything cold!", "I've been walking for hours! I need lemonade, now!"}; greeting = g[random(0, g.length()-1)]; }
@@ -966,8 +978,8 @@ double rep_loss = 2.0 + level + (daynumber / 5.0);
 reputation=max(0.0, reputation-rep_loss);
 check_reputation();
 customers[i].leaving=true;
-customers[i].targetx=random(1, 13);
-customers[i].targety=random(45, 55);
+customers[i].targetx=random(47, 49);
+customers[i].targety=random(21, 29);
 customers[i].steptimer.restart();
 }
 }

@@ -823,3 +823,117 @@ dlgmessage(msg);
 wait(500);
 buybmenu();
 }
+void postermenu()
+{
+personpool.pause_all();
+setupmenu();
+m.add_item("Bundled posters", "pbg");
+m.add_item("Single posters", "psg");
+m.add_item("back", "back");
+m.intro_text = "Posters menu.";
+int start_pos = 0;
+if(last_menu_id != "")
+{
+int found = m.find_item_by_id(last_menu_id);
+if(found != -1) start_pos = found;
+}
+int mres = m.run(start_pos, true);
+string postem = m.get_item_id(mres);
+if(mres != -1) last_menu_id = postem;
+if(mres == -1 || postem == "back") { last_menu_id = ""; return; }
+if(postem == "pbg") { last_menu_id = ""; posterbmenu(); }
+if(postem == "psg") { last_menu_id = ""; postersmenu(); }
+}
+void postersmenu()
+{
+setupmenu();
+m.add_item("Basic poster: costs " + convert_to_currency(poster_basic_cost) + ". Small boost to wave size and patience. You have " + poster_basic, "pb");
+m.add_item("Colorful poster: costs " + convert_to_currency(poster_colorful_cost) + ". Moderate boost to wave size and patience. You have " + poster_colorful, "pc");
+m.add_item("Premium poster: costs " + convert_to_currency(poster_premium_cost) + ". Strong boost to wave size and patience. You have " + poster_premium, "pp");
+m.add_item("back", "back");
+m.intro_text = "Single posters.";
+int start_pos = 0;
+if(last_menu_id != "")
+{
+int found = m.find_item_by_id(last_menu_id);
+if(found != -1) start_pos = found;
+}
+int mres = m.run(start_pos, true);
+string postsem = m.get_item_id(mres);
+if(mres != -1) last_menu_id = postsem;
+if(mres == -1 || postsem == "back") { last_menu_id = ""; postermenu(); return; }
+int cost = 0;
+string ptype = "";
+if(postsem == "pb") { cost = poster_basic_cost; ptype = "basic"; }
+else if(postsem == "pc") { cost = poster_colorful_cost; ptype = "colorful"; }
+else if(postsem == "pp") { cost = poster_premium_cost; ptype = "premium"; }
+else { postermenu(); return; }
+vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=~", false, "");
+int max_qty = int(floor(cash / cost));
+string qty_input = vd.input_box("", "How many " + ptype + " posters would you like to buy? They cost " + convert_to_currency(cost) + " each. You can afford up to " + max_qty + ". Press enter to buy the maximum.", string(max_qty));
+if(qty_input == "") { postersmenu(); return; }
+int qty = int(string_to_number(qty_input));
+if(qty <= 0) { postersmenu(); return; }
+double total = qty * cost;
+if(cash < total) { dlg("You don't have enough cash for that."); postersmenu(); return; }
+cash -= total;
+if(ptype == "basic") poster_basic += qty;
+else if(ptype == "colorful") poster_colorful += qty;
+else poster_premium += qty;
+p.play_stationary("sounds/misc/buypost" + random(1, 2) + ".ogg", false);
+p.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
+dlg("Purchase complete. You bought " + qty + " " + ptype + " poster" + (qty == 1 ? "" : "s") + " for " + convert_to_currency(total) + ". Head to the neighborhood street and use them from your inventory to hang them up. You now have " + convert_to_currency(cash) + " remaining.");
+postersmenu();
+}
+void posterbmenu()
+{
+setupmenu();
+int small_qty = 3; double small_cost = (poster_basic_cost * 2 + poster_colorful_cost) * 0.9;
+int medium_qty = 6; double medium_cost = (poster_basic_cost * 3 + poster_colorful_cost * 2 + poster_premium_cost) * 0.85;
+int large_qty = 10; double large_cost = (poster_basic_cost * 4 + poster_colorful_cost * 3 + poster_premium_cost * 3) * 0.8;
+m.add_item("Starter pack: costs " + convert_to_currency(small_cost) + ". Contains 2 basic posters and 1 colorful poster.", "psm");
+m.add_item("Advertiser pack: costs " + convert_to_currency(medium_cost) + ". Contains 3 basic, 2 colorful, and 1 premium poster.", "pmd");
+m.add_item("Campaign pack: costs " + convert_to_currency(large_cost) + ". Contains 4 basic, 3 colorful, and 3 premium posters.", "plg");
+m.add_item("back", "back");
+m.intro_text = "Bundled posters.";
+int start_pos = 0;
+if(last_menu_id != "")
+{
+int found = m.find_item_by_id(last_menu_id);
+if(found != -1) start_pos = found;
+}
+int mres = m.run(start_pos, true);
+string postbem = m.get_item_id(mres);
+if(mres != -1) last_menu_id = postbem;
+if(mres == -1 || postbem == "back") { last_menu_id = ""; postermenu(); return; }
+double total = 0;
+string msg = "";
+if(postbem == "psm")
+{
+total = small_cost;
+if(cash < total) { dlg("You don't have enough cash for that."); posterbmenu(); return; }
+cash -= total;
+poster_basic += 2; poster_colorful += 1;
+msg = "You bought the starter pack for " + convert_to_currency(total) + ". You received 2 basic posters and 1 colorful poster.";
+}
+else if(postbem == "pmd")
+{
+total = medium_cost;
+if(cash < total) { dlg("You don't have enough cash for that."); posterbmenu(); return; }
+cash -= total;
+poster_basic += 3; poster_colorful += 2; poster_premium += 1;
+msg = "You bought the advertiser pack for " + convert_to_currency(total) + ". You received 3 basic, 2 colorful, and 1 premium poster.";
+}
+else if(postbem == "plg")
+{
+total = large_cost;
+if(cash < total) { dlg("You don't have enough cash for that."); posterbmenu(); return; }
+cash -= total;
+poster_basic += 4; poster_colorful += 3; poster_premium += 3;
+msg = "You bought the campaign pack for " + convert_to_currency(total) + ". You received 4 basic, 3 colorful, and 3 premium posters.";
+}
+p.play_stationary("sounds/misc/buypost" + random(1, 2) + ".ogg", false);
+p.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
+dlg(msg + " Head to the neighborhood street and use them from your inventory to hang them up. You now have " + convert_to_currency(cash) + " remaining.");
+posterbmenu();
+}
