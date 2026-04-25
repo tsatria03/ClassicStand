@@ -29,7 +29,7 @@ else if(dx == 1) npc_facing = "right";
 else if(dx == -1) npc_facing = "left";
 nx += dx;
 ny += dy;
-if(string_contains(gmt(nx, ny), "wall", 1) > -1)
+if(gmt(nx, ny) != "concrete2")
 {
 npc_bounce();
 targety = safe_street_y(nx);
