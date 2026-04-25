@@ -1,4 +1,5 @@
 New in 3.0.
+Updated the readme to reflect the current state of the game, and added a full configuration files section documenting all config file formats, fields, placeholders, and section headers.
 Added mood tags to all customer dialogue lines. Each line now carries an internal tag such as happy, restless, impatient, or stern that describes the customer's emotional state at that point in the conversation. These tags are purely cosmetic for now, but will be used in the future.
 Added data/config/tables/customers.table, which defines customer type spawn weights, wave sizing rules, per-type movement speed and patience multipliers, and per-type dialogue lines including mood tags and walkoff lines.
 Added data/config/tables/main.table, which defines starting inventory values for a new game, lemonade quality thresholds, and all item definitions including whether each item is useable, recycleable, and what action it performs.
