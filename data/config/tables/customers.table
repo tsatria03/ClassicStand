@@ -1,4 +1,7 @@
 [types]
+
+; Required header — removing or renaming this will break the file.
+
 normal=6
 nice=1
 mean=1
@@ -12,6 +15,9 @@ child=1
 thief=1
 
 [waves]
+
+; Required header — removing or renaming this will break the file.
+
 base_min=1
 base_max=5
 extra_max=15
@@ -23,6 +29,9 @@ cold_temp=45
 hot_temp=85
 
 [movements]
+
+; Required header — removing or renaming this will break the file.
+
 normal:1.0:1.0:true
 nice:1.0:1.5:true
 mean:1.0:0.7:true
@@ -36,6 +45,9 @@ child:0.6:0.6:true
 thief:0.55:1.0:false
 
 [speeches]
+
+; Required header — removing or renaming this will break the file.
+
 normal=3
 1:happy:Just stopping by for a refreshing drink. Looks like a great stand!
 2:fine:Taking my time today. No rush, no rush.

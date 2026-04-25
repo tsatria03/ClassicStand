@@ -1,0 +1,62 @@
+dictionary passer_wave_settings;
+dictionary passer_behavior_settings;
+
+void load_passer_table_waves()
+{
+passer_wave_settings.delete_all();
+string[] lines = load_config_file("data/config/tables/passers.table");
+bool in_section = false;
+for(uint i = 0; i < lines.length(); i++)
+{
+string line = lines[i];
+if(line == "[waves]") { in_section = true; continue; }
+if(string_starts_with(line, "[")) { in_section = false; continue; }
+if(!in_section) continue;
+int eq = line.find("=");
+if(eq == -1) continue;
+string key = line.substr(0, eq).trim_whitespace();
+string val = line.substr(eq + 1).trim_whitespace();
+passer_wave_settings.set(key, val);
+}
+}
+
+void load_passer_table_behavior()
+{
+passer_behavior_settings.delete_all();
+string[] lines = load_config_file("data/config/tables/passers.table");
+bool in_section = false;
+for(uint i = 0; i < lines.length(); i++)
+{
+string line = lines[i];
+if(line == "[behaviors]") { in_section = true; continue; }
+if(string_starts_with(line, "[")) { in_section = false; continue; }
+if(!in_section) continue;
+int eq = line.find("=");
+if(eq == -1) continue;
+string key = line.substr(0, eq).trim_whitespace();
+string val = line.substr(eq + 1).trim_whitespace();
+passer_behavior_settings.set(key, val);
+}
+}
+
+double passer_wave_get(string key, double fallback)
+{
+if(!passer_wave_settings.exists(key)) return fallback;
+string v;
+passer_wave_settings.get(key, v);
+return string_to_number(v);
+}
+
+double passer_behavior_get(string key, double fallback)
+{
+if(!passer_behavior_settings.exists(key)) return fallback;
+string v;
+passer_behavior_settings.get(key, v);
+return string_to_number(v);
+}
+
+void load_passer_table()
+{
+load_passer_table_waves();
+load_passer_table_behavior();
+}

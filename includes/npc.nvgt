@@ -23,10 +23,14 @@ if(nx < targetx) nx++;
 else if(nx > targetx) nx--;
 if(ny < targety) ny++;
 else if(ny > targety) ny--;
-personpool.update_sound_2d(soundslot, nx, ny);
+update_sound_pos(nx, ny);
 if(nx != targetx || ny != targety)
 p.play_2d("sounds/platforms/"+gmt(nx, ny)+"/step"+random(1,5)+".ogg", me.x, me.y, nx, ny, false);
 steptimer.restart();
+}
+void update_sound_pos(int x, int y)
+{
+personpool.update_sound_2d(soundslot, x, y);
 }
 void update_extra() {}
 }

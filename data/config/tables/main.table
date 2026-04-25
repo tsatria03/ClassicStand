@@ -1,4 +1,7 @@
 [newgame]
+
+; Required header — removing or renaming this will break the file.
+
 cash=100
 reputation=100
 cups_min=3
@@ -15,6 +18,9 @@ salts_min=0
 salts_max=1
 
 [thresholds]
+
+; Required header — removing or renaming this will break the file.
+
 sour=0.35
 extreme_sour=0.6
 sweet=0.35
@@ -27,6 +33,9 @@ icy=0.3
 extreme_icy=1.0
 
 [items]
+
+; Required header — removing or renaming this will break the file.
+
 empty cup:Empty cup:false:true:none
 lemon:Lemon:false:true:none
 packet of sugar:Packet of sugar:false:true:none
@@ -39,3 +48,6 @@ used_napkin:Used napkin:true:false:toss
 basic poster:Basic poster:true:false:place_poster
 colorful poster:Colorful poster:true:false:place_poster
 premium poster:Premium poster:true:false:place_poster
+melted ice:Melted ice:false:true:none
+rotted lemon:Rotted lemon:false:true:none
+evaporated water:Evaporated water:false:true:none

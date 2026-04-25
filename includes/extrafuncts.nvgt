@@ -476,9 +476,13 @@ if(placed_posters > 0 && daynumber > 1)
 p.play_stationary("sounds/misc/destpost.ogg", false);
 dlg("Overnight, all " + placed_posters + " of your posters were taken down or wore out. You'll need to hang new ones today if you want the boost.");
 placed_posters = 0;
+poster_tiles.resize(0);
 }
 else
+{
 placed_posters = 0;
+poster_tiles.resize(0);
+}
 if(daynumber > 1)
 {
 string spoilage_msg = "";
@@ -489,7 +493,8 @@ if(ice_lost > 0)
 {
 ices -= ice_lost;
 if(ices < 0) ices = 0;
-spoilage_msg += "Your ice melted overnight. You lost " + int(ice_lost) + " bag" + (ice_lost == 1 ? "" : "s") + " of ice.--";
+give("melted ice", int(ice_lost));
+spoilage_msg += "Your ice melted overnight. You lost " + int(ice_lost) + " bag" + (ice_lost == 1 ? "" : "s") + " of ice. The melted ice has been added to your inventory to discard.--";
 }
 }
 if(lemons > 0)
@@ -499,7 +504,8 @@ if(lemons_lost > 0)
 {
 lemons -= lemons_lost;
 if(lemons < 0) lemons = 0;
-spoilage_msg += "Some of your lemons rotted overnight. You lost " + int(lemons_lost) + " lemon" + (lemons_lost == 1 ? "" : "s") + ".--";
+give("rotted lemon", int(lemons_lost));
+spoilage_msg += "Some of your lemons rotted overnight. You lost " + int(lemons_lost) + " lemon" + (lemons_lost == 1 ? "" : "s") + ". The rotted lemon" + (lemons_lost == 1 ? " has" : "s have") + " been added to your inventory to discard.--";
 }
 }
 if(waters > 0)
@@ -509,7 +515,8 @@ if(water_lost > 0)
 {
 waters -= water_lost;
 if(waters < 0) waters = 0;
-spoilage_msg += "Some of your water evaporated overnight. You lost " + int(water_lost) + " liter" + (water_lost == 1 ? "" : "s") + " of water.--";
+give("evaporated water", int(water_lost));
+spoilage_msg += "Some of your water evaporated overnight. You lost " + int(water_lost) + " liter" + (water_lost == 1 ? "" : "s") + " of water. The evaporated water has been added to your inventory to discard.--";
 }
 }
 if(spoilage_msg != "")

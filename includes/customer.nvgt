@@ -5,6 +5,7 @@ int get_cx() { return nx; }
 void set_cx(int v) { nx = v; }
 int get_cy() { return ny; }
 void set_cy(int v) { ny = v; }
+void update_sound_pos(int x, int y) override { custpool.update_sound_2d(soundslot, x, y); }
 int patience;
 string type;
 int group_size;
@@ -558,15 +559,37 @@ open_serve_menu();
 return;
 }
 setupmenu();
-m.add_item("Talk to this customer", "talk");
+string talk_label = "Talk to this customer";
+int si = get_customer_speeches_index(customers[idx].type);
+if(si >= 0 && customers[idx].talk_count <= customer_speeches[si].count)
+{
+int next_line = customers[idx].talk_count + 1;
+for(uint li = 0; li < customer_speeches[si].lines.length(); li++)
+{
+if(customer_speeches[si].lines[li].number == next_line)
+{
+talk_label += ". Current mood: " + customer_speeches[si].lines[li].mood;
+break;
+}
+}
+}
+m.add_item(talk_label, "talk");
 m.add_item("Serve this customer", "serve");
 m.add_item("Back", "back");
 string tlabel = customers[idx].type == "normal" ? "customer" : customers[idx].type + " customer";
 m.intro_text = "What would you like to do with this " + tlabel + "?";
-int mres = m.run();
+int sub_start = 0;
+if(last_menu_id != "")
+{
+int found = m.find_item_by_id(last_menu_id);
+if(found >= 0) sub_start = found;
+}
+int mres = m.run(sub_start, true);
 string choice = m.get_item_id(mres);
+if(mres != -1) last_menu_id = choice;
 if(mres == -1 || choice == "back")
 {
+last_menu_id = "";
 open_serve_menu();
 return;
 }
@@ -616,6 +639,8 @@ return;
 void open_serve_menu()
 {
 custpool.pause_all();
+personpool.pause_all();
+passerpool.pause_all();
 uint[] waiting_indices;
 for(uint i=0; i<customers.length(); i++)
 if(customers[i].waiting and !customers[i].leaving and customers[i].type != "thief")
@@ -623,6 +648,8 @@ waiting_indices.insert_last(i);
 if(waiting_indices.length() == 0)
 {
 custpool.resume_all();
+personpool.resume_all();
+passerpool.resume_all();
 return;
 }
 setupmenu();
@@ -647,11 +674,21 @@ m.add_item("Customer " + (i + 1) + tlabel + (dir == "at the counter" ? ", waitin
 if(waiting_indices.length() > 1) m.add_item("Serve all customers", "all");
 m.add_item("Back", "back");
 m.intro_text = "Serve menu. " + waiting_indices.length() + " customer" + (waiting_indices.length() == 1 ? "" : "s") + " waiting. You have " + int(fullcups) + " filled cup" + (fullcups == 1 ? "" : "s") + ".";
-int mres = m.run();
+int serve_start = 0;
+if(last_menu_id != "")
+{
+int found = m.find_item_by_id(last_menu_id);
+if(found >= 0) serve_start = found;
+}
+int mres = m.run(serve_start, true);
 string choice = m.get_item_id(mres);
+if(mres != -1) last_menu_id = choice;
 if(mres == -1 || choice == "back")
 {
+last_menu_id = "";
 custpool.resume_all();
+personpool.resume_all();
+passerpool.resume_all();
 return;
 }
 if(choice == "all")
@@ -795,11 +832,17 @@ summary += "Total collected: " + convert_to_currency(total_earned + total_tips) 
 }
 if(turned_away > 0) summary += "--You ran out of cups, so " + turned_away + " customer" + (turned_away == 1 ? "" : "s") + " got disappointed and stormed off.";
 dlgmessage(summary);
+last_menu_id = "";
 custpool.resume_all();
+personpool.resume_all();
+passerpool.resume_all();
 return;
 }
+string saved_serve_id = choice;
 int picked = string_to_int(choice.substr(1));
+last_menu_id = "";
 customer_submenu(picked);
+last_menu_id = saved_serve_id;
 }
 void check_customer_interaction()
 {

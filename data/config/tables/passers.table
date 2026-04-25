@@ -1,0 +1,17 @@
+[waves]
+
+; Required header — removing or renaming this will break the file.
+
+base_min=2
+base_max=4
+level_bonus=0.5
+day_bonus=0.25
+max_passers=10
+
+[behaviors]
+
+; Required header — removing or renaming this will break the file.
+
+convince_chance=10
+speed_min=300
+speed_max=500

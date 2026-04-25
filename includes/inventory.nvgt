@@ -153,8 +153,18 @@ if(placed_posters >= 10)
 speak("You already have 10 posters placed around the neighborhood. That's the maximum.");
 return;
 }
+string tile_key = string(int(me.x)) + "," + string(int(me.y));
+for(uint ti = 0; ti < poster_tiles.length(); ti++)
+{
+if(poster_tiles[ti] == tile_key)
+{
+speak("There's already a poster here. Place it somewhere else on the street.");
+return;
+}
+}
 p.play_stationary("sounds/misc/placepost.ogg", false);
 placed_posters += 1;
+poster_tiles.insert_last(tile_key);
 if(current == "basic poster") poster_basic -= 1;
 else if(current == "colorful poster") poster_colorful -= 1;
 else poster_premium -= 1;

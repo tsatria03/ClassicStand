@@ -80,12 +80,13 @@ Control+L: Reload your game.
 Alt+F4: Exit to the main menu without saving.
 Escape: Open the quit menu.
 
-Configuration files
+Configuration files for modders
 
 All configuration files are located in the data/config folder, split into three subfolders: events, stores, and tables.
 Lines starting with a semicolon, hash, or double slash are treated as comments and ignored by the parser.
 
-Four files, main.table and customers.table, use section headers in square brackets such as [newgame], [thresholds], [items], [types], [waves], [movements], and [speeches]. These are not cosmetic. The parser uses them to know which format to expect. Do not remove or rename these headers or the parser will not read the file correctly.
+Three files, main.table, customers.table, and passers.table, use section headers in square brackets. These are not cosmetic. The parser uses them to know which format to expect. Do not remove or rename these headers or the parser will not read the file correctly.
+Each functional header has a warning comment placed directly below it inside the file as a reminder. That comment is cosmetic and can be removed, but the header itself must stay exactly as written.
 
 The remaining files, main.event, single_ingredients.store, bundle_ingredients.store, single_posters.store, and bundle_posters.store, do not use functional section headers. Every line in those files follows the same format throughout.
 
@@ -144,6 +145,49 @@ The probability of this event firing when selected, from 1 to 100. Set to 0 to d
 description
 The message spoken to the player when this event fires. Use %amount% as a placeholder for the rolled value.
 
+bundle_ingredients.store
+
+Location: data/config/stores/bundle_ingredients.store
+
+Defines all ingredient bundle tiers available in the market.
+
+Format: bundle_id:display_name:quantity:description
+
+bundle_id
+The internal identifier for this bundle.
+
+display_name
+The name shown in the bundle menu.
+
+quantity
+How many of each core ingredient (cups, lemons, sugar, water) the bundle contains. Ice and salt are optional add-ons the player is asked about at purchase time.
+
+description
+Shown in the bundle menu. Use %quantity% as a placeholder for the bundle quantity.
+
+bundle_posters.store
+
+Location: data/config/stores/bundle_posters.store
+
+Defines all poster bundle packs available in the poster shop.
+
+Format: bundle_id:display_name:basic_qty:colorful_qty:premium_qty:discount:description
+
+bundle_id
+The internal identifier for this bundle.
+
+display_name
+The name shown in the bundle menu.
+
+basic_qty, colorful_qty, premium_qty
+How many of each poster type the bundle contains.
+
+discount
+The price discount applied to this bundle as a multiplier. Example: 0.9 means the bundle costs 10 percent less than buying the posters individually.
+
+description
+Shown in the bundle menu. Use %basic%, %colorful%, and %premium% as placeholders for the respective quantities.
+
 single_ingredients.store
 
 Location: data/config/stores/single_ingredients.store
@@ -170,26 +214,6 @@ An expression that controls how the cost scales. Supports level and day as varia
 description
 Shown in the store menu. Use %stock% as a placeholder for the player's current quantity of this item.
 
-bundle_ingredients.store
-
-Location: data/config/stores/bundle_ingredients.store
-
-Defines all ingredient bundle tiers available in the market.
-
-Format: bundle_id:display_name:quantity:description
-
-bundle_id
-The internal identifier for this bundle.
-
-display_name
-The name shown in the bundle menu.
-
-quantity
-How many of each core ingredient (cups, lemons, sugar, water) the bundle contains. Ice and salt are optional add-ons the player is asked about at purchase time.
-
-description
-Shown in the bundle menu. Use %quantity% as a placeholder for the bundle quantity.
-
 single_posters.store
 
 Location: data/config/stores/single_posters.store
@@ -213,28 +237,46 @@ An expression controlling how the cost scales. Supports level and day. Example: 
 description
 Shown in the store menu. Use %stock% as a placeholder for the player's current quantity of this poster type.
 
-bundle_posters.store
+customers.table
 
-Location: data/config/stores/bundle_posters.store
+Location: data/config/tables/customers.table
 
-Defines all poster bundle packs available in the poster shop.
+Defines all customer behavior including spawn weights, wave rules, movement, and dialogue.
 
-Format: bundle_id:display_name:basic_qty:colorful_qty:premium_qty:discount:description
+[types]
+Flat key=value spawn weights for each customer type. Higher values make that type more likely to appear.
 
-bundle_id
-The internal identifier for this bundle.
+[waves]
+Flat key=value settings controlling wave size.
 
-display_name
-The name shown in the bundle menu.
+base_min and base_max = random base customer count per wave.
+extra_max = maximum bonus customers added from level scaling.
+poster_wave_bonus = additional customers added per placed poster.
+max_customers = hard cap on total customers per wave.
+cold_guaranteed_min and cold_guaranteed_max = guaranteed customer count on cold days.
+cold_temp = temperature below which cold rules apply.
+hot_temp = temperature above which hot rules apply.
 
-basic_qty, colorful_qty, premium_qty
-How many of each poster type the bundle contains.
+[movements]
+Per-type movement and patience multipliers.
 
-discount
-The price discount applied to this bundle as a multiplier. Example: 0.9 means the bundle costs 10 percent less than buying the posters individually.
+Format: type:speed_multiplier:patience_multiplier:use_patience
 
-description
-Shown in the bundle menu. Use %basic%, %colorful%, and %premium% as placeholders for the respective quantities.
+speed_multiplier scales how fast this customer type walks. Values above 1.0 are slower, below 1.0 are faster.
+patience_multiplier scales how long this type waits before leaving. Values above 1.0 are more patient, below 1.0 are less patient.
+use_patience controls whether the patience timer is active for this type. Set to false for types that manage their own leaving logic.
+
+[speeches]
+Dialogue lines for each customer type.
+
+Each type block starts with type=count, where count is the number of regular talk lines.
+
+Each line follows the format: line_number:mood:text
+
+The line numbered one above the count is the walkoff line, spoken when the player has talked to the customer too many times.
+Mood tags are internal labels describing the customer's emotional state on that line. They are cosmetic for now and do not affect gameplay.
+
+Use %group_size% in group customer lines as a placeholder for the number of people in the group.
 
 main.table
 
@@ -288,46 +330,25 @@ toss = discards the item silently.
 place_poster = places the poster on the neighborhood street.
 inspect_cup = opens the filled cup inspection menu.
 
-customers.table
+passers.table
 
-Location: data/config/tables/customers.table
+Location: data/config/tables/passers.table
 
-Defines all customer behavior including spawn weights, wave rules, movement, and dialogue.
-
-[types]
-Flat key=value spawn weights for each customer type. Higher values make that type more likely to appear.
+Defines passerby wave sizing and behavior.
 
 [waves]
-Flat key=value settings controlling wave size.
+Flat key=value settings controlling how many passers spawn each time period.
 
-base_min and base_max = random base customer count per wave.
-extra_max = maximum bonus customers added from level scaling.
-poster_wave_bonus = additional customers added per placed poster.
-max_customers = hard cap on total customers per wave.
-cold_guaranteed_min and cold_guaranteed_max = guaranteed customer count on cold days.
-cold_temp = temperature below which cold rules apply.
-hot_temp = temperature above which hot rules apply.
+base_min and base_max = random base passer count per period.
+level_bonus = additional passers added per level. For example, 0.5 adds one extra passer every two levels.
+day_bonus = additional passers added per day. For example, 0.25 adds one extra passer every four days.
+max_passers = hard cap on total passers per period.
 
-[movements]
-Per-type movement and patience multipliers.
+[behaviors]
+Flat key=value settings controlling passer movement and poster interaction.
 
-Format: type:speed_multiplier:patience_multiplier:use_patience
-
-speed_multiplier scales how fast this customer type walks. Values above 1.0 are slower, below 1.0 are faster.
-patience_multiplier scales how long this type waits before leaving. Values above 1.0 are more patient, below 1.0 are less patient.
-use_patience controls whether the patience timer is active for this type. Set to false for types that manage their own leaving logic.
-
-[speeches]
-Dialogue lines for each customer type.
-
-Each type block starts with type=count, where count is the number of regular talk lines.
-
-Each line follows the format: line_number:mood:text
-
-The line numbered one above the count is the walkoff line, spoken when the player has talked to the customer too many times.
-Mood tags are internal labels describing the customer's emotional state on that line. They are cosmetic for now and do not affect gameplay.
-
-Use %group_size% in group customer lines as a placeholder for the number of people in the group.
+convince_chance = the percent chance per placed poster that a passer gets convinced to become a customer.
+speed_min and speed_max = the random step time range in milliseconds. Higher values are slower.
 
 Game conclusion
 

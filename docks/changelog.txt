@@ -1,3 +1,14 @@
+New in 3.1.
+Made it so passerby behavior is now fully data-driven. Wave sizing, level and day scaling, convince chance per poster, and movement speed are all loaded from data/config/tables/passers.table.
+Fixed a bug where the poster read sound would play once for every passerby that noticed a poster, causing it to stack up when multiple passers were convinced at the same time. It now plays once per wave at most.
+Made it so the serve menu and customer submenu now remember their position. When you return from serving or talking, the menu reopens focused on the same customer you were on.
+Made it so all menus now pause customer, person, and passerby sounds while open, and resume when you close or exit.
+Made it so spoiled and evaporated ingredients are now added to your inventory overnight so you can discard them with shift enter. Melted ice, rotted lemons, and evaporated water each show up as their own recycleable item.
+Made it so you can no longer place a poster on a tile that already has one. Attempting to do so tells you there is already a poster there and to place it somewhere else on the street.
+Made it so the talk menu item now shows the customer's current mood before you speak to them. For example, it will say talk to this customer, current mood: restless.
+Fixed a bug where passerbys were roaming the sidewalk, market, and lemonade stand instead of the actual neighborhood street. They now walk along the open street on both sides of the neighborhood, which is also where posters are placed.
+Fixed a bug where passerby sounds would cut off or play incorrectly as they walked around. Their sounds are now updated through the correct sound pool.
+Fixed a bug where passerbys could get stuck and never reach their waypoint. The waypoint check now only requires the horizontal position to match, since passers move diagonally and the vertical position may not land exactly.
 New in 3.0.
 Updated the readme to reflect the current state of the game, and added a full configuration files section documenting all config file formats, fields, placeholders, and section headers.
 Added mood tags to all customer dialogue lines. Each line now carries an internal tag such as happy, restless, impatient, or stern that describes the customer's emotional state at that point in the conversation. These tags are purely cosmetic for now, but will be used in the future.

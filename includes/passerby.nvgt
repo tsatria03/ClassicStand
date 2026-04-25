@@ -1,4 +1,5 @@
 passer@[] passers(0);
+bool readpost_played = false;
 class passer : npc
 {
 int poster_score;
@@ -8,26 +9,27 @@ int get_psx() { return nx; }
 void set_psx(int v) { nx = v; }
 int get_psy() { return ny; }
 void set_psy(int v) { ny = v; }
+void update_sound_pos(int x, int y) override { passerpool.update_sound_2d(soundslot, x, y); }
 passer(int x, int y)
 {
-super(x, y, random(300, 500));
+super(x, y, random(int(passer_behavior_get("speed_min", 300)), int(passer_behavior_get("speed_max", 500))));
 poster_score = 0;
 convinced = false;
 read_poster = false;
 soundslot = passerpool.play_extended_2d("sounds/misc/person.ogg", me.x, me.y, nx, ny, 0, 0, 0, 0, true, 0, 0, 0, pitch, false);
 targetx = (x > 25) ? 1 : 49;
-targety = random(1, 49);
+targety = random_street_y();
 }
 void update_extra()
 {
 if(convinced) return;
 if(!read_poster && placed_posters > 0 && nx >= 1 && nx <= 49)
 {
-int chance = placed_posters * 10;
+int chance = int(placed_posters * passer_behavior_get("convince_chance", 10));
 if(random(0, 99) < chance)
 {
 read_poster = true;
-p.play_2d("sounds/misc/readpost.ogg", me.x, me.y, nx, ny, false);
+if(!readpost_played) { p.play_stationary("sounds/misc/readpost.ogg", false); readpost_played = true; }
 convinced = true;
 targetx = 14;
 targety = 25;
@@ -50,22 +52,34 @@ speak("Someone on the street noticed your poster and is heading to your stand!")
 }
 bool at_waypoint()
 {
-return nx == targetx && ny == targety;
+return nx == targetx;
 }
 void flip_waypoint()
 {
 if(targetx <= 25) targetx = 49;
 else targetx = 1;
-targety = random(1, 49);
+targety = random_street_y();
 }
 }
+int random_street_y()
+{
+if(random(0, 1) == 0) return random(1, 17);
+return random(33, 49);
+}
+
 void spawn_passers()
 {
-int count = random(2, 4);
+readpost_played = false;
+int base_min  = int(passer_wave_get("base_min",  2));
+int base_max  = int(passer_wave_get("base_max",  4));
+int max_p     = int(passer_wave_get("max_passers", 12));
+double lbonus = passer_wave_get("level_bonus", 0.5);
+double dbonus = passer_wave_get("day_bonus",   0.25);
+int count = clamp(random(base_min, base_max) + int(floor(level * lbonus)) + int(floor(daynumber * dbonus)), base_min, max_p);
 for(int i = 0; i < count; i++)
 {
 int sx = random(1, 49);
-int sy = random(1, 49);
+int sy = random_street_y();
 passer ps(sx, sy);
 passers.insert_last(ps);
 }

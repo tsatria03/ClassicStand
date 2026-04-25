@@ -20,6 +20,7 @@
 #include"bundle_poster_store.nvgt"
 #include"main_table.nvgt"
 #include"customer_table.nvgt"
+#include"passer_table.nvgt"
 #include"extrafuncts.nvgt"
 #include"form.nvgt"
 #include"game.nvgt"

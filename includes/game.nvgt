@@ -8,6 +8,7 @@ load_bundle_poster_store();
 load_main_table_thresholds();
 load_main_table_items();
 load_customer_table();
+load_passer_table();
 load_map("neighborhood");
 napkin_giver_index = 0;
 spawn_customer_wave();
@@ -50,20 +51,35 @@ string triggered = get_menu_trigger_at(me.x, me.y);
 if(triggered == "buymenu")
 {
 last_menu_id="";
+custpool.pause_all();
+personpool.pause_all();
+passerpool.pause_all();
 buymenu();
+custpool.resume_all();
 personpool.resume_all();
+passerpool.resume_all();
 }
 else if(triggered == "actsmenu")
 {
 last_menu_id="";
+custpool.pause_all();
+personpool.pause_all();
+passerpool.pause_all();
 actsmenu();
+custpool.resume_all();
 personpool.resume_all();
+passerpool.resume_all();
 }
 else if(triggered == "postermenu")
 {
 last_menu_id="";
+custpool.pause_all();
+personpool.pause_all();
+passerpool.pause_all();
 postermenu();
+custpool.resume_all();
 personpool.resume_all();
+passerpool.resume_all();
 }
 else
 {
@@ -87,8 +103,13 @@ speak("No item in focus.");
 }
 if(key_pressed(KEY_I))
 {
+custpool.pause_all();
+personpool.pause_all();
+passerpool.pause_all();
 infomenu();
+custpool.resume_all();
 personpool.resume_all();
+passerpool.resume_all();
 }
 if(key_pressed(KEY_B))
 {
