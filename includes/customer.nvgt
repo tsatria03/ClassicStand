@@ -1,18 +1,16 @@
 customer@[] customers(0);
-class customer
+class customer : npc
 {
-int cx, cy;
-int targetx, targety;
-int steptime;
+int get_cx() { return nx; }
+void set_cx(int v) { nx = v; }
+int get_cy() { return ny; }
+void set_cy(int v) { ny = v; }
 int patience;
-int soundslot;
-int pitch;
 string type;
 int group_size;
 int talk_count;
 string stolen_item;
 int stolen_amount;
-timer steptimer;
 timer patiencetimer;
 bool waiting;
 bool leaving;
@@ -21,11 +19,9 @@ bool spilled;
 bool read_poster;
 customer(int sx, int sy, int sp, int pat, string t="normal", int gs=1)
 {
-cx=sx;
-cy=sy;
+super(sx, sy, sp);
 targetx=14;
 targety=25;
-steptime=sp;
 patience=pat;
 waiting=false;
 leaving=false;
@@ -37,8 +33,7 @@ group_size=gs;
 talk_count=0;
 stolen_item="";
 stolen_amount=0;
-pitch=random(80, 120);
-soundslot=personpool.play_extended_2d("sounds/misc/customer.ogg", me.x, me.y, cx, cy, 0, 0, 0, 0, true, 0, 0, 0, pitch, false);
+soundslot=personpool.play_extended_2d("sounds/misc/customer.ogg", me.x, me.y, nx, ny, 0, 0, 0, 0, true, 0, 0, 0, pitch, false);
 if(type == "desperate")
 speak("Someone is sprinting toward your stand in a panic! They look absolutely parched!");
 else if(type == "charitable")
@@ -65,6 +60,200 @@ else if(temperature < 45)
 speak("A customer is slowly making their way to your stand.");
 else
 speak("A customer is arriving at your stand.");
+}
+void update_extra()
+{
+if(leaving)
+{
+if(type == "thief" && stolen_amount > 0 && int(me.x)==nx && int(me.y)==ny)
+{
+string recovered = "";
+if(stolen_item == "cash") { cash += stolen_amount; recovered = convert_to_currency(stolen_amount); }
+else if(stolen_item == "lemon") { lemons += stolen_amount; recovered = stolen_amount == 1 ? "1 lemon" : stolen_amount + " lemons"; }
+else if(stolen_item == "sugar") { sugars += stolen_amount; recovered = stolen_amount == 1 ? "1 packet of sugar" : stolen_amount + " packets of sugar"; }
+else if(stolen_item == "water") { waters += stolen_amount; recovered = stolen_amount == 1 ? "1 liter of water" : stolen_amount + " liters of water"; }
+else if(stolen_item == "ice") { ices += stolen_amount; recovered = stolen_amount == 1 ? "1 bag of ice" : stolen_amount + " bags of ice"; }
+else if(stolen_item == "salt") { salts += stolen_amount; recovered = stolen_amount == 1 ? "1 packet of salt" : stolen_amount + " packets of salt"; }
+else if(stolen_item == "cup") { cups += stolen_amount; recovered = stolen_amount == 1 ? "1 empty cup" : stolen_amount + " empty cups"; }
+stolen_amount = 0;
+stolen_item = "";
+double rep_gain = 1.0 + (daynumber / 10.0);
+reputation = min(200.0, reputation + rep_gain);
+if(reputation > peak_reputation) peak_reputation = reputation;
+speak("You caught the thief! They dropped " + recovered + " and ran off!");
+}
+return;
+}
+if(!waiting)
+{
+if(!read_poster && placed_posters > 0 && nx <= 44 && nx >= 30)
+{
+read_poster = true;
+p.play_2d("sounds/misc/readpost.ogg", me.x, me.y, nx, ny, false);
+}
+if(nx == targetx && ny == targety)
+{
+waiting = true;
+wave_started = true;
+patiencetimer.restart();
+personpool.play_extended_2d("sounds/misc/customer.ogg", me.x, me.y, nx, ny, 0, 0, 0, 0, false, 0, 0, 0, pitch, false);
+if(type == "thief")
+{
+if(int(me.x)==14 && int(me.y)==25)
+{
+speak("The shifty person spotted you at the counter and bolted!");
+leaving=true;
+targetx=random(47, 49);
+targety=random(21, 29);
+steptimer.restart();
+}
+else
+{
+int dist = abs(int(me.x) - nx) + abs(int(me.y) - ny);
+if(dist <= 10)
+{
+string[] stealable;
+if(lemons > 0) stealable.insert_last("lemon");
+if(sugars > 0) stealable.insert_last("sugar");
+if(waters > 0) stealable.insert_last("water");
+if(ices > 0) stealable.insert_last("ice");
+if(salts > 0) stealable.insert_last("salt");
+if(cups > 0) stealable.insert_last("cup");
+if(stealable.length() == 0)
+{
+speak("The thief reached your stand but found nothing worth stealing and left.");
+leaving=true;
+targetx=random(47, 49);
+targety=random(21, 29);
+steptimer.restart();
+}
+else
+{
+string item = stealable[random(0, stealable.length()-1)];
+int amt = random(1, 3);
+string item_name = "";
+if(item == "lemon") { amt = min(amt, int(lemons)); lemons -= amt; item_name = amt == 1 ? "1 lemon" : amt + " lemons"; stolen_item = "lemon"; }
+else if(item == "sugar") { amt = min(amt, int(sugars)); sugars -= amt; item_name = amt == 1 ? "1 packet of sugar" : amt + " packets of sugar"; stolen_item = "sugar"; }
+else if(item == "water") { amt = min(amt, int(waters)); waters -= amt; item_name = amt == 1 ? "1 liter of water" : amt + " liters of water"; stolen_item = "water"; }
+else if(item == "ice") { amt = min(amt, int(ices)); ices -= amt; item_name = amt == 1 ? "1 bag of ice" : amt + " bags of ice"; stolen_item = "ice"; }
+else if(item == "salt") { amt = min(amt, int(salts)); salts -= amt; item_name = amt == 1 ? "1 packet of salt" : amt + " packets of salt"; stolen_item = "salt"; }
+else if(item == "cup") { amt = min(amt, int(cups)); cups -= amt; item_name = amt == 1 ? "1 empty cup" : amt + " empty cups"; stolen_item = "cup"; }
+stolen_amount = amt;
+steptime = int(steptime * 0.5);
+dlg("A thief snatched " + item_name + " from your stand! Chase them down to get it back!");
+leaving=true;
+targetx=random(47, 49);
+targety=random(21, 29);
+steptimer.restart();
+}
+}
+else
+{
+if(random(0, 1) == 0 && cash > 0)
+{
+int stolen_cash = int(min(cash, random(50 * level * daynumber, 200 * level * daynumber)));
+cash -= stolen_cash;
+stolen_item = "cash";
+stolen_amount = stolen_cash;
+steptime = int(steptime * 0.5);
+dlg("While you were away, a thief raided your cash box and made off with " + convert_to_currency(stolen_cash) + "!");
+}
+else
+{
+dlg("While you were away, a shifty person was seen lurking around your stand. It doesn't look like they took anything this time.");
+}
+leaving=true;
+targetx=random(47, 49);
+targety=random(21, 29);
+steptimer.restart();
+}
+}
+}
+if(type != "thief")
+{
+int dx = nx - int(me.x);
+int dy = ny - int(me.y);
+string dir = "";
+if(dy > 0 && dx == 0) dir = "north";
+else if(dy < 0 && dx == 0) dir = "south";
+else if(dx > 0 && dy == 0) dir = "east";
+else if(dx < 0 && dy == 0) dir = "west";
+else if(dx > 0 && dy > 0) dir = "northeast";
+else if(dx < 0 && dy > 0) dir = "northwest";
+else if(dx > 0 && dy < 0) dir = "southeast";
+else if(dx < 0 && dy < 0) dir = "southwest";
+else dir = "at the counter";
+string dir_phrase = (dir == "at the counter") ? "They are " + dir + "." : "They are to your " + dir + ".";
+if(type == "group")
+speak("Someone ordering for a group of " + group_size + " has arrived at your stand. " + dir_phrase);
+else if(type == "desperate")
+speak("A desperate customer has arrived at your stand, gasping for a drink. " + dir_phrase);
+else if(type == "charitable")
+speak("A charitable customer has arrived at your stand. " + dir_phrase);
+else if(type == "critic")
+speak("A well-dressed stranger has arrived at your stand. " + dir_phrase);
+else if(type == "elderly")
+speak("An elderly customer has arrived at your stand. " + dir_phrase);
+else if(type == "child")
+speak("A child has arrived at your stand. " + dir_phrase);
+else if(type == "returning")
+speak("A returning customer has arrived at your stand. " + dir_phrase);
+else if(type == "nice")
+speak("A friendly customer has arrived at your stand. " + dir_phrase);
+else if(type == "mean")
+speak("An irritated-looking customer has arrived at your stand. " + dir_phrase);
+else
+speak("A customer has arrived at your stand. " + dir_phrase);
+string greeting;
+if(type == "desperate")
+{ string[] g = {"Please, I'm absolutely dying of thirst! Give me anything cold!", "I've been walking for hours! I need lemonade, now!"}; greeting = g[random(0, g.length()-1)]; }
+else if(type == "charitable")
+{ string[] g = {"Hi there! I'd like to buy a cup for someone in need nearby.", "Could I get a cup? There's someone down the street who really needs it."}; greeting = g[random(0, g.length()-1)]; }
+else if(type == "group")
+{ string[] g = {"Hi! There are " + group_size + " of us, we'd all love a cup!", "We heard this is the best lemonade stand around. " + group_size + " cups please!"}; greeting = g[random(0, g.length()-1)]; }
+else if(type == "returning")
+{ string[] g = {"I was here earlier and your lemonade was amazing! I had to come back.", "Your lemonade is the best I've had all day. One more please!"}; greeting = g[random(0, g.length()-1)]; }
+else if(type == "critic")
+{ string[] g = {"Interesting establishment. I'll have one cup, please.", "I've been reviewing lemonade stands across town. Let's see what you've got."}; greeting = g[random(0, g.length()-1)]; }
+else if(type == "nice")
+{ string[] g = {"What a wonderful stand you have here! I'd love a lemonade please!", "You're doing a great job! Could I get a cup of lemonade?"}; greeting = g[random(0, g.length()-1)]; }
+else if(type == "mean")
+{ string[] g = {"Finally! I've been waiting forever. Just give me a lemonade.", "This better be worth it. I'll take one cup."}; greeting = g[random(0, g.length()-1)]; }
+else if(type == "elderly")
+{ string[] g = {"Hello dear, could I trouble you for a nice cup of lemonade?", "What a lovely little stand! A cup of lemonade would be wonderful, thank you."}; greeting = g[random(0, g.length()-1)]; }
+else if(type == "child")
+{ string[] g = {"Ooh ooh! Can I have a lemonade? Please please please!", "I have some coins! Can I have a lemonade?"}; greeting = g[random(0, g.length()-1)]; }
+else if(temperature > 85)
+{ string[] g = {"Whew, it is scorching out here! I need something cold, and fast!", "This heat is unbearable. Please tell me you have something cold!"}; greeting = g[random(0, g.length()-1)]; }
+else if(temperature < 45)
+{ string[] g = {"It's quite chilly today, but a nice lemonade still sounds lovely.", "Brr, not the best weather for lemonade, but here I am anyway!"}; greeting = g[random(0, g.length()-1)]; }
+else
+{ string[] g = {"What a lovely day for some lemonade!", "I'd love a nice cup of lemonade please."}; greeting = g[random(0, g.length()-1)]; }
+wait(500);
+speak("The customer says, " + greeting);
+}
+}
+}
+else
+{
+if(patiencetimer.elapsed >= patience)
+{
+string leave_msg = "";
+if(type == "mean") leave_msg = "The irritated customer stormed off. What a waste of time!";
+else if(type == "desperate") leave_msg = "The desperate customer couldn't wait any longer and ran off!";
+else if(type == "child") leave_msg = "The child got bored and ran off.";
+else if(type == "elderly") leave_msg = "The elderly customer sighed and slowly walked away.";
+else leave_msg = "A customer got tired of waiting and left.";
+speak(leave_msg);
+double rep_loss = 2.0 + level + (daynumber / 5.0);
+reputation = max(0.0, reputation - rep_loss);
+check_reputation();
+leaving = true;
+targetx = random(47, 49);
+targety = random(21, 29);
+steptimer.restart();
+}
+}
 }
 }
 void serve_customer(uint idx)
@@ -481,8 +670,8 @@ setupmenu();
 for(uint i=0; i<waiting_indices.length(); i++)
 {
 uint idx = waiting_indices[i];
-int dx = customers[idx].cx - int(me.x);
-int dy = customers[idx].cy - int(me.y);
+int dx = customers[idx].nx - int(me.x);
+int dy = customers[idx].ny - int(me.y);
 string dir = "";
 if(dy > 0 && dx == 0) dir = "north";
 else if(dy < 0 && dx == 0) dir = "south";
@@ -732,16 +921,14 @@ return;
 }
 if(!wave_ending)
 {
-bool all_done=customers.length()==0 and wave_started;
+bool all_done = customers.length()==0 and wave_started;
 if(!all_done)
 {
-all_done=true;
+all_done = true;
 for(uint i=0; i<customers.length(); i++)
 {
-if(!customers[i].leaving)
-{ all_done=false; break; }
-if(customers[i].leaving and (customers[i].cx!=customers[i].targetx or customers[i].cy!=customers[i].targety))
-{ all_done=false; break; }
+if(!customers[i].leaving) { all_done=false; break; }
+if(customers[i].leaving and (customers[i].nx!=customers[i].targetx or customers[i].ny!=customers[i].targety)) { all_done=false; break; }
 }
 }
 if(all_done)
@@ -754,42 +941,11 @@ speak("The wave is over. The time period will advance in 10 seconds.");
 }
 for(uint i=0; i<customers.length(); i++)
 {
+customers[i].update_extra();
 if(customers[i].leaving)
 {
-if(customers[i].type == "thief" && customers[i].stolen_amount > 0 && int(me.x)==customers[i].cx && int(me.y)==customers[i].cy)
-{
-int amt = customers[i].stolen_amount;
-string recovered = "";
-if(customers[i].stolen_item == "cash") { cash += amt; recovered = convert_to_currency(amt); }
-else if(customers[i].stolen_item == "lemon") { lemons += amt; recovered = amt == 1 ? "1 lemon" : amt + " lemons"; }
-else if(customers[i].stolen_item == "sugar") { sugars += amt; recovered = amt == 1 ? "1 packet of sugar" : amt + " packets of sugar"; }
-else if(customers[i].stolen_item == "water") { waters += amt; recovered = amt == 1 ? "1 liter of water" : amt + " liters of water"; }
-else if(customers[i].stolen_item == "ice") { ices += amt; recovered = amt == 1 ? "1 bag of ice" : amt + " bags of ice"; }
-else if(customers[i].stolen_item == "salt") { salts += amt; recovered = amt == 1 ? "1 packet of salt" : amt + " packets of salt"; }
-else if(customers[i].stolen_item == "cup") { cups += amt; recovered = amt == 1 ? "1 empty cup" : amt + " empty cups"; }
-customers[i].stolen_amount = 0;
-customers[i].stolen_item = "";
-double rep_gain = 1.0 + (daynumber / 10.0);
-reputation = min(200.0, reputation + rep_gain);
-if(reputation > peak_reputation) peak_reputation = reputation;
-speak("You caught the thief! They dropped " + recovered + " and ran off!");
-}
-if(customers[i].steptimer.elapsed>=customers[i].steptime)
-{
-if(customers[i].cx<customers[i].targetx)
-customers[i].cx++;
-else if(customers[i].cx>customers[i].targetx)
-customers[i].cx--;
-if(customers[i].cy<customers[i].targety)
-customers[i].cy++;
-else if(customers[i].cy>customers[i].targety)
-customers[i].cy--;
-personpool.update_sound_2d(customers[i].soundslot, customers[i].cx, customers[i].cy);
-if(customers[i].cx!=customers[i].targetx or customers[i].cy!=customers[i].targety)
-p.play_2d("sounds/platforms/"+gmt(customers[i].cx,customers[i].cy)+"/step"+random(1,5)+".ogg",me.x,me.y,customers[i].cx,customers[i].cy,false);
-customers[i].steptimer.restart();
-}
-if(customers[i].cx==customers[i].targetx and customers[i].cy==customers[i].targety)
+customers[i].move_step();
+if(customers[i].nx==customers[i].targetx and customers[i].ny==customers[i].targety)
 {
 personpool.destroy_sound(customers[i].soundslot);
 customers.remove_at(i);
@@ -798,191 +954,7 @@ i--;
 continue;
 }
 if(!customers[i].waiting)
-{
-if(customers[i].steptimer.elapsed>=customers[i].steptime)
-{
-if(customers[i].cx<customers[i].targetx)
-customers[i].cx++;
-else if(customers[i].cx>customers[i].targetx)
-customers[i].cx--;
-if(customers[i].cy<customers[i].targety)
-customers[i].cy++;
-else if(customers[i].cy>customers[i].targety)
-customers[i].cy--;
-personpool.update_sound_2d(customers[i].soundslot, customers[i].cx, customers[i].cy);
-if(!customers[i].read_poster && placed_posters > 0 && customers[i].cx <= 44 && customers[i].cx >= 30)
-{
-customers[i].read_poster = true;
-p.play_2d("sounds/misc/readpost.ogg", me.x, me.y, customers[i].cx, customers[i].cy, false);
-}
-if(customers[i].cx!=customers[i].targetx or customers[i].cy!=customers[i].targety)
-p.play_2d("sounds/platforms/"+gmt(customers[i].cx,customers[i].cy)+"/step"+random(1,5)+".ogg",me.x,me.y,customers[i].cx,customers[i].cy,false);
-else
-{
-customers[i].waiting=true;
-wave_started=true;
-customers[i].patiencetimer.restart();
-personpool.play_extended_2d("sounds/misc/customer.ogg", me.x, me.y, customers[i].cx, customers[i].cy, 0, 0, 0, 0, false, 0, 0, 0, customers[i].pitch, false);
-if(customers[i].type == "thief")
-{
-if(int(me.x)==14 and int(me.y)==25)
-{
-speak("The shifty person spotted you at the counter and bolted!");
-customers[i].leaving=true;
-customers[i].targetx=random(47, 49);
-customers[i].targety=random(21, 29);
-customers[i].steptimer.restart();
-}
-else
-{
-int dist = abs(int(me.x) - customers[i].cx) + abs(int(me.y) - customers[i].cy);
-if(dist <= 10)
-{
-string[] stealable;
-if(lemons > 0) stealable.insert_last("lemon");
-if(sugars > 0) stealable.insert_last("sugar");
-if(waters > 0) stealable.insert_last("water");
-if(ices > 0) stealable.insert_last("ice");
-if(salts > 0) stealable.insert_last("salt");
-if(cups > 0) stealable.insert_last("cup");
-if(stealable.length() == 0)
-{
-speak("The thief reached your stand but found nothing worth stealing and left.");
-customers[i].leaving=true;
-customers[i].targetx=random(47, 49);
-customers[i].targety=random(21, 29);
-customers[i].steptimer.restart();
-}
-else
-{
-string item = stealable[random(0, stealable.length()-1)];
-int amt = random(1, 3);
-string item_name = "";
-if(item == "lemon") { amt = min(amt, int(lemons)); lemons -= amt; item_name = amt == 1 ? "1 lemon" : amt + " lemons"; customers[i].stolen_item = "lemon"; }
-else if(item == "sugar") { amt = min(amt, int(sugars)); sugars -= amt; item_name = amt == 1 ? "1 packet of sugar" : amt + " packets of sugar"; customers[i].stolen_item = "sugar"; }
-else if(item == "water") { amt = min(amt, int(waters)); waters -= amt; item_name = amt == 1 ? "1 liter of water" : amt + " liters of water"; customers[i].stolen_item = "water"; }
-else if(item == "ice") { amt = min(amt, int(ices)); ices -= amt; item_name = amt == 1 ? "1 bag of ice" : amt + " bags of ice"; customers[i].stolen_item = "ice"; }
-else if(item == "salt") { amt = min(amt, int(salts)); salts -= amt; item_name = amt == 1 ? "1 packet of salt" : amt + " packets of salt"; customers[i].stolen_item = "salt"; }
-else if(item == "cup") { amt = min(amt, int(cups)); cups -= amt; item_name = amt == 1 ? "1 empty cup" : amt + " empty cups"; customers[i].stolen_item = "cup"; }
-customers[i].stolen_amount = amt;
-customers[i].steptime = int(customers[i].steptime * 0.5);
-dlg("A thief snatched " + item_name + " from your stand! Chase them down to get it back!");
-customers[i].leaving=true;
-customers[i].targetx=random(47, 49);
-customers[i].targety=random(21, 29);
-customers[i].steptimer.restart();
-}
-}
-else
-{
-if(random(0, 1) == 0 && cash > 0)
-{
-int stolen_cash = int(min(cash, random(50 * level * daynumber, 200 * level * daynumber)));
-cash -= stolen_cash;
-customers[i].stolen_item = "cash";
-customers[i].stolen_amount = stolen_cash;
-customers[i].steptime = int(customers[i].steptime * 0.5);
-dlg("While you were away, a thief raided your cash box and made off with " + convert_to_currency(stolen_cash) + "!");
-}
-else
-{
-dlg("While you were away, a shifty person was seen lurking around your stand. It doesn't look like they took anything this time.");
-}
-customers[i].leaving=true;
-customers[i].targetx=random(47, 49);
-customers[i].targety=random(21, 29);
-customers[i].steptimer.restart();
-}
-}
-if(customers[i].type != "thief")
-{
-int dx = customers[i].cx - int(me.x);
-int dy = customers[i].cy - int(me.y);
-string dir = "";
-if(dy > 0 && dx == 0) dir = "north";
-else if(dy < 0 && dx == 0) dir = "south";
-else if(dx > 0 && dy == 0) dir = "east";
-else if(dx < 0 && dy == 0) dir = "west";
-else if(dx > 0 && dy > 0) dir = "northeast";
-else if(dx < 0 && dy > 0) dir = "northwest";
-else if(dx > 0 && dy < 0) dir = "southeast";
-else if(dx < 0 && dy < 0) dir = "southwest";
-else dir = "at the counter";
-string dir_phrase = (dir == "at the counter") ? "They are " + dir + "." : "They are to your " + dir + ".";
-string ctype = customers[i].type;
-if(ctype == "group")
-speak("Someone ordering for a group of " + customers[i].group_size + " has arrived at your stand. " + dir_phrase);
-else if(ctype == "desperate")
-speak("A desperate customer has arrived at your stand, gasping for a drink. " + dir_phrase);
-else if(ctype == "charitable")
-speak("A charitable customer has arrived at your stand. " + dir_phrase);
-else if(ctype == "critic")
-speak("A well-dressed stranger has arrived at your stand. " + dir_phrase);
-else if(ctype == "elderly")
-speak("An elderly customer has arrived at your stand. " + dir_phrase);
-else if(ctype == "child")
-speak("A child has arrived at your stand. " + dir_phrase);
-else if(ctype == "returning")
-speak("A returning customer has arrived at your stand. " + dir_phrase);
-else if(ctype == "nice")
-speak("A friendly customer has arrived at your stand. " + dir_phrase);
-else if(ctype == "mean")
-speak("An irritated-looking customer has arrived at your stand. " + dir_phrase);
-else
-speak("A customer has arrived at your stand. " + dir_phrase);
-string greeting;
-if(ctype == "desperate")
-{ string[] g = {"Please, I'm absolutely dying of thirst! Give me anything cold!", "I've been walking for hours! I need lemonade, now!"}; greeting = g[random(0, g.length()-1)]; }
-else if(ctype == "charitable")
-{ string[] g = {"Hi there! I'd like to buy a cup for someone in need nearby.", "Could I get a cup? There's someone down the street who really needs it."}; greeting = g[random(0, g.length()-1)]; }
-else if(ctype == "group")
-{ string[] g = {"Hi! There are " + customers[i].group_size + " of us, we'd all love a cup!", "We heard this is the best lemonade stand around. " + customers[i].group_size + " cups please!"}; greeting = g[random(0, g.length()-1)]; }
-else if(ctype == "returning")
-{ string[] g = {"I was here earlier and your lemonade was amazing! I had to come back.", "Your lemonade is the best I've had all day. One more please!"}; greeting = g[random(0, g.length()-1)]; }
-else if(ctype == "critic")
-{ string[] g = {"Interesting establishment. I'll have one cup, please.", "I've been reviewing lemonade stands across town. Let's see what you've got."}; greeting = g[random(0, g.length()-1)]; }
-else if(ctype == "nice")
-{ string[] g = {"What a wonderful stand you have here! I'd love a lemonade please!", "You're doing a great job! Could I get a cup of lemonade?"}; greeting = g[random(0, g.length()-1)]; }
-else if(ctype == "mean")
-{ string[] g = {"Finally! I've been waiting forever. Just give me a lemonade.", "This better be worth it. I'll take one cup."}; greeting = g[random(0, g.length()-1)]; }
-else if(ctype == "elderly")
-{ string[] g = {"Hello dear, could I trouble you for a nice cup of lemonade?", "What a lovely little stand! A cup of lemonade would be wonderful, thank you."}; greeting = g[random(0, g.length()-1)]; }
-else if(ctype == "child")
-{ string[] g = {"Ooh ooh! Can I have a lemonade? Please please please!", "I have some coins! Can I have a lemonade?"}; greeting = g[random(0, g.length()-1)]; }
-else if(temperature > 85)
-{ string[] g = {"Whew, it is scorching out here! I need something cold, and fast!", "This heat is unbearable. Please tell me you have something cold!"}; greeting = g[random(0, g.length()-1)]; }
-else if(temperature < 45)
-{ string[] g = {"It's quite chilly today, but a nice lemonade still sounds lovely.", "Brr, not the best weather for lemonade, but here I am anyway!"}; greeting = g[random(0, g.length()-1)]; }
-else
-{ string[] g = {"What a lovely day for some lemonade!", "I'd love a nice cup of lemonade please."}; greeting = g[random(0, g.length()-1)]; }
-wait(500);
-speak("The customer says, " + greeting);
-}
-}
-}
-customers[i].steptimer.restart();
-}
-}
-else
-{
-if(customers[i].patiencetimer.elapsed>=customers[i].patience)
-{
-string leave_msg = "";
-if(customers[i].type == "mean") leave_msg = "The irritated customer stormed off. What a waste of time!";
-else if(customers[i].type == "desperate") leave_msg = "The desperate customer couldn't wait any longer and ran off!";
-else if(customers[i].type == "child") leave_msg = "The child got bored and ran off.";
-else if(customers[i].type == "elderly") leave_msg = "The elderly customer sighed and slowly walked away.";
-else leave_msg = "A customer got tired of waiting and left.";
-speak(leave_msg);
-double rep_loss = 2.0 + level + (daynumber / 5.0);
-reputation=max(0.0, reputation-rep_loss);
-check_reputation();
-customers[i].leaving=true;
-customers[i].targetx=random(47, 49);
-customers[i].targety=random(21, 29);
-customers[i].steptimer.restart();
-}
-}
+customers[i].move_step();
 }
 }
 void destroy_all_customers()

@@ -1,95 +1,79 @@
 person@[] persons(0);
-class person
+class person : npc
 {
+string text;
 bool automatic;
 bool in_range;
-int persosound;
-int persx, persy;
-int targetx, targety;
-int steptime;
-timer steptimer;
-string text;
+int get_px() { return nx; }
+void set_px(int v) { nx = v; }
+int get_py() { return ny; }
+void set_py(int v) { ny = v; }
 person(int px, int py, string txt, bool acl, int sp=300)
 {
-persx=px;
-persy=py;
-targetx=px;
-targety=py;
-text=txt;
-automatic=acl;
-in_range=false;
-steptime=sp;
-persosound=personpool.play_2d("sounds/misc/person.ogg", me.x, me.y, persx, persy, true);
+super(px, py, sp);
+text = txt;
+automatic = acl;
+in_range = false;
+soundslot = personpool.play_2d("sounds/misc/person.ogg", me.x, me.y, nx, ny, true);
 }
-}
-void update_persons()
+void update_extra()
 {
-for(uint i=0; i<persons.length(); i++)
+bool in_area = nx == int(me.x) && ny == int(me.y);
+if(automatic)
 {
-if(persons[i].steptimer.elapsed>=persons[i].steptime)
+if(in_area && !in_range)
 {
-if(persons[i].persx<persons[i].targetx)
-persons[i].persx++;
-else if(persons[i].persx>persons[i].targetx)
-persons[i].persx--;
-if(persons[i].persy<persons[i].targety)
-persons[i].persy++;
-else if(persons[i].persy>persons[i].targety)
-persons[i].persy--;
-personpool.update_sound_2d(persons[i].persosound, persons[i].persx, persons[i].persy);
-if(persons[i].persx!=persons[i].targetx or persons[i].persy!=persons[i].targety)
-p.play_2d("sounds/platforms/"+gmt(persons[i].persx,persons[i].persy)+"/step"+random(1,5)+".ogg",me.x,me.y,persons[i].persx,persons[i].persy,false);
-persons[i].steptimer.restart();
-}
-}
-}
-void personcheck()
-{
-for(uint i=0; i<persons.length(); i++)
-{
-bool in_area=persons[i].persx==me.x and persons[i].persy==me.y;
-if(persons[i].automatic)
-{
-if(in_area and !persons[i].in_range)
-{
-persons[i].in_range=true;
-personpool.pause_sound(persons[i].persosound);
-dlgmessage(persons[i].text);
-personpool.resume_sound(persons[i].persosound);
+in_range = true;
+personpool.pause_sound(soundslot);
+dlgmessage(text);
+personpool.resume_sound(soundslot);
 }
 else if(!in_area)
-persons[i].in_range=false;
+in_range = false;
 }
 else
 {
-if(in_area and !shift_is_down() and key_pressed(KEY_RETURN))
+if(in_area && !shift_is_down() && key_pressed(KEY_RETURN))
 {
-personpool.pause_sound(persons[i].persosound);
-dlgmessage(persons[i].text);
-personpool.resume_sound(persons[i].persosound);
-if(floor_spilled and int(i)==napkin_giver_index and item_exists("napkin")==-1)
+personpool.pause_sound(soundslot);
+dlgmessage(text);
+personpool.resume_sound(soundslot);
+int idx = -1;
+for(uint i = 0; i < persons.length(); i++)
+{
+if(@persons[i] == @this) { idx = i; break; }
+}
+if(floor_spilled && idx == napkin_giver_index && item_exists("napkin") == -1)
 {
 p.play_stationary("sounds/misc/givenapkin.ogg", false);
 give("napkin", 1);
 focus_item("napkin");
 speak("You received a napkin.");
-persons[i].text=napkin_giver_default_text;
-}
-break;
+this.text = napkin_giver_default_text;
 }
 }
 }
 }
-void spawn_person(int px, int py, string txt, bool automatic, int steptime=300)
+}
+void update_persons()
 {
-person ps(px, py, txt, automatic, steptime);
+for(uint i = 0; i < persons.length(); i++)
+{
+persons[i].move_step();
+persons[i].update_extra();
+}
+}
+void personcheck()
+{
+}
+void spawn_person(int px, int py, string txt, bool automatic, int sp=300)
+{
+person ps(px, py, txt, automatic, sp);
 persons.insert_last(ps);
 }
 void destroy_all_persons()
 {
-for(uint i=0; i<persons.length(); i++)
-{
-personpool.destroy_sound(persons[i].persosound);
-}
+for(uint i = 0; i < persons.length(); i++)
+personpool.destroy_sound(persons[i].soundslot);
 persons.resize(0);
 }

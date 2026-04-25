@@ -352,6 +352,7 @@ void calculate_new_day_conditions()
 wave_ending=false;
 wave_started=false;
 destroy_all_customers();
+destroy_all_passers();
 if(placed_posters > 0 && daynumber > 1)
 {
 p.play_stationary("sounds/misc/destpost.ogg", false);
@@ -452,6 +453,7 @@ price_multiplier = double(chosen_price) / double(suggested_price);
 dlg("Price set to " + convert_to_currency(chosen_price) + " per cup.");
 }
 spawn_customer_wave();
+spawn_passers();
 }
 void generate_daily_summary()
 {
@@ -461,7 +463,9 @@ void generate_daily_summary()
     {
     trigger_event(60);
     destroy_all_customers();
+    destroy_all_passers();
     spawn_customer_wave();
+    spawn_passers();
     }
     if(level > 6)
     {

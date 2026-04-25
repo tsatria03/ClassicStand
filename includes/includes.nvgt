@@ -7,7 +7,9 @@
 #include"sound_pool.nvgt"
 
 #include"custom_menu.nvgt"
+#include"npc.nvgt"
 #include"customer.nvgt"
+#include"passerby.nvgt"
 #include"dec.nvgt"
 #include"dlg.nvgt"
 #include"events.nvgt"

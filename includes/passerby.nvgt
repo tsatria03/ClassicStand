@@ -1,0 +1,99 @@
+passer@[] passers(0);
+class passer : npc
+{
+int poster_score;
+bool convinced;
+bool read_poster;
+int get_psx() { return nx; }
+void set_psx(int v) { nx = v; }
+int get_psy() { return ny; }
+void set_psy(int v) { ny = v; }
+passer(int x, int y)
+{
+super(x, y, random(300, 500));
+poster_score = 0;
+convinced = false;
+read_poster = false;
+soundslot = personpool.play_extended_2d("sounds/misc/person.ogg", me.x, me.y, nx, ny, 0, 0, 0, 0, true, 0, 0, 0, pitch, false);
+targetx = (x > 25) ? random(1, 10) : random(40, 49);
+targety = ny;
+}
+void update_extra()
+{
+if(convinced) return;
+if(!read_poster && placed_posters > 0 && nx >= 1 && nx <= 49)
+{
+int chance = placed_posters * 10;
+if(random(0, 99) < chance)
+{
+read_poster = true;
+p.play_2d("sounds/misc/readpost.ogg", me.x, me.y, nx, ny, false);
+convinced = true;
+targetx = 14;
+targety = 25;
+steptime = random(250, 450);
+string[] types = {"normal", "normal", "normal", "nice", "mean", "desperate", "charitable", "group", "returning", "critic", "elderly", "child"};
+string t = types[random(0, types.length() - 1)];
+int gs = t == "group" ? random(2, 4) : 1;
+int pat = max(30000, int((random(60000, 120000) - (daynumber * 2000) - (int(level) * 7000)) / price_multiplier));
+if(t == "desperate") { steptime = int(steptime * 0.5); pat = int(pat * 0.5); }
+else if(t == "nice") pat = int(pat * 1.5);
+else if(t == "mean") pat = int(pat * 0.7);
+else if(t == "elderly") { steptime = int(steptime * 1.8); pat = int(pat * 2.0); }
+else if(t == "child") { steptime = int(steptime * 0.6); pat = int(pat * 0.6); }
+else if(t == "returning") pat = int(pat * 1.8);
+customer c(nx, ny, steptime, pat, t, gs);
+customers.insert_last(c);
+speak("Someone on the street noticed your poster and is heading to your stand!");
+}
+}
+}
+bool at_waypoint()
+{
+return nx == targetx && ny == targety;
+}
+void flip_waypoint()
+{
+if(targetx <= 10) targetx = random(40, 49);
+else targetx = random(1, 10);
+}
+}
+void spawn_passers()
+{
+int count = random(2, 4);
+for(int i = 0; i < count; i++)
+{
+int sx = random(0, 1) == 0 ? random(1, 10) : random(40, 49);
+int sy = random(0, 1) == 0 ? random(2, 17) : random(33, 48);
+passer ps(sx, sy);
+passers.insert_last(ps);
+}
+}
+void update_passers()
+{
+for(uint i = 0; i < passers.length(); i++)
+{
+if(passers[i].convinced)
+{
+if(passers[i].nx == passers[i].targetx && passers[i].ny == passers[i].targety)
+{
+personpool.destroy_sound(passers[i].soundslot);
+passers.remove_at(i);
+i--;
+continue;
+}
+passers[i].move_step();
+continue;
+}
+if(passers[i].at_waypoint())
+passers[i].flip_waypoint();
+passers[i].move_step();
+passers[i].update_extra();
+}
+}
+void destroy_all_passers()
+{
+for(uint i = 0; i < passers.length(); i++)
+personpool.destroy_sound(passers[i].soundslot);
+passers.resize(0);
+}

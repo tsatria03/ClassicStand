@@ -3,6 +3,7 @@ void game()
 load_map("neighborhood");
 napkin_giver_index = 0;
 spawn_customer_wave();
+spawn_passers();
 while(true)
 {
 wait(5);
@@ -11,8 +12,7 @@ ambpool.update_listener_2d(me.x,me.y);
 muspool.update_listener_2d(me.x,me.y);
 personpool.update_listener_2d(me.x,me.y);
 update_sources();
-update_persons();
-update_customers();
+update_npcs();
 checkloc();
 personcheck();
 sync_inv();
@@ -33,10 +33,10 @@ personpool.resume_sound(customers[i].soundslot);
 }
 for(uint i=0; i<persons.length(); i++)
 {
-if(int(me.x)==persons[i].persx and int(me.y)==persons[i].persy)
-personpool.pause_sound(persons[i].persosound);
+if(int(me.x)==persons[i].nx and int(me.y)==persons[i].ny)
+personpool.pause_sound(persons[i].soundslot);
 else
-personpool.resume_sound(persons[i].persosound);
+personpool.resume_sound(persons[i].soundslot);
 }
 check_customer_interaction();
 if(!shift_is_down() && key_pressed(KEY_RETURN))
