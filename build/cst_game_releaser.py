@@ -23,6 +23,7 @@ GH = r"C:\Program Files\GitHub CLI\gh.exe"
 SKIP = 0
 DO = 1
 SILENT_SKIP = 2
+AUTOMATED = False
 
 def ask(question):
     answer = input(f"{question} (Y/N): ").strip().upper()
@@ -49,11 +50,12 @@ TITLE = f"{GAME} V{VERSION}"
 TAG = f"V{VERSION}0"
 
 args = sys.argv[1:]
-skip_compile       = int(args[0]) if len(args) > 0 else DO
-skip_package       = int(args[1]) if len(args) > 1 else DO
-skip_release       = int(args[2]) if len(args) > 2 else DO
-skip_website       = int(args[3]) if len(args) > 3 else DO
-skip_empty_release = int(args[4]) if len(args) > 4 else DO
+_default = DO if AUTOMATED else SKIP
+skip_compile       = int(args[0]) if len(args) > 0 else _default
+skip_package       = int(args[1]) if len(args) > 1 else _default
+skip_release       = int(args[2]) if len(args) > 2 else _default
+skip_website       = int(args[3]) if len(args) > 3 else _default
+skip_empty_release = int(args[4]) if len(args) > 4 else _default
 
 interactive = any(f == SKIP for f in [skip_compile, skip_package, skip_release, skip_website, skip_empty_release])
 
