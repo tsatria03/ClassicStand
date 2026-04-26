@@ -66,8 +66,8 @@ if(random(0, 99) < chance)
 read_poster = true;
 if(!readpost_played) { p.play_stationary("sounds/misc/readpost.ogg", false); readpost_played = true; }
 convinced = true;
-targetx = 14;
-targety = 25;
+targetx = COUNTER_X;
+targety = COUNTER_Y;
 steptime = random(250, 450);
 string[] pool = customer_type_pool.length() > 0 ? customer_type_pool : {"normal"};
 string t = pool[random(0, pool.length() - 1)];

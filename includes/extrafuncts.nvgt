@@ -136,6 +136,23 @@ result.insert_last(line);
 }
 return result;
 }
+void load_section_dict(string filepath, string section, dictionary@ dest)
+{
+dest.delete_all();
+string[] lines = load_config_file(filepath);
+bool in_section = false;
+for(uint i = 0; i < lines.length(); i++)
+{
+string line = lines[i];
+if(line == section) { in_section = true; continue; }
+if(string_starts_with(line, "[")) { in_section = false; continue; }
+if(!in_section) continue;
+int eq = line.find("=");
+if(eq == -1) continue;
+dest.set(line.substr(0, eq).trim_whitespace(), line.substr(eq + 1).trim_whitespace());
+}
+}
+
 bool string_starts_with(const string& in str, const string& in start)
 {
 if (str.length()>=start.length())
@@ -604,7 +621,9 @@ void generate_daily_summary()
     }
     if(level > 6)
     {
-destroymap();
+destroy_all_customers();
+destroy_all_passers();
+ambpool.pause_all();
 string report = "Daily summary for " + business_name + ".--";
 report += "For the date of " + dayname + ", " + monthname + daynumber + ", you ended with a total of " + convert_to_currency(cash) + " in cash.--";
 report += "You sold a total of " + soldcups + " cup" + (soldcups == 1 ? "" : "s") + " of lemonade.--";
@@ -644,6 +663,7 @@ setupmenu();
         string choice = m.get_item_id(res);
         if (res == -1 || choice=="cancel")
         {
+ambpool.resume_all();
 calculate_new_day_conditions();
 writedata();
 dlgplay("sounds/misc/savegame.ogg");
@@ -655,6 +675,7 @@ return;
             {
                 clipboard_copy_text(report);
                 dlg("Your daily summary has been copied to your clipboard.");
+ambpool.resume_all();
 calculate_new_day_conditions();
 writedata();
 dlgplay("sounds/misc/savegame.ogg");
@@ -669,6 +690,7 @@ last_menu_id="";
                 poastfile.write("\r\n\r\n"+report);
                 poastfile.close();
                 dlg("Your daily summary has been exported to stats/daily_summeries.txt.");
+ambpool.resume_all();
 calculate_new_day_conditions();
 writedata();
 dlgplay("sounds/misc/savegame.ogg");
@@ -677,6 +699,7 @@ last_menu_id="";
                 return;
             }
         }
+ambpool.resume_all();
 calculate_new_day_conditions();
 last_menu_id="";
     }

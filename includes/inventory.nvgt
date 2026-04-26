@@ -111,7 +111,7 @@ return;
 }
 if(current == "napkin")
 {
-if(int(me.x)==14 and int(me.y)==25)
+if(int(me.x)==COUNTER_X and int(me.y)==COUNTER_Y)
 {
 if(!floor_spilled)
 {
@@ -148,9 +148,9 @@ if(string_contains(zone, "Neighborhood street", 1) == -1)
 speak("You can only place posters on the neighborhood street. Head outside the stand and market area.");
 return;
 }
-if(placed_posters >= 10)
+if(placed_posters >= MAX_POSTERS)
 {
-speak("You already have 10 posters placed around the neighborhood. That's the maximum.");
+speak("You already have " + MAX_POSTERS + " posters placed around the neighborhood. That's the maximum.");
 return;
 }
 string tile_key = string(int(me.x)) + "," + string(int(me.y));

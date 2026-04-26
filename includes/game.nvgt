@@ -22,7 +22,7 @@ update_npcs();
 checkloc();
 personcheck();
 sync_inv();
-if(int(me.x)==14 and int(me.y)==25)
+if(int(me.x)==COUNTER_X and int(me.y)==COUNTER_Y)
 {
 for(uint i=0; i<customers.length(); i++)
 {
@@ -135,7 +135,17 @@ speak("Time: " + display_hour + hour_period + ". Level " + level + " of " + maxl
 }
 if(key_pressed(KEY_R))
 {
-speak("Reputation: " + int(reputation) + " out of 200.");
+string rep_label = "";
+string rep_punct = "";
+if(reputation < 25) { rep_label = "Terrible"; rep_punct = "!"; }
+else if(reputation < 50) { rep_label = "Poor"; rep_punct = "!"; }
+else if(reputation < 75) { rep_label = "Mediocre"; rep_punct = "."; }
+else if(reputation < 100) { rep_label = "Fair"; rep_punct = "."; }
+else if(reputation < 125) { rep_label = "Good"; rep_punct = "."; }
+else if(reputation < 150) { rep_label = "Great"; rep_punct = "."; }
+else if(reputation < 175) { rep_label = "Excellent"; rep_punct = "!"; }
+else { rep_label = "Legendary"; rep_punct = "!"; }
+speak("Reputation: " + int(reputation) + " out of " + int(MAX_REPUTATION) + ". " + rep_label + rep_punct);
 }
 if(key_pressed(KEY_A))
 {
@@ -163,7 +173,7 @@ speak("Leaving customers: " + leaving + ".");
 }
 if(key_pressed(KEY_N))
 {
-if(wave_ending)
+if(wave_ending || fast_skip)
 {
 speak("Advancing to the next time period.");
 advance_time_period();
@@ -201,7 +211,7 @@ if(poster_colorful > 0) parts.insert_last(poster_colorful + " colorful");
 if(poster_premium > 0) parts.insert_last(poster_premium + " premium");
 if(parts.length() == 0) poster_msg += "none. ";
 else poster_msg += format_list(parts) + ". ";
-poster_msg += "You have placed " + placed_posters + " out of 10.";
+poster_msg += "You have placed " + placed_posters + " out of " + MAX_POSTERS + ".";
 speak(poster_msg);
 }
 if(key_pressed(KEY_X))

@@ -1,11 +1,7 @@
-# Neighborhood map
-
 minx 0
 maxx 50
 miny 0
 maxy 50
-
-# Platforms
 
 platform 0 50 0 50 concrete2
 platform 0 15 18 32 marble2
@@ -13,24 +9,13 @@ platform 14 14 25 25 marble
 platform 15 30 21 29 concrete
 platform 30 45 18 32 tile
 
-# Boundary walls
-
 wall 0 50 0 0 walldirt
 wall 0 50 50 50 walldirt
 wall 0 0 0 50 walldirt
 wall 50 50 0 50 walldirt
-
-# Stand back wall
-
 wall 0 0 18 32 wallwood
-
-# Sidewalk poles
-
 wall 15 30 20 20 wallpole
 wall 15 30 30 30 wallpole
-
-# Market walls
-
 wall 30 45 17 17 wallbuilding
 wall 30 45 33 33 wallbuilding
 wall 46 46 17 33 wallbuilding
@@ -38,11 +23,7 @@ wall 31 44 18 18 wallwindow
 wall 31 44 32 32 wallwindow
 wall 45 45 18 32 wallwindow
 
-# Person (greeter)
-
 person 11 25 Hello there, and welcome to Classic Stand!--You're currently at your lemonade stand. This is where you'll be spending most of your time.--To the east is the sidewalk, which connects your stand to the market. Customers will come from that direction, walking in from the street past the market to reach your counter.--At the market, head to the buying station to purchase ingredients like lemons, sugar, water, ice, and salt. There is also a poster shop further inside the market where you can buy posters to hang around the neighborhood street. The more posters you place, the more customers show up and the more patient they are. They wear out each day though, so you will need to restock regularly.--Back at your stand, use the actions station to make lemonade and pour it into cups. Each ingredient prompt will suggest a balanced amount, but you can adjust it if you like. Just know that customers will react to how the drink tastes, so try to keep things balanced!--When customers arrive, they will walk to the customer service counter. Head over there and press enter to open the serve menu. You can serve customers one at a time or all at once. You can even talk to them while you wait, but don't chat too long or they will lose patience and leave.--There are all kinds of customers you might meet. Some are friendly, some are in a rush, and some might even try to steal from you! Keep your eyes open.--You also set your own price per cup at the start of each day. Price too high and customers might refuse to buy. Price fairly and they might even leave a tip!--Keep your customers happy to build your reputation. Let too many walk away unserved or serve them bad lemonade and it's game over.--By the way, you already have a small supply of ingredients to get you started. Press tab to check your inventory, and check the readme for a full list of keyboard shortcuts.--Good luck, and have fun! false
-
-# Sound sources
 
 source 0 15 18 32 calm 0
 source 30 45 18 32 inside 0
@@ -53,13 +34,9 @@ source 0 50 0 50 city1|city2 -20
 source 0 29 0 50 residential -20
 source 15 30 21 29 distant_traffic -20
 
-# Menu triggers
-
 menu 2 6 19 31 actsmenu
 menu 32 36 23 27 buymenu
 menu 38 42 23 27 postermenu
-
-# Zones
 
 zone 0 50 0 50 Neighborhood street. Head east to find your lemonade stand.
 zone 0 50 0 2 South boundary approaching.

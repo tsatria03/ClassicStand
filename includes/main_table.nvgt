@@ -3,21 +3,7 @@ dictionary main_thresholds;
 
 void load_main_table_newgame()
 {
-main_newgame.delete_all();
-string[] lines = load_config_file("data/config/tables/main.table");
-bool in_section = false;
-for(uint i = 0; i < lines.length(); i++)
-{
-string line = lines[i];
-if(line == "[newgame]") { in_section = true; continue; }
-if(string_starts_with(line, "[")) { in_section = false; continue; }
-if(!in_section) continue;
-int eq = line.find("=");
-if(eq == -1) continue;
-string key = line.substr(0, eq).trim_whitespace();
-string val = line.substr(eq + 1).trim_whitespace();
-main_newgame.set(key, val);
-}
+load_section_dict("data/config/tables/main.table", "[newgame]", main_newgame);
 }
 
 double newgame_get(string key, double fallback)
@@ -30,21 +16,7 @@ return string_to_number(v);
 
 void load_main_table_thresholds()
 {
-main_thresholds.delete_all();
-string[] lines = load_config_file("data/config/tables/main.table");
-bool in_section = false;
-for(uint i = 0; i < lines.length(); i++)
-{
-string line = lines[i];
-if(line == "[thresholds]") { in_section = true; continue; }
-if(string_starts_with(line, "[")) { in_section = false; continue; }
-if(!in_section) continue;
-int eq = line.find("=");
-if(eq == -1) continue;
-string key = line.substr(0, eq).trim_whitespace();
-string val = line.substr(eq + 1).trim_whitespace();
-main_thresholds.set(key, val);
-}
+load_section_dict("data/config/tables/main.table", "[thresholds]", main_thresholds);
 }
 
 double threshold_get(string key, double fallback)

@@ -4,7 +4,8 @@
       "Bash(\"C:\\\\nvgt\\\\nvgt.exe\" -c cst.nvgt)",
       "Bash(git rm *)",
       "Bash(xargs grep *)",
-      "Bash(nvgt -c cst.nvgt)"
+      "Bash(nvgt -c cst.nvgt)",
+      "Bash(rm *)"
     ]
   }
 }

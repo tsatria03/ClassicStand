@@ -41,6 +41,7 @@ void destroymap()
 {
 destroy_all_customers();
 destroy_all_persons();
+destroy_all_passers();
 destroy_all_sources();
 }
 

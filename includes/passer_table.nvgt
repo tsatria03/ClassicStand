@@ -3,40 +3,12 @@ dictionary passer_behavior_settings;
 
 void load_passer_table_waves()
 {
-passer_wave_settings.delete_all();
-string[] lines = load_config_file("data/config/tables/passers.table");
-bool in_section = false;
-for(uint i = 0; i < lines.length(); i++)
-{
-string line = lines[i];
-if(line == "[waves]") { in_section = true; continue; }
-if(string_starts_with(line, "[")) { in_section = false; continue; }
-if(!in_section) continue;
-int eq = line.find("=");
-if(eq == -1) continue;
-string key = line.substr(0, eq).trim_whitespace();
-string val = line.substr(eq + 1).trim_whitespace();
-passer_wave_settings.set(key, val);
-}
+load_section_dict("data/config/tables/passers.table", "[waves]", passer_wave_settings);
 }
 
 void load_passer_table_behavior()
 {
-passer_behavior_settings.delete_all();
-string[] lines = load_config_file("data/config/tables/passers.table");
-bool in_section = false;
-for(uint i = 0; i < lines.length(); i++)
-{
-string line = lines[i];
-if(line == "[behaviors]") { in_section = true; continue; }
-if(string_starts_with(line, "[")) { in_section = false; continue; }
-if(!in_section) continue;
-int eq = line.find("=");
-if(eq == -1) continue;
-string key = line.substr(0, eq).trim_whitespace();
-string val = line.substr(eq + 1).trim_whitespace();
-passer_behavior_settings.set(key, val);
-}
+load_section_dict("data/config/tables/passers.table", "[behaviors]", passer_behavior_settings);
 }
 
 double passer_wave_get(string key, double fallback)
