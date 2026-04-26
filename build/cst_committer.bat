@@ -61,6 +61,8 @@ if errorlevel 1 (
 )
 
 echo.
+echo Committed %CHANGES% file(s).
+echo.
 set /p DO_PUSH=Do you want to push? (Y/N):
 if /i not "%DO_PUSH%"=="Y" (
     echo Done. Changes committed but not pushed.
@@ -77,5 +79,5 @@ if errorlevel 1 (
 )
 
 echo.
-echo Done.
+echo Push complete.
 pause
