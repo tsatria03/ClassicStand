@@ -33,6 +33,37 @@ def run_cmd(args, cwd=None):
     result = subprocess.run(args, cwd=cwd)
     return result.returncode == 0
 
+def do_website_update():
+    do_website = False
+    if skip_website == DO:
+        do_website = True
+    elif skip_website == SKIP:
+        do_website = ask("Do you want to update the game's website?")
+
+    if not do_website:
+        if skip_website == SKIP:
+            print("Skipping website update.\n")
+        sys.exit(0)
+
+    print("Updating website...")
+    ps1 = os.path.join(SCRIPT_DIR, "cst_site_updater.ps1")
+    if not run_cmd(["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", ps1, "-HtmlFile", SITE_HTML, "-Version", VERSION, "-Tag", TAG]):
+        error("Failed to update website HTML.")
+    print("Website updated.\n")
+
+    print("Committing website changes...")
+    log = subprocess.run(["git", "log", "--oneline"], cwd=SITE_REPO, capture_output=True, text=True).stdout
+    if f"Updated {GAME} to version {VERSION}." in log:
+        print(f"WARNING: Commit already exists. Skipping commit.\n")
+        sys.exit(0)
+
+    run_cmd(["git", "add", "projects/games/ClassicStand/index.html"], cwd=SITE_REPO)
+    if not run_cmd(["git", "commit", "-m", f"Updated {GAME} to version {VERSION}."], cwd=SITE_REPO):
+        error("Failed to commit website changes.")
+    if not run_cmd(["git", "push"], cwd=SITE_REPO):
+        error("Failed to push website changes.")
+    print("Website committed and pushed.\n")
+
 def error(msg):
     print(f"ERROR: {msg}")
     if any(f == SKIP for f in [skip_compile, skip_package, skip_release, skip_website, skip_empty_release]):
@@ -106,7 +137,7 @@ if do_package:
     print("Building Windows installer...")
     if os.path.exists(INSTALLER):
         os.remove(INSTALLER)
-    if not run_cmd([ISCC, "/Q", os.path.join(SCRIPT_DIR, "cst_game_installer.iss")]):
+    if not run_cmd([ISCC, "/Q", os.path.join(SCRIPT_DIR, "cst_installer.iss")]):
         error("Installer build failed.")
     print("Installer built successfully.\n")
 else:
@@ -123,6 +154,7 @@ elif skip_release == SKIP:
 if not do_release:
     if skip_release == SKIP:
         print("Skipping release.\n")
+    do_website_update()
     sys.exit(0)
 
 assets = []
@@ -160,33 +192,4 @@ if not assets:
     print("WARNING: No assets were released. Skipping website update.\n")
     sys.exit(0)
 
-# Website
-do_website = False
-if skip_website == DO:
-    do_website = True
-elif skip_website == SKIP:
-    do_website = ask("Do you want to update the game's website?")
-
-if not do_website:
-    if skip_website == SKIP:
-        print("Skipping website update.\n")
-    sys.exit(0)
-
-print("Updating website...")
-ps1 = os.path.join(SCRIPT_DIR, "cst_game_updater.ps1")
-if not run_cmd(["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", ps1, "-HtmlFile", SITE_HTML, "-Version", VERSION, "-Tag", TAG]):
-    error("Failed to update website HTML.")
-print("Website updated.\n")
-
-print("Committing website changes...")
-log = subprocess.run(["git", "log", "--oneline"], cwd=SITE_REPO, capture_output=True, text=True).stdout
-if f"Updated {GAME} to version {VERSION}." in log:
-    print(f"WARNING: Commit already exists. Skipping commit.\n")
-    sys.exit(0)
-
-run_cmd(["git", "add", "projects/games/ClassicStand/index.html"], cwd=SITE_REPO)
-if not run_cmd(["git", "commit", "-m", f"Updated {GAME} to version {VERSION}."], cwd=SITE_REPO):
-    error("Failed to commit website changes.")
-if not run_cmd(["git", "push"], cwd=SITE_REPO):
-    error("Failed to push website changes.")
-print("Website committed and pushed.\n")
+do_website_update()
