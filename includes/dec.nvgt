@@ -1,4 +1,4 @@
-bool fast_skip=false, autorun=false, hrtf=true, behind_pitch=true, y_is_elevation=true, busprofed=false, intro=true;
+bool autorun=false, hrtf=true, behind_pitch=true, y_is_elevation=true, busprofed=false, fast_skip=false, intro=true;
 bool wave_ending=false;
 bool wave_started=false;
 bool floor_spilled=false;

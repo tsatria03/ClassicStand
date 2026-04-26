@@ -173,7 +173,7 @@ if not do_website:
     sys.exit(0)
 
 print("Updating website...")
-ps1 = os.path.join(SCRIPT_DIR, "cst_site_updater.ps1")
+ps1 = os.path.join(SCRIPT_DIR, "cst_game_updater.ps1")
 if not run_cmd(["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", ps1, "-HtmlFile", SITE_HTML, "-Version", VERSION, "-Tag", TAG]):
     error("Failed to update website HTML.")
 print("Website updated.\n")
