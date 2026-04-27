@@ -2,23 +2,41 @@ import subprocess
 import os
 import sys
 import shutil
+import configparser
 
-GAME = "ClassicStand"
-PASSWORD = "LemonPledge"
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 REPO_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, ".."))
-WIN_SOURCE = os.path.join(REPO_DIR, "releases", "windows", f"{GAME}_windows_portable_password_is_{PASSWORD}", "cst")
-ARCHIVE_DIR = os.path.join(REPO_DIR, "releases", "archives")
+
+_cfg = configparser.ConfigParser()
+_cfg.read(os.path.join(SCRIPT_DIR, "tools.ini"))
+
+_tools = configparser.ConfigParser()
+_tools.read(os.path.join(os.path.expanduser("~"), ".game_tools", "tools.ini"))
+
+GAME         = _cfg["game"]["name"]
+PASSWORD     = _cfg["game"]["password"]
+NVGT_FILE    = _cfg["game"]["nvgt_file"]
+
+INSTALLER_ISS = _cfg["installer"]["iss"]
+APP_ID       = _cfg["installer"]["app_id"]
+APP_URL      = _cfg["installer"]["app_url"]
+EXE_NAME     = _cfg["installer"]["exe_name"]
+
+SITE_HTML    = _cfg["site"]["html"]
+SITE_REPO    = _cfg["site"]["repo"]
+SITE_PATH    = _cfg["site"]["path"]
+
+NVGT    = _tools["tools"]["nvgt"]
+SEVENZIP = _tools["tools"]["sevenzip"]
+ISCC    = _tools["tools"]["iscc"]
+GH      = _tools["tools"]["gh"]
+
+WIN_SOURCE   = os.path.join(REPO_DIR, "releases", "windows", f"{GAME}_windows_portable_password_is_{PASSWORD}", "cst")
+ARCHIVE_DIR  = os.path.join(REPO_DIR, "releases", "archives")
 ARCHIVE_NAME = f"{GAME}_windows_portable_password_is_{PASSWORD}.7z"
-ARCHIVE = os.path.join(ARCHIVE_DIR, ARCHIVE_NAME)
-INSTALLER = os.path.join(ARCHIVE_DIR, f"{GAME}_windows_installer_password_is_{PASSWORD}.exe")
-RELEASE_DIR = os.path.join(REPO_DIR, "releases", "windows", f"{GAME}_windows_portable_password_is_{PASSWORD}")
-SITE_HTML = r"C:\Users\tonys\OneDrive\Documents\github\tsatria03.github.io\projects\games\ClassicStand\index.html"
-SITE_REPO = r"C:\Users\tonys\OneDrive\Documents\github\tsatria03.github.io"
-NVGT = r"C:\nvgt\nvgt.exe"
-SEVENZIP = r"C:\Program Files\7-Zip\7z.exe"
-ISCC = r"C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
-GH = r"C:\Program Files\GitHub CLI\gh.exe"
+ARCHIVE      = os.path.join(ARCHIVE_DIR, ARCHIVE_NAME)
+INSTALLER    = os.path.join(ARCHIVE_DIR, f"{GAME}_windows_installer_password_is_{PASSWORD}.exe")
+RELEASE_DIR  = os.path.join(REPO_DIR, "releases", "windows", f"{GAME}_windows_portable_password_is_{PASSWORD}")
 
 SKIP = 0
 DO = 1
@@ -40,7 +58,7 @@ def clip(text):
     subprocess.run("clip", input=text.strip(), text=True)
 
 def get_version():
-    with open(os.path.join(REPO_DIR, "docks", "version.txt"), "r") as f:
+    with open(os.path.join(SCRIPT_DIR, "version.txt"), "r") as f:
         return f.read().strip()
 
 # ── Commit ────────────────────────────────────────────────────────────────────
@@ -254,7 +272,7 @@ def do_website_update(version, tag, skip_website):
         return
 
     print("Updating website...")
-    ps1 = os.path.join(SCRIPT_DIR, "cst_site_updater.ps1")
+    ps1 = os.path.join(SCRIPT_DIR, "site_updater.ps1")
     if not run_cmd(["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", ps1, "-HtmlFile", SITE_HTML, "-Version", version, "-Tag", tag]):
         print("ERROR: Failed to update website HTML.")
         return
@@ -266,7 +284,7 @@ def do_website_update(version, tag, skip_website):
         print("WARNING: Commit already exists. Skipping commit.\n")
         return
 
-    run_cmd(["git", "add", "projects/games/ClassicStand/index.html"], cwd=SITE_REPO)
+    run_cmd(["git", "add", SITE_PATH], cwd=SITE_REPO)
     if not run_cmd(["git", "commit", "-m", f"Updated {GAME} to version {version}."], cwd=SITE_REPO):
         print("ERROR: Failed to commit website changes.")
         return
@@ -297,7 +315,7 @@ def run_release(skip_compile, skip_package, skip_release, skip_website, skip_emp
 
     if do_compile:
         print("Compiling NVGT source...")
-        if not run_cmd([NVGT, "-c", "-Q", os.path.join(REPO_DIR, "cst.nvgt")]):
+        if not run_cmd([NVGT, "-c", "-Q", os.path.join(REPO_DIR, NVGT_FILE)]):
             print("ERROR: NVGT compilation failed.")
             return
         print("Compilation successful.\n")
@@ -333,7 +351,14 @@ def run_release(skip_compile, skip_package, skip_release, skip_website, skip_emp
         print("Building Windows installer...")
         if os.path.exists(INSTALLER):
             os.remove(INSTALLER)
-        if not run_cmd([ISCC, "/Q", os.path.join(SCRIPT_DIR, "cst_installer.iss")]):
+        if not run_cmd([ISCC, "/Q",
+                        f"/DMyAppId={APP_ID}",
+                        f"/DMyAppName={GAME}",
+                        f"/DMyAppURL={APP_URL}",
+                        f"/DMyAppExeName={EXE_NAME}",
+                        f"/DMyAppPassword={PASSWORD}",
+                        f"/DMySourcePath={WIN_SOURCE}",
+                        os.path.join(SCRIPT_DIR, INSTALLER_ISS)]):
             print("ERROR: Installer build failed.")
             return
         print("Installer built successfully.\n")
@@ -398,7 +423,7 @@ def menu():
         unpushed = unpushed_count()
         print()
         print("========================")
-        print("  CST Game Tools")
+        print(f"  {GAME} Tools")
         print("========================")
         print(" --- Commit ---")
         print(" 1. Make a commit")
@@ -422,7 +447,7 @@ def menu():
         elif choice == "3":
             do_history()
         elif choice == "4":
-            run_release(DO, DO, DO, DO, DO)
+            run_release(SKIP, SKIP, SKIP, SKIP, SKIP)
         elif choice == "5":
             run_release(DO, SILENT_SKIP, SILENT_SKIP, SILENT_SKIP, SILENT_SKIP)
         elif choice == "6":

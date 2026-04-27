@@ -1,9 +1,6 @@
-#define MyAppId "{{2269D597-3F4F-4A25-B680-36C5EDC6E4BE}}"
-#define MyAppName "ClassicStand"
-#define MyAppVersion Trim(FileRead(FileOpen("..\docks\version.txt")))
+#define MyAppVersion Trim(FileRead(FileOpen("version.txt")))
 #define MyAppPublisher "tsatria03"
-#define MyAppURL "https://tsatria03.github.io/projects/games/ClassicStand"
-#define MyAppExeName "cst.exe"
+#define MyOutputFilename MyAppName + "_windows_installer_password_is_" + MyAppPassword
 
 [Setup]
 AppId={#MyAppId}
@@ -22,8 +19,8 @@ PrivilegesRequired=admin
 UninstallDisplayName={#MyAppName} {#MyAppVersion}
 AppMutex={#MyAppName}_Mutex
 OutputDir=..\releases\archives
-OutputBaseFilename=ClassicStand_windows_installer_password_is_LemonPledge
-Password=LemonPledge
+OutputBaseFilename={#MyOutputFilename}
+Password={#MyAppPassword}
 Encryption=yes
 SolidCompression=yes
 WizardStyle=modern
@@ -36,7 +33,7 @@ Name: "desktopicon"; Description: "Create a desktop shortcut"; GroupDescription:
 Name: "startmenuicon"; Description: "Create a Start Menu shortcut"; GroupDescription: "Additional icons:"
 
 [Files]
-Source: "C:\Users\tonys\OneDrive\Documents\GitHub\ClassicStand\releases\windows\ClassicStand_windows_portable_password_is_LemonPledge\cst\*"; \
+Source: "{#MySourcePath}\*"; \
   DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
