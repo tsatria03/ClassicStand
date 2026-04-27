@@ -1,5 +1,6 @@
 class ingredient_item
 {
+string menu_id;
 string id;
 string display_name;
 string target;
@@ -9,22 +10,47 @@ string description;
 }
 
 ingredient_item@[] ingredient_store;
+store_menu@[] ingredient_item_menus;
 
 void load_single_ingredient_store()
 {
+ingredient_item_menus.resize(0);
 ingredient_store.resize(0);
 string[] lines = load_config_file("data/config/stores/single_ingredients.store");
 for(uint i = 0; i < lines.length(); i++)
 {
-string[] p = parse_delimited_line(lines[i], 5);
-if(p.length() < 6) continue;
+string line = lines[i];
+int eq = line.find("=");
+int col = line.find(":");
+if(eq != -1 && (col == -1 || eq < col))
+{
+store_menu sm;
+sm.id = line.substr(0, eq).trim_whitespace();
+string rest = line.substr(eq + 1);
+int pipe = rest.find("|");
+if(pipe != -1)
+{
+sm.display_name = rest.substr(0, pipe).trim_whitespace();
+sm.description = rest.substr(pipe + 1).trim_whitespace();
+}
+else
+{
+sm.display_name = rest.trim_whitespace();
+sm.description = "";
+}
+ingredient_item_menus.insert_last(sm);
+continue;
+}
+string[] p = parse_delimited_line(line, 6);
+if(p.length() < 7) continue;
 ingredient_item item;
-item.id           = p[0].trim_whitespace();
-item.display_name = p[1].trim_whitespace();
-item.target       = p[2].trim_whitespace();
-item.base_cost    = string_to_number(p[3].trim_whitespace());
-item.cost_expr    = p[4].trim_whitespace();
-item.description  = p[5].trim_whitespace();
+item.menu_id      = p[0].trim_whitespace();
+item.id           = p[1].trim_whitespace();
+item.display_name = p[2].trim_whitespace();
+item.target       = p[3].trim_whitespace();
+item.base_cost    = string_to_number(p[4].trim_whitespace());
+item.cost_expr    = p[5].trim_whitespace();
+item.description  = p[6].trim_whitespace();
 ingredient_store.insert_last(item);
 }
 }
@@ -51,4 +77,25 @@ return format_template(ingredient_store[i].description, r);
 }
 }
 return "";
+}
+
+double get_ingredient_stock(string target)
+{
+if(target == "cups") return cups;
+if(target == "ice") return ices;
+if(target == "lemons") return lemons;
+if(target == "salt") return salts;
+if(target == "sugar") return sugars;
+if(target == "water") return waters;
+return 0;
+}
+
+void apply_ingredient_purchase(string target, double qty)
+{
+if(target == "cups") cups += qty;
+else if(target == "ice") ices += qty;
+else if(target == "lemons") lemons += qty;
+else if(target == "salt") salts += qty;
+else if(target == "sugar") sugars += qty;
+else if(target == "water") waters += qty;
 }

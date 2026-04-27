@@ -112,7 +112,7 @@ Whether this event helps or hurts the player.
 
 1 = positive. The event gives the player something.
 2 = negative. The event takes something away.
-0 = neutral. No effect on any stat.
+3 = neutral. No effect on any stat.
 
 target
 The stat this event affects.
@@ -124,10 +124,13 @@ salt = the player's salt supply.
 posters = the player's placed posters.
 none = no stat is affected.
 
+Note: you can freely add new events or remove existing ones. However, the target field is limited to the values listed above. Using any other value will cause the event to fire but have no effect on any stat, as the game code only recognizes these specific targets.
+
 min_amount and max_amount
 The range of values the effect rolls between. Supports expressions using level, day, and placed as variables with the operators *, /, +, and -. Examples: 5*level*day, placed/2, 100.
 
 use_percent
+Controls whether the rolled amount is treated as a flat value or a percentage of the player's current stat.
 
 false = the rolled amount is applied directly.
 true = the rolled amount is treated as a percentage of the player's current stat.
@@ -152,7 +155,14 @@ Location: data/config/stores/bundle_ingredients.store
 
 Defines all ingredient bundle tiers available in the market.
 
-Format: bundle_id:display_name:quantity:description
+Groups (optional):
+You can define submenu groups at the top of the file, before any item lines.
+Format: group_id=display_name|description
+
+When at least one group is defined, the bundle menu opens a submenu selector first. Items are placed into a group by prefixing the item line with the group id.
+
+Item format without groups: bundle_id:display_name:quantity:description
+Item format with groups: group_id:bundle_id:display_name:quantity:description
 
 bundle_id
 The internal identifier for this bundle.
@@ -166,13 +176,22 @@ How many of each core ingredient (cups, lemons, sugar, water) the bundle contain
 description
 Shown in the bundle menu. Use %quantity% as a placeholder for the bundle quantity.
 
+Note: you can add or remove bundle tiers and groups freely. The core ingredients a bundle distributes are fixed to cups, lemons, sugar, and water. This cannot be changed through config alone.
+
 bundle_posters.store
 
 Location: data/config/stores/bundle_posters.store
 
 Defines all poster bundle packs available in the poster shop.
 
-Format: bundle_id:display_name:basic_qty:colorful_qty:premium_qty:discount:description
+Groups (optional):
+You can define submenu groups at the top of the file, before any item lines.
+Format: group_id=display_name|description
+
+When at least one group is defined, the bundle menu opens a submenu selector first. Items are placed into a group by prefixing the item line with the group id.
+
+Item format without groups: bundle_id:display_name:basic_qty:colorful_qty:premium_qty:discount:description
+Item format with groups: group_id:bundle_id:display_name:basic_qty:colorful_qty:premium_qty:discount:description
 
 bundle_id
 The internal identifier for this bundle.
@@ -189,13 +208,22 @@ The price discount applied to this bundle as a multiplier. Example: 0.9 means th
 description
 Shown in the bundle menu. Use %basic%, %colorful%, and %premium% as placeholders for the respective quantities.
 
+Note: you can add or remove bundle packs and groups freely. The poster types a bundle distributes are fixed to basic, colorful, and premium. You cannot introduce a new poster type through config alone.
+
 single_ingredients.store
 
 Location: data/config/stores/single_ingredients.store
 
 Defines all single ingredients available for purchase in the market.
 
-Format: item_id:display_name:target:base_cost:cost_expr:description
+Groups (optional):
+You can define submenu groups at the top of the file, before any item lines.
+Format: group_id=display_name|description
+
+When at least one group is defined, the ingredient menu opens a submenu selector first. Items are placed into a group by prefixing the item line with the group id.
+
+Item format without groups: item_id:display_name:target:base_cost:cost_expr:description
+Item format with groups: group_id:item_id:display_name:target:base_cost:cost_expr:description
 
 item_id
 The internal identifier for this ingredient. Must match the variable name used in the game code.
@@ -215,13 +243,22 @@ An expression that controls how the cost scales. Supports level and day as varia
 description
 Shown in the store menu. Use %stock% as a placeholder for the player's current quantity of this item.
 
+Note: you can modify the display name, cost, and description of any existing ingredient and add or remove groups freely. However, you cannot add a new ingredient type through config alone. The item_id and target fields must match a variable that exists in the game code. An unrecognized target will appear in the store but will not add anything to inventory when purchased.
+
 single_posters.store
 
 Location: data/config/stores/single_posters.store
 
 Defines all poster types available in the poster shop.
 
-Format: item_id:display_name:base_cost:cost_expr:description
+Groups (optional):
+You can define submenu groups at the top of the file, before any item lines.
+Format: group_id=display_name|description
+
+When at least one group is defined, the poster menu opens a submenu selector first. Items are placed into a group by prefixing the item line with the group id.
+
+Item format without groups: item_id:display_name:base_cost:cost_expr:description
+Item format with groups: group_id:item_id:display_name:base_cost:cost_expr:description
 
 item_id
 The internal identifier for this poster type.
@@ -237,6 +274,8 @@ An expression controlling how the cost scales. Supports level and day. Example: 
 
 description
 Shown in the store menu. Use %stock% as a placeholder for the player's current quantity of this poster type.
+
+Note: you can modify the display name, cost, and description of any existing poster type and add or remove groups freely. However, you cannot add a new poster type through config alone. The item_id field must match a poster variable that exists in the game code. An unrecognized item_id will appear in the store but will not add anything to inventory when purchased.
 
 customers.table
 
@@ -275,9 +314,11 @@ Each type block starts with type=count, where count is the number of regular tal
 Each line follows the format: line_number:mood:text
 
 The line numbered one above the count is the walkoff line, spoken when the player has talked to the customer too many times.
-Mood tags are internal labels describing the customer's emotional state on that line. They are cosmetic for now and do not affect gameplay.
+Mood tags describe the customer's emotional state on that line. They are displayed alongside the customer's name in the talk menu so you can gauge how they are feeling before interacting. They do not affect gameplay mechanics.
 
 Use %group_size% in group customer lines as a placeholder for the number of people in the group.
+
+Note: you can adjust the spawn weight of any existing customer type. You cannot add a new customer type through config alone. A type name not recognized by the game code will be ignored entirely.
 
 main.table
 
@@ -331,6 +372,8 @@ toss = discards the item silently.
 place_poster = places the poster on the neighborhood street.
 inspect_cup = opens the filled cup inspection menu.
 
+Note: you can modify existing item entries freely. You cannot add a new use_action value through config alone. Any value not in the list above will be treated as none. Similarly, adding a new item_id that is not recognized by the inventory system will have no effect in gameplay.
+
 passers.table
 
 Location: data/config/tables/passers.table
@@ -354,10 +397,15 @@ speed_cap = the fastest a passer can ever move, in milliseconds. Prevents them f
 speed_level_bonus = milliseconds subtracted from the speed range per level. Makes passers walk faster as you progress.
 speed_day_bonus = milliseconds subtracted from the speed range per day. Makes passers walk faster as each day passes.
 
+Note: all values in this file are fully tunable. There are no hardcoded entity types to work around. You can freely adjust any setting here and the game will pick it up.
+
 Game conclusion
 
-Classic Stand started as a simple lemonade selling game and has grown into a full-featured business simulation with a live customer system, a dynamic neighborhood map, random events, a poster marketing system, multiple save slots, and deep modding support.
-Every system in the game, from customer behavior to event effects to store prices, can be tuned or extended through the provided configuration files.
+Classic Stand started as a simple lemonade selling game and has grown into a full-featured business simulation with a live customer system, a dynamic neighborhood map, random events, a poster marketing system, and multiple save slots.
+
+The configuration files let you tune most of the game's existing values, such as store prices, customer behavior, wave sizes, quality thresholds, and starting inventory. The events file goes one step further and supports adding entirely new random events without any code changes, as long as you use one of the supported target values.
+All other files are tuning only. Adding new ingredient types, customer types, item actions, or event targets requires changes to the game code. The config files control the knobs that are already wired up, not the wiring itself.
 
 Whether you are a player looking to understand the game better, or a modder building your own experience on top of it, we hope this document gives you everything you need to succeed in the lemonade making business.
+
 Thanks for playing, and happy selling!

@@ -1,5 +1,6 @@
 class poster_item
 {
+string menu_id;
 string id;
 string display_name;
 double base_cost;
@@ -8,21 +9,46 @@ string description;
 }
 
 poster_item@[] poster_store;
+store_menu@[] poster_item_menus;
 
 void load_single_poster_store()
 {
+poster_item_menus.resize(0);
 poster_store.resize(0);
 string[] lines = load_config_file("data/config/stores/single_posters.store");
 for(uint i = 0; i < lines.length(); i++)
 {
-string[] p = parse_delimited_line(lines[i], 4);
-if(p.length() < 5) continue;
+string line = lines[i];
+int eq = line.find("=");
+int col = line.find(":");
+if(eq != -1 && (col == -1 || eq < col))
+{
+store_menu sm;
+sm.id = line.substr(0, eq).trim_whitespace();
+string rest = line.substr(eq + 1);
+int pipe = rest.find("|");
+if(pipe != -1)
+{
+sm.display_name = rest.substr(0, pipe).trim_whitespace();
+sm.description = rest.substr(pipe + 1).trim_whitespace();
+}
+else
+{
+sm.display_name = rest.trim_whitespace();
+sm.description = "";
+}
+poster_item_menus.insert_last(sm);
+continue;
+}
+string[] p = parse_delimited_line(line, 5);
+if(p.length() < 6) continue;
 poster_item item;
-item.id           = p[0].trim_whitespace();
-item.display_name = p[1].trim_whitespace();
-item.base_cost    = string_to_number(p[2].trim_whitespace());
-item.cost_expr    = p[3].trim_whitespace();
-item.description  = p[4].trim_whitespace();
+item.menu_id      = p[0].trim_whitespace();
+item.id           = p[1].trim_whitespace();
+item.display_name = p[2].trim_whitespace();
+item.base_cost    = string_to_number(p[3].trim_whitespace());
+item.cost_expr    = p[4].trim_whitespace();
+item.description  = p[5].trim_whitespace();
 poster_store.insert_last(item);
 }
 }
@@ -49,4 +75,19 @@ return format_template(poster_store[i].description, r);
 }
 }
 return "";
+}
+
+int get_poster_stock(string id)
+{
+if(id == "basic") return poster_basic;
+if(id == "colorful") return poster_colorful;
+if(id == "premium") return poster_premium;
+return 0;
+}
+
+void apply_poster_purchase(string id, int qty)
+{
+if(id == "basic") poster_basic += qty;
+else if(id == "colorful") poster_colorful += qty;
+else if(id == "premium") poster_premium += qty;
 }

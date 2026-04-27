@@ -1,6 +1,8 @@
-cup:Empty cups:cups:1:level*day:Buy empty cups to pour your lemonade into. You currently have %stock% empty cup.
-lemon:Ripe lemons:lemons:3:level*day:Buy fresh lemons to squeeze into your pitcher. You currently have %stock% lemon.
-sugar:Sugar packets:sugar:5:level*day:Buy packets of sugar to sweeten your lemonade. You currently have %stock% packet of sugar.
-water:Water:water:6:level*day:Buy liters of water for your pitcher. You currently have %stock% liter of water.
-ice:Bags of ice:ice:2:level*day:Buy bags of ice to chill your lemonade. Optional ingredient. You currently have %stock% bag of ice.
-salt:Salt packets:salt:4:level*day:Buy packets of salt for a subtle twist. Optional ingredient. You currently have %stock% packet of salt.
+essentials=Essentials|Core ingredients needed to make lemonade.
+extras=Extras|Optional ingredients to customize your recipe.
+essentials:cup:Empty cups:cups:1:level*day:Buy empty cups to pour your lemonade into. You currently have %stock% empty cup.
+essentials:lemon:Ripe lemons:lemons:3:level*day:Buy fresh lemons to squeeze into your pitcher. You currently have %stock% lemon.
+essentials:sugar:Sugar packets:sugar:5:level*day:Buy packets of sugar to sweeten your lemonade. You currently have %stock% packet of sugar.
+essentials:water:Water:water:6:level*day:Buy liters of water for your pitcher. You currently have %stock% liter of water.
+extras:ice:Bags of ice:ice:2:level*day:Buy bags of ice to chill your lemonade. Optional ingredient. You currently have %stock% bag of ice.
+extras:salt:Salt packets:salt:4:level*day:Buy packets of salt for a subtle twist. Optional ingredient. You currently have %stock% packet of salt.

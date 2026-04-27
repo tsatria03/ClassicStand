@@ -703,6 +703,35 @@ ambpool.resume_all();
 calculate_new_day_conditions();
 last_menu_id="";
     }
+void play_poster_sound()
+{
+p.play_stationary("sounds/misc/buypost" + random(1, 2) + ".ogg", false);
+p.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
+}
+
+void play_ingredient_sound(string target)
+{
+if(target == "cups") p.play_stationary("sounds/misc/buycup" + random(1, 2) + ".ogg", false);
+else if(target == "ice") p.play_stationary("sounds/misc/buybag" + random(1, 4) + ".ogg", false);
+else if(target == "lemons") p.play_stationary("sounds/misc/buyfruit" + random(1, 2) + ".ogg", false);
+else if(target == "salt") p.play_stationary("sounds/misc/buypack" + random(1, 2) + ".ogg", false);
+else if(target == "sugar") p.play_stationary("sounds/misc/buypack" + random(1, 2) + ".ogg", false);
+else if(target == "water") p.play_stationary("sounds/misc/buywater" + random(1, 2) + ".ogg", false);
+}
+
+void load_config()
+{
+load_events();
+load_single_ingredient_store();
+load_bundle_ingredient_store();
+load_single_poster_store();
+load_bundle_poster_store();
+load_main_table_thresholds();
+load_main_table_items();
+load_customer_table();
+load_passer_table();
+}
+
 void restart_game(string appid="cst.exe", string scriptid="cst.nvgt")
 {
 if(SCRIPT_COMPILED)

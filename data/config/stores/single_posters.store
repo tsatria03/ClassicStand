@@ -1,3 +1,5 @@
-basic:Basic poster:50:level*day:A simple poster that gives a small boost to wave size and customer patience. You currently have %stock%.
-colorful:Colorful poster:150:level*day:A colorful poster that gives a moderate boost to wave size and customer patience. You currently have %stock%.
-premium:Premium poster:400:level*day:A premium poster that gives a strong boost to wave size and customer patience. You currently have %stock%.
+everyday=Everyday Posters|Affordable posters for day-to-day marketing.
+top_shelf=Top Shelf Posters|High-impact posters for serious marketing.
+everyday:basic:Basic poster:50:level*day:A simple poster that gives a small boost to wave size and customer patience. You currently have %stock%.
+everyday:colorful:Colorful poster:150:level*day:A colorful poster that gives a moderate boost to wave size and customer patience. You currently have %stock%.
+top_shelf:premium:Premium poster:400:level*day:A premium poster that gives a strong boost to wave size and customer patience. You currently have %stock%.

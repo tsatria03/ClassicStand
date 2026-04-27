@@ -4,5 +4,5 @@ slow_day:none:2:none:0:0:false:cold:100:It was a slow period. The cold kept most
 ingredient_freeze_sugar:none:2:sugar:1*level*day:3*level*day:false:cold:100:The cold and moisture clumped %amount% packet of sugar together, making it unusable.
 ingredient_freeze_salt:none:2:salt:1*level*day:3*level*day:false:cold:100:The cold and moisture clumped %amount% packet of salt together, making it unusable.
 lucky_bonus:buy(1,4).ogg:1:cash:100*level*day:500*level*day:false:any:100:A video of your stand went viral! You got a bonus of %amount%.
-nothing:none:0:none:0:0:false:any:100:Nothing unusual happened today. Just another boring hour at the stand.
+nothing:none:3:none:0:0:false:any:100:Nothing unusual happened today. Just another boring hour at the stand.
 poster_damage:destpost.ogg:2:posters:1:placed/2:false:posters:100:Some of your posters were torn down or damaged by the weather! You lost %amount% poster. You now have %remaining% remaining.

@@ -1,5 +1,6 @@
 class poster_bundle
 {
+string menu_id;
 string id;
 string display_name;
 int basic_qty;
@@ -10,23 +11,48 @@ string description;
 }
 
 poster_bundle@[] poster_bundles;
+store_menu@[] poster_bundle_menus;
 
 void load_bundle_poster_store()
 {
+poster_bundle_menus.resize(0);
 poster_bundles.resize(0);
 string[] lines = load_config_file("data/config/stores/bundle_posters.store");
 for(uint i = 0; i < lines.length(); i++)
 {
-string[] p = parse_delimited_line(lines[i], 6);
-if(p.length() < 7) continue;
+string line = lines[i];
+int eq = line.find("=");
+int col = line.find(":");
+if(eq != -1 && (col == -1 || eq < col))
+{
+store_menu sm;
+sm.id = line.substr(0, eq).trim_whitespace();
+string rest = line.substr(eq + 1);
+int pipe = rest.find("|");
+if(pipe != -1)
+{
+sm.display_name = rest.substr(0, pipe).trim_whitespace();
+sm.description = rest.substr(pipe + 1).trim_whitespace();
+}
+else
+{
+sm.display_name = rest.trim_whitespace();
+sm.description = "";
+}
+poster_bundle_menus.insert_last(sm);
+continue;
+}
+string[] p = parse_delimited_line(line, 7);
+if(p.length() < 8) continue;
 poster_bundle b;
-b.id           = p[0].trim_whitespace();
-b.display_name = p[1].trim_whitespace();
-b.basic_qty    = string_to_int(p[2].trim_whitespace());
-b.colorful_qty = string_to_int(p[3].trim_whitespace());
-b.premium_qty  = string_to_int(p[4].trim_whitespace());
-b.discount     = string_to_number(p[5].trim_whitespace());
-b.description  = p[6].trim_whitespace();
+b.menu_id      = p[0].trim_whitespace();
+b.id           = p[1].trim_whitespace();
+b.display_name = p[2].trim_whitespace();
+b.basic_qty    = string_to_int(p[3].trim_whitespace());
+b.colorful_qty = string_to_int(p[4].trim_whitespace());
+b.premium_qty  = string_to_int(p[5].trim_whitespace());
+b.discount     = string_to_number(p[6].trim_whitespace());
+b.description  = p[7].trim_whitespace();
 poster_bundles.insert_last(b);
 }
 }

@@ -1,3 +1,5 @@
-starter:Starter pack:2:1:0:0.9:Get started with %basic% basic and %colorful% colorful poster.
-advertiser:Advertiser pack:3:2:1:0.85:A well-rounded mix of %basic% basic, %colorful% colorful, and %premium% premium poster.
-campaign:Campaign pack:4:3:3:0.8:A full campaign with %basic% basic, %colorful% colorful, and %premium% premium poster.
+starter_packs=Starter Packs|Entry-level poster bundles at a discount.
+pro_packs=Pro Packs|Higher-volume bundles for established stands.
+starter_packs:starter:Starter pack:2:1:0:0.9:Get started with %basic% basic and %colorful% colorful poster.
+pro_packs:advertiser:Advertiser pack:3:2:1:0.85:A well-rounded mix of %basic% basic, %colorful% colorful, and %premium% premium poster.
+pro_packs:campaign:Campaign pack:4:3:3:0.8:A full campaign with %basic% basic, %colorful% colorful, and %premium% premium poster.

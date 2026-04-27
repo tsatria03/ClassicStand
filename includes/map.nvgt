@@ -52,9 +52,24 @@ clearmap();
 destroymap();
 if(string_ends_with(mapname, ".map"))
 mapname = string_replace(mapname, ".map", "", true);
-mapper.open("data/maps/" + mapname + ".map", "r");
-mapdata = mapper.read();
+string map_path = "data/maps/" + mapname + ".map";
+string map_header = "CSTENC";
+mapper.open(map_path, "rb");
+string map_raw = mapper.read();
 mapper.close();
+if(string_starts_with(map_raw, map_header))
+{
+mapdata = string_aes_decrypt(map_raw.substr(map_header.length()), MAP_KEY);
+}
+else
+{
+mapdata = map_raw;
+string encrypted = map_header + string_aes_encrypt(mapdata, MAP_KEY);
+file enc_out;
+enc_out.open(map_path, "wb");
+enc_out.write(encrypted);
+enc_out.close();
+}
 string[] lines = delinear(mapdata);
 for(uint i = 0; i < lines.length(); i++)
 {

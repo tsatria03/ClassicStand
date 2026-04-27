@@ -1,5 +1,6 @@
 class ingredient_bundle
 {
+string menu_id;
 string id;
 string display_name;
 int quantity;
@@ -7,20 +8,45 @@ string description;
 }
 
 ingredient_bundle@[] ingredient_bundles;
+store_menu@[] ingredient_bundle_menus;
 
 void load_bundle_ingredient_store()
 {
+ingredient_bundle_menus.resize(0);
 ingredient_bundles.resize(0);
 string[] lines = load_config_file("data/config/stores/bundle_ingredients.store");
 for(uint i = 0; i < lines.length(); i++)
 {
-string[] p = parse_delimited_line(lines[i], 3);
-if(p.length() < 4) continue;
+string line = lines[i];
+int eq = line.find("=");
+int col = line.find(":");
+if(eq != -1 && (col == -1 || eq < col))
+{
+store_menu sm;
+sm.id = line.substr(0, eq).trim_whitespace();
+string rest = line.substr(eq + 1);
+int pipe = rest.find("|");
+if(pipe != -1)
+{
+sm.display_name = rest.substr(0, pipe).trim_whitespace();
+sm.description = rest.substr(pipe + 1).trim_whitespace();
+}
+else
+{
+sm.display_name = rest.trim_whitespace();
+sm.description = "";
+}
+ingredient_bundle_menus.insert_last(sm);
+continue;
+}
+string[] p = parse_delimited_line(line, 4);
+if(p.length() < 5) continue;
 ingredient_bundle b;
-b.id           = p[0].trim_whitespace();
-b.display_name = p[1].trim_whitespace();
-b.quantity     = string_to_int(p[2].trim_whitespace());
-b.description  = p[3].trim_whitespace();
+b.menu_id      = p[0].trim_whitespace();
+b.id           = p[1].trim_whitespace();
+b.display_name = p[2].trim_whitespace();
+b.quantity     = string_to_int(p[3].trim_whitespace());
+b.description  = p[4].trim_whitespace();
 ingredient_bundles.insert_last(b);
 }
 }

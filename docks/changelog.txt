@@ -1,3 +1,14 @@
+New in 3.3.
+Made it so both submenu selector entries and individual items inside each store submenu now label their description text with Description:, placed after the affordability count on selectors and after the cost on individual items.
+Made it so each submenu entry in the store menu selector now shows a live count of how many items in that group you can currently afford, in the format Contains x of x purchasable items.
+Made it so each submenu within a store menu now announces its own display name as the intro text when opened, rather than repeating the parent menu name.
+Made it so all four store menus now support submenus defined entirely in config. Menu groups are declared at the top of each store file using a name equals display name pipe description format, and items are assigned to a group by prefixing their line with the group id. The code builds the submenu list dynamically from whatever groups are defined, so adding or rearranging sections requires no code changes.
+Updated the readme to rewrite the Game conclusion section. Removed the claim of deep modding support and replaced it with an accurate summary of what the config system can and cannot do.
+Updated the readme to add a per-section note to every config file that has limitations, clarifying what can be tuned versus what requires code changes to extend.
+Updated the readme to correct the mood tag description. Mood tags are displayed in the talk menu alongside the customer's name, not purely internal.
+Changed the polarity field in main.event from 0, 1, 2 to 1, 2, 3 to be consistent with the other enum style fields. Updated the readme and event file to match.
+Made it so configuration files get reloaded propperly when pressing control L, or when you load the game in the load game menu.
+Made it so the neighborhood map will now be encripted moving forward.
 New in 3.2.
 Fixed a bug where customers would walk in a straight diagonal line from their spawn point, cutting directly through the market walls and interior. Customers now walk west along the street first, then turn at the sidewalk entrance to approach the counter.
 Changed customer spawn and departure points to the open street, matching where passerbys roam. The sidewalk and market are now reserved for the player.

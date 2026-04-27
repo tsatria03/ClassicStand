@@ -140,6 +140,7 @@ if (file_exists(currentSaveSlot))
 speak("Loading slot " + string(slotNumber));
 m.fade_music();
 readdata();
+load_config();
 game();
 }
 else
@@ -510,304 +511,205 @@ last_menu_id="";
 buysmenu();
 }
 }
-void buybmenu()
+void buybmenu(string sub_id = "")
+{
+if(ingredient_bundle_menus.length() > 0 && sub_id == "")
 {
 setupmenu();
-double booth_cost     = ((cupcost + lemoncost + sugarcost + watercost) * 4) / 6;
-m.add_item("Booth bundle: costs " + convert_to_currency(booth_cost) + ". " + get_bundle_description("booth", 4), "tbl");
-double community_cost = ((cupcost + lemoncost + sugarcost + watercost) * 8) / 6;
-m.add_item("Community bundle: costs " + convert_to_currency(community_cost) + ". " + get_bundle_description("community", 8), "cbl");
-double carnival_cost  = ((cupcost + lemoncost + sugarcost + watercost) * 12) / 6;
-m.add_item("Carnival bundle: costs " + convert_to_currency(carnival_cost) + ". " + get_bundle_description("carnival", 12), "rbl");
-double festival_cost  = ((cupcost + lemoncost + sugarcost + watercost) * 16) / 6;
-m.add_item("Festival bundle: costs " + convert_to_currency(festival_cost) + ". " + get_bundle_description("festival", 16), "fbl");
-double market_cost    = ((cupcost + lemoncost + sugarcost + watercost) * 20) / 6;
-m.add_item("Market bundle: costs " + convert_to_currency(market_cost) + ". " + get_bundle_description("market", 20), "mbl");
-double parade_cost    = ((cupcost + lemoncost + sugarcost + watercost) * 24) / 6;
-m.add_item("Parade bundle: costs " + convert_to_currency(parade_cost) + ". " + get_bundle_description("parade", 24), "pbl");
+for(uint i = 0; i < ingredient_bundle_menus.length(); i++)
+{
+store_menu@ sm = ingredient_bundle_menus[i];
+int _bb_total = 0; int _bb_can = 0;
+for(uint j = 0; j < ingredient_bundles.length(); j++) { if(ingredient_bundles[j].menu_id == sm.id) { _bb_total++; double _bb_cost = ((cupcost + lemoncost + sugarcost + watercost) * ingredient_bundles[j].quantity) / 6; if(cash >= _bb_cost) _bb_can++; } }
+m.add_item(sm.display_name + ". Contains " + _bb_can + " out of " + _bb_total + " purchasable item" + (_bb_total != 1 ? "s" : "") + "." + (sm.description != "" ? " Description: " + sm.description : ""), sm.id);
+}
 m.add_item("back", "back");
 m.intro_text = "Bundled ingredients menu.";
-    int start_pos = 0;
-    if (last_menu_id != "")
-    {
-        int found = m.find_item_by_id(last_menu_id);
-        if (found != -1)
-            start_pos = found;
-    }
-        int mres = m.run(start_pos, true);
+int start_pos = 0;
+if(last_sub_id != "")
+{
+int found = m.find_item_by_id(last_sub_id);
+if(found != -1) start_pos = found;
+}
+int mres = m.run(start_pos, true);
+string sel = m.get_item_id(mres);
+if(mres != -1) last_sub_id = sel;
+if(mres == -1 || sel == "back") { last_sub_id = ""; last_menu_id = ""; buymenu(); return; }
+buybmenu(sel);
+return;
+}
+setupmenu();
+for(uint i = 0; i < ingredient_bundles.length(); i++)
+{
+ingredient_bundle@ b = ingredient_bundles[i];
+if(sub_id != "" && b.menu_id != sub_id) continue;
+double cost = ((cupcost + lemoncost + sugarcost + watercost) * b.quantity) / 6;
+m.add_item(b.display_name + ": costs " + convert_to_currency(cost) + ". Description: " + get_bundle_description(b.id, b.quantity), b.id);
+}
+m.add_item("back", "back");
+string _buib_title = "Bundled ingredients.";
+if(sub_id != "") { for(uint mi = 0; mi < ingredient_bundle_menus.length(); mi++) { if(ingredient_bundle_menus[mi].id == sub_id) { _buib_title = ingredient_bundle_menus[mi].display_name + " menu."; break; } } }
+m.intro_text = _buib_title;
+int start_pos = 0;
+if(last_menu_id != "")
+{
+int found = m.find_item_by_id(last_menu_id);
+if(found != -1) start_pos = found;
+}
+int mres = m.run(start_pos, true);
 string buybem = m.get_item_id(mres);
-    if (mres != -1)
+if(mres != -1) last_menu_id = buybem;
+if(mres == -1 || buybem == "back") { last_menu_id = ""; if(sub_id != "") { buybmenu(); } else { buymenu(); } return; }
+ingredient_bundle@ selected = null;
+for(uint i = 0; i < ingredient_bundles.length(); i++)
 {
-        last_menu_id = buybem;
+if(ingredient_bundles[i].id == buybem) { @selected = ingredient_bundles[i]; break; }
 }
-if (mres == -1 || buybem == "back")
-{
-last_menu_id = "";
-buymenu();
-}
-if (buybem == "tbl")
-{
+if(@selected == null) { buybmenu(sub_id); return; }
 m.fade_music();
-purchase_ingredient_bundle("tbl", "booth", 4);
+purchase_ingredient_bundle(selected, sub_id);
 }
-if (buybem == "cbl")
+void buysmenu(string sub_id = "")
 {
-m.fade_music();
-purchase_ingredient_bundle("cbl", "community", 8);
-}
-if (buybem == "rbl")
-{
-m.fade_music();
-purchase_ingredient_bundle("rbl", "carnival", 12);
-}
-if (buybem == "fbl")
-{
-m.fade_music();
-purchase_ingredient_bundle("fbl", "festival", 16);
-}
-if (buybem == "mbl")
-{
-m.fade_music();
-purchase_ingredient_bundle("mbl", "market", 20);
-}
-if (buybem == "pbl")
-{
-m.fade_music();
-purchase_ingredient_bundle("pbl", "parade", 24);
-}
-}
-void buysmenu()
+if(ingredient_item_menus.length() > 0 && sub_id == "")
 {
 setupmenu();
-m.add_item("Empty cups: costs " + convert_to_currency(cupcost) + ". " + get_ingredient_description("cups", cups), "cps");
-m.add_item("Bags of ice: costs " + convert_to_currency(icecost) + ". " + get_ingredient_description("ice", ices), "ics");
-m.add_item("Ripe lemons: costs " + convert_to_currency(lemoncost) + ". " + get_ingredient_description("lemons", lemons), "lms");
-m.add_item("Salt packets: costs " + convert_to_currency(saltcost) + ". " + get_ingredient_description("salt", salts), "slt");
-m.add_item("Sugar packets: costs " + convert_to_currency(sugarcost) + ". " + get_ingredient_description("sugar", sugars), "sgr");
-m.add_item("Water: costs " + convert_to_currency(watercost) + ". " + get_ingredient_description("water", waters), "swr");
+for(uint i = 0; i < ingredient_item_menus.length(); i++)
+{
+store_menu@ sm = ingredient_item_menus[i];
+int _bi_total = 0; int _bi_can = 0;
+for(uint j = 0; j < ingredient_store.length(); j++) { if(ingredient_store[j].menu_id == sm.id) { _bi_total++; if(cash >= get_ingredient_cost(ingredient_store[j].target)) _bi_can++; } }
+m.add_item(sm.display_name + ". Contains " + _bi_can + " out of " + _bi_total + " purchasable item" + (_bi_total != 1 ? "s" : "") + "." + (sm.description != "" ? " Description: " + sm.description : ""), sm.id);
+}
 m.add_item("back", "back");
 m.intro_text = "Single ingredients menu.";
-    int start_pos = 0;
-    if (last_menu_id != "")
-    {
-        int found = m.find_item_by_id(last_menu_id);
-        if (found != -1)
-            start_pos = found;
-    }
-        int mres = m.run(start_pos, true);
+int start_pos = 0;
+if(last_sub_id != "")
+{
+int found = m.find_item_by_id(last_sub_id);
+if(found != -1) start_pos = found;
+}
+int mres = m.run(start_pos, true);
+string sel = m.get_item_id(mres);
+if(mres != -1) last_sub_id = sel;
+if(mres == -1 || sel == "back") { last_sub_id = ""; last_menu_id = ""; buymenu(); return; }
+buysmenu(sel);
+return;
+}
+setupmenu();
+for(uint i = 0; i < ingredient_store.length(); i++)
+{
+ingredient_item@ item = ingredient_store[i];
+if(sub_id != "" && item.menu_id != sub_id) continue;
+double cost = get_ingredient_cost(item.target);
+m.add_item(item.display_name + ": costs " + convert_to_currency(cost) + ". Description: " + get_ingredient_description(item.target, get_ingredient_stock(item.target)), item.id);
+}
+m.add_item("back", "back");
+string _buis_title = "Single ingredients.";
+if(sub_id != "") { for(uint mi = 0; mi < ingredient_item_menus.length(); mi++) { if(ingredient_item_menus[mi].id == sub_id) { _buis_title = ingredient_item_menus[mi].display_name + " menu."; break; } } }
+m.intro_text = _buis_title;
+int start_pos = 0;
+if(last_menu_id != "")
+{
+int found = m.find_item_by_id(last_menu_id);
+if(found != -1) start_pos = found;
+}
+int mres = m.run(start_pos, true);
 string buyem = m.get_item_id(mres);
-    if (mres != -1)
+if(mres != -1) last_menu_id = buyem;
+if(mres == -1 || buyem == "back") { last_menu_id = ""; if(sub_id != "") { buysmenu(); } else { buymenu(); } return; }
+ingredient_item@ selected = null;
+for(uint i = 0; i < ingredient_store.length(); i++)
 {
-        last_menu_id = buyem;
+if(ingredient_store[i].id == buyem) { @selected = ingredient_store[i]; break; }
 }
-if(mres==-1 || buyem=="back")
-{
-last_menu_id="";
-buymenu();
-}
-if(buyem== "cps")
-{
+if(@selected == null) { buysmenu(sub_id); return; }
+double cost = get_ingredient_cost(selected.target);
 m.fade_music();
 vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !`@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
-int max_cups = int(floor(cash / cupcost));
-    string cup = vd.input_box("", "How many empty cups would you like to buy? You can afford up to " + max_cups + ". Press enter to buy the maximum amount.", string(max_cups));
-    if(cup == "") { buysmenu(); return; }
-    double qty = string_to_number(cup);
-    if(qty <= 0) { buysmenu(); return; }
-    double total = qty * cupcost;
-    if(cash < total)
-    {
-        dlg("Error. You don't have enough cash to purchase " + qty + " empty cup" + (qty == 1 ? "" : "s") + ".");
-        buysmenu();
-        return;
-    }
-    cups += qty;
-    cash -= total;
-p.play_stationary("sounds/misc/buycup" + random(1, 2) + ".ogg", false);
-    p.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
-dlg("Purchase complete. You bought " + qty + " empty cup" + (qty == 1 ? "" : "s") + " for " + convert_to_currency(total) + ". You now have " + convert_to_currency(cash) + " in cash remaining.");
-        buysmenu();
-}
-if(buyem== "ics")
+int max_qty = int(floor(cash / cost));
+string qty_input = vd.input_box("", "How many " + selected.display_name + " would you like to buy? You can afford up to " + max_qty + ". Press enter to buy the maximum amount.", string(max_qty));
+if(qty_input == "") { buysmenu(sub_id); return; }
+double qty = string_to_number(qty_input);
+if(qty <= 0) { buysmenu(sub_id); return; }
+double total = qty * cost;
+if(cash < total)
 {
-m.fade_music();
-vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !`@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
-int max_ices = int(floor(cash / icecost));
-    string ice = vd.input_box("", "How many bags of ice would you like to buy? You can afford up to " + max_ices + ". Press enter to buy the maximum amount.", string(max_ices));
-    if(ice == "") { buysmenu(); return; }
-    double qty = string_to_number(ice);
-    if(qty <= 0) { buysmenu(); return; }
-    double total = qty * icecost;
-    if(cash < total)
-    {
-dlg("Error. You don't have enough cash to purchase " + qty + " bag" + (qty == 1 ? "" : "s") + " of ice.");
-        buysmenu();
-        return;
-    }
-    ices += qty;
-    cash -= total;
-p.play_stationary("sounds/misc/buybag" + random(1, 4) + ".ogg", false);
-    p.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
-dlg("Purchase complete. You bought " + qty + " bag" + (qty == 1 ? "" : "s") + " of ice for " + convert_to_currency(total) + ". You now have " + convert_to_currency(cash) + " in cash remaining.");
-        buysmenu();
+dlg("Error. You don't have enough cash to purchase " + qty + " " + selected.display_name + ".");
+buysmenu(sub_id);
+return;
 }
-if(buyem== "lms")
-{
-m.fade_music();
-vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !`@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
-int max_lemons = int(floor(cash / lemoncost));
-    string lemon = vd.input_box("", "How many ripe lemons would you like to buy? You can afford up to " + max_lemons + ". Press enter to buy the maximum amount.", string(max_lemons));
-    if(lemon == "") { buysmenu(); return; }
-    double qty = string_to_number(lemon);
-    if(qty <= 0) { buysmenu(); return; }
-    double total = qty * lemoncost;
-    if(cash < total)
-    {
-        dlg("Error. You don't have enough cash to purchase " + qty + " ripe lemon" + (qty == 1 ? "" : "s") + ".");
-        buysmenu();
-        return;
-    }
-    lemons += qty;
-    cash -= total;
-p.play_stationary("sounds/misc/buyfruit" + random(1, 2) + ".ogg", false);
-    p.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
-dlg("Purchase complete. You bought " + qty + " ripe lemon" + (qty == 1 ? "" : "s") + " for " + convert_to_currency(total) + ". You now have " + convert_to_currency(cash) + " in cash remaining.");
-        buysmenu();
+apply_ingredient_purchase(selected.target, qty);
+cash -= total;
+play_ingredient_sound(selected.target);
+p.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
+dlg("Purchase complete. You bought " + qty + " " + selected.display_name + " for " + convert_to_currency(total) + ". You now have " + convert_to_currency(cash) + " in cash remaining.");
+buysmenu(sub_id);
 }
-if(buyem== "slt")
-{
-m.fade_music();
-vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !`@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
-int max_salts = int(floor(cash / saltcost));
-    string salt = vd.input_box("", "How many packets of salt would you like to buy? You can afford up to " + max_salts + ". Press enter to buy the maximum amount.", string(max_salts));
-    if(salt == "") { buysmenu(); return; }
-    double qty = string_to_number(salt);
-    if(qty <= 0) { buysmenu(); return; }
-    double total = qty * saltcost;
-    if(cash < total)
-    {
-dlg("Error. You don't have enough cash to purchase " + qty + " packet" + (qty == 1 ? "" : "s") + " of salt.");
-        buysmenu();
-        return;
-    }
-    salts += qty;
-    cash -= total;
-p.play_stationary("sounds/misc/buypack" + random(1, 2) + ".ogg", false);
-    p.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
-dlg("Purchase complete. You bought " + qty + " packet" + (qty == 1 ? "" : "s") + " of salt for " + convert_to_currency(total) + ". You now have " + convert_to_currency(cash) + " in cash remaining.");
-        buysmenu();
-}
-if(buyem== "sgr")
-{
-m.fade_music();
-vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !`@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
-int max_sugars = int(floor(cash / sugarcost));
-    string sugar = vd.input_box("", "How many packets of sugar would you like to buy? You can afford up to " + max_sugars + ". Press enter to buy the maximum amount.", string(max_sugars));
-    if(sugar == "") { buysmenu(); return; }
-    double qty = string_to_number(sugar);
-    if(qty <= 0) { buysmenu(); return; }
-    double total = qty * sugarcost;
-    if(cash < total)
-    {
-dlg("Error. You don't have enough cash to purchase " + qty + " packet" + (qty == 1 ? "" : "s") + " of sugar.");
-        buysmenu();
-        return;
-    }
-    sugars += qty;
-    cash -= total;
-p.play_stationary("sounds/misc/buypack" + random(1, 2) + ".ogg", false);
-    p.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
-dlg("Purchase complete. You bought " + qty + " packet" + (qty == 1 ? "" : "s") + " of sugar for " + convert_to_currency(total) + ". You now have " + convert_to_currency(cash) + " in cash remaining.");
-        buysmenu();
-}
-if(buyem== "swr")
-{
-m.fade_music();
-vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !`@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
-int max_waters = int(floor(cash / watercost));
-    string water = vd.input_box("", "How many liters of water would you like to buy? You can afford up to " + max_waters + ". Press enter to buy the maximum amount.", string(max_waters));
-    if(water == "") { buysmenu(); return; }
-    double qty = string_to_number(water);
-    if(qty <= 0) { buysmenu(); return; }
-    double total = qty * watercost;
-    if(cash < total)
-    {
-dlg("Error. You don't have enough cash to purchase " + qty + " liter" + (qty == 1 ? "" : "s") + " of water.");
-        buysmenu();
-        return;
-    }
-    waters += qty;
-    cash -= total;
-p.play_stationary("sounds/misc/buywater" + random(1, 2) + ".ogg", false);
-    p.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
-dlg("Purchase complete. You bought " + qty + " liter" + (qty == 1 ? "" : "s") + " of water for " + convert_to_currency(total) + ". You now have " + convert_to_currency(cash) + " in cash remaining.");
-        buysmenu();
-}
-}
-void purchase_ingredient_bundle(string bundle_id, string bundle_name, double unit_qty)
+void purchase_ingredient_bundle(ingredient_bundle@ b, string sub_id = "")
 {
 vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=~", false, "");
-double per_bundle_base = ((cupcost + lemoncost + sugarcost + watercost) * unit_qty) / 6;
+double per_bundle_base = ((cupcost + lemoncost + sugarcost + watercost) * b.quantity) / 6;
 int max_qty = (per_bundle_base > 0) ? int(cash / per_bundle_base) : 1;
 if(max_qty < 1) max_qty = 1;
-string qty_input = vd.input_box("", "How many " + bundle_name + " bundles would you like to buy? You can afford up to " + max_qty + ". Press enter to buy the maximum amount.", string(max_qty));
+string qty_input = vd.input_box("", "How many " + b.display_name + " bundles would you like to buy? You can afford up to " + max_qty + ". Press enter to buy the maximum amount.", string(max_qty));
 if(qty_input == "")
 {
-buybmenu();
+buybmenu(sub_id);
 return;
 }
 double qty = string_to_number(qty_input);
 if(qty <= 0)
 {
-buybmenu();
+buybmenu(sub_id);
 return;
 }
 setupmenu();
 m.add_item("Yes", "yes");
 m.add_item("No", "no");
-m.intro_text = "Would you like to include " + unit_qty + " bags of ice with each bundle?";
+m.intro_text = "Would you like to include " + b.quantity + " bags of ice with each bundle?";
 int mres = m.run();
 bool include_ice = m.get_item_id(mres) == "yes";
 setupmenu();
 m.add_item("Yes", "yes");
 m.add_item("No", "no");
-m.intro_text = "Would you like to include " + unit_qty + " packets of salt with each bundle?";
+m.intro_text = "Would you like to include " + b.quantity + " packets of salt with each bundle?";
 int mres2 = m.run();
 bool include_salt = m.get_item_id(mres2) == "yes";
-double per_bundle = ((cupcost + lemoncost + sugarcost + watercost) * unit_qty) / 6;
-if(include_ice)  per_bundle += icecost * unit_qty;
-if(include_salt) per_bundle += saltcost * unit_qty;
+double per_bundle = ((cupcost + lemoncost + sugarcost + watercost) * b.quantity) / 6;
+if(include_ice)  per_bundle += icecost * b.quantity;
+if(include_salt) per_bundle += saltcost * b.quantity;
 double total = per_bundle * qty;
 if(cash < total)
 {
-dlg("Error. You don't have enough cash to purchase " + qty + " " + bundle_name + " bundle" + (qty == 1 ? "" : "s") + " of supplies.");
-buybmenu();
+dlg("Error. You don't have enough cash to purchase " + qty + " " + b.display_name + " bundle" + (qty == 1 ? "" : "s") + " of supplies.");
+buybmenu(sub_id);
 return;
 }
 cash   -= total;
-cups   += unit_qty * qty;
-if(include_ice) ices += unit_qty * qty;
-lemons += unit_qty * qty;
-if(include_salt) salts += unit_qty * qty;
-sugars += unit_qty * qty;
-waters += unit_qty * qty;
+cups   += b.quantity * qty;
+if(include_ice) ices += b.quantity * qty;
+lemons += b.quantity * qty;
+if(include_salt) salts += b.quantity * qty;
+sugars += b.quantity * qty;
+waters += b.quantity * qty;
 p.play_stationary("sounds/misc/buycup" + random(1, 2) + ".ogg", false);
 p.play_stationary("sounds/misc/buybag" + random(1, 4) + ".ogg", false);
 p.play_stationary("sounds/misc/buyfruit" + random(1, 2) + ".ogg", false);
 p.play_stationary("sounds/misc/buypack" + random(1, 2) + ".ogg", false);
 p.play_stationary("sounds/misc/buywater" + random(1, 2) + ".ogg", false);
 p.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
-string msg = "Purchase complete. You bought " + qty + " " + bundle_name + " bundle" + (qty == 1 ? "" : "s") + " of supplies for " + convert_to_currency(total) + ".--";
-msg += "You received " + (unit_qty * qty) + " empty cups";
-if(include_ice)  msg += ", " + (unit_qty * qty) + " bags of ice";
-msg += ", " + (unit_qty * qty) + " ripe lemons";
-if(include_salt) msg += ", " + (unit_qty * qty) + " packets of salt";
-msg += ", " + (unit_qty * qty) + " packets of sugar";
-msg += ", and " + (unit_qty * qty) + " liters of water.";
+string msg = "Purchase complete. You bought " + qty + " " + b.display_name + " bundle" + (qty == 1 ? "" : "s") + " of supplies for " + convert_to_currency(total) + ".--";
+msg += "You received " + (b.quantity * qty) + " empty cups";
+if(include_ice)  msg += ", " + (b.quantity * qty) + " bags of ice";
+msg += ", " + (b.quantity * qty) + " ripe lemons";
+if(include_salt) msg += ", " + (b.quantity * qty) + " packets of salt";
+msg += ", " + (b.quantity * qty) + " packets of sugar";
+msg += ", and " + (b.quantity * qty) + " liters of water.";
 msg += "--You now have " + convert_to_currency(cash) + " in cash remaining.";
 dlgmessage(msg);
 wait(500);
-buybmenu();
+buybmenu(sub_id);
 }
 void postermenu()
 {
@@ -832,14 +734,45 @@ if(mres == -1 || postem == "back") { last_menu_id = ""; custpool.resume_all(); p
 if(postem == "pbg") { last_menu_id = ""; posterbmenu(); }
 if(postem == "psg") { last_menu_id = ""; postersmenu(); }
 }
-void postersmenu()
+void postersmenu(string sub_id = "")
+{
+if(poster_item_menus.length() > 0 && sub_id == "")
 {
 setupmenu();
-m.add_item("Basic poster: costs " + convert_to_currency(poster_basic_cost) + ". " + get_poster_description("basic", poster_basic), "pb");
-m.add_item("Colorful poster: costs " + convert_to_currency(poster_colorful_cost) + ". " + get_poster_description("colorful", poster_colorful), "pc");
-m.add_item("Premium poster: costs " + convert_to_currency(poster_premium_cost) + ". " + get_poster_description("premium", poster_premium), "pp");
+for(uint i = 0; i < poster_item_menus.length(); i++)
+{
+store_menu@ sm = poster_item_menus[i];
+int _ps_total = 0; int _ps_can = 0;
+for(uint j = 0; j < poster_store.length(); j++) { if(poster_store[j].menu_id == sm.id) { _ps_total++; if(cash >= get_poster_cost(poster_store[j].id)) _ps_can++; } }
+m.add_item(sm.display_name + ". Contains " + _ps_can + " out of " + _ps_total + " purchasable item" + (_ps_total != 1 ? "s" : "") + "." + (sm.description != "" ? " Description: " + sm.description : ""), sm.id);
+}
 m.add_item("back", "back");
 m.intro_text = "Single posters.";
+int start_pos = 0;
+if(last_sub_id != "")
+{
+int found = m.find_item_by_id(last_sub_id);
+if(found != -1) start_pos = found;
+}
+int mres = m.run(start_pos, true);
+string sel = m.get_item_id(mres);
+if(mres != -1) last_sub_id = sel;
+if(mres == -1 || sel == "back") { last_sub_id = ""; last_menu_id = ""; postermenu(); return; }
+postersmenu(sel);
+return;
+}
+setupmenu();
+for(uint i = 0; i < poster_store.length(); i++)
+{
+poster_item@ item = poster_store[i];
+if(sub_id != "" && item.menu_id != sub_id) continue;
+double cost = get_poster_cost(item.id);
+m.add_item(item.display_name + ": costs " + convert_to_currency(cost) + ". Description: " + get_poster_description(item.id, get_poster_stock(item.id)), item.id);
+}
+m.add_item("back", "back");
+string _ps_title = "Single posters.";
+if(sub_id != "") { for(uint mi = 0; mi < poster_item_menus.length(); mi++) { if(poster_item_menus[mi].id == sub_id) { _ps_title = poster_item_menus[mi].display_name + " menu."; break; } } }
+m.intro_text = _ps_title;
 int start_pos = 0;
 if(last_menu_id != "")
 {
@@ -849,41 +782,67 @@ if(found != -1) start_pos = found;
 int mres = m.run(start_pos, true);
 string postsem = m.get_item_id(mres);
 if(mres != -1) last_menu_id = postsem;
-if(mres == -1 || postsem == "back") { last_menu_id = ""; postermenu(); return; }
-int cost = 0;
-string ptype = "";
-if(postsem == "pb") { cost = poster_basic_cost; ptype = "basic"; }
-else if(postsem == "pc") { cost = poster_colorful_cost; ptype = "colorful"; }
-else if(postsem == "pp") { cost = poster_premium_cost; ptype = "premium"; }
-else { postermenu(); return; }
+if(mres == -1 || postsem == "back") { last_menu_id = ""; if(sub_id != "") { postersmenu(); } else { postermenu(); } return; }
+poster_item@ selected = null;
+for(uint i = 0; i < poster_store.length(); i++)
+{
+if(poster_store[i].id == postsem) { @selected = poster_store[i]; break; }
+}
+if(@selected == null) { postersmenu(sub_id); return; }
+double cost = get_poster_cost(selected.id);
 vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=~", false, "");
 int max_qty = int(floor(cash / cost));
-string qty_input = vd.input_box("", "How many " + ptype + " posters would you like to buy? They cost " + convert_to_currency(cost) + " each. You can afford up to " + max_qty + ". Press enter to buy the maximum.", string(max_qty));
-if(qty_input == "") { postersmenu(); return; }
+string qty_input = vd.input_box("", "How many " + selected.display_name + " would you like to buy? They cost " + convert_to_currency(cost) + " each. You can afford up to " + max_qty + ". Press enter to buy the maximum.", string(max_qty));
+if(qty_input == "") { postersmenu(sub_id); return; }
 int qty = int(string_to_number(qty_input));
-if(qty <= 0) { postersmenu(); return; }
+if(qty <= 0) { postersmenu(sub_id); return; }
 double total = qty * cost;
-if(cash < total) { dlg("You don't have enough cash for that."); postersmenu(); return; }
+if(cash < total) { dlg("You don't have enough cash for that."); postersmenu(sub_id); return; }
 cash -= total;
-if(ptype == "basic") poster_basic += qty;
-else if(ptype == "colorful") poster_colorful += qty;
-else poster_premium += qty;
-p.play_stationary("sounds/misc/buypost" + random(1, 2) + ".ogg", false);
-p.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
-dlg("Purchase complete. You bought " + qty + " " + ptype + " poster" + (qty == 1 ? "" : "s") + " for " + convert_to_currency(total) + ". You now have " + convert_to_currency(cash) + " remaining.");
-postersmenu();
+apply_poster_purchase(selected.id, qty);
+play_poster_sound();
+dlg("Purchase complete. You bought " + qty + " " + selected.display_name + " for " + convert_to_currency(total) + ". You now have " + convert_to_currency(cash) + " remaining.");
+postersmenu(sub_id);
 }
-void posterbmenu()
+void posterbmenu(string sub_id = "")
+{
+if(poster_bundle_menus.length() > 0 && sub_id == "")
 {
 setupmenu();
-int small_qty = 3; double small_cost = (poster_basic_cost * 2 + poster_colorful_cost) * 0.9;
-int medium_qty = 6; double medium_cost = (poster_basic_cost * 3 + poster_colorful_cost * 2 + poster_premium_cost) * 0.85;
-int large_qty = 10; double large_cost = (poster_basic_cost * 4 + poster_colorful_cost * 3 + poster_premium_cost * 3) * 0.8;
-m.add_item("Starter pack: costs " + convert_to_currency(small_cost) + ". " + get_poster_bundle_description("starter"), "psm");
-m.add_item("Advertiser pack: costs " + convert_to_currency(medium_cost) + ". " + get_poster_bundle_description("advertiser"), "pmd");
-m.add_item("Campaign pack: costs " + convert_to_currency(large_cost) + ". " + get_poster_bundle_description("campaign"), "plg");
+for(uint i = 0; i < poster_bundle_menus.length(); i++)
+{
+store_menu@ sm = poster_bundle_menus[i];
+int _pb_total = 0; int _pb_can = 0;
+for(uint j = 0; j < poster_bundles.length(); j++) { if(poster_bundles[j].menu_id == sm.id) { _pb_total++; double _pb_cost = (poster_basic_cost * poster_bundles[j].basic_qty + poster_colorful_cost * poster_bundles[j].colorful_qty + poster_premium_cost * poster_bundles[j].premium_qty) * poster_bundles[j].discount; if(cash >= _pb_cost) _pb_can++; } }
+m.add_item(sm.display_name + ". Contains " + _pb_can + " out of " + _pb_total + " purchasable item" + (_pb_total != 1 ? "s" : "") + "." + (sm.description != "" ? " Description: " + sm.description : ""), sm.id);
+}
 m.add_item("back", "back");
 m.intro_text = "Bundled posters.";
+int start_pos = 0;
+if(last_sub_id != "")
+{
+int found = m.find_item_by_id(last_sub_id);
+if(found != -1) start_pos = found;
+}
+int mres = m.run(start_pos, true);
+string sel = m.get_item_id(mres);
+if(mres != -1) last_sub_id = sel;
+if(mres == -1 || sel == "back") { last_sub_id = ""; last_menu_id = ""; postermenu(); return; }
+posterbmenu(sel);
+return;
+}
+setupmenu();
+for(uint i = 0; i < poster_bundles.length(); i++)
+{
+poster_bundle@ b = poster_bundles[i];
+if(sub_id != "" && b.menu_id != sub_id) continue;
+double cost = (poster_basic_cost * b.basic_qty + poster_colorful_cost * b.colorful_qty + poster_premium_cost * b.premium_qty) * b.discount;
+m.add_item(b.display_name + ": costs " + convert_to_currency(cost) + ". Description: " + get_poster_bundle_description(b.id), b.id);
+}
+m.add_item("back", "back");
+string _pb_title = "Bundled posters.";
+if(sub_id != "") { for(uint mi = 0; mi < poster_bundle_menus.length(); mi++) { if(poster_bundle_menus[mi].id == sub_id) { _pb_title = poster_bundle_menus[mi].display_name + " menu."; break; } } }
+m.intro_text = _pb_title;
 int start_pos = 0;
 if(last_menu_id != "")
 {
@@ -893,35 +852,33 @@ if(found != -1) start_pos = found;
 int mres = m.run(start_pos, true);
 string postbem = m.get_item_id(mres);
 if(mres != -1) last_menu_id = postbem;
-if(mres == -1 || postbem == "back") { last_menu_id = ""; postermenu(); return; }
-double total = 0;
-string msg = "";
-if(postbem == "psm")
+if(mres == -1 || postbem == "back") { last_menu_id = ""; if(sub_id != "") { posterbmenu(); } else { postermenu(); } return; }
+poster_bundle@ selected = null;
+for(uint i = 0; i < poster_bundles.length(); i++)
 {
-total = small_cost;
-if(cash < total) { dlg("You don't have enough cash for that."); posterbmenu(); return; }
-cash -= total;
-poster_basic += 2; poster_colorful += 1;
-msg = "You bought the starter pack for " + convert_to_currency(total) + ". You received 2 basic posters and 1 colorful poster.";
+if(poster_bundles[i].id == postbem) { @selected = poster_bundles[i]; break; }
 }
-else if(postbem == "pmd")
+if(@selected == null) { posterbmenu(sub_id); return; }
+double total = (poster_basic_cost * selected.basic_qty + poster_colorful_cost * selected.colorful_qty + poster_premium_cost * selected.premium_qty) * selected.discount;
+if(cash < total) { dlg("You don't have enough cash for that."); posterbmenu(sub_id); return; }
+cash -= total;
+poster_basic    += selected.basic_qty;
+poster_colorful += selected.colorful_qty;
+poster_premium  += selected.premium_qty;
+string[] receipt_parts;
+if(selected.basic_qty > 0)    receipt_parts.insert_last(selected.basic_qty + " basic");
+if(selected.colorful_qty > 0) receipt_parts.insert_last(selected.colorful_qty + " colorful");
+if(selected.premium_qty > 0)  receipt_parts.insert_last(selected.premium_qty + " premium");
+string receipt = "";
+for(uint i = 0; i < receipt_parts.length(); i++)
 {
-total = medium_cost;
-if(cash < total) { dlg("You don't have enough cash for that."); posterbmenu(); return; }
-cash -= total;
-poster_basic += 3; poster_colorful += 2; poster_premium += 1;
-msg = "You bought the advertiser pack for " + convert_to_currency(total) + ". You received 3 basic, 2 colorful, and 1 premium poster.";
+if(i == 0) receipt = receipt_parts[i];
+else if(i == receipt_parts.length() - 1) receipt += (receipt_parts.length() > 2 ? ", and " : " and ") + receipt_parts[i];
+else receipt += ", " + receipt_parts[i];
 }
-else if(postbem == "plg")
-{
-total = large_cost;
-if(cash < total) { dlg("You don't have enough cash for that."); posterbmenu(); return; }
-cash -= total;
-poster_basic += 4; poster_colorful += 3; poster_premium += 3;
-msg = "You bought the campaign pack for " + convert_to_currency(total) + ". You received 4 basic, 3 colorful, and 3 premium posters.";
-}
-p.play_stationary("sounds/misc/buypost" + random(1, 2) + ".ogg", false);
-p.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
-dlg(msg + " You now have " + convert_to_currency(cash) + " remaining.");
-posterbmenu();
+int total_qty = selected.basic_qty + selected.colorful_qty + selected.premium_qty;
+receipt += " poster" + (total_qty != 1 ? "s" : "");
+play_poster_sound();
+dlg("You bought the " + selected.display_name + " for " + convert_to_currency(total) + ". You received " + receipt + ". You now have " + convert_to_currency(cash) + " remaining.");
+posterbmenu(sub_id);
 }

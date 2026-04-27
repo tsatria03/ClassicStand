@@ -1,14 +1,6 @@
 void game()
 {
-load_events();
-load_single_ingredient_store();
-load_bundle_ingredient_store();
-load_single_poster_store();
-load_bundle_poster_store();
-load_main_table_thresholds();
-load_main_table_items();
-load_customer_table();
-load_passer_table();
+load_config();
 load_map("neighborhood");
 napkin_giver_index = 0;
 spawn_customer_wave();
@@ -414,6 +406,7 @@ movetimer.restart();
 if(control_is_down() and key_pressed(KEY_L))
 {
 readdata();
+load_config();
 speak("game reloaded");
 wait(500);
 last_menu_id="";

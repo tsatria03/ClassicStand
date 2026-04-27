@@ -11,6 +11,7 @@ string[] poster_tiles;
 int poster_basic_cost=50, poster_colorful_cost=150, poster_premium_cost=400;
 double last_lemons_per_cup=0, last_sugars_per_cup=0, last_waters_per_cup=0, last_ices_per_cup=0, last_salts_per_cup=0, price_per_cup=0, selling_price=25, price_multiplier=1.0;
 double[] cup_lemons(0), cup_sugars(0), cup_waters(0), cup_ices(0), cup_salts(0);
+const string MAP_KEY = "RCrkvuzjuCuQdbGstarctlESn1cU2LuZTNmjGb2BlnT0pHJ33MGSxGEsGwAzDk2sCDMG2lEbfHr9JGt4wwmnMvaSnpedSWCAPyDmDgCbLcfiYnMfqpoeN4yzkWdZnHDw4pw5PaJuwm90bFpFHj6AoEo6gGfXsUHKt0ZleszhpvPjayjGy2O4hz0BvkkIoiD9yqa1cvZGlJYabiCvVrtFm4HZFkDvJ5RlNSARgmODFlwsuEnGMkd9BZzfCs0DV63Qb8cEI7vks0HsexrdQD44neQsRxTKGFjb5tDhVZPNuVoJeH";
 const int COUNTER_X = 14;
 const int COUNTER_Y = 25;
 const int EXIT_X_MIN = 47;
@@ -26,7 +27,15 @@ int current_day_index=0, current_month_index=0, clocktime=0, daynumber=1, monthn
 int usetime=100;
 string business_name="";
 string last_menu_id="";
+string last_sub_id="";
 string facing="right";
+
+class store_menu
+{
+string id;
+string display_name;
+string description;
+}
 string[] daynames = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 string[] monthnames = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 string dayname = daynames[current_day_index];
