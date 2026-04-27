@@ -433,7 +433,7 @@ def menu():
         print(" 4. Full release")
         print(" 5. Compile only")
         print(" 6. Package only")
-        print(" 7. Publish only")
+        print(" 7. Release only")
         print(" 8. Website only")
         print(" ---")
         print(" 9. Exit")
@@ -453,7 +453,7 @@ def menu():
         elif choice == "6":
             run_release(SILENT_SKIP, DO, SILENT_SKIP, SILENT_SKIP, SILENT_SKIP)
         elif choice == "7":
-            run_release(SILENT_SKIP, SILENT_SKIP, DO, DO, DO)
+            run_release(SILENT_SKIP, SILENT_SKIP, DO, SILENT_SKIP, DO)
         elif choice == "8":
             run_release(SILENT_SKIP, SILENT_SKIP, SILENT_SKIP, DO, SILENT_SKIP)
         elif choice == "9":
