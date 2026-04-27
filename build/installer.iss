@@ -3,7 +3,7 @@
 #define MyOutputFilename MyAppName + "_windows_installer_password_is_" + MyAppPassword
 
 [Setup]
-AppId={#MyAppId}
+AppId={{{#MyAppId}}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 AppPublisher={#MyAppPublisher}
