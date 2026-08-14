@@ -46,7 +46,6 @@ string savePath = DIRECTORY_APPDATA + "tsatria03/ClassicStand/saves/";
 string statsPath = DIRECTORY_APPDATA + "tsatria03/ClassicStand/stats/";
 string mapdata;
 string mapname;
-string version;
 string newzone;
 file mapper;
 instance gamstence("cst");

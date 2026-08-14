@@ -9,7 +9,6 @@ readdata();
 readpreffs();
 sound_global_hrtf=hrtf;
 initialize_sound_pools();
-getver();
 show_window("ClassicStand, version "+version);
 if(gamstence.is_already_running)
 {
@@ -47,12 +46,6 @@ last_menu_id = "";
 mainmenu();
 }
 }
-}
-void getver()
-{
-dockver.open("docks/version.txt","rb");
-version=dockver.read();
-dockver.close();
 }
 void resetgame()
 {

@@ -732,7 +732,7 @@ load_customer_table();
 load_passer_table();
 }
 
-void restart_game(string appid="cst.exe", string scriptid="cst.nvgt")
+void restart_game(string appid="cst.exe", string scriptid="../src/cst.nvgt")
 {
 if(SCRIPT_COMPILED)
 {
@@ -744,7 +744,7 @@ alert("errorr", "Unable to restart "+appid+"!");
 }
 else
 {
-bool success=run("c:\\nvgt\\nvgtw.exe", scriptid,false,false);
+bool success=run("c:\\nvgt2\\nvgtw.exe", scriptid,false,false);
 if(!success)
 {
 alert("errorr", "Unable to restart "+scriptid+"!");
