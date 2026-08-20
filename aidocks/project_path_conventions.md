@@ -14,10 +14,10 @@ ClassicStand separates code from runtime assets into top-level folders (the Simp
 - **`build/`** — the build/release pipeline (`tools.py`, `tools.ini`, `version.txt`) — see [[project_build_pipeline]].
 - **`releases/`** — compiled output + archives (gitignored).
 
-**The cwd trick (the key mechanism):** `cst/cst.py` runs `../src/cst.nvgt` through `C:\nvgt2\nvgt.exe` but sets **cwd = `cst/`**. So two path classes coexist in the code:
+**The cwd trick (the key mechanism):** `cst/cst.py` runs `../src/cst.nvgt` through `C:\nvgt\nvgt.exe` but sets **cwd = `cst/`**. So two path classes coexist in the code:
 - `#include"includes/..."` resolves relative to the **script** → `src/includes/`.
 - bare `sounds/...`, `data/...`, `docks/...` strings resolve relative to **cwd** → `cst/`.
 
-So a path naming a *file on disk* is under `src/` or `cst/`, while the bare `data/`/`sounds/`/`docks/` strings in the code are cwd-relative against `cst/`. **No in-code asset path needs to change** for the split — only the launcher's cwd (runtime) and `tools.py`'s asset-copy (build) know about it. There are deliberately **no `#pragma asset`/`#pragma document`** lines (nvgt2 resolves those against the output dir, which was brittle); `tools.py` copies `data/docks/sounds` into the compiled bundle instead.
+So a path naming a *file on disk* is under `src/` or `cst/`, while the bare `data/`/`sounds/`/`docks/` strings in the code are cwd-relative against `cst/`. **No in-code asset path needs to change** for the split — only the launcher's cwd (runtime) and `tools.py`'s asset-copy (build) know about it. There are deliberately **no `#pragma asset`/`#pragma document`** lines (nvgt resolves those against the output dir, which was brittle); `tools.py` copies `data/docks/sounds` into the compiled bundle instead.
 
 **Writable user data** is absolute, unaffected by the split: `DIRECTORY_APPDATA + "tsatria03/ClassicStand/..."` (preffs/saves/stats) — see [[project_save_data_layout]].

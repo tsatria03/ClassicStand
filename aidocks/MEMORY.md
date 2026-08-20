@@ -11,7 +11,13 @@ The `[[name]]` links in `CLAUDE.md` and across these memories resolve to `aidock
 - [Audio model](project_audio_model.md) — sound_pool + HRTF; cst/sounds/ layout (ambience/dlg/keyboard/menu/misc/platforms/walls); no sound packs.
 - [Save-data layout](project_save_data_layout.md) — writable data in AppData under tsatria03/ClassicStand/ (preffs/saves/stats); map file encrypted, sounds not.
 - [Repo hygiene](project_repo_hygiene.md) — .gitattributes CRLF enforcement + binary rules; what's gitignored; CLAUDE.md + aidocks/ are committed.
-- [Engine pinned to nvgt2](project_engine_pinned_nvgt2.md) — runs on the legacy fork at C:\nvgt2 (BASS); upstream C:\nvgt (miniaudio) is incompatible; don't target it or suggest upgrading.
+- [Engine pinned to nvgt](project_engine_pinned_nvgt2.md) — runs on the legacy fork at C:\nvgt (BASS); upstream C:\nvgt2 (miniaudio) is incompatible; don't target it or suggest upgrading.
+
+## Known issues — from the 2026-08-20 (v3.3) full-repo evaluation
+- [Known player-facing bugs](project_known_player_bugs.md) — save-data loss gaps (posters/per-cup recipes/napkins), load/new-game menu fall-through, dock viewer missing-file crash, spill geometry accretion, cup-count inflation, spoiled-item wipe, serve-all group mispricing.
+- [Design feedback](project_design_feedback.md) — design/balance suggestions (not bugs) from a blind player's 2026-08-20 v3.3 feedback: ratio-feedback clarity, inert salt/ice, spoilage pacing + storage upgrades, talking always negative, posters vs viral bonus, per-group pricing, clock sound, day length, movement friction, napkin/greeter rework.
+- [Known code issues](project_known_code_issues.md) — global-state sprawl, silent parser failures, 4× store parser/menu duplication, recursion-as-navigation, and assorted latent bugs (eval_amount precedence, stn OOB, keyhook inverted, etc.).
+- [Menu refactor plan](project_menu_refactor_plan.md) — planned v3.4 loop-and-return state machine to replace recursion-as-navigation; why ToyMania is only a partial reference (its navigation recurses too), and the good primitives (choose_difficulty loop-and-return) to generalize.
 
 ## NVGT / AngelScript gotchas — these cause compile failures (game won't launch)
 - [AngelScript braceless if](project_angelscript_braceless_if.md) — a braceless if/else governs one statement; a second orphans the else → compile error.
