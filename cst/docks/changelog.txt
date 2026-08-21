@@ -1,4 +1,5 @@
 New in 3.5.
+Made it so each customer type's price adjustment is now set in the customers config file under a new prices section, instead of being fixed in the code. Desperate customers still pay more and children pay less by default, but the multiplier for any type can now be tuned without code changes.
 Made it so a customer's feedback on unbalanced lemonade now names the ingredient that is off, such as too much lemon for the sugar, instead of vague comments that made it hard to tell what to adjust.
 Fixed a bug where the serve all option ignored your price, letting customers who would normally refuse or hesitate at a high price buy without complaint. Serve all now applies the same price sensitivity as serving customers one at a time, and the summary reports how many refused or grumbled about the price.
 Made it so serving customers all at once with serve all now applies the same desperate and child price adjustments as serving them one at a time, so desperate customers pay more and children pay less either way.

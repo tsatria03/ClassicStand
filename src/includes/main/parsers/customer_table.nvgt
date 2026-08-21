@@ -2,6 +2,8 @@ string[] customer_type_pool;
 
 dictionary wave_settings;
 
+dictionary customer_prices;
+
 class customer_movement
 {
 string type;
@@ -56,6 +58,21 @@ if(!wave_settings.exists(key)) return fallback;
 string v;
 wave_settings.get(key, v);
 return string_to_number(v);
+}
+
+void load_customer_table_prices()
+{
+load_section_dict("data/config/tables/customers.table", "[prices]", customer_prices);
+}
+
+double get_customer_price_multiplier(string type)
+{
+if(!customer_prices.exists(type)) return 1.0;
+string v;
+customer_prices.get(type, v);
+double m = string_to_number(v);
+if(m <= 0) return 1.0;
+return m;
 }
 
 void load_customer_table_movements()
@@ -135,5 +152,6 @@ void load_customer_table()
 load_customer_table_types();
 load_customer_table_waves();
 load_customer_table_movements();
+load_customer_table_prices();
 load_customer_table_speeches();
 }

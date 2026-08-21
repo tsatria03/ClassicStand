@@ -44,6 +44,22 @@ elderly:1.8:2.0:true
 child:0.6:0.6:true
 thief:0.55:1.0:false
 
+[prices]
+
+; Required header — removing or renaming this will break the file.
+
+normal=1.0
+nice=1.0
+mean=1.0
+desperate=1.5
+charitable=1.0
+group=1.0
+returning=1.0
+critic=1.0
+elderly=1.0
+child=0.6
+thief=1.0
+
 [speeches]
 
 ; Required header — removing or renaming this will break the file.

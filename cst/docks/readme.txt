@@ -322,6 +322,13 @@ speed_multiplier scales how fast this customer type walks. Values above 1.0 are 
 patience_multiplier scales how long this type waits before leaving. Values above 1.0 are more patient, below 1.0 are less patient.
 use_patience controls whether the patience timer is active for this type. Set to false for types that manage their own leaving logic.
 
+[prices]
+Flat key=value price multiplier for each customer type, applied to the amount that type pays per cup.
+
+Format: type=multiplier
+
+A value of 1.0 means that type pays the normal price. Above 1.0 they pay more, for example desperate is 1.5 and pays 50 percent more. Below 1.0 they pay less, for example child is 0.6 and pays 40 percent less. A missing type, or a value of 0 or less, falls back to 1.0.
+
 [speeches]
 Dialogue lines for each customer type.
 
