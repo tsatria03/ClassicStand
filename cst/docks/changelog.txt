@@ -1,4 +1,5 @@
 New in 3.4.
+Fixed a bug where reloading a saved game would lose your placed posters, each filled cup's exact recipe, and your napkins. These are now saved and restored when you load your game.
 Fixed a bug where backing out or pressing escape from the load game or new game slot list would drop you onto an invalid save slot instead of returning to the game menu. Both slot lists now return you cleanly to the game menu.
 Fixed a bug where trying to view a readme or changelog file that was missing would throw an error instead of showing a clean message. The docks menu now tells you the file could not be found and returns you to the menu.
 New in 3.3.

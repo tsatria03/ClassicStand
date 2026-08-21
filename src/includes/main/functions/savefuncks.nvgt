@@ -139,6 +139,58 @@ if (sd.d.exists("poster_premium"))
 poster_premium = sd.read_int("poster_premium");
 if (sd.d.exists("placed_posters"))
 placed_posters = sd.read_int("placed_posters");
+if (sd.d.exists("floor_spilled"))
+floor_spilled = sd.read_bool("floor_spilled");
+if (sd.d.exists("poster_tiles"))
+{
+poster_tiles.resize(0);
+string pts = sd.read_string("poster_tiles");
+if(pts != "")
+{
+string[] pparts = string_split(pts, ";", true);
+for(uint i=0; i<pparts.length(); i++)
+if(pparts[i] != "") poster_tiles.insert_last(pparts[i]);
+}
+}
+if (sd.d.exists("cup_lemons"))
+{
+cup_lemons.resize(0);
+cup_sugars.resize(0);
+cup_waters.resize(0);
+cup_ices.resize(0);
+cup_salts.resize(0);
+string csl = sd.read_string("cup_lemons");
+if(csl != "")
+{
+string[] arr_lem = string_split(csl, ",", true);
+string[] arr_sug = string_split(sd.read_string("cup_sugars"), ",", true);
+string[] arr_wat = string_split(sd.read_string("cup_waters"), ",", true);
+string[] arr_ice = string_split(sd.read_string("cup_ices"), ",", true);
+string[] arr_sal = string_split(sd.read_string("cup_salts"), ",", true);
+for(uint i=0; i<arr_lem.length(); i++)
+{
+cup_lemons.insert_last(string_to_number(arr_lem[i]));
+cup_sugars.insert_last(string_to_number(arr_sug[i]));
+cup_waters.insert_last(string_to_number(arr_wat[i]));
+cup_ices.insert_last(string_to_number(arr_ice[i]));
+cup_salts.insert_last(string_to_number(arr_sal[i]));
+}
+}
+}
+int cur_napkin = item_exists("napkin");
+if(cur_napkin > 0) give("napkin", -cur_napkin);
+int cur_used = item_exists("used_napkin");
+if(cur_used > 0) give("used_napkin", -cur_used);
+if (sd.d.exists("napkin"))
+{
+int n = sd.read_int("napkin");
+if(n > 0) give("napkin", n);
+}
+if (sd.d.exists("used_napkin"))
+{
+int un = sd.read_int("used_napkin");
+if(un > 0) give("used_napkin", un);
+}
 }
 void writedata()
 {
@@ -181,6 +233,35 @@ sd.add("poster_basic", poster_basic);
 sd.add("poster_colorful", poster_colorful);
 sd.add("poster_premium", poster_premium);
 sd.add("placed_posters", placed_posters);
+string poster_tiles_str = "";
+for(uint i=0; i<poster_tiles.length(); i++)
+{
+if(i > 0) poster_tiles_str += ";";
+poster_tiles_str += poster_tiles[i];
+}
+sd.add("poster_tiles", poster_tiles_str);
+string cl="", cs="", cw="", ci="", csa="";
+for(uint i=0; i<cup_lemons.length(); i++)
+{
+if(i > 0) { cl+=","; cs+=","; cw+=","; ci+=","; csa+=","; }
+cl += "" + cup_lemons[i];
+cs += "" + cup_sugars[i];
+cw += "" + cup_waters[i];
+ci += "" + cup_ices[i];
+csa += "" + cup_salts[i];
+}
+sd.add("cup_lemons", cl);
+sd.add("cup_sugars", cs);
+sd.add("cup_waters", cw);
+sd.add("cup_ices", ci);
+sd.add("cup_salts", csa);
+int napkin_ct = item_exists("napkin");
+if(napkin_ct < 0) napkin_ct = 0;
+int used_napkin_ct = item_exists("used_napkin");
+if(used_napkin_ct < 0) used_napkin_ct = 0;
+sd.add("napkin", napkin_ct);
+sd.add("used_napkin", used_napkin_ct);
+sd.add("floor_spilled", floor_spilled);
     sd.save();
 }
 void readpreffs()
