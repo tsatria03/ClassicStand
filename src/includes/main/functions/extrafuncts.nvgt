@@ -381,7 +381,7 @@ double get_save_cash(string saveFile)
     {
         return -1;
     }
-    savedata tempSave(saveFile, "");
+    savedata tempSave(saveFile, SAVE_KEY);
     tempSave.load();
     if (tempSave.d.exists("cash"))
     {
@@ -438,7 +438,7 @@ return retval;
 void set_save_slot(int slot)
 {
     currentSaveSlot = DIRECTORY_APPDATA + "tsatria03/ClassicStand/saves/game" + string(slot) + ".clm";
-    sd = savedata(currentSaveSlot, "");
+    sd = savedata(currentSaveSlot, SAVE_KEY);
 }
 
 void dockread(const string&in filename)

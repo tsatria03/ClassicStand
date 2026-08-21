@@ -1,3 +1,5 @@
+New in 3.6.
+Made it so saved games and game settings are now encrypted on disk. They can no longer be opened or edited with a plain text editor. Any existing unencrypted save or settings file still loads and is converted automatically the next time it is saved.
 New in 3.5.
 Made it so each segment of the day now feels longer do to raising wave sizes, so early periods now open with a real line of customers instead of ending almost as soon as they begin.
 You can now set how many in-game hours each level lasts in the game's config, which also decides how many levels make up a day. The value must divide evenly into 24, and prices, events, and other amounts now scale on how far through the day you are rather than the raw level number, so changing the number of levels no longer throws off the economy.

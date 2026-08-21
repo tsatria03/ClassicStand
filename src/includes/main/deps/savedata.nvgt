@@ -27,19 +27,22 @@ void load()
 file f;
 //fn is our previously declared filename string, so use that.
 f.open(fn,"rb");
+string raw=f.read();
+//close the file
+f.close();
 //check for a decryption key.
 if (key=="")
 {
 //no key, so just deserialize.
-d=deserialize(f.read());
+d=deserialize(raw);
+return;
 }
+/* An encrypted file starts with the header sentinel. A legacy plaintext file won't, so read it as-is; the next save() re-writes it encrypted. This mirrors how the map self-heals. */
+string enc_header="CSTSAV";
+if (string_starts_with(raw, enc_header))
+d=deserialize(string_decrypt(raw.substr(enc_header.length()),key));
 else
-{
-//deserialize but first decrypt.
-d=deserialize(string_decrypt(f.read(),key));
-}
-//close the file
-f.close();
+d=deserialize(raw);
 }
 //function to save the data into the file.
 void save()
@@ -51,7 +54,10 @@ f.open(fn,"wb");
 if (key=="")
 f.write(serialize(d));
 else
-f.write(string_encrypt(serialize(d),key));
+{
+string enc_header="CSTSAV";
+f.write(enc_header + string_encrypt(serialize(d),key));
+}
 f.close();
 }
 //overloaded function of add to add a boolion.
