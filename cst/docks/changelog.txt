@@ -1,4 +1,5 @@
 New in 3.6.
+Fixed a bug where the menu's music volume was being written to the wrong save file. It will now write the adjusted setting into the propper gamesets.clm file moving forward.
 Made it so saved games and game settings are now encrypted on disk. They can no longer be opened or edited with a plain text editor. Any existing unencrypted save or settings file still loads and is converted automatically the next time it is saved.
 New in 3.5.
 Made it so each segment of the day now feels longer do to raising wave sizes, so early periods now open with a real line of customers instead of ending almost as soon as they begin.
