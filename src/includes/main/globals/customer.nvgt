@@ -724,7 +724,7 @@ dlg("You have no filled cups to serve. Head to the actions station to make and p
 open_serve_menu();
 return;
 }
-int served = 0, happy = 0, unhappy = 0, turned_away = 0, tipped = 0, total_cups = 0;
+int served = 0, happy = 0, unhappy = 0, turned_away = 0, tipped = 0, total_cups = 0, refused = 0, hesitated = 0;
 double total_earned = 0, total_tips = 0;
 for(uint i=0; i<waiting_indices.length(); i++)
 {
@@ -743,6 +743,35 @@ customers[idx].targety=random_street_y();
 customers[idx].steptimer.restart();
 speak("A customer got nothing and stormed off.");
 continue;
+}
+if(price_multiplier > 1.0)
+{
+if(price_multiplier > 2.0)
+{
+double overcharge = price_multiplier - 2.0;
+int refuse_chance = int(overcharge * 50.0);
+string rtype = customers[idx].type;
+if(rtype == "desperate") refuse_chance = 0;
+else if(rtype == "child") refuse_chance = int(refuse_chance * 2.0);
+else if(rtype == "mean") refuse_chance = int(refuse_chance * 1.5);
+else if(rtype == "nice") refuse_chance = int(refuse_chance * 0.5);
+else if(rtype == "charitable") refuse_chance = int(refuse_chance * 0.5);
+else if(rtype == "returning") refuse_chance = int(refuse_chance * 0.75);
+refuse_chance = min(refuse_chance, 95);
+if(random(0, 99) < refuse_chance)
+{
+refused++;
+double rep_loss = 0.5 + (daynumber / 20.0);
+reputation = max(0.0, reputation - rep_loss);
+check_reputation();
+customers[idx].leaving = true;
+customers[idx].targetx = random(EXIT_X_MIN2, EXIT_X_MAX2);
+customers[idx].targety = random_street_y();
+customers[idx].steptimer.restart();
+continue;
+}
+}
+else hesitated++;
 }
 fullcups -= cups_needed_all;
 soldcups += cups_needed_all;
@@ -858,6 +887,8 @@ else summary += "No customers left a tip this time.--";
 summary += "Total collected: " + convert_to_currency(total_earned + total_tips) + ".";
 }
 if(turned_away > 0) summary += "--You ran out of cups, so " + turned_away + " customer" + (turned_away == 1 ? "" : "s") + " got disappointed and stormed off.";
+if(refused > 0) summary += "--" + refused + " customer" + (refused == 1 ? "" : "s") + " refused your high price and left.";
+if(hesitated > 0) summary += "--" + hesitated + " customer" + (hesitated == 1 ? "" : "s") + " grumbled about the price but paid.";
 dlgmessage(summary);
 last_menu_id = "";
 custpool.resume_all();
