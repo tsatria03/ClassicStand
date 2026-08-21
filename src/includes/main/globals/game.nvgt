@@ -447,6 +447,9 @@ return;
 }
 if(key_repeating(KEY_ESCAPE))
 {
+custpool.pause_all();
+personpool.pause_all();
+passerpool.pause_all();
 setupmenu();
 m.add_item("Yes, quit the game without saving", "quit_no_save");
 m.add_item("Yes, save the game and then quit", "quit_save");
