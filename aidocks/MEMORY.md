@@ -34,7 +34,7 @@ The `[[name]]` links in `CLAUDE.md` and across these memories resolve to `aidock
 - [Check git log for commits](feedback_check_git_log_for_commits.md) — the dev commits between turns; check git log/status before assuming commit state; don't commit unless asked.
 - [Stage commits before big changes](feedback_stage_commits_before_big_changes.md) — flag a commit break point before a risky stage so safe pieces land first.
 - [CLAUDE.md length limit](feedback_claudemd_length.md) — keep CLAUDE.md a dispatcher under 40,000 chars; move detail into memory files.
-- [Changelog rules](feedback_changelog_rules.md) — docks/changelog.txt: player-facing prose, reverse-chronological, a record not a manual; bump version.txt with each block.
+- [Changelog rules](feedback_changelog_rules.md) — docks/changelog.txt: player-facing prose, reverse-chronological, a record not a manual; bump version.txt with each block; ≤10 entries per minor version / ≤20 per major.
 - [Todo list format](feedback_todo_list_format.md) — docks/todo_list.txt: two sections (####Unfinished / ##Finished), ****Unfinished./**Finished. markers, newest-first (add at top), Fix-vs-Make phrasing, graduation flow.
 - [Dock line length 1024](feedback_dock_line_length_1024.md) — keep every line in cst/docks/ at or under 1024 chars; the screen reader splits longer lines.
 - [One-sentence game messages](feedback_one_sentence_game_messages.md) — in-game spoken feedback is exactly one sentence; no trailing advice.

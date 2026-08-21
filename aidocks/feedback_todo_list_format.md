@@ -23,4 +23,6 @@ The marker asterisk counts mirror the header counts (4 up top, 2 below).
 - **Bugs** → "Fix …"
 - **Features / enhancements** → "Make …" / "Add …" / "Make it so …"
 
+**No entry cap.** The open list can hold any number of entries; the per-version entry cap (10 minor / 20 major) applies to the **changelog/version block**, not here ([[feedback_changelog_rules]]).
+
 **Why:** keeps the todo a consistent, readable record instead of something re-derived from the file each session. Keep every line within the dock line limit ([[feedback_dock_line_length_1024]]).
