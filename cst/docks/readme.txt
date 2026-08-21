@@ -426,6 +426,11 @@ watery and extreme_watery = water ratio thresholds for mild and extreme watery c
 salty and extreme_salty = salt amount thresholds for mild and extreme saltiness complaints.
 icy and extreme_icy = ice amount thresholds for mild and extreme iciness complaints.
 
+[time]
+Flat key=value setting controlling the length of a day.
+
+hours_per_level = how many in-game hours each level lasts, which also sets how many levels make up a day (24 divided by hours_per_level). It must divide evenly into 24, so valid values are 1, 2, 3, 4, 6, 8, 12, and 24. Any other value falls back to 4.
+
 [items]
 Defines every item in the game.
 

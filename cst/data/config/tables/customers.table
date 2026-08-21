@@ -18,11 +18,11 @@ thief=1
 
 ; Required header — removing or renaming this will break the file.
 
-base_min=1
-base_max=5
+base_min=3
+base_max=8
 extra_max=15
 poster_wave_bonus=0.75
-max_customers=20
+max_customers=28
 cold_guaranteed_min=1
 cold_guaranteed_max=2
 cold_temp=45
