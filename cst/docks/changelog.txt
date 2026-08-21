@@ -1,3 +1,5 @@
+New in 3.4.
+Fixed a bug where trying to view a readme or changelog file that was missing would throw an error instead of showing a clean message. The docks menu now tells you the file could not be found and returns you to the menu.
 New in 3.3.
 Made it so both submenu selector entries and individual items inside each store submenu now label their description text with Description:, placed after the affordability count on selectors and after the cost on individual items.
 Made it so each submenu entry in the store menu selector now shows a live count of how many items in that group you can currently afford, in the format Contains x of x purchasable items.

@@ -16,13 +16,13 @@
 ****Unfinished. Fix empty cup counts only ever going up, since pouring lemonade never uses up an empty cup and serving a customer hands one back.
 ****Unfinished. Fix spills and cleanups piling up floor patches that are never freed, slowly growing memory the longer a game runs.
 ****Unfinished. Fix cleaning up a spill leaving the counter tile still sounding wet afterward, since the wet floor patch is never actually removed.
-****Unfinished. Fix trying to view a missing readme or changelog file throwing an error instead of showing a clean message.
 ****Unfinished. Fix backing out or pressing escape from the load game or new game slot list dropping you onto an invalid save slot instead of returning to the game menu.
 ****Unfinished. Fix reloading a saved game losing your placed posters, each filled cup's exact recipe, your napkins, and any spill you were cleaning up.
 ****Unfinished. Fix serving a whole group at once only handing over and charging for a single cup, instead of one cup per person in the group.
 
 ##These are the things that are already finished from earlier versions of the game.
 
+**Finished. Fix trying to view a missing readme or changelog file throwing an error instead of showing a clean message.
 **Finished. Make this game more map based.
 **Finished. Add random events to the game.
 **Finished. Add a popularity system to the game when selling lemonade.

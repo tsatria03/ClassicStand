@@ -445,8 +445,9 @@ void dockread(const string&in filename)
 {
 if(!file_exists(filename))
 {
-alert("Error", "Could not fined "+string_replace(filename, "docks/", "", true));
+alert("Error", "Could not find "+string_replace(filename, "docks/", "", true));
 docksmenu();
+return;
 }
 dockfile.open(filename,"rb");
 string docktext=dockfile.read();

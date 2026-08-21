@@ -15,7 +15,7 @@ metadata:
 
 The marker asterisk counts mirror the header counts (4 up top, 2 below).
 
-**Graduation flow:** an item is born in the top list as `****Unfinished. …`; when it ships it **moves down** to the finished section and flips to `**Finished. …` (asterisks 4→2, word Unfinished→Finished).
+**Graduation flow:** an item is born in the top list as `****Unfinished. …`; when it is **done, verified by the dev, and changelogged** (dev rule 2026-08-20 — graduate on completion, NOT waiting for the version to release) it **moves** to the finished section and flips to `**Finished. …` (asterisks 4→2, word Unfinished→Finished; the sentence text is kept as-is). Add the newly-finished item at the **top** of the finished section (newest-first, same as the open list).
 
 **Ordering: newest-first (dev decision 2026-08-20).** Add NEW `****Unfinished.` entries at the **top** of the open section, right under the `####` header — same reverse-chronological spirit as the changelog. (Older entries had been top-to-bottom oldest-first; the open list was reversed on 2026-08-20 to newest-first.)
 
