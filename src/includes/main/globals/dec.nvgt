@@ -23,19 +23,13 @@ const int MAX_POSTERS = 10;
 double reputation=100, max_reputation=200, peak_reputation=100;
 double minx=0, maxx=100, miny=0, maxy=100;
 int alertslot, tileslot, wallslot;
-int current_day_index=0, current_month_index=0, clocktime=0, daynumber=1, monthnumber=1, yearnumber=1, pitcher=0, temperature=32, movetime, runtime=100, walktime=200, zonestatus=1;
+int current_day_index=0, current_month_index=0, clocktime=0, daynumber=1, monthnumber=1, yearnumber=1, pitcher=0, temperature=32, movetime, runtime=100, walktime=200, zonestatus=1, hours_per_level=4;
 int usetime=100;
 string business_name="";
 string last_menu_id="";
 string last_sub_id="";
 string facing="right";
 
-class store_menu
-{
-string id;
-string display_name;
-string description;
-}
 string[] daynames = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 string[] monthnames = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 string dayname = daynames[current_day_index];

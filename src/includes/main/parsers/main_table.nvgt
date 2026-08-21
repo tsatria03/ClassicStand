@@ -1,5 +1,6 @@
 dictionary main_newgame;
 dictionary main_thresholds;
+dictionary main_time;
 
 void load_main_table_newgame()
 {
@@ -17,6 +18,26 @@ return string_to_number(v);
 void load_main_table_thresholds()
 {
 load_section_dict("data/config/tables/main.table", "[thresholds]", main_thresholds);
+}
+
+double time_get(string key, double fallback)
+{
+if(!main_time.exists(key)) return fallback;
+string v;
+main_time.get(key, v);
+return string_to_number(v);
+}
+
+void load_main_table_time()
+{
+load_section_dict("data/config/tables/main.table", "[time]", main_time);
+int hpl = int(time_get("hours_per_level", 4));
+/* Must divide 24 evenly so a day is exactly 24 hours; anything else falls back to the default. */
+if(hpl < 1 || hpl > 24 || (24 % hpl) != 0) hpl = 4;
+hours_per_level = hpl;
+maxlevel = 24 / hours_per_level;
+/* Snap a restored level down if the config now allows fewer levels than the save had. */
+if(level > maxlevel) level = maxlevel;
 }
 
 double threshold_get(string key, double fallback)

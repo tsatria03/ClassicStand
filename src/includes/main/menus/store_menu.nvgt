@@ -1,0 +1,6 @@
+class store_menu
+{
+string id;
+string display_name;
+string description;
+}
