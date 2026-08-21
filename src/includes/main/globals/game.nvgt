@@ -3,6 +3,12 @@ void game()
 load_config();
 load_map("neighborhood");
 napkin_giver_index = 0;
+if(floor_spilled)
+{
+if(napkin_giver_index>=0 and napkin_giver_index<int(persons.length()))
+napkin_giver_default_text = persons[napkin_giver_index].text;
+set_counter_wet();
+}
 spawn_customer_wave();
 spawn_passers();
 while(true)

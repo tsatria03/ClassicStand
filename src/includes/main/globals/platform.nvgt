@@ -35,6 +35,14 @@ void remove_platform(int id)
         platforms.remove_at(id);
     }
 }
+void remove_wet_platforms()
+{
+for(int i = int(platforms.length()) - 1; i >= 0; i--)
+{
+if(platforms[i].tile == "spring" || platforms[i].tile == "spring2")
+platforms.remove_at(i);
+}
+}
 void destroy_all_platforms()
 {
 platforms.resize(0);

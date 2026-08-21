@@ -413,14 +413,7 @@ else bad_outro = feedback + " They refuse to pay and storm off in a fury!";
 dlg(bad_outro);
 if(ctype != "mean") { cash -= earned; soldcups -= cups_needed; }
 customers[idx].spilled=true;
-floor_spilled=true;
-string wet = (random(0, 1) == 0) ? "spring" : "spring2";
-spawn_platform(14, 14, 25, 25, wet);
-if(napkin_giver_index>=0 and napkin_giver_index<int(persons.length()))
-{
-napkin_giver_default_text=persons[napkin_giver_index].text;
-persons[napkin_giver_index].text="Oh my, it looks like somebody made quite the mess! Here's a napkin that you can use to clean it up.";
-}
+set_counter_wet();
 double rep_loss = (1.0 + (daynumber / 10.0)) * 2.0;
 if(ctype == "critic") rep_loss *= 3.0;
 reputation=max(0.0, reputation-rep_loss);
@@ -523,6 +516,16 @@ if(too_watery) return "This tastes a bit watered down. Could use more flavor.";
 if(too_salty)  return "Whoa, that's really salty! Not what I expected from lemonade.";
 if(too_icy)    return "Brrr, that's ice cold! Maybe a little less ice next time.";
 return "Mmm, that's delicious! Perfectly balanced. Just what I needed!";
+}
+void set_counter_wet()
+{
+if(!floor_spilled and napkin_giver_index>=0 and napkin_giver_index<int(persons.length()))
+napkin_giver_default_text=persons[napkin_giver_index].text;
+floor_spilled=true;
+string wet = (random(0, 1) == 0) ? "spring" : "spring2";
+spawn_platform(14, 14, 25, 25, wet);
+if(napkin_giver_index>=0 and napkin_giver_index<int(persons.length()))
+persons[napkin_giver_index].text="Oh my, it looks like somebody made quite the mess! Here's a napkin that you can use to clean it up.";
 }
 void check_reputation()
 {
@@ -769,11 +772,7 @@ unhappy++;
 if(extreme_all)
 {
 customers[idx].spilled=true;
-floor_spilled=true;
-string wet = (random(0, 1) == 0) ? "spring" : "spring2";
-spawn_platform(14, 14, 25, 25, wet);
-if(napkin_giver_index>=0 and napkin_giver_index<int(persons.length()))
-persons[napkin_giver_index].text="Oh my, it looks like somebody made quite the mess! Here's a napkin that you can use to clean it up.";
+set_counter_wet();
 double rep_loss = (1.0 + (daynumber / 10.0)) * 2.0;
 if(ctype_all == "critic") rep_loss *= 3.0;
 reputation=max(0.0, reputation-rep_loss);

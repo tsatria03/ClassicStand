@@ -14,12 +14,12 @@
 ****Unfinished. Make the lemonade feedback point out which ingredient is off, instead of vague too sweet or too sour messages.
 ****Unfinished. Fix spoiled ingredients like melted ice, rotted lemons, evaporated water, and clumped salt vanishing from your inventory before you get a chance to discard them.
 ****Unfinished. Fix empty cup counts only ever going up, since pouring lemonade never uses up an empty cup and serving a customer hands one back.
-****Unfinished. Fix spills and cleanups piling up floor patches that are never freed, slowly growing memory the longer a game runs.
-****Unfinished. Fix cleaning up a spill leaving the counter tile still sounding wet afterward, since the wet floor patch is never actually removed.
 ****Unfinished. Fix serving a whole group at once only handing over and charging for a single cup, instead of one cup per person in the group.
 
 ##These are the things that are already finished from earlier versions of the game.
 
+**Finished. Fix cleaning up a spill leaving the counter tile still sounding wet afterward, since the wet floor patch is never actually removed.
+**Finished. Fix spills and cleanups piling up floor patches that are never freed, slowly growing memory the longer a game runs.
 **Finished. Fix reloading a saved game losing your placed posters, each filled cup's exact recipe, and your napkins.
 **Finished. Fix backing out or pressing escape from the load game or new game slot list dropping you onto an invalid save slot instead of returning to the game menu.
 **Finished. Fix trying to view a missing readme or changelog file throwing an error instead of showing a clean message.

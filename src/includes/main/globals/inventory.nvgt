@@ -121,7 +121,7 @@ else
 {
 p.play_stationary("sounds/misc/usenapkin.ogg", false);
 wait(500);
-spawn_platform(32, 32, 50, 50, "marble");
+remove_wet_platforms();
 floor_spilled=false;
 give("napkin", -1);
 give("used_napkin", 1);
