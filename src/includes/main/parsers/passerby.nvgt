@@ -72,7 +72,7 @@ steptime = random(250, 450);
 string[] pool = customer_type_pool.length() > 0 ? customer_type_pool : {"normal"};
 string t = pool[random(0, pool.length() - 1)];
 int gs = t == "group" ? random(2, 4) : 1;
-int pat = max(30000, int((random(60000, 120000) - (daynumber * 2000) - (int(level) * 7000)) / price_multiplier));
+int pat = max(30000, int((random(60000, 120000) - (daynumber * 2000) - int(economy_level() * 7000)) / price_multiplier));
 if(t == "desperate") { steptime = int(steptime * 0.5); pat = int(pat * 0.5); }
 else if(t == "nice") pat = int(pat * 1.5);
 else if(t == "mean") pat = int(pat * 0.7);

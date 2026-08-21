@@ -38,7 +38,7 @@ double get_napkin_cost(string id)
 for(uint i = 0; i < napkin_store.length(); i++)
 {
 if(napkin_store[i].id == id)
-return eval_amount(napkin_store[i].cost_expr, level, daynumber) * napkin_store[i].base_cost;
+return eval_amount(napkin_store[i].cost_expr, economy_level(), daynumber) * napkin_store[i].base_cost;
 }
 return 0;
 }

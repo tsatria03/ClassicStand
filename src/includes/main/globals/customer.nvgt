@@ -171,7 +171,7 @@ else
 {
 if(random(0, 1) == 0 && cash > 0)
 {
-int stolen_cash = int(min(cash, random(50 * level * daynumber, 200 * level * daynumber)));
+int stolen_cash = int(min(cash, random(50 * economy_level() * daynumber, 200 * economy_level() * daynumber)));
 cash -= stolen_cash;
 stolen_item = "cash";
 stolen_amount = stolen_cash;
@@ -918,7 +918,7 @@ wave_ending=false;
 wave_started=false;
 p.play_stationary("sounds/misc/timestart.ogg", false);
 int base = random(1, int(wave_get("base_max", 5)));
-int extra = int(min(wave_get("extra_max", 15), level - 1));
+int extra = int(min(wave_get("extra_max", 15), economy_level() - 1));
 int temp_mod = 0;
 int sp_min, sp_max, pat_mod;
 int hot_temp  = int(wave_get("hot_temp",  85));
@@ -956,7 +956,7 @@ for(int i=0; i<count; i++)
 int sx = random(47, 49);
 int sy = random_street_y();
 int sp = random(sp_min, sp_max);
-int pat = max(30000, int((random(60000, 120000) - (daynumber * 2000) - (int(level) * 7000) + pat_mod + poster_pat_bonus) / price_multiplier));
+int pat = max(30000, int((random(60000, 120000) - (daynumber * 2000) - int(economy_level() * 7000) + pat_mod + poster_pat_bonus) / price_multiplier));
 string t = pool[random(0, pool.length() - 1)];
 int gs = 1;
 int mvi = get_customer_movement_index(t);

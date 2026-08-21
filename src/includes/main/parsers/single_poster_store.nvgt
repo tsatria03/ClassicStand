@@ -58,7 +58,7 @@ double get_poster_cost(string id)
 for(uint i = 0; i < poster_store.length(); i++)
 {
 if(poster_store[i].id == id)
-return eval_amount(poster_store[i].cost_expr, level, daynumber) * poster_store[i].base_cost;
+return eval_amount(poster_store[i].cost_expr, economy_level(), daynumber) * poster_store[i].base_cost;
 }
 return 0;
 }

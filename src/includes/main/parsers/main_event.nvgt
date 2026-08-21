@@ -53,7 +53,7 @@ possible.insert_last(e);
 if(possible.length() == 0) return;
 game_event@ ev = possible[random(0, possible.length() - 1)];
 if(random(0, 99) >= ev.chance) return;
-double rolled = random(int(eval_amount(ev.min_expr, level, daynumber, placed_posters)), int(eval_amount(ev.max_expr, level, daynumber, placed_posters)));
+double rolled = random(int(eval_amount(ev.min_expr, economy_level(), daynumber, placed_posters)), int(eval_amount(ev.max_expr, economy_level(), daynumber, placed_posters)));
 double actual = rolled;
 if(ev.use_percent)
 {

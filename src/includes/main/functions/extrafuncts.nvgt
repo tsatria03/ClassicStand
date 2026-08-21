@@ -467,9 +467,15 @@ docksmenu();
 }
 }
 }
+double economy_level()
+{
+/* Economy scales on the normalized time-of-day position, anchored to the historical 6-level day, so the ramp is identical at maxlevel 6 but stays independent of how many levels a day has. Multiply before divide so level 1 of 6 lands on exactly 1.0, not 0.9999. */
+if(maxlevel <= 0) return double(level);
+return double(level) * 6.0 / double(maxlevel);
+}
 void calculate_cup_price()
 {
-double scale = level * daynumber;
+double scale = economy_level() * daynumber;
 price_per_cup = 0;
 price_per_cup += last_lemons_per_cup * lemoncost * scale * 0.1;
 price_per_cup += last_sugars_per_cup * sugarcost * scale * 0.1;

@@ -60,7 +60,7 @@ double get_ingredient_cost(string target)
 for(uint i = 0; i < ingredient_store.length(); i++)
 {
 if(ingredient_store[i].target == target)
-return eval_amount(ingredient_store[i].cost_expr, level, daynumber) * ingredient_store[i].base_cost;
+return eval_amount(ingredient_store[i].cost_expr, economy_level(), daynumber) * ingredient_store[i].base_cost;
 }
 return 0;
 }
