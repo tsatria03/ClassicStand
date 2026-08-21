@@ -19,6 +19,8 @@ The `[[name]]` links in `CLAUDE.md` and across these memories resolve to `aidock
 - [Known code issues](project_known_code_issues.md) — global-state sprawl, silent parser failures, 4× store parser/menu duplication, recursion-as-navigation, and assorted latent bugs (eval_amount precedence, stn OOB, keyhook inverted, etc.).
 - [Menu refactor plan](project_menu_refactor_plan.md) — planned v3.4 loop-and-return state machine to replace recursion-as-navigation; why ToyMania is only a partial reference (its navigation recurses too), and the good primitives (choose_difficulty loop-and-return) to generalize.
 
+- [Docks spelling pass](project_docks_spelling_pass.md) — deferred full spelling/grammar sweep across all cst/docks/ (changelog/readme/todo/credits); ~30 known changelog typos listed as a head start; passerbys/recycleable are style decisions.
+
 ## NVGT / AngelScript gotchas — these cause compile failures (game won't launch)
 - [AngelScript braceless if](project_angelscript_braceless_if.md) — a braceless if/else governs one statement; a second orphans the else → compile error.
 - [AngelScript reserved words](project_angelscript_reserved_words.md) — never name a variable `out` (or in/inout/shared/final/from…); reserved keyword → compile error.
