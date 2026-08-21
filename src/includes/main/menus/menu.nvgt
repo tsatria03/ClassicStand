@@ -438,6 +438,13 @@ dlg("Error. The pitcher doesn't have enough lemonade to pour a single cup.");
 actsmenu();
 return;
 }
+if(cups < 1)
+{
+dlg("Error. You have no empty cups to pour into. Buy more empty cups at the market first.");
+actsmenu();
+return;
+}
+if(cups < maxcups) maxcups = floor(cups);
 vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !`@#$%^&*()[]{};:'\"\\|,.<>_?/+-=`~", false, "");
 string input = vd.input_box("", "How many cups would you like to pour from the pitcher? You can pour up to " + maxcups + " cup" + (maxcups == 1 ? "" : "s") + ". Press enter to pour the maximum amount.", string(int(maxcups)));
 if(input == "") { actsmenu(); return; }
@@ -451,6 +458,7 @@ return;
 }
 pitcherstat -= pourcount * 0.25;
 fullcups += pourcount;
+cups -= pourcount;
 if(pitcherstat <= 0)
 {
 pitcherstat = 0;

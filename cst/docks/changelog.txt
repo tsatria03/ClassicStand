@@ -1,3 +1,6 @@
+New in 3.5.
+Made it so serving customers all at once with serve all now applies the same desperate and child price adjustments as serving them one at a time, so desperate customers pay more and children pay less either way.
+Fixed a bug where your empty cup count only ever increased. Pouring lemonade now uses up an empty cup, and customers return their cup when served, so cups cycle back to you and only run low from spills or theft, meaning you will need to restock now and then.
 New in 3.4.
 Fixed a bug where the poster damage event lowered your placed poster count but still treated the destroyed posters' spots as occupied, so you could not hang new posters there until the next day. Those spots are now freed right away.
 Fixed a bug where serving a whole group at once only handed over and charged for a single cup instead of one for each person in the group. Serve all now uses the full group size for both cups and payment, and turns a group away if there aren't enough cups for everyone.

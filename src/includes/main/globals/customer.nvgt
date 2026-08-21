@@ -747,6 +747,8 @@ continue;
 fullcups -= cups_needed_all;
 soldcups += cups_needed_all;
 double earned = selling_price * cups_needed_all;
+if(customers[idx].type == "desperate") earned = int(earned * 1.5);
+else if(customers[idx].type == "child") earned = int(earned * 0.6);
 cash += earned;
 total_earned += earned;
 double this_lem = cup_lemons.length() > 0 ? cup_lemons[0] : last_lemons_per_cup;
@@ -769,7 +771,7 @@ bool bad = (feedback_all != "Mmm, that's delicious! Perfectly balanced. Just wha
 string ctype_all = customers[idx].type;
 if(ctype_all == "returning") bad = false;
 if(ctype_all == "mean") bad = true;
-if(ctype_all != "charitable" && !extreme_all) cups += 1;
+if(ctype_all != "charitable" && !extreme_all) cups += cups_needed_all;
 if(bad)
 {
 unhappy++;
@@ -786,7 +788,6 @@ check_reputation();
 }
 else
 {
-cups += 1;
 double rep_loss = 0.5 + (daynumber / 20.0);
 if(ctype_all == "critic") rep_loss *= 2.0;
 reputation=max(0.0, reputation-rep_loss);
