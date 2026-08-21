@@ -34,7 +34,7 @@ business_name=name;
 dlgmessage("Congratulations! You've successfully completed the game setup. Your business will now be known as "+business_name+". Press enter to start playing.");
 busprofed=true;
 writepreffs();
-dlgplay("savegame.ogg");
+dlgplay("sounds/misc/savegame.ogg");
 wait(200);
 last_menu_id = "";
 mainmenu();

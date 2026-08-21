@@ -43,7 +43,7 @@ nx += dx;
 ny += dy;
 update_sound_pos(nx, ny);
 if(nx != targetx || ny != targety)
-p.play_2d("sounds/platforms/"+gmt(nx, ny)+"/step"+random(1,5)+".ogg", me.x, me.y, nx, ny, false);
+p.play_2d("sounds/objects/platforms/"+gmt(nx, ny)+"/step"+random(1,5)+".ogg", me.x, me.y, nx, ny, false);
 steptimer.restart();
 }
 void update_sound_pos(int x, int y)

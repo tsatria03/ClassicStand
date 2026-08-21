@@ -29,7 +29,7 @@ bool in_range = (me.x >= minx && me.x <= maxx && me.y >= miny && me.y <= maxy);
 if(slot == -1)
 {
 string chosen = random_string(sourcetypes);
-slot = ambpool.play_extended_2d("sounds/ambience/source/" + chosen + ".ogg", me.x, me.y, cx, cy, left_range, right_range, backward_range, forward_range, true, 0, 0, volume, 100, true);
+slot = ambpool.play_extended_2d("sounds/objects/sources/ambiences/" + chosen + ".ogg", me.x, me.y, cx, cy, left_range, right_range, backward_range, forward_range, true, 0, 0, volume, 100, true);
 if(ambient && !in_range)
 ambpool.pause_sound(slot);
 }

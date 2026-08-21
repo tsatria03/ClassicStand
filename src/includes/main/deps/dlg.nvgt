@@ -4,7 +4,7 @@ custpool.pause_all();
 personpool.pause_all();
 passerpool.pause_all();
 timer timeouter;
-if(dlgsound==true) temp.play_stationary("sounds/dlg/read.ogg", false);
+if(dlgsound==true) temp.play_stationary("sounds/ui/dlg/read.ogg", false);
 speak(message);
 while(true)
 {
@@ -14,7 +14,7 @@ return false;
 if (key_repeating(KEY_C) and dlgcoppy==true)
 {
 temp.destroy_all();
-temp.play_stationary("sounds/dlg/coppy.ogg", false);
+temp.play_stationary("sounds/ui/dlg/coppy.ogg", false);
 speak("Text copied");
 clipboard_copy_text(message);
 }
@@ -37,25 +37,25 @@ return false;
 }
 void dlgmessage(string messages)
 {
-temp.play_stationary("sounds/dlg/open.ogg", false);
+temp.play_stationary("sounds/ui/dlg/open.ogg", false);
 string[] d = string_split(messages, "--", true);
 bool escaped = dlg(d[0], dlgsound:false);
 if (escaped)
 {
-temp.play_stationary("sounds/dlg/close.ogg", false);
+temp.play_stationary("sounds/ui/dlg/close.ogg", false);
 return;
 }
 for (uint i = 1; i < d.length(); i++)
 {
-temp.play_stationary("sounds/dlg/scroll.ogg", false);
+temp.play_stationary("sounds/ui/dlg/scroll.ogg", false);
 escaped = dlg(d[i], dlgsound:false);
 if (escaped)
 {
-temp.play_stationary("sounds/dlg/close.ogg", false);
+temp.play_stationary("sounds/ui/dlg/close.ogg", false);
 return;
 }
 }
-temp.play_stationary("sounds/dlg/close.ogg", false);
+temp.play_stationary("sounds/ui/dlg/close.ogg", false);
 }
 void dlgplay(string dlgsound, bool skippable=false, bool fadeable=false, int fadetime=30)
 {

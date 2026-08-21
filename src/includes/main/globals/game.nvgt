@@ -288,13 +288,13 @@ facing="left";
 if(string_contains(gmt(me.x,me.y),"wall",1)>-1)
 {
 string wt=gmt(me.x,me.y);
-wallslot=p.play_2d("sounds/walls/"+wt+"/bump.ogg",me.x,me.y,me.x,me.y,false);
+wallslot=p.play_2d("sounds/objects/walls/"+wt+"/bump.ogg",me.x,me.y,me.x,me.y,false);
 movetimer.restart();
 pbounce();
 }
 else
 {
-tileslot=p.play_stationary("sounds/platforms/"+gmt(me.x,me.y)+"/step"+random(1,5)+".ogg",false);
+tileslot=p.play_stationary("sounds/objects/platforms/"+gmt(me.x,me.y)+"/step"+random(1,5)+".ogg",false);
 movetimer.restart();
 }
 }
@@ -305,13 +305,13 @@ facing="right";
 if(string_contains(gmt(me.x,me.y),"wall",1)>-1)
 {
 string wt=gmt(me.x,me.y);
-wallslot=p.play_2d("sounds/walls/"+wt+"/bump.ogg",me.x,me.y,me.x,me.y,false);
+wallslot=p.play_2d("sounds/objects/walls/"+wt+"/bump.ogg",me.x,me.y,me.x,me.y,false);
 movetimer.restart();
 pbounce();
 }
 else
 {
-tileslot=p.play_stationary("sounds/platforms/"+gmt(me.x,me.y)+"/step"+random(1,5)+".ogg",false);
+tileslot=p.play_stationary("sounds/objects/platforms/"+gmt(me.x,me.y)+"/step"+random(1,5)+".ogg",false);
 movetimer.restart();
 }
 }
@@ -322,13 +322,13 @@ facing="backward";
 if(string_contains(gmt(me.x,me.y),"wall",1)>-1)
 {
 string wt=gmt(me.x,me.y);
-wallslot=p.play_2d("sounds/walls/"+wt+"/bump.ogg",me.x,me.y,me.x,me.y,false);
+wallslot=p.play_2d("sounds/objects/walls/"+wt+"/bump.ogg",me.x,me.y,me.x,me.y,false);
 movetimer.restart();
 pbounce();
 }
 else
 {
-tileslot=p.play_stationary("sounds/platforms/"+gmt(me.x,me.y)+"/step"+random(1,5)+".ogg",false);
+tileslot=p.play_stationary("sounds/objects/platforms/"+gmt(me.x,me.y)+"/step"+random(1,5)+".ogg",false);
 movetimer.restart();
 }
 }
@@ -339,13 +339,13 @@ facing="forward";
 if(string_contains(gmt(me.x,me.y),"wall",1)>-1)
 {
 string wt=gmt(me.x,me.y);
-wallslot=p.play_2d("sounds/walls/"+wt+"/bump.ogg",me.x,me.y,me.x,me.y,false);
+wallslot=p.play_2d("sounds/objects/walls/"+wt+"/bump.ogg",me.x,me.y,me.x,me.y,false);
 movetimer.restart();
 pbounce();
 }
 else
 {
-tileslot=p.play_stationary("sounds/platforms/"+gmt(me.x,me.y)+"/step"+random(1,5)+".ogg",false);
+tileslot=p.play_stationary("sounds/objects/platforms/"+gmt(me.x,me.y)+"/step"+random(1,5)+".ogg",false);
 movetimer.restart();
 }
 }
@@ -358,13 +358,13 @@ facing="left";
 if(string_contains(gmt(me.x,me.y),"wall",1)>-1)
 {
 string wt=gmt(me.x,me.y);
-wallslot=p.play_2d("sounds/walls/"+wt+"/bump.ogg",me.x,me.y,me.x,me.y,false);
+wallslot=p.play_2d("sounds/objects/walls/"+wt+"/bump.ogg",me.x,me.y,me.x,me.y,false);
 movetimer.restart();
 pbounce();
 }
 else
 {
-tileslot=p.play_stationary("sounds/platforms/"+gmt(me.x,me.y)+"/step"+random(1,5)+".ogg",false);
+tileslot=p.play_stationary("sounds/objects/platforms/"+gmt(me.x,me.y)+"/step"+random(1,5)+".ogg",false);
 movetimer.restart();
 }
 }
@@ -375,13 +375,13 @@ facing="right";
 if(string_contains(gmt(me.x,me.y),"wall",1)>-1)
 {
 string wt=gmt(me.x,me.y);
-wallslot=p.play_2d("sounds/walls/"+wt+"/bump.ogg",me.x,me.y,me.x,me.y,false);
+wallslot=p.play_2d("sounds/objects/walls/"+wt+"/bump.ogg",me.x,me.y,me.x,me.y,false);
 movetimer.restart();
 pbounce();
 }
 else
 {
-tileslot=p.play_stationary("sounds/platforms/"+gmt(me.x,me.y)+"/step"+random(1,5)+".ogg",false);
+tileslot=p.play_stationary("sounds/objects/platforms/"+gmt(me.x,me.y)+"/step"+random(1,5)+".ogg",false);
 movetimer.restart();
 }
 }
@@ -392,13 +392,13 @@ facing="backward";
 if(string_contains(gmt(me.x,me.y),"wall",1)>-1)
 {
 string wt=gmt(me.x,me.y);
-wallslot=p.play_2d("sounds/walls/"+wt+"/bump.ogg",me.x,me.y,me.x,me.y,false);
+wallslot=p.play_2d("sounds/objects/walls/"+wt+"/bump.ogg",me.x,me.y,me.x,me.y,false);
 movetimer.restart();
 pbounce();
 }
 else
 {
-tileslot=p.play_stationary("sounds/platforms/"+gmt(me.x,me.y)+"/step"+random(1,5)+".ogg",false);
+tileslot=p.play_stationary("sounds/objects/platforms/"+gmt(me.x,me.y)+"/step"+random(1,5)+".ogg",false);
 movetimer.restart();
 }
 }
@@ -409,13 +409,13 @@ facing="forward";
 if(string_contains(gmt(me.x,me.y),"wall",1)>-1)
 {
 string wt=gmt(me.x,me.y);
-wallslot=p.play_2d("sounds/walls/"+wt+"/bump.ogg",me.x,me.y,me.x,me.y,false);
+wallslot=p.play_2d("sounds/objects/walls/"+wt+"/bump.ogg",me.x,me.y,me.x,me.y,false);
 movetimer.restart();
 pbounce();
 }
 else
 {
-tileslot=p.play_stationary("sounds/platforms/"+gmt(me.x,me.y)+"/step"+random(1,5)+".ogg",false);
+tileslot=p.play_stationary("sounds/objects/platforms/"+gmt(me.x,me.y)+"/step"+random(1,5)+".ogg",false);
 movetimer.restart();
 }
 }
