@@ -724,13 +724,14 @@ dlg("You have no filled cups to serve. Head to the actions station to make and p
 open_serve_menu();
 return;
 }
-int served = 0, happy = 0, unhappy = 0, turned_away = 0, tipped = 0;
+int served = 0, happy = 0, unhappy = 0, turned_away = 0, tipped = 0, total_cups = 0;
 double total_earned = 0, total_tips = 0;
 for(uint i=0; i<waiting_indices.length(); i++)
 {
 uint idx = waiting_indices[i];
 if(customers[idx].leaving) continue;
-if(fullcups < 1)
+int cups_needed_all = (customers[idx].type == "group") ? customers[idx].group_size : 1;
+if(fullcups < cups_needed_all)
 {
 turned_away++;
 double rep_loss = 2.0 + level + (daynumber / 5.0);
@@ -743,9 +744,9 @@ customers[idx].steptimer.restart();
 speak("A customer got nothing and stormed off.");
 continue;
 }
-fullcups -= 1;
-soldcups += 1;
-double earned = selling_price;
+fullcups -= cups_needed_all;
+soldcups += cups_needed_all;
+double earned = selling_price * cups_needed_all;
 cash += earned;
 total_earned += earned;
 double this_lem = cup_lemons.length() > 0 ? cup_lemons[0] : last_lemons_per_cup;
@@ -753,11 +754,14 @@ double this_sug = cup_sugars.length() > 0 ? cup_sugars[0] : last_sugars_per_cup;
 double this_wat = cup_waters.length() > 0 ? cup_waters[0] : last_waters_per_cup;
 double this_ice = cup_ices.length() > 0 ? cup_ices[0] : last_ices_per_cup;
 double this_sal = cup_salts.length() > 0 ? cup_salts[0] : last_salts_per_cup;
+for(int c = 0; c < cups_needed_all; c++)
+{
 if(cup_lemons.length() > 0) cup_lemons.remove_at(0);
 if(cup_sugars.length() > 0) cup_sugars.remove_at(0);
 if(cup_waters.length() > 0) cup_waters.remove_at(0);
 if(cup_ices.length() > 0)   cup_ices.remove_at(0);
 if(cup_salts.length() > 0)  cup_salts.remove_at(0);
+}
 string feedback_all = get_customer_feedback(this_lem, this_sug, this_wat, this_ice, this_sal);
 bool extreme_all = string_starts_with(feedback_all, "EXTREME:");
 if(extreme_all) feedback_all = feedback_all.substr(8);
@@ -816,10 +820,11 @@ reputation=min(MAX_REPUTATION, reputation+rep_gain);
 if(reputation>peak_reputation) peak_reputation=reputation;
 }
 served++;
+total_cups += cups_needed_all;
 }
 if(served > 0)
 {
-speak("You hand the customers " + served + " cup" + (served == 1 ? "" : "s") + " of lemonade.");
+speak("You hand the customers " + total_cups + " cup" + (total_cups == 1 ? "" : "s") + " of lemonade.");
 p.play_stationary("sounds/misc/givecup.ogg", false);
 wait(random(500, 1000));
 int drinkslot_all = custpool.play_stationary("sounds/misc/drinkcup.ogg", true);

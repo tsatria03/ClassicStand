@@ -84,6 +84,8 @@ else if(ev.target == "posters")
 {
 placed_posters = max(0, placed_posters - int(actual));
 actual = int(actual);
+while(int(poster_tiles.length()) > placed_posters)
+poster_tiles.remove_at(random(0, poster_tiles.length() - 1));
 }
 }
 dictionary@ replacements = dictionary();

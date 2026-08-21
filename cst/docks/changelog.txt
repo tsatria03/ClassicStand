@@ -1,4 +1,6 @@
 New in 3.4.
+Fixed a bug where the poster damage event lowered your placed poster count but still treated the destroyed posters' spots as occupied, so you could not hang new posters there until the next day. Those spots are now freed right away.
+Fixed a bug where serving a whole group at once only handed over and charged for a single cup instead of one for each person in the group. Serve all now uses the full group size for both cups and payment, and turns a group away if there aren't enough cups for everyone.
 Reworded the sugar and salt cold weather events so they describe the ingredient spoiling and going to waste, rather than implying you get a clumped item to discard.
 Fixed a bug where spoiled ingredients like melted ice, rotted lemons, evaporated water, and clumped salt would vanish from your inventory before you could discard them. They now stay in your inventory and can be recycled with shift enter.
 Fixed a bug where cleaning up a spill would leave the counter still sounding wet, because the wet patch on the floor was never actually removed. Cleaning now restores the counter to its normal surface.

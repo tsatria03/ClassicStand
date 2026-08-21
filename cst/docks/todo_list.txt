@@ -13,10 +13,10 @@
 ****Unfinished. Give salt and ice a real upside as well as a downside, so every ingredient matters instead of only ever causing complaints.
 ****Unfinished. Make the lemonade feedback point out which ingredient is off, instead of vague too sweet or too sour messages.
 ****Unfinished. Fix empty cup counts only ever going up, since pouring lemonade never uses up an empty cup and serving a customer hands one back.
-****Unfinished. Fix serving a whole group at once only handing over and charging for a single cup, instead of one cup per person in the group.
 
 ##These are the things that are already finished from earlier versions of the game.
 
+**Finished. Fix serving a whole group at once only handing over and charging for a single cup, instead of one cup per person in the group.
 **Finished. Fix spoiled ingredients like melted ice, rotted lemons, evaporated water, and clumped salt vanishing from your inventory before you get a chance to discard them.
 **Finished. Fix cleaning up a spill leaving the counter tile still sounding wet afterward, since the wet floor patch is never actually removed.
 **Finished. Fix spills and cleanups piling up floor patches that are never freed, slowly growing memory the longer a game runs.
