@@ -509,12 +509,12 @@ if(extreme_sweet)  return "EXTREME:This is liquid sugar! I can't even drink this
 if(extreme_watery) return "EXTREME:This is just water! I paid for lemonade, not tap water!";
 if(extreme_salty)  return "EXTREME:This tastes like the ocean! Are you trying to poison me?!";
 if(extreme_icy)    return "EXTREME:This is basically a block of ice! I can't even drink this!";
-if(too_sour && too_sweet) return "Wow, this is both sour and sweet at the same time! Interesting...";
-if(too_sour)   return "Ooh, that's quite sour! A little less lemon next time maybe.";
-if(too_sweet)  return "That's very sweet! You might want to ease up on the sugar a bit.";
-if(too_watery) return "This tastes a bit watered down. Could use more flavor.";
-if(too_salty)  return "Whoa, that's really salty! Not what I expected from lemonade.";
-if(too_icy)    return "Brrr, that's ice cold! Maybe a little less ice next time.";
+if(too_sour && too_sweet) return "Whoa, this has too much lemon and too much sugar at the same time!";
+if(too_sour)   return "Ooh, that's quite sour, there's too much lemon for the sugar!";
+if(too_sweet)  return "That's very sweet, there's too much sugar for the lemon!";
+if(too_watery) return "This tastes watered down, there's too much water for the lemon and sugar!";
+if(too_salty)  return "Whoa, there's way too much salt in this!";
+if(too_icy)    return "Brrr, there's way too much ice in this one!";
 return "Mmm, that's delicious! Perfectly balanced. Just what I needed!";
 }
 void set_counter_wet()

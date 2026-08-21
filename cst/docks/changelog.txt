@@ -1,4 +1,5 @@
 New in 3.5.
+Made it so a customer's feedback on unbalanced lemonade now names the ingredient that is off, such as too much lemon for the sugar, instead of vague comments that made it hard to tell what to adjust.
 Fixed a bug where the serve all option ignored your price, letting customers who would normally refuse or hesitate at a high price buy without complaint. Serve all now applies the same price sensitivity as serving customers one at a time, and the summary reports how many refused or grumbled about the price.
 Made it so serving customers all at once with serve all now applies the same desperate and child price adjustments as serving them one at a time, so desperate customers pay more and children pay less either way.
 Fixed a bug where your empty cup count only ever increased. Pouring lemonade now uses up an empty cup, and customers return their cup when served, so cups cycle back to you and only run low from spills or theft, meaning you will need to restock now and then.
