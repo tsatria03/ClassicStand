@@ -20,7 +20,6 @@ clipboard_copy_text(message);
 }
 if (key_repeating(KEY_LEFT) or key_repeating(KEY_RIGHT) or key_repeating(KEY_UP) or key_repeating(KEY_DOWN))
 {
-temp.play_stationary("sounds/dlg/scroll.ogg", false);
 speak(message);
 }
 if (key_repeating(KEY_ESCAPE))

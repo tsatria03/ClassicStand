@@ -1,6 +1,6 @@
 ---
 name: project_save_data_layout
-description: "Writable user data lives in AppData under tsatria03/ClassicStand/ (preffs/saves/stats); the map file is encrypted, sounds are not."
+description: "Writable user data lives in AppData under tsatria03/ClassicStand/ (preffs/saves/stats); save slots, settings, and the map file are encrypted, sounds are not."
 metadata:
   node_type: memory
   type: project
@@ -9,9 +9,11 @@ metadata:
 
 All writable player data is stored **absolutely** under `DIRECTORY_APPDATA + "tsatria03/ClassicStand/"`, so it's independent of the src/asset layout ([[project_path_conventions]]). `main()` creates the dirs at startup; the paths are declared in `main/globals/dec.nvgt` and used by `main/functions/savefuncks.nvgt`:
 
-- `preffs/` — settings + saved profile (business title, options).
-- `saves/` — save-slot game state (multiple independent slots).
+- `preffs/` — settings + saved profile (business title, options). File `gamesets.clm`.
+- `saves/` — save-slot game state (multiple independent slots). Files `game<N>.clm`.
 - `stats/` — lifetime stats.
+
+**Save/settings encryption (v3.6, 2026-08-21).** Save slots and the settings file are now **encrypted** via the shared `savedata` class ([[project_include_tree]], `main/deps/savedata.nvgt`). The class already had an `enckey` param that was being passed `""` everywhere (plaintext); it now gets `SAVE_KEY` (slots) and `SETTINGS_KEY` (settings), both `const string` in `dec.nvgt` alongside `MAP_KEY`. `savedata` self-heals exactly like the map: `save()` writes a `CSTSAV` header + `string_aes_encrypt(...)`; `load()` AES-decrypts only when the file starts with `CSTSAV`, and reads any headerless (legacy plaintext) file as-is so the next `save()` migrates it. Construction sites keyed up: `sd`/`st` in `dec.nvgt`, `sd = savedata(currentSaveSlot, SAVE_KEY)` in `set_save_slot`, and `tempSave` (load-menu slot preview) in `extrafuncts.nvgt`. Stats files were left plaintext (out of scope for that change). Like `MAP_KEY`, these keys live in committed source — this deters casual save-file editing, it is not real cryptographic secrecy.
 
 **Shipped read-only data** stays in the bundle: `cst/data/` (config + maps) and `cst/sounds/`. The neighborhood map file under `cst/data/maps/` is **encrypted** going forward (`CSTENC` header, AES via `MAP_KEY` in `dec.nvgt`); sounds are not. Don't confuse the two: `data/`/`sounds`/`docks` are cwd-relative read-only assets; the AppData tree is the read/write user state.
 

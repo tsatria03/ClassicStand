@@ -9,7 +9,7 @@ The `[[name]]` links in `CLAUDE.md` and across these memories resolve to `aidock
 - [Include tree](project_include_tree.md) — src/includes/ = version.nvgt + main/{deps,functions,globals,menus,parsers}; wildcard glob aggregation; vendored stdlib helpers incl. rotation (transitive-dep gotcha).
 - [Build pipeline](project_build_pipeline.md) — cst.py launcher + build/tools.py (commit tools + compile→package→release→website), version mirroring, tools.ini + ~/.game_tools/tools.ini config.
 - [Audio model](project_audio_model.md) — sound_pool + HRTF; cst/sounds/ layout (ambience/dlg/keyboard/menu/misc/platforms/walls); no sound packs.
-- [Save-data layout](project_save_data_layout.md) — writable data in AppData under tsatria03/ClassicStand/ (preffs/saves/stats); map file encrypted, sounds not.
+- [Save-data layout](project_save_data_layout.md) — writable data in AppData under tsatria03/ClassicStand/ (preffs/saves/stats); save slots, settings, and map file encrypted (savedata CSTSAV self-heal), sounds not.
 - [Repo hygiene](project_repo_hygiene.md) — .gitattributes CRLF enforcement + binary rules; what's gitignored; CLAUDE.md + aidocks/ are committed.
 - [Engine pinned to nvgt](project_engine_pinned_nvgt2.md) — runs on the legacy fork at C:\nvgt (BASS); upstream C:\nvgt2 (miniaudio) is incompatible; don't target it or suggest upgrading.
 

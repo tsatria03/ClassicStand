@@ -24,7 +24,7 @@ class custom_menu
 bool music_added = false;
     int current_item = 0;
 int last_letter_index = -1;
-int voltime = 200;
+int voltime = 50;
 int volkeyup = KEY_PAGEUP;
 int volkeydown = KEY_PAGEDOWN;
 string intro_text = "";
