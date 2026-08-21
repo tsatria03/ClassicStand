@@ -128,10 +128,12 @@ string slotem = m.get_item_id(mres);
 if(mres==-1)
 {
 gamemenu();
+return;
 }
 if (slotem == "back")
 {
 gamemenu();
+return;
 }
 int slotNumber = string_to_int(slotem.substr(2));
 set_save_slot(slotNumber);
@@ -175,10 +177,12 @@ string slotem2 = m.get_item_id(mres);
 if(mres==-1)
 {
 gamemenu();
+return;
 }
 if (slotem2 == "back")
 {
 gamemenu();
+return;
 }
 int slotNumber = string_to_int(slotem2.substr(2));
 set_save_slot(slotNumber);
@@ -192,6 +196,7 @@ int mres2=m.run();
 if(mres2==-1)
 {
 newgamemenu();
+return;
 }
 if(mres2==1)
 {
@@ -199,10 +204,12 @@ speak("Loading slot " + string(slotNumber));
 m.fade_music();
 resetgame();
 game();
+return;
 }
 if (mres2==2)
 {
 newgamemenu();
+return;
 }
 }
 else
