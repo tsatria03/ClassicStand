@@ -293,6 +293,62 @@ Shown in the store menu. Use %stock% as a placeholder for the player's current q
 
 Note: you can modify the display name, cost, and description of any existing poster type and add or remove groups freely. However, you cannot add a new poster type through config alone. The item_id field must match a poster variable that exists in the game code. An unrecognized item_id will appear in the store but will not add anything to inventory when purchased.
 
+single_napkins.store
+
+Location: data/config/stores/single_napkins.store
+
+Defines the single napkins sold at the cleaning station in the market.
+
+Format: menu_id:item_id:display_name:base_cost:cost_expr:description
+
+menu_id
+An internal grouping id. Napkins do not use submenu groups, so this can simply repeat the item id.
+
+item_id
+The internal identifier for the napkin item. Must be napkin to match the inventory system.
+
+display_name
+The name shown in the store menu.
+
+base_cost
+The starting price before any scaling.
+
+cost_expr
+An expression that controls how the cost scales. Supports level and day as variables. Example: level*day.
+
+description
+Shown in the store menu. Use %stock% as a placeholder for how many napkins you currently have.
+
+Note: you can freely change the price, scaling, and description. The item_id must stay napkin, as that is the item the cleaning station adds to your inventory.
+
+bundle_napkins.store
+
+Location: data/config/stores/bundle_napkins.store
+
+Defines the napkin packs sold at the cleaning station.
+
+Format: menu_id:bundle_id:display_name:quantity:discount:description
+
+menu_id
+An internal grouping id. Can repeat the bundle id, as napkin bundles do not use submenu groups.
+
+bundle_id
+The internal identifier for this pack.
+
+display_name
+The name shown in the bundle menu.
+
+quantity
+How many napkins this pack contains.
+
+discount
+The price discount applied as a multiplier against the single napkin price times the quantity. Example: 0.9 means the pack costs 10 percent less than buying that many napkins individually.
+
+description
+Shown in the bundle menu. Use %quantity% as a placeholder for the pack quantity.
+
+Note: you can add, remove, or retune packs freely. Each pack always distributes napkins only.
+
 customers.table
 
 Location: data/config/tables/customers.table

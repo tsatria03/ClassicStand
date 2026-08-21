@@ -7,12 +7,12 @@
 ****Unfinished. Make talking to a customer sometimes calm them down or improve their patience, instead of only ever being neutral or making them leave angry.
 ****Unfinished. Make rude and mean customers have consequences the player actually feels, since right now they still pay you and only cost a little reputation despite acting hostile.
 ****Unfinished. Add a way for the player to set different selling prices for different customer groups during play, such as discounts for children or the elderly.
-****Unfinished. Make napkins a purchasable supply in the market, like the other inventory items.
 ****Unfinished. Add storage or preservation upgrades the player can buy to slow down water evaporation, salt clumping, and ice melting.
 ****Unfinished. Give salt and ice a real upside as well as a downside, so every ingredient matters instead of only ever causing complaints.
 
 ##These are the things that are already finished from earlier versions of the game.
 
+**Finished. Make napkins a purchasable supply in the market, like the other inventory items.
 **Finished. Make each customer type's automatic price adjustment tunable from the customers config file, so discounts like cheaper cups for children or the elderly no longer require code changes.
 **Finished. Make the lemonade feedback point out which ingredient is off, instead of vague too sweet or too sour messages.
 **Finished. Fix empty cup counts only ever going up, since pouring lemonade never uses up an empty cup and serving a customer hands one back.

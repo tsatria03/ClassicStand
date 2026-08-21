@@ -1,0 +1,48 @@
+class napkin_bundle
+{
+string menu_id;
+string id;
+string display_name;
+int quantity;
+double discount;
+string description;
+}
+
+napkin_bundle@[] napkin_bundles;
+
+void load_bundle_napkin_store()
+{
+napkin_bundles.resize(0);
+string[] lines = load_config_file("data/config/stores/bundle_napkins.store");
+for(uint i = 0; i < lines.length(); i++)
+{
+string line = lines[i];
+int eq = line.find("=");
+int col = line.find(":");
+if(eq != -1 && (col == -1 || eq < col)) continue;
+string[] p = parse_delimited_line(line, 5);
+if(p.length() < 6) continue;
+napkin_bundle b;
+b.menu_id      = p[0].trim_whitespace();
+b.id           = p[1].trim_whitespace();
+b.display_name = p[2].trim_whitespace();
+b.quantity     = string_to_int(p[3].trim_whitespace());
+b.discount     = string_to_number(p[4].trim_whitespace());
+b.description  = p[5].trim_whitespace();
+napkin_bundles.insert_last(b);
+}
+}
+
+string get_napkin_bundle_description(string id)
+{
+for(uint i = 0; i < napkin_bundles.length(); i++)
+{
+if(napkin_bundles[i].id == id)
+{
+dictionary@ r = dictionary();
+r.set("quantity", string(napkin_bundles[i].quantity));
+return format_template(napkin_bundles[i].description, r);
+}
+}
+return "";
+}

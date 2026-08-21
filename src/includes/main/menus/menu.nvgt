@@ -897,3 +897,105 @@ play_poster_sound();
 dlg("You bought the " + selected.display_name + " for " + convert_to_currency(total) + ". You received " + receipt + ". You now have " + convert_to_currency(cash) + " remaining.");
 posterbmenu(sub_id);
 }
+void cleaningmenu()
+{
+custpool.pause_all();
+personpool.pause_all();
+passerpool.pause_all();
+setupmenu();
+m.add_item("Bundled napkins", "nbg");
+m.add_item("Single napkins", "nsg");
+m.add_item("back", "back");
+m.intro_text = "Cleaning station.";
+int start_pos = 0;
+if(last_menu_id != "")
+{
+int found = m.find_item_by_id(last_menu_id);
+if(found != -1) start_pos = found;
+}
+int mres = m.run(start_pos, true);
+string sel = m.get_item_id(mres);
+if(mres != -1) last_menu_id = sel;
+if(mres == -1 || sel == "back") { last_menu_id = ""; custpool.resume_all(); personpool.resume_all(); passerpool.resume_all(); return; }
+if(sel == "nbg") { last_menu_id = ""; napkinbmenu(); }
+if(sel == "nsg") { last_menu_id = ""; napkinsmenu(); }
+}
+void napkinsmenu()
+{
+setupmenu();
+for(uint i = 0; i < napkin_store.length(); i++)
+{
+napkin_item@ item = napkin_store[i];
+double cost = get_napkin_cost(item.id);
+m.add_item(item.display_name + ": costs " + convert_to_currency(cost) + " each. Description: " + get_napkin_description(item.id, get_napkin_stock()), item.id);
+}
+m.add_item("back", "back");
+m.intro_text = "Single napkins.";
+int start_pos = 0;
+if(last_menu_id != "")
+{
+int found = m.find_item_by_id(last_menu_id);
+if(found != -1) start_pos = found;
+}
+int mres = m.run(start_pos, true);
+string sel = m.get_item_id(mres);
+if(mres != -1) last_menu_id = sel;
+if(mres == -1 || sel == "back") { last_menu_id = ""; cleaningmenu(); return; }
+napkin_item@ selected = null;
+for(uint i = 0; i < napkin_store.length(); i++)
+{
+if(napkin_store[i].id == sel) { @selected = napkin_store[i]; break; }
+}
+if(@selected == null) { napkinsmenu(); return; }
+double cost = get_napkin_cost(selected.id);
+if(cost <= 0) { dlg("That item is not available right now."); napkinsmenu(); return; }
+vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,.<>_?/+-=~", false, "");
+int max_qty = int(floor(cash / cost));
+string qty_input = vd.input_box("", "How many " + selected.display_name + " would you like to buy? They cost " + convert_to_currency(cost) + " each. You can afford up to " + max_qty + ". Press enter to buy the maximum.", string(max_qty));
+if(qty_input == "") { napkinsmenu(); return; }
+int qty = int(string_to_number(qty_input));
+if(qty <= 0) { napkinsmenu(); return; }
+double total = qty * cost;
+if(cash < total) { dlg("You don't have enough cash for that."); napkinsmenu(); return; }
+cash -= total;
+apply_napkin_purchase(qty);
+p.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
+dlg("Purchase complete. You bought " + qty + " " + selected.display_name + " for " + convert_to_currency(total) + ". You now have " + convert_to_currency(cash) + " remaining.");
+napkinsmenu();
+}
+void napkinbmenu()
+{
+setupmenu();
+double single = get_napkin_cost("napkin");
+for(uint i = 0; i < napkin_bundles.length(); i++)
+{
+napkin_bundle@ b = napkin_bundles[i];
+double cost = single * b.quantity * b.discount;
+m.add_item(b.display_name + ": costs " + convert_to_currency(cost) + ". Description: " + get_napkin_bundle_description(b.id), b.id);
+}
+m.add_item("back", "back");
+m.intro_text = "Bundled napkins.";
+int start_pos = 0;
+if(last_menu_id != "")
+{
+int found = m.find_item_by_id(last_menu_id);
+if(found != -1) start_pos = found;
+}
+int mres = m.run(start_pos, true);
+string sel = m.get_item_id(mres);
+if(mres != -1) last_menu_id = sel;
+if(mres == -1 || sel == "back") { last_menu_id = ""; cleaningmenu(); return; }
+napkin_bundle@ selected = null;
+for(uint i = 0; i < napkin_bundles.length(); i++)
+{
+if(napkin_bundles[i].id == sel) { @selected = napkin_bundles[i]; break; }
+}
+if(@selected == null) { napkinbmenu(); return; }
+double total = single * selected.quantity * selected.discount;
+if(cash < total) { dlg("You don't have enough cash for that."); napkinbmenu(); return; }
+cash -= total;
+give("napkin", selected.quantity);
+p.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
+dlg("You bought the " + selected.display_name + " for " + convert_to_currency(total) + ". You received " + selected.quantity + " napkin" + (selected.quantity == 1 ? "" : "s") + ". You now have " + convert_to_currency(cash) + " remaining.");
+napkinbmenu();
+}

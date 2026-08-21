@@ -727,6 +727,8 @@ load_single_ingredient_store();
 load_bundle_ingredient_store();
 load_single_poster_store();
 load_bundle_poster_store();
+load_single_napkin_store();
+load_bundle_napkin_store();
 load_main_table_thresholds();
 load_main_table_items();
 load_customer_table();

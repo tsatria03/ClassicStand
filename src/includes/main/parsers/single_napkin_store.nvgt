@@ -1,0 +1,69 @@
+class napkin_item
+{
+string menu_id;
+string id;
+string display_name;
+double base_cost;
+string cost_expr;
+string description;
+}
+
+napkin_item@[] napkin_store;
+
+void load_single_napkin_store()
+{
+napkin_store.resize(0);
+string[] lines = load_config_file("data/config/stores/single_napkins.store");
+for(uint i = 0; i < lines.length(); i++)
+{
+string line = lines[i];
+int eq = line.find("=");
+int col = line.find(":");
+if(eq != -1 && (col == -1 || eq < col)) continue;
+string[] p = parse_delimited_line(line, 5);
+if(p.length() < 6) continue;
+napkin_item item;
+item.menu_id      = p[0].trim_whitespace();
+item.id           = p[1].trim_whitespace();
+item.display_name = p[2].trim_whitespace();
+item.base_cost    = string_to_number(p[3].trim_whitespace());
+item.cost_expr    = p[4].trim_whitespace();
+item.description  = p[5].trim_whitespace();
+napkin_store.insert_last(item);
+}
+}
+
+double get_napkin_cost(string id)
+{
+for(uint i = 0; i < napkin_store.length(); i++)
+{
+if(napkin_store[i].id == id)
+return eval_amount(napkin_store[i].cost_expr, level, daynumber) * napkin_store[i].base_cost;
+}
+return 0;
+}
+
+string get_napkin_description(string id, int stock)
+{
+for(uint i = 0; i < napkin_store.length(); i++)
+{
+if(napkin_store[i].id == id)
+{
+dictionary@ r = dictionary();
+r.set("stock", string(stock));
+return format_template(napkin_store[i].description, r);
+}
+}
+return "";
+}
+
+int get_napkin_stock()
+{
+int n = item_exists("napkin");
+return n > 0 ? n : 0;
+}
+
+void apply_napkin_purchase(int qty)
+{
+give("napkin", qty);
+}
