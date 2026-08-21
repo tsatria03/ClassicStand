@@ -140,7 +140,7 @@ if(key_pressed(KEY_T))
     string hour_period = (hour >= 12 && hour < 24) ? "PM" : "AM";
     int display_hour = hour % 12;
     if(display_hour == 0) display_hour = 12;
-speak("Time: " + display_hour + hour_period + ". Level " + level + " of " + maxlevel + ".");
+speak("Time: " + display_hour + hour_period + ".");
 }
 if(key_pressed(KEY_R))
 {
