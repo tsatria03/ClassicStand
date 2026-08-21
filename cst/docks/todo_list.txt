@@ -3,7 +3,6 @@
 ****Unfinished. Make how many in-game hours each level lasts configurable, which also sets how many levels make up a day. Do this only after the economy no longer depends on the level number, and note the value must divide evenly into 24.
 ****Unfinished. Separate the time-of-day level from the economy, so prices and events scale on the day and how far through the day it is, rather than on the raw level number. Keep the through-the-day ramp.
 ****Unfinished. Make each segment of the day feel longer, since early waves are so small that a period often ends almost as soon as it begins.
-****Unfinished. Make posters feel worthwhile by rebalancing them against the viral video bonus, which currently gives such large cash rewards that marketing with posters feels pointless.
 ****Unfinished. Make talking to a customer sometimes calm them down or improve their patience, instead of only ever being neutral or making them leave angry.
 ****Unfinished. Make rude and mean customers have consequences the player actually feels, since right now they still pay you and only cost a little reputation despite acting hostile.
 ****Unfinished. Add a way for the player to set different selling prices for different customer groups during play, such as discounts for children or the elderly.
@@ -12,6 +11,7 @@
 
 ##These are the things that are already finished from earlier versions of the game.
 
+**Finished. Make posters feel worthwhile by rebalancing them against the viral video bonus, which currently gives such large cash rewards that marketing with posters feels pointless.
 **Finished. Make napkins a purchasable supply in the market, like the other inventory items.
 **Finished. Make each customer type's automatic price adjustment tunable from the customers config file, so discounts like cheaper cups for children or the elderly no longer require code changes.
 **Finished. Make the lemonade feedback point out which ingredient is off, instead of vague too sweet or too sour messages.
