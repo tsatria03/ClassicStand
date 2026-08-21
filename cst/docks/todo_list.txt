@@ -1,19 +1,25 @@
 ####These are the things that need to be finished for future versions of the game.
 
-****Unfinished. Fix serving a whole group at once only handing over and charging for a single cup, instead of one cup per person in the group.
-****Unfinished. Fix reloading a saved game losing your placed posters, each filled cup's exact recipe, your napkins, and any spill you were cleaning up.
-****Unfinished. Fix backing out or pressing escape from the load game or new game slot list dropping you onto an invalid save slot instead of returning to the game menu.
-****Unfinished. Fix trying to view a missing readme or changelog file throwing an error instead of showing a clean message.
-****Unfinished. Fix cleaning up a spill leaving the counter tile still sounding wet afterward, since the wet floor patch is never actually removed.
-****Unfinished. Fix spills and cleanups piling up floor patches that are never freed, slowly growing memory the longer a game runs.
-****Unfinished. Fix empty cup counts only ever going up, since pouring lemonade never uses up an empty cup and serving a customer hands one back.
-****Unfinished. Fix spoiled ingredients like melted ice, rotted lemons, evaporated water, and clumped salt vanishing from your inventory before you get a chance to discard them.
-****Unfinished. Make the lemonade feedback point out which ingredient is off, instead of vague too sweet or too sour messages.
-****Unfinished. Give salt and ice a real upside as well as a downside, so every ingredient matters instead of only ever causing complaints.
-****Unfinished. Add storage or preservation upgrades the player can buy to slow down water evaporation, salt clumping, and ice melting.
-****Unfinished. Make napkins a purchasable supply in the market, like the other inventory items.
-****Unfinished. Make each customer type's automatic price adjustment tunable from the customers config file, so discounts like cheaper cups for children or the elderly no longer require code changes.
+****Unfinished. Make how many in-game hours each level lasts configurable, which also sets how many levels make up a day. Do this only after the economy no longer depends on the level number, and note the value must divide evenly into 24.
+****Unfinished. Separate the time-of-day level from the economy, so prices and events scale on the day and how far through the day it is, rather than on the raw level number. Keep the through-the-day ramp.
+****Unfinished. Make each segment of the day feel longer, since early waves are so small that a period often ends almost as soon as it begins.
+****Unfinished. Make posters feel worthwhile by rebalancing them against the viral video bonus, which currently gives such large cash rewards that marketing with posters feels pointless.
+****Unfinished. Make talking to a customer sometimes calm them down or improve their patience, instead of only ever being neutral or making them leave angry.
+****Unfinished. Make rude and mean customers have consequences the player actually feels, since right now they still pay you and only cost a little reputation despite acting hostile.
 ****Unfinished. Add a way for the player to set different selling prices for different customer groups during play, such as discounts for children or the elderly.
+****Unfinished. Make each customer type's automatic price adjustment tunable from the customers config file, so discounts like cheaper cups for children or the elderly no longer require code changes.
+****Unfinished. Make napkins a purchasable supply in the market, like the other inventory items.
+****Unfinished. Add storage or preservation upgrades the player can buy to slow down water evaporation, salt clumping, and ice melting.
+****Unfinished. Give salt and ice a real upside as well as a downside, so every ingredient matters instead of only ever causing complaints.
+****Unfinished. Make the lemonade feedback point out which ingredient is off, instead of vague too sweet or too sour messages.
+****Unfinished. Fix spoiled ingredients like melted ice, rotted lemons, evaporated water, and clumped salt vanishing from your inventory before you get a chance to discard them.
+****Unfinished. Fix empty cup counts only ever going up, since pouring lemonade never uses up an empty cup and serving a customer hands one back.
+****Unfinished. Fix spills and cleanups piling up floor patches that are never freed, slowly growing memory the longer a game runs.
+****Unfinished. Fix cleaning up a spill leaving the counter tile still sounding wet afterward, since the wet floor patch is never actually removed.
+****Unfinished. Fix trying to view a missing readme or changelog file throwing an error instead of showing a clean message.
+****Unfinished. Fix backing out or pressing escape from the load game or new game slot list dropping you onto an invalid save slot instead of returning to the game menu.
+****Unfinished. Fix reloading a saved game losing your placed posters, each filled cup's exact recipe, your napkins, and any spill you were cleaning up.
+****Unfinished. Fix serving a whole group at once only handing over and charging for a single cup, instead of one cup per person in the group.
 
 ##These are the things that are already finished from earlier versions of the game.
 
