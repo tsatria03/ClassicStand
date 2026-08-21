@@ -1,4 +1,5 @@
 New in 3.4.
+Reworded the sugar and salt cold weather events so they describe the ingredient spoiling and going to waste, rather than implying you get a clumped item to discard.
 Fixed a bug where spoiled ingredients like melted ice, rotted lemons, evaporated water, and clumped salt would vanish from your inventory before you could discard them. They now stay in your inventory and can be recycled with shift enter.
 Fixed a bug where cleaning up a spill would leave the counter still sounding wet, because the wet patch on the floor was never actually removed. Cleaning now restores the counter to its normal surface.
 Fixed a bug where spills and cleanups kept adding floor patches that were never removed, slowly growing memory over a long game. Cleaning now removes the wet patches instead of leaving them behind.
