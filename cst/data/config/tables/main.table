@@ -46,6 +46,13 @@ ice_tip_bonus=15
 
 hours_per_level=4
 
+[pricing]
+
+; Required header — removing or renaming this will break the file.
+
+min_percent=25
+max_percent=200
+
 [items]
 
 ; Required header — removing or renaming this will break the file.

@@ -4,6 +4,8 @@ dictionary wave_settings;
 
 dictionary customer_prices;
 
+dictionary group_price_mult;
+
 dictionary talk_settings;
 
 dictionary mean_settings;
@@ -95,14 +97,35 @@ mean_settings.get(key, v);
 return string_to_number(v);
 }
 
+// Seed the runtime per-group price multipliers from the config [prices] defaults.
+void init_group_prices()
+{
+group_price_mult.delete_all();
+string[] keys = customer_prices.get_keys();
+for(uint i = 0; i < keys.length(); i++)
+{
+string v;
+customer_prices.get(keys[i], v);
+group_price_mult.set(keys[i], string_to_number(v));
+}
+}
+
+// Runtime per-group multiplier (edited at the Pricing station, saved per game). Falls back to the config default, then 1.0.
 double get_customer_price_multiplier(string type)
 {
+if(group_price_mult.exists(type))
+{
+double m;
+group_price_mult.get(type, m);
+if(m > 0) return m;
+return 1.0;
+}
 if(!customer_prices.exists(type)) return 1.0;
 string v;
 customer_prices.get(type, v);
-double m = string_to_number(v);
-if(m <= 0) return 1.0;
-return m;
+double cm = string_to_number(v);
+if(cm <= 0) return 1.0;
+return cm;
 }
 
 void load_customer_table_movements()

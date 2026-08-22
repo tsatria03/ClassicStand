@@ -40,8 +40,11 @@ Handler name **`pricemenu`**; zone name **"Pricing station"** (dev-approved 2026
 
 **Accessibility (load-bearing):** the menu must read each group's current % and resulting price aloud; every change is confirmed by speech.
 
-## Open sub-decisions to confirm before coding
-1. Multiplier bounds — allow free discounts, but cap markups (e.g. ≤200%) so a group's price can't exceed the day cap absurdly?
-2. Do **tips** scale with a group's effective price or stay on the base? (Lean: stay on base, simpler.)
-3. Include **group** type in the list (pays per cup × group size — a % still applies; recommend yes) and any other type exclusions beyond thief.
-4. Exact wording of the input prompt and how out-of-range % entries are clamped/messaged.
+## Sub-decisions — DECIDED 2026-08-22
+1. **% range: 25%–200%**, config-tunable min/max, out-of-range entries clamped with a spoken note. NOT capped to the day's price cap (refuse/patience self-limits steep markups). Must fit the config defaults (desperate 150%, child 60%).
+2. **Tips stay on the base price** — a group's discount/markup affects the price they pay, not the tip (keeps tips a rep-reward, avoids markups being doubly profitable).
+3. **List all 10 non-thief buying types** (normal, nice, mean, desperate, charitable, group, returning, critic, elderly, child); thief excluded. Mean stays (a calmed mean pays the set price).
+4. Prompt wording = implementation detail.
+
+## Per-group refuse/patience mechanic (implementation note)
+Effective overpricing ratio for a type = `price_multiplier * get_customer_price_multiplier(type)` (since `price_multiplier = base/suggested` and the group multiplier scales it). Apply in refuse (serve) and patience (spawn, after the type is known). A discount (mult<1) makes them more patient / less likely to refuse; a markup (mult>1) the reverse.

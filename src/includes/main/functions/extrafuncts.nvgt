@@ -737,6 +737,7 @@ load_single_napkin_store();
 load_bundle_napkin_store();
 load_main_table_thresholds();
 load_main_table_time();
+load_main_table_pricing();
 load_main_table_items();
 load_customer_table();
 load_passer_table();

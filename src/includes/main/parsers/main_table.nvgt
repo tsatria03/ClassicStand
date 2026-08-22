@@ -1,6 +1,7 @@
 dictionary main_newgame;
 dictionary main_thresholds;
 dictionary main_time;
+dictionary main_pricing;
 
 void load_main_table_newgame()
 {
@@ -45,6 +46,19 @@ double threshold_get(string key, double fallback)
 if(!main_thresholds.exists(key)) return fallback;
 string v;
 main_thresholds.get(key, v);
+return string_to_number(v);
+}
+
+void load_main_table_pricing()
+{
+load_section_dict("data/config/tables/main.table", "[pricing]", main_pricing);
+}
+
+double pricing_get(string key, double fallback)
+{
+if(!main_pricing.exists(key)) return fallback;
+string v;
+main_pricing.get(key, v);
 return string_to_number(v);
 }
 
