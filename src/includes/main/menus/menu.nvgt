@@ -665,7 +665,7 @@ vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@
 double per_bundle_base = ((cupcost + lemoncost + sugarcost + watercost) * b.quantity) / 6;
 int max_qty = (per_bundle_base > 0) ? int(cash / per_bundle_base) : 1;
 if(max_qty < 1) max_qty = 1;
-string qty_input = vd.input_box("", "How many " + b.display_name + " bundles would you like to buy? You can afford up to " + max_qty + ". Press enter to buy the maximum amount.", string(max_qty));
+string qty_input = vd.input_box("", "How many " + b.display_name + "s would you like to buy? You can afford up to " + max_qty + ". Press enter to buy the maximum amount.", string(max_qty));
 if(qty_input == "")
 {
 buybmenu(sub_id);
@@ -695,7 +695,7 @@ if(include_salt) per_bundle += saltcost * b.quantity;
 double total = per_bundle * qty;
 if(cash < total)
 {
-dlg("Error. You don't have enough cash to purchase " + qty + " " + b.display_name + " bundle" + (qty == 1 ? "" : "s") + " of supplies.");
+dlg("Error. You don't have enough cash to purchase " + qty + " " + b.display_name + (qty == 1 ? "" : "s") + " of supplies.");
 buybmenu(sub_id);
 return;
 }
@@ -712,7 +712,7 @@ p.play_stationary("sounds/misc/buyfruit" + random(1, 2) + ".ogg", false);
 p.play_stationary("sounds/misc/buypack" + random(1, 2) + ".ogg", false);
 p.play_stationary("sounds/misc/buywater" + random(1, 2) + ".ogg", false);
 p.play_stationary("sounds/misc/buy" + random(1, 4) + ".ogg", false);
-string msg = "Purchase complete. You bought " + qty + " " + b.display_name + " bundle" + (qty == 1 ? "" : "s") + " of supplies for " + convert_to_currency(total) + ".--";
+string msg = "Purchase complete. You bought " + qty + " " + b.display_name + (qty == 1 ? "" : "s") + " of supplies for " + convert_to_currency(total) + ".--";
 msg += "You received " + (b.quantity * qty) + " empty cups";
 if(include_ice)  msg += ", " + (b.quantity * qty) + " bags of ice";
 msg += ", " + (b.quantity * qty) + " ripe lemons";
