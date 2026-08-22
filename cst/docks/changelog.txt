@@ -1,4 +1,5 @@
 New in 3.6.
+Made it so salt and ice now have an upside instead of only ever causing complaints. A pinch of salt makes an already good drink taste better and customers more likely to tip, and on a hot day a good amount of ice does the same while letting you add more ice before it counts as too icy. Too much salt or ice still draws complaints, and on a cold day customers turn on ice sooner.
 Added a way to adjust the overall sound source volume while playing with the Home and End keys, where Home raises it and End lowers it. Your chosen level is saved between sessions.
 Removed the level number from the time readout on the T key and from the business info screen, so both now show only the time of day. The level number is now purely internal.
 Fixed a bug where the menu's music volume was being written to the wrong save file. It will now write the adjusted setting into the propper gamesets.clm file moving forward.

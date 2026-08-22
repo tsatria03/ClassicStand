@@ -6,7 +6,7 @@ metadata:
   type: project
 ---
 
-Plan for the todo item **"Give salt and ice a real upside as well as a downside."** Direction chosen by the dev on **2026-08-21: Direction 2 (weather-driven roles).** **Not yet coded** — this is the design to implement when we return to it. From the [[project_design_feedback]] salt/ice bullet; stays config-driven per [[project_data_driven_config]].
+Plan for the todo item **"Give salt and ice a real upside as well as a downside."** Direction chosen by the dev on **2026-08-21: Direction 2 (weather-driven roles).** **IMPLEMENTED & confirmed working 2026-08-21 (v3.6)** — see the code notes below for what shipped. From the [[project_design_feedback]] salt/ice bullet; stays config-driven per [[project_data_driven_config]].
 
 ## Baseline (how salt & ice work today)
 - The recipe splits: **lemon/sugar/water** judged by *ratio*; **salt and ice** judged by *absolute amount per cup* against flat thresholds in `main.table [thresholds]` (`salty=0.3`, `extreme_salty=1.0`, `icy=0.3`, `extreme_icy=1.0`).
@@ -34,7 +34,7 @@ Plan for the todo item **"Give salt and ice a real upside as well as a downside.
 
 **Accessibility (load-bearing):** every bonus MUST be conveyed in the spoken feedback line — a blind player can't see numbers. If a bonus isn't spoken, it doesn't exist to the player.
 
-## Open sub-decisions to confirm before coding
-1. Include a **salt "rescue"** mechanic (a pinch softens a *mild*, non-extreme too_sour/too_sweet by one tier — borrowed from Direction 3), or keep salt as a pure additive bonus?
-2. Exact good-band numbers and bonus magnitudes (tune during implementation).
-3. Should the ice refreshment apply only to otherwise-good drinks (recommended, simpler), or partially even when the flavor base is slightly off?
+## Open sub-decisions
+1. Salt "rescue" mechanic? **DECIDED 2026-08-21: NO — Option A, pure additive bonus.** Salt only rewards an already-good drink (tip bonus) and keeps its too-salty drawback; it does NOT rescue a mildly off (too_sour/too_sweet) batch. Rationale (dev takes player feedback seriously): the player's stated ask was only "every ingredient should give a benefit and a drawback," which A meets, and a rescue interaction would be hard to perceive in an audio game — reintroducing the "why was my drink judged this way?" fog the 3.5 feedback change fixed. Rescue kept on the shelf as a possible later follow-up.
+2. Good-band numbers and bonus magnitudes — **DECIDED 2026-08-21** (all config in `main.table [thresholds]`, read via `threshold_get`; hot/cold temps via `wave_get`): salt good band **0.10–0.25** → **+15 tip chance**, too-salty stays 0.30; ice good band (hot day only) **0.15–0.40** → **+15 tip chance**; hot-day too-icy line **0.50**, cold-day too-icy line **0.15**, neutral stays 0.30; both in band on a hot day **stack (+30)** with both flavor lines. **Simplification approved: drop the salt hot-day electrolyte extra** — salt is a flat universal bonus for v1. Bands kept wide vs the ±15% pour jitter (`menu.nvgt:469–478`). New config keys: `salt_good_min/max`, `ice_good_min/max`, `icy_hot`, `icy_cold`, `salt_tip_bonus`, `ice_tip_bonus`.
+3. Ice refreshment scope? **DECIDED 2026-08-21: good drinks only**, mirroring salt's Option A. Ice gives its hot-day refreshment reward only on an otherwise-good drink; it never rescues a bad one.

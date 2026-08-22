@@ -450,6 +450,9 @@ else if(ctype == "charitable") tip_chance = 100;
 else if(ctype == "returning") tip_chance = min(99, tip_chance + 20);
 else if(ctype == "mean") tip_chance = 0;
 else if(ctype == "child") tip_chance = int(tip_chance * 0.3);
+string flavor_note = "";
+if(salt_in_good_band(this_sal)) { tip_chance = min(99, tip_chance + int(threshold_get("salt_tip_bonus", 15))); flavor_note += " That subtle hint of salt really brings the flavor to life!"; }
+if(ice_in_good_band_hot(this_ice)) { tip_chance = min(99, tip_chance + int(threshold_get("ice_tip_bonus", 15))); flavor_note += " And it is wonderfully ice cold, so refreshing on a hot day like this!"; }
 if(random(0, 99) < tip_chance)
 {
 double tip_min = selling_price * 0.05;
@@ -469,6 +472,7 @@ else if(ctype == "critic") good_msg = "The critic scribbles in their notebook. I
 else if(ctype == "elderly") good_msg = "The elderly customer smiles contentedly. Oh that's just lovely, dear. They pay you " + convert_to_currency(earned) + "." + tip_msg;
 else if(ctype == "child") good_msg = "The child's eyes light up. This is the best lemonade EVER! They pay you " + convert_to_currency(earned) + "." + tip_msg;
 else good_msg = "The customer finishes their lemonade. " + feedback + " They pay you " + convert_to_currency(earned) + "." + tip_msg;
+good_msg += flavor_note;
 dlg(good_msg);
 cups += cups_needed;
 double rep_gain = 1.0 + (daynumber / 10.0);
@@ -485,6 +489,15 @@ customers[idx].steptimer.restart();
 speak("The customer is heading back to the street.");
 open_serve_menu();
 }
+bool salt_in_good_band(double sal)
+{
+return sal >= threshold_get("salt_good_min", 0.1) && sal <= threshold_get("salt_good_max", 0.25);
+}
+bool ice_in_good_band_hot(double ice)
+{
+if(temperature <= int(wave_get("hot_temp", 85))) return false;
+return ice >= threshold_get("ice_good_min", 0.15) && ice <= threshold_get("ice_good_max", 0.4);
+}
 string get_customer_feedback(double lem, double sug, double wat, double ice, double sal)
 {
 double total = lem + sug + wat;
@@ -496,7 +509,10 @@ bool too_sour      = lemon_ratio > threshold_get("sour", 0.35);
 bool too_sweet     = sugar_ratio > threshold_get("sweet", 0.35);
 bool too_watery    = water_ratio > threshold_get("watery", 0.5);
 bool too_salty     = sal > threshold_get("salty", 0.3);
-bool too_icy       = ice > threshold_get("icy", 0.3);
+double icy_thresh = threshold_get("icy", 0.3);
+if(temperature > int(wave_get("hot_temp", 85))) icy_thresh = threshold_get("icy_hot", 0.5);
+else if(temperature < int(wave_get("cold_temp", 45))) icy_thresh = threshold_get("icy_cold", 0.15);
+bool too_icy       = ice > icy_thresh;
 bool extreme_sour  = lemon_ratio > threshold_get("extreme_sour", 0.6);
 bool extreme_sweet = sugar_ratio > threshold_get("extreme_sweet", 0.6);
 bool extreme_watery= water_ratio > threshold_get("extreme_watery", 0.75);
@@ -509,9 +525,9 @@ if(extreme_watery) return "EXTREME:This is just water! I paid for lemonade, not 
 if(extreme_salty)  return "EXTREME:This tastes like the ocean! Are you trying to poison me?!";
 if(extreme_icy)    return "EXTREME:This is basically a block of ice! I can't even drink this!";
 if(too_sour && too_sweet) return "Whoa, this has too much lemon and too much sugar at the same time!";
-if(too_sour)   return "Ooh, that's quite sour, there's too much lemon for the sugar!";
-if(too_sweet)  return "That's very sweet, there's too much sugar for the lemon!";
-if(too_watery) return "This tastes watered down, there's too much water for the lemon and sugar!";
+if(too_sour)   return "Ooh, that's quite sour, there's too much lemon and not enough sugar to balance it!";
+if(too_sweet)  return "That's very sweet, there's too much sugar and not enough lemon to balance it!";
+if(too_watery) return "This tastes watered down, there's too much water and not enough lemon and sugar!";
 if(too_salty)  return "Whoa, there's way too much salt in this!";
 if(too_icy)    return "Brrr, there's way too much ice in this one!";
 return "Mmm, that's delicious! Perfectly balanced. Just what I needed!";
@@ -831,6 +847,8 @@ else if(ctype_all == "charitable") tip_chance = 100;
 else if(ctype_all == "returning") tip_chance = min(99, tip_chance + 20);
 else if(ctype_all == "mean") tip_chance = 0;
 else if(ctype_all == "child") tip_chance = int(tip_chance * 0.3);
+if(salt_in_good_band(this_sal)) tip_chance = min(99, tip_chance + int(threshold_get("salt_tip_bonus", 15)));
+if(ice_in_good_band_hot(this_ice)) tip_chance = min(99, tip_chance + int(threshold_get("ice_tip_bonus", 15)));
 if(random(0, 99) < tip_chance)
 {
 double tip_min = selling_price * 0.05;

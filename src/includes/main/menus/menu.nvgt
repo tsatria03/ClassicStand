@@ -278,10 +278,8 @@ setupmenu();
 m.add_item("Make lemonade. You have " + cups + " empty cup" + (cups == 1 ? "" : "s"), "make");
 if(pitcherstat <= 0)
 m.add_item("Pour lemonade. Pitcher is empty.", "pour");
-else if(pitcherstat <= 1)
-m.add_item("Pour lemonade. You have 1 liter in the pitcher.", "pour");
 else
-m.add_item("Pour lemonade. You have " + ceil(pitcherstat) + " liters in the pitcher.", "pour");
+m.add_item("Pour lemonade. You have " + round(pitcherstat, 2) + " liter" + (pitcherstat == 1 ? "" : "s") + " in the pitcher.", "pour");
 m.add_item("Back", "back");
 m.intro_text = "Actions station.";
 int mres = m.run();

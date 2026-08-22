@@ -4,10 +4,10 @@
 ****Unfinished. Make rude and mean customers have consequences the player actually feels, since right now they still pay you and only cost a little reputation despite acting hostile.
 ****Unfinished. Add a way for the player to set different selling prices for different customer groups during play, such as discounts for children or the elderly.
 ****Unfinished. Add storage or preservation upgrades the player can buy to slow down water evaporation, salt clumping, and ice melting.
-****Unfinished. Give salt and ice a real upside as well as a downside, so every ingredient matters instead of only ever causing complaints.
 
 ##These are the things that are already finished from earlier versions of the game.
 
+**Finished. Give salt and ice a real upside as well as a downside, so every ingredient matters instead of only ever causing complaints.
 **Finished. Make each segment of the day feel longer, since early waves are so small that a period often ends almost as soon as it begins.
 **Finished. Make how many in-game hours each level lasts configurable, which also sets how many levels make up a day. Do this only after the economy no longer depends on the level number, and note the value must divide evenly into 24.
 **Finished. Separate the time-of-day level from the economy, so prices and events scale on the day and how far through the day it is, rather than on the raw level number. Keep the through-the-day ramp.

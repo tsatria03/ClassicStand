@@ -31,6 +31,14 @@ salty=0.3
 extreme_salty=1.0
 icy=0.3
 extreme_icy=1.0
+salt_good_min=0.1
+salt_good_max=0.25
+ice_good_min=0.15
+ice_good_max=0.4
+icy_hot=0.5
+icy_cold=0.15
+salt_tip_bonus=15
+ice_tip_bonus=15
 
 [time]
 

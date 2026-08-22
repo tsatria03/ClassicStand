@@ -427,6 +427,10 @@ sweet and extreme_sweet = sugar ratio thresholds for mild and extreme sweetness 
 watery and extreme_watery = water ratio thresholds for mild and extreme watery complaints.
 salty and extreme_salty = salt amount thresholds for mild and extreme saltiness complaints.
 icy and extreme_icy = ice amount thresholds for mild and extreme iciness complaints.
+salt_good_min and salt_good_max = the good range of salt per cup that rewards an already good drink with a tip bonus.
+ice_good_min and ice_good_max = the good range of ice per cup that rewards an already good drink, but only on a hot day.
+icy_hot and icy_cold = the too icy threshold used on hot and cold days, replacing the normal icy threshold based on the weather.
+salt_tip_bonus and ice_tip_bonus = how much each adds to the tip chance when the drink falls in the good range.
 
 [time]
 Flat key=value setting controlling the length of a day.
