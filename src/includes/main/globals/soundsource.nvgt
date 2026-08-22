@@ -29,7 +29,7 @@ bool in_range = (me.x >= minx && me.x <= maxx && me.y >= miny && me.y <= maxy);
 if(slot == -1)
 {
 string chosen = random_string(sourcetypes);
-slot = ambpool.play_extended_2d("sounds/objects/sources/ambiences/" + chosen + ".ogg", me.x, me.y, cx, cy, left_range, right_range, backward_range, forward_range, true, 0, 0, volume, 100, true);
+slot = ambpool.play_extended_2d("sounds/objects/sources/ambiences/" + chosen + ".ogg", me.x, me.y, cx, cy, left_range, right_range, backward_range, forward_range, true, 0, 0, volume + sourcevolume, 100, true);
 if(ambient && !in_range)
 ambpool.pause_sound(slot);
 }
@@ -62,6 +62,14 @@ void update_sources()
 {
 for(uint i = 0; i < sources.length(); i++)
 sources[i].sorceloop();
+}
+void apply_source_volume()
+{
+for(uint i = 0; i < sources.length(); i++)
+{
+if(sources[i].slot != -1)
+ambpool.update_sound_start_values(sources[i].slot, 0, sources[i].volume + sourcevolume, 100);
+}
 }
 void destroy_all_sources()
 {

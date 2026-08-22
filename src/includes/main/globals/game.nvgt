@@ -142,6 +142,20 @@ if(key_pressed(KEY_T))
     if(display_hour == 0) display_hour = 12;
 speak("Time: " + display_hour + hour_period + ".");
 }
+if(key_repeating(KEY_HOME) && sourcevolume < 0)
+{
+sourcevolume += 1;
+apply_source_volume();
+speak("source " + sourcevolume);
+writepreffs();
+}
+if(key_repeating(KEY_END) && sourcevolume > -50)
+{
+sourcevolume -= 1;
+apply_source_volume();
+speak("source " + sourcevolume);
+writepreffs();
+}
 if(key_pressed(KEY_R))
 {
 string rep_label = "";

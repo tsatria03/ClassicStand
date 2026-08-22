@@ -77,7 +77,7 @@ R: Speak your current reputation.
 I: Open the business information screen.
 B: Speak your business title.
 D: Speak the current date.
-T: Speak the current time and level.
+T: Speak the current time.
 M: Speak the current temperature.
 C: Speak your current cash.
 F: Speak your filled cup count.
@@ -88,6 +88,8 @@ N: Skip to the next time period when the wave is over.
 Q: Speak your current location.
 Z: Toggle zone announcements on or off.
 X: Speak your exact coordinates and surface.
+Home: Raise the overall sound source volume.
+End: Lower the overall sound source volume.
 Tab: Cycle forward through your inventory.
 Shift+Tab: Cycle backward through your inventory.
 Shift+Enter: Use or recycle the selected inventory item.
