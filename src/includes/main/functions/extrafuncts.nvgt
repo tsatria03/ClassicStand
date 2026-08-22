@@ -485,6 +485,15 @@ price_per_cup += last_salts_per_cup  * saltcost  * scale * 0.03;
 if(price_per_cup < 25) price_per_cup = 25;
 price_per_cup = floor(price_per_cup);
 }
+// Clamp the carried-over base price into the current day's allowed range and refresh the base price multiplier. Runs at day start and at game/load start.
+void clamp_base_price()
+{
+int suggested_price = 25 + (daynumber * 5) + (int(level) * 2);
+int price_cap = int(suggested_price * 4.0);
+if(selling_price < suggested_price) selling_price = suggested_price;
+if(selling_price > price_cap) selling_price = price_cap;
+price_multiplier = selling_price / double(suggested_price);
+}
 void calculate_new_day_conditions()
 {
 wave_ending=false;
@@ -588,12 +597,8 @@ weather_msg += "It's a cool " + temperature + " degrees today. Business may be a
 else
 weather_msg += "It's a freezing " + temperature + " degrees out there. Only the most dedicated customers will brave this cold.";
 dlg(weather_msg);
-int suggested_price = 25 + (daynumber * 5) + (int(level) * 2);
-int price_cap = int(suggested_price * 4.0);
 /* No daily prompt anymore: carry the base price over from the previous day, clamped into today's range. The player changes it at the pricing station. */
-if(selling_price < suggested_price) selling_price = suggested_price;
-if(selling_price > price_cap) selling_price = price_cap;
-price_multiplier = selling_price / double(suggested_price);
+clamp_base_price();
 dlg("Today's price is " + convert_to_currency(int(selling_price)) + " per cup.");
 }
 spawn_customer_wave();

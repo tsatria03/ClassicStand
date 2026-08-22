@@ -1,6 +1,7 @@
 void game()
 {
 load_config();
+if(group_price_mult.get_size() == 0) init_group_prices();
 load_map("neighborhood");
 napkin_giver_index = 0;
 if(floor_spilled)
@@ -9,6 +10,7 @@ if(napkin_giver_index>=0 and napkin_giver_index<int(persons.length()))
 napkin_giver_default_text = persons[napkin_giver_index].text;
 set_counter_wet();
 }
+clamp_base_price();
 spawn_customer_wave();
 spawn_passers();
 while(true)
