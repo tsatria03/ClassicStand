@@ -60,6 +60,7 @@ soldcups=0;
 level=1;
 load_main_table_time();
 init_group_prices();
+selling_price=0;
 pitcherstat=0;
 cups=random(int(newgame_get("cups_min", 3)), int(newgame_get("cups_max", 6)));
 ices=random(int(newgame_get("ices_min", 0)), int(newgame_get("ices_max", 2)));
