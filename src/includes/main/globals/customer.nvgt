@@ -294,11 +294,12 @@ if(fullcups < cups_needed)
 dlg("You don't have enough filled cups for this customer. You need " + cups_needed + " but only have " + int(fullcups) + ".");
 return;
 }
-if(price_multiplier > 1.0)
+double eff_pm = price_multiplier * get_customer_price_multiplier(ctype);
+if(eff_pm > 1.0)
 {
-if(price_multiplier > 2.0)
+if(eff_pm > 2.0)
 {
-double overcharge = price_multiplier - 2.0;
+double overcharge = eff_pm - 2.0;
 int refuse_chance = int(overcharge * 50.0);
 if(ctype == "desperate") refuse_chance = 0;
 else if(ctype == "child") refuse_chance = int(refuse_chance * 2.0);
@@ -836,11 +837,12 @@ customers[idx].steptimer.restart();
 speak("A customer got nothing and stormed off.");
 continue;
 }
-if(price_multiplier > 1.0)
+double eff_pm = price_multiplier * get_customer_price_multiplier(customers[idx].type);
+if(eff_pm > 1.0)
 {
-if(price_multiplier > 2.0)
+if(eff_pm > 2.0)
 {
-double overcharge = price_multiplier - 2.0;
+double overcharge = eff_pm - 2.0;
 int refuse_chance = int(overcharge * 50.0);
 string rtype = customers[idx].type;
 if(rtype == "desperate") refuse_chance = 0;
@@ -1063,6 +1065,8 @@ if(mvi >= 0)
 sp  = int(sp  * customer_movements[mvi].speed);
 pat = int(pat * customer_movements[mvi].patience);
 }
+/* Per-group pricing: a discounted type (multiplier below 1) is more patient, a marked-up type less patient. */
+pat = max(30000, int(pat / get_customer_price_multiplier(t)));
 if(t == "group") gs = random(2, 4);
 customer c(sx, sy, sp, pat, t, gs);
 customers.insert_last(c);

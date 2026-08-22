@@ -6,7 +6,7 @@ metadata:
   type: project
 ---
 
-Plan for the todo item **"Add a way for the player to set different selling prices for different customer groups during play."** Chosen 2026-08-21: **Direction A (relative % of base), delivered via a new "Pricing station" map menu.** **Not yet coded.** Fulfils the "player-facing feature" half of the per-group-pricing bullet in [[project_design_feedback]] (the config half — `customers.table [prices]` — shipped in 3.5). Config-driven per [[project_data_driven_config]].
+Plan for the todo item **"Add a way for the player to set different selling prices for different customer groups during play."** Chosen 2026-08-21: **Direction A (relative % of base), delivered via a new "Pricing station" map menu.** **IMPLEMENTED & confirmed working 2026-08-22 (v3.6)** — built in stages: 1a data layer, 1b day-start carry-over, 1c the Pricing station + map station at x8/y25, then Stage 2 per-group refuse/patience (`price_multiplier * group_mult`). Fulfils the "player-facing feature" half of the per-group-pricing bullet in [[project_design_feedback]] (the config half — `customers.table [prices]` — shipped in 3.5). Config-driven per [[project_data_driven_config]].
 
 ## Baseline (current pricing)
 - Once per day (level 1) a forced input box sets a single global `selling_price` (`extrafuncts.nvgt:596`), bounded `[suggested_price, price_cap]`, `suggested = 25 + day*5 + level*2`, cap = suggested×4.
