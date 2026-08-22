@@ -6,6 +6,8 @@ dictionary customer_prices;
 
 dictionary talk_settings;
 
+dictionary mean_settings;
+
 class customer_movement
 {
 string type;
@@ -77,6 +79,19 @@ double talk_get(string key, double fallback)
 if(!talk_settings.exists(key)) return fallback;
 string v;
 talk_settings.get(key, v);
+return string_to_number(v);
+}
+
+void load_customer_table_mean()
+{
+load_section_dict("data/config/tables/customers.table", "[mean]", mean_settings);
+}
+
+double mean_get(string key, double fallback)
+{
+if(!mean_settings.exists(key)) return fallback;
+string v;
+mean_settings.get(key, v);
 return string_to_number(v);
 }
 
@@ -169,5 +184,6 @@ load_customer_table_waves();
 load_customer_table_movements();
 load_customer_table_prices();
 load_customer_table_talk();
+load_customer_table_mean();
 load_customer_table_speeches();
 }

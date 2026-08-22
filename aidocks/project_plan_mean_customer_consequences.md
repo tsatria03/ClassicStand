@@ -6,7 +6,7 @@ metadata:
   type: project
 ---
 
-Plan for the todo item **"Make rude and mean customers have consequences the player actually feels."** Direction chosen by the dev on **2026-08-21: Direction B (social ripple), fully config-tunable.** **Not yet coded.** From the [[project_design_feedback]] rude-customer bullet. The calm counterplay is shared with [[project_plan_rewarding_talk]] — designed once here. Config-driven per [[project_data_driven_config]].
+Plan for the todo item **"Make rude and mean customers have consequences the player actually feels."** Direction chosen by the dev on **2026-08-21: Direction B (social ripple), fully config-tunable.** **IMPLEMENTED & confirmed working 2026-08-22 (v3.6)** — includes the calm mechanic deferred from [[project_plan_rewarding_talk]]. From the [[project_design_feedback]] rude-customer bullet. The calm counterplay is shared with [[project_plan_rewarding_talk]] — designed once here. Config-driven per [[project_data_driven_config]].
 
 ## Baseline (how mean customers work today — the problem)
 - `bad = true` is **forced** for mean regardless of drink quality (`customer.nvgt:368`).
@@ -30,9 +30,11 @@ Plan for the todo item **"Make rude and mean customers have consequences the pla
 
 **Accessibility (load-bearing):** every consequence and calm event MUST be spoken — the ripple, the refusal, the calming. Unspoken = invisible.
 
-## Open sub-decisions to confirm before coding
-1. Exact ripple magnitudes (patience-knock ms, rep dip) and rep-hit multiplier — tune conservative.
-2. Ripple triggers on both refuse-to-pay-serve AND walk-off, or walk-off only? (Recommend both, single toggle.)
-3. Ripple scope: all waiting customers vs proximity-limited (recommend all waiting — simpler).
-4. Keep un-calmed mean forced-bad even on a perfect drink (recommend yes).
-5. Calmed mean = fully normal (tip possible) vs merely servable (recommend fully normal, to reward the calm).
+## Decisions & sub-decisions
+- **Calm mechanic — DECIDED 2026-08-22:** applies to **mean only** (critic and the rest excluded — not hostile). **Config-tunable calm chance** (~25% per chat default; 0 disables). A **calmed** mean becomes **fully normal** (forced-bad and zero-tip both drop; a good drink satisfies them, tip possible). Every calm spoken. Calm is triggered by the existing Talk option; ships here (the talk feature deferred it).
+- **Un-calmed mean — DECIDED 2026-08-22: Option A (stays forced-bad).** Even a perfect drink gets a grumble; calming is the ONLY way to a good outcome.
+
+## Teeth + ripple — DECIDED 2026-08-22 (all in a new `customers.table [mean]` section)
+- **Teeth:** un-calmed mean **refuses to pay** (pay-anyway exemption removed — the extreme-spill refund now applies to everyone); **keeps the cup** on a normal refusal, only a genuinely extreme drink spills it; **rep hit ×2** (`rep_multiplier=2`).
+- **Ripple:** fires on a bad mean interaction — **both** a refuse-to-pay serve AND a walk-off (patience/anger). Toggle `ripple_enabled` (default on). Each *other* waiting customer loses **5 sec** patience (`ripple_patience=5`); small immediate **−2** rep dip (`ripple_rep=2`); scope = **all waiting** (exclude thieves); spoken cue "The mean customer loudly badmouths your stand as they storm off; the other customers look impatient."
+- Config keys: `calm_chance=25`, `rep_multiplier=2`, `ripple_enabled=1`, `ripple_patience=5`, `ripple_rep=2`. New per-customer field `bool calmed`.

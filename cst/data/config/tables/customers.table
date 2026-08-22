@@ -64,12 +64,22 @@ thief=1.0
 
 ; Required header — removing or renaming this will break the file.
 
-chatter_tip_per=5
+chatter_tip=5
 chatter_tip_cap=15
-chatter_patience_per=5
+chatter_patience=5
 chatter_patience_cap=20
-mild_tip_per=5
+mild_tip=5
 mild_tip_cap=10
+
+[mean]
+
+; Required header — removing or renaming this will break the file.
+
+calm_chance=25
+rep_multiplier=2
+ripple_enabled=1
+ripple_patience=5
+ripple_rep=2
 
 [speeches]
 

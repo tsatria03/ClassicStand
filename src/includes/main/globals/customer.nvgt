@@ -11,6 +11,7 @@ string type;
 int group_size;
 int talk_count;
 int talk_patience_added;
+bool calmed;
 string stolen_item;
 int stolen_amount;
 timer patiencetimer;
@@ -270,6 +271,7 @@ double rep_loss = 2.0 + level + (daynumber / 5.0);
 reputation = max(0.0, reputation - rep_loss);
 check_reputation();
 leaving = true;
+if(type == "mean" and !calmed) mean_badmouth();
 targetx = random(47, 49);
 targety = random_street_y();
 steptimer.restart();
@@ -366,7 +368,7 @@ if(cup_salts.length() > 0)  cup_salts.remove_at(0);
 string feedback = get_customer_feedback(this_lem, this_sug, this_wat, this_ice, this_sal);
 bool bad = (feedback != "Mmm, that's delicious! Perfectly balanced. Just what I needed!");
 if(ctype == "returning" || ctype == "charitable") bad = false;
-if(ctype == "mean") bad = true;
+if(ctype == "mean" and !customers[idx].calmed) bad = true;
 if(ctype == "charitable")
 {
 speak("You hand the customer a cup of lemonade.");
@@ -407,31 +409,37 @@ if(extreme)
 {
 p.play_stationary("sounds/misc/spillcup.ogg", false);
 wait(random(500,1000));
+bool uncalmed_mean = (ctype == "mean" and !customers[idx].calmed);
 string bad_outro = "";
-if(ctype == "mean") bad_outro = "They were clearly looking for something to complain about. They pay you " + convert_to_currency(earned) + " and storm off.";
+if(uncalmed_mean) bad_outro = "They were clearly looking for something to complain about, and they refuse to pay before storming off.";
 else bad_outro = feedback + " They refuse to pay and storm off in a fury!";
 dlg(bad_outro);
-if(ctype != "mean") { cash -= earned; soldcups -= cups_needed; }
+cash -= earned; soldcups -= cups_needed;
 customers[idx].spilled=true;
 set_counter_wet();
 double rep_loss = (1.0 + (daynumber / 10.0)) * 2.0;
 if(ctype == "critic") rep_loss *= 3.0;
+if(uncalmed_mean) rep_loss *= mean_get("rep_multiplier", 2);
 reputation=max(0.0, reputation-rep_loss);
 check_reputation();
+if(uncalmed_mean) mean_badmouth();
 }
 else
 {
 p.play_stationary("sounds/misc/takecup.ogg", false);
 wait(random(500,1000));
+bool uncalmed_mean_ne = (ctype == "mean" and !customers[idx].calmed);
 string bad_outro = "";
-if(ctype == "mean") bad_outro = "They were clearly looking for something to complain about. They pay you " + convert_to_currency(earned) + " and storm off.";
+if(uncalmed_mean_ne) { bad_outro = "The mean customer takes one sip, sneers, and refuses to pay before storming off."; cash -= earned; soldcups -= cups_needed; }
 else bad_outro = "The customer takes a sip and grimaces. " + feedback + " They reluctantly pay you " + convert_to_currency(earned) + " and leave.";
 dlg(bad_outro);
 cups += cups_needed;
 double rep_loss = 0.5 + (daynumber / 20.0);
 if(ctype == "critic") rep_loss *= 2.0;
+if(uncalmed_mean_ne) rep_loss *= mean_get("rep_multiplier", 2);
 reputation=max(0.0, reputation-rep_loss);
 check_reputation();
+if(uncalmed_mean_ne) mean_badmouth();
 }
 }
 else
@@ -449,7 +457,7 @@ int tip_chance = int(reputation / 2);
 if(ctype == "nice") tip_chance = min(99, tip_chance + 30);
 else if(ctype == "charitable") tip_chance = 100;
 else if(ctype == "returning") tip_chance = min(99, tip_chance + 20);
-else if(ctype == "mean") tip_chance = 0;
+else if(ctype == "mean" and !customers[idx].calmed) tip_chance = 0;
 else if(ctype == "child") tip_chance = int(tip_chance * 0.3);
 string flavor_note = "";
 if(salt_in_good_band(this_sal)) { tip_chance = min(99, tip_chance + int(threshold_get("salt_tip_bonus", 15))); flavor_note += " That subtle hint of salt really brings the flavor to life!"; }
@@ -599,9 +607,23 @@ return t == "normal" or t == "desperate" or t == "charitable" or t == "child" or
 int talk_tip_bonus(string t, int tc)
 {
 if(tc <= 0) return 0;
-if(is_chatter(t)) return int(min(talk_get("chatter_tip_cap", 15), talk_get("chatter_tip_per", 5) * tc));
-if(is_mild_talker(t)) return int(min(talk_get("mild_tip_cap", 10), talk_get("mild_tip_per", 5) * tc));
+if(is_chatter(t)) return int(min(talk_get("chatter_tip_cap", 15), talk_get("chatter_tip", 5) * tc));
+if(is_mild_talker(t)) return int(min(talk_get("mild_tip_cap", 10), talk_get("mild_tip", 5) * tc));
 return 0;
+}
+void mean_badmouth()
+{
+if(mean_get("ripple_enabled", 1) <= 0) return;
+speak("The mean customer loudly badmouths your stand as they storm off; the other customers look impatient.");
+reputation = max(0.0, reputation - mean_get("ripple_rep", 2));
+int knock = int(mean_get("ripple_patience", 5) * 1000);
+for(uint i = 0; i < customers.length(); i++)
+if(customers[i].waiting and !customers[i].leaving and customers[i].type != "thief")
+{
+customers[i].patience -= knock;
+if(customers[i].patience < 30000) customers[i].patience = 30000;
+}
+check_reputation();
 }
 int get_talk_limit(string t)
 {
@@ -680,6 +702,7 @@ double rep_loss = 1.0 + (daynumber / 10.0);
 reputation = max(0.0, reputation - rep_loss);
 check_reputation();
 customers[idx].leaving = true;
+if(customers[idx].type == "mean" and !customers[idx].calmed) mean_badmouth();
 customers[idx].targetx = random(EXIT_X_MIN2, EXIT_X_MAX2);
 customers[idx].targety = random_street_y();
 customers[idx].steptimer.restart();
@@ -695,15 +718,22 @@ if(is_chatter(customers[idx].type))
 int cap_ms = int(talk_get("chatter_patience_cap", 20) * 1000);
 if(customers[idx].talk_patience_added < cap_ms)
 {
-int add = int(talk_get("chatter_patience_per", 5) * 1000);
+int add = int(talk_get("chatter_patience", 5) * 1000);
 if(customers[idx].talk_patience_added + add > cap_ms) add = cap_ms - customers[idx].talk_patience_added;
 customers[idx].patience += add;
 customers[idx].talk_patience_added += add;
 wait_note = "They seem happy to wait a little longer for you.";
 }
 }
+string calm_note = "";
+if(customers[idx].type == "mean" and !customers[idx].calmed and random(0, 99) < int(mean_get("calm_chance", 25)))
+{
+customers[idx].calmed = true;
+calm_note = "The mean customer's scowl softens a little. Fine, I'll give you a fair shot.";
+}
 dlg("The customer says, " + line);
 if(wait_note != "") dlg(wait_note);
+if(calm_note != "") dlg(calm_note);
 customer_submenu(idx);
 return;
 }
@@ -860,7 +890,7 @@ if(extreme_all) feedback_all = feedback_all.substr(8);
 bool bad = (feedback_all != "Mmm, that's delicious! Perfectly balanced. Just what I needed!");
 string ctype_all = customers[idx].type;
 if(ctype_all == "returning") bad = false;
-if(ctype_all == "mean") bad = true;
+if(ctype_all == "mean" and !customers[idx].calmed) bad = true;
 if(ctype_all != "charitable" && !extreme_all) cups += cups_needed_all;
 if(bad)
 {
@@ -871,6 +901,7 @@ customers[idx].spilled=true;
 set_counter_wet();
 double rep_loss = (1.0 + (daynumber / 10.0)) * 2.0;
 if(ctype_all == "critic") rep_loss *= 3.0;
+if(ctype_all == "mean" and !customers[idx].calmed) rep_loss *= mean_get("rep_multiplier", 2);
 reputation=max(0.0, reputation-rep_loss);
 cash -= earned;
 total_earned -= earned;
@@ -880,6 +911,7 @@ else
 {
 double rep_loss = 0.5 + (daynumber / 20.0);
 if(ctype_all == "critic") rep_loss *= 2.0;
+if(ctype_all == "mean" and !customers[idx].calmed) { cash -= earned; total_earned -= earned; rep_loss *= mean_get("rep_multiplier", 2); }
 reputation=max(0.0, reputation-rep_loss);
 check_reputation();
 }
@@ -892,7 +924,7 @@ int tip_chance = int(reputation / 2);
 if(ctype_all == "nice") tip_chance = min(99, tip_chance + 30);
 else if(ctype_all == "charitable") tip_chance = 100;
 else if(ctype_all == "returning") tip_chance = min(99, tip_chance + 20);
-else if(ctype_all == "mean") tip_chance = 0;
+else if(ctype_all == "mean" and !customers[idx].calmed) tip_chance = 0;
 else if(ctype_all == "child") tip_chance = int(tip_chance * 0.3);
 if(salt_in_good_band(this_sal)) tip_chance = min(99, tip_chance + int(threshold_get("salt_tip_bonus", 15)));
 if(ice_in_good_band_hot(this_ice)) tip_chance = min(99, tip_chance + int(threshold_get("ice_tip_bonus", 15)));

@@ -390,9 +390,18 @@ A value of 1.0 means that type pays the normal price. Above 1.0 they pay more, f
 [talk]
 Flat key=value settings controlling the reward for talking to customers.
 
-chatter_tip_per and chatter_tip_cap = how much each chat raises the tip chance, and the total cap, for the friendly chatter types (elderly, nice, and returning).
-mild_tip_per and mild_tip_cap = the same, but for all other buying types, who reward chatting less.
-chatter_patience_per and chatter_patience_cap = how many extra seconds each chat adds to a chatter's patience, and the total cap. Only chatter types gain patience from talking. Set the per values to 0 to turn a reward off. The tip bonus only pays out when you also serve that customer a good drink, and chatting past a type's line limit still makes them leave angry.
+chatter_tip and chatter_tip_cap = how much each chat raises the tip chance, and the total cap, for the friendly chatter types (elderly, nice, and returning).
+mild_tip and mild_tip_cap = the same, but for all other buying types, who reward chatting less.
+chatter_patience and chatter_patience_cap = how many extra seconds each chat adds to a chatter's patience, and the total cap. Only chatter types gain patience from talking. Set the per values to 0 to turn a reward off. The tip bonus only pays out when you also serve that customer a good drink, and chatting past a type's line limit still makes them leave angry.
+
+[mean]
+Flat key=value settings controlling mean customer behavior.
+
+calm_chance = the percent chance, per chat, that talking to a mean customer calms them down. A calmed mean customer behaves like a normal one and can be pleased and tipped. Set to 0 to disable calming.
+rep_multiplier = how much the reputation loss from a bad interaction with an un-calmed mean customer is multiplied.
+ripple_enabled = set to 1 to let an un-calmed mean customer badmouth your stand on a bad interaction, souring your other waiting customers, or 0 to turn it off.
+ripple_patience = how many seconds of patience each other waiting customer loses when a mean customer badmouths your stand.
+ripple_rep = the immediate reputation dip when a mean customer badmouths your stand.
 
 [speeches]
 Dialogue lines for each customer type.
