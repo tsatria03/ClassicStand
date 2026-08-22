@@ -56,6 +56,7 @@ source 15 30 21 29 distant_traffic -20
 # Menu triggers
 
 menu 2 6 19 31 actsmenu
+menu 8 8 25 25 pricemenu
 menu 32 36 23 27 buymenu
 menu 38 42 23 27 postermenu
 menu 37 37 25 25 cleaningmenu
@@ -69,6 +70,7 @@ zone 0 2 0 50 West boundary approaching.
 zone 0 15 18 32 Your lemonade stand. The actions station and selling counter are here.
 zone 0 4 18 32 Back wall of your lemonade stand.
 zone 2 6 19 31 Actions station. Press enter to make or pour lemonade.
+zone 8 8 25 25 Pricing station. Press enter to set prices for different customer groups.
 zone 11 11 25 25 Someone is standing here. Press enter to greet them.
 zone 14 14 25 25 Customer service counter. Customers will wait here to be served.
 zone 15 30 21 29 Sidewalk. Head east to reach the market, or west to return to your stand.

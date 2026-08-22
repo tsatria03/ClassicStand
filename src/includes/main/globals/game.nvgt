@@ -96,6 +96,17 @@ custpool.resume_all();
 personpool.resume_all();
 passerpool.resume_all();
 }
+else if(triggered == "pricemenu")
+{
+last_menu_id="";
+custpool.pause_all();
+personpool.pause_all();
+passerpool.pause_all();
+pricemenu();
+custpool.resume_all();
+personpool.resume_all();
+passerpool.resume_all();
+}
 else
 {
 speak("There's nothing to interact with in this area.");

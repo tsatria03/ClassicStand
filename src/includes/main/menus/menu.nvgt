@@ -895,6 +895,77 @@ play_poster_sound();
 dlg("You bought the " + selected.display_name + " for " + convert_to_currency(total) + ". You received " + receipt + ". You now have " + convert_to_currency(cash) + " remaining.");
 posterbmenu(sub_id);
 }
+void pricemenu()
+{
+setupmenu();
+m.add_item("Customer prices", "customer");
+m.add_item("Sale price", "sale");
+m.add_item("back", "back");
+m.intro_text = "Pricing station.";
+int mres = m.run();
+string sel = m.get_item_id(mres);
+if(mres == -1 || sel == "back") return;
+if(sel == "customer") { customerpricemenu(); pricemenu(); return; }
+if(sel == "sale") { salepricemenu(); pricemenu(); return; }
+}
+void customerpricemenu()
+{
+string[] types = {"normal", "nice", "mean", "desperate", "charitable", "group", "returning", "critic", "elderly", "child"};
+setupmenu();
+for(uint i = 0; i < types.length(); i++)
+{
+double mult = get_customer_price_multiplier(types[i]);
+int pct = int(round(mult * 100.0, 0));
+m.add_item(types[i] + " customers: " + pct + " percent of base, currently " + convert_to_currency(int(selling_price * mult)), types[i]);
+}
+m.add_item("Reset all to defaults", "reset");
+m.add_item("back", "back");
+m.intro_text = "Customer prices. The base price is " + convert_to_currency(int(selling_price)) + " per cup.";
+int mres = m.run();
+string sel = m.get_item_id(mres);
+if(mres == -1 || sel == "back") return;
+if(sel == "reset")
+{
+init_group_prices();
+dlg("All customer prices have been reset to their defaults.");
+customerpricemenu();
+return;
+}
+set_group_price(sel);
+customerpricemenu();
+return;
+}
+void set_group_price(string type)
+{
+double min_pct = pricing_get("min_percent", 25);
+double max_pct = pricing_get("max_percent", 200);
+int cur = int(round(get_customer_price_multiplier(type) * 100.0, 0));
+vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,<>_?/+-=~", false, "");
+string inp = vd.input_box("", "Enter the price for " + type + " customers as a percent of the base, from " + int(min_pct) + " to " + int(max_pct) + " percent. Press enter to keep " + cur + ".", string(cur));
+if(inp == "") return;
+double pct = string_to_number(inp);
+if(pct <= 0) return;
+if(pct < min_pct) { pct = min_pct; dlg("That is below the minimum, so it was set to " + int(min_pct) + " percent."); }
+if(pct > max_pct) { pct = max_pct; dlg("That is above the maximum, so it was set to " + int(max_pct) + " percent."); }
+group_price_mult.set(type, pct / 100.0);
+dlg(type + " customers will now pay " + int(pct) + " percent of the base price, currently " + convert_to_currency(int(selling_price * (pct / 100.0))) + ".");
+}
+void salepricemenu()
+{
+int suggested = 25 + (daynumber * 5) + (int(level) * 2);
+int cap = int(suggested * 4.0);
+vd.set_disallowed_chars("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !@#$%^&*()[]{};:'\"\\|,<>_?/+-=~", false, "");
+string inp = vd.input_box("", "Set your base price per cup in dollars, from " + convert_to_currency(suggested) + " to " + convert_to_currency(cap) + ". Press enter to keep " + convert_to_currency(int(selling_price)) + ".", string(selling_price / 100.0));
+if(inp == "") return;
+double v = string_to_number(inp);
+if(v <= 0) return;
+int cents = int(round(v * 100.0, 0));
+if(cents < suggested) { cents = suggested; dlg("That is below today's minimum, so it was set to " + convert_to_currency(suggested) + "."); }
+if(cents > cap) { cents = cap; dlg("That is above today's maximum, so it was set to " + convert_to_currency(cap) + "."); }
+selling_price = cents;
+price_multiplier = selling_price / double(suggested);
+dlg("Base price set to " + convert_to_currency(cents) + " per cup.");
+}
 void cleaningmenu()
 {
 custpool.pause_all();

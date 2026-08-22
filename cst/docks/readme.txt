@@ -12,11 +12,13 @@ Use the arrow keys to walk around the neighborhood map. Hold control or alt whil
 
 Interacting with stations:
 
-There are 3 stations on the map, each activated by pressing enter when you are standing in the right area.
+There are several stations on the map, each activated by pressing enter when you are standing in the right area.
 
 The actions station is located at your lemonade stand. Make and pour lemonade here.
+The pricing station is also at your lemonade stand. Set your base price and each customer group's price here.
 The customer service counter is also located at your lemonade stand. Serve waiting customers here.
 The buying station is located inside the market to the east. Buy ingredients and posters here.
+The cleaning station is also in the market. Buy napkins to clean up spills here.
 
 Making lemonade:
 
@@ -24,7 +26,7 @@ When you make lemonade at the actions station, you will be asked how many cups t
 
 Pricing:
 
-At the start of each day you are asked to set your price per cup. A suggested price is shown based on your current day and level. The minimum is the suggested price and the maximum is four times the suggested price. Prices between one and two times the suggested price cause customers to hesitate. Prices above two times the suggested price give customers a chance to refuse outright, with the chance increasing the higher you go. Desperate customers never refuse no matter the price.
+You set your prices at the pricing station at your lemonade stand. Your base price per cup carries over from day to day, clamped into that day's allowed range, so you only change it when you want to rather than being asked every morning. A suggested price is based on your current day and level. The minimum is the suggested price and the maximum is four times the suggested price. Prices between one and two times the suggested price cause customers to hesitate. Prices above two times the suggested price give customers a chance to refuse outright, with the chance increasing the higher you go. Desperate customers never refuse no matter the price. The pricing station also lets you set a different price for each customer type as a percentage of the base, such as a discount for children or the elderly. The config files set the starting per-type prices and the allowed percentage range, while the pricing station sets your own prices within those limits for the current game.
 
 Serving customers:
 
@@ -452,6 +454,11 @@ salt_tip_bonus and ice_tip_bonus = how much each adds to the tip chance when the
 Flat key=value setting controlling the length of a day.
 
 hours_per_level = how many in-game hours each level lasts, which also sets how many levels make up a day (24 divided by hours_per_level). It must divide evenly into 24, so valid values are 1, 2, 3, 4, 6, 8, 12, and 24. Any other value falls back to 4.
+
+[pricing]
+Flat key=value settings controlling the per customer group pricing range.
+
+min_percent and max_percent = the lowest and highest percentage of the base price you can set for a customer group at the pricing station. Entries outside this range are clamped.
 
 [items]
 Defines every item in the game.
