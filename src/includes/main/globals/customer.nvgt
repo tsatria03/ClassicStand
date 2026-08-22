@@ -676,11 +676,24 @@ customer_submenu(idx);
 return;
 }
 }
+void pause_waiting_patience()
+{
+for(uint i=0; i<customers.length(); i++)
+if(customers[i].waiting and !customers[i].leaving and customers[i].type != "thief")
+customers[i].patiencetimer.pause();
+}
+void resume_waiting_patience()
+{
+for(uint i=0; i<customers.length(); i++)
+if(customers[i].waiting and !customers[i].leaving and customers[i].type != "thief")
+customers[i].patiencetimer.resume();
+}
 void open_serve_menu()
 {
 custpool.pause_all();
 personpool.pause_all();
 passerpool.pause_all();
+pause_waiting_patience();
 uint[] waiting_indices;
 for(uint i=0; i<customers.length(); i++)
 if(customers[i].waiting and !customers[i].leaving and customers[i].type != "thief")
@@ -690,6 +703,7 @@ if(waiting_indices.length() == 0)
 custpool.resume_all();
 personpool.resume_all();
 passerpool.resume_all();
+resume_waiting_patience();
 return;
 }
 setupmenu();
@@ -729,6 +743,7 @@ last_menu_id = "";
 custpool.resume_all();
 personpool.resume_all();
 passerpool.resume_all();
+resume_waiting_patience();
 return;
 }
 if(choice == "all")
