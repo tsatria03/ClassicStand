@@ -1,6 +1,5 @@
 New in 3.6.
 Added a way to adjust the overall sound source volume while playing with the Home and End keys, where Home raises it and End lowers it. Your chosen level is saved between sessions.
-Reorganized the game's sound files into a cleaner folder layout and repointed every sound in the code to match, so all audio plays exactly as before.
 Removed the level number from the time readout on the T key and from the business info screen, so both now show only the time of day. The level number is now purely internal.
 Fixed a bug where the menu's music volume was being written to the wrong save file. It will now write the adjusted setting into the propper gamesets.clm file moving forward.
 Made it so saved games and game settings are now encrypted on disk. They can no longer be opened or edited with a plain text editor. Any existing unencrypted save or settings file still loads and is converted automatically the next time it is saved.
