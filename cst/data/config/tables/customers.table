@@ -60,6 +60,17 @@ elderly=1.0
 child=0.6
 thief=1.0
 
+[talk]
+
+; Required header — removing or renaming this will break the file.
+
+chatter_tip_per=5
+chatter_tip_cap=15
+chatter_patience_per=5
+chatter_patience_cap=20
+mild_tip_per=5
+mild_tip_cap=10
+
 [speeches]
 
 ; Required header — removing or renaming this will break the file.

@@ -10,6 +10,7 @@ int patience;
 string type;
 int group_size;
 int talk_count;
+int talk_patience_added;
 string stolen_item;
 int stolen_amount;
 timer patiencetimer;
@@ -453,6 +454,8 @@ else if(ctype == "child") tip_chance = int(tip_chance * 0.3);
 string flavor_note = "";
 if(salt_in_good_band(this_sal)) { tip_chance = min(99, tip_chance + int(threshold_get("salt_tip_bonus", 15))); flavor_note += " That subtle hint of salt really brings the flavor to life!"; }
 if(ice_in_good_band_hot(this_ice)) { tip_chance = min(99, tip_chance + int(threshold_get("ice_tip_bonus", 15))); flavor_note += " And it is wonderfully ice cold, so refreshing on a hot day like this!"; }
+int talk_bonus = talk_tip_bonus(ctype, customers[idx].talk_count);
+if(talk_bonus > 0) { tip_chance = min(99, tip_chance + talk_bonus); flavor_note += " Your friendly chat earlier clearly left them in a generous mood."; }
 if(random(0, 99) < tip_chance)
 {
 double tip_min = selling_price * 0.05;
@@ -585,6 +588,21 @@ return text;
 }
 return "...";
 }
+bool is_chatter(string t)
+{
+return t == "elderly" or t == "nice" or t == "returning";
+}
+bool is_mild_talker(string t)
+{
+return t == "normal" or t == "desperate" or t == "charitable" or t == "child" or t == "group";
+}
+int talk_tip_bonus(string t, int tc)
+{
+if(tc <= 0) return 0;
+if(is_chatter(t)) return int(min(talk_get("chatter_tip_cap", 15), talk_get("chatter_tip_per", 5) * tc));
+if(is_mild_talker(t)) return int(min(talk_get("mild_tip_cap", 10), talk_get("mild_tip_per", 5) * tc));
+return 0;
+}
 int get_talk_limit(string t)
 {
 int si = get_customer_speeches_index(t);
@@ -671,7 +689,21 @@ return;
 }
 string line = get_customer_talk(idx);
 customers[idx].talk_count++;
+string wait_note = "";
+if(is_chatter(customers[idx].type))
+{
+int cap_ms = int(talk_get("chatter_patience_cap", 20) * 1000);
+if(customers[idx].talk_patience_added < cap_ms)
+{
+int add = int(talk_get("chatter_patience_per", 5) * 1000);
+if(customers[idx].talk_patience_added + add > cap_ms) add = cap_ms - customers[idx].talk_patience_added;
+customers[idx].patience += add;
+customers[idx].talk_patience_added += add;
+wait_note = "They seem happy to wait a little longer for you.";
+}
+}
 dlg("The customer says, " + line);
+if(wait_note != "") dlg(wait_note);
 customer_submenu(idx);
 return;
 }
@@ -864,6 +896,7 @@ else if(ctype_all == "mean") tip_chance = 0;
 else if(ctype_all == "child") tip_chance = int(tip_chance * 0.3);
 if(salt_in_good_band(this_sal)) tip_chance = min(99, tip_chance + int(threshold_get("salt_tip_bonus", 15)));
 if(ice_in_good_band_hot(this_ice)) tip_chance = min(99, tip_chance + int(threshold_get("ice_tip_bonus", 15)));
+tip_chance = min(99, tip_chance + talk_tip_bonus(ctype_all, customers[idx].talk_count));
 if(random(0, 99) < tip_chance)
 {
 double tip_min = selling_price * 0.05;

@@ -6,7 +6,7 @@ metadata:
   type: project
 ---
 
-Plan for the todo item **"Make talking to a customer sometimes calm them down or improve their patience."** Direction chosen by the dev on **2026-08-21: Direction B (type-specific payoffs).** **Not yet coded.** From the [[project_design_feedback]] talking bullet. Stays config-driven per [[project_data_driven_config]]. **Coordinate the "calm a mean/critic" piece with [[project_plan_mean_customer_consequences]] — design that mechanic once across both items.**
+Plan for the todo item **"Make talking to a customer sometimes calm them down or improve their patience."** Direction chosen by the dev on **2026-08-21: Direction B (type-specific payoffs).** **IMPLEMENTED & confirmed working 2026-08-22 (v3.6)** — rapport→tip and chatter patience extension shipped. The **calm-a-prickly-type** sliver was deliberately deferred and ships WITH [[project_plan_mean_customer_consequences]] (next). From the [[project_design_feedback]] talking bullet. Stays config-driven per [[project_data_driven_config]]. **Coordinate the "calm a mean/critic" piece with [[project_plan_mean_customer_consequences]] — design that mechanic once across both items.**
 
 ## Baseline (how talk works today)
 - Talk handler `customer.nvgt:631–661`: **Talk** speaks the next scripted line (escalates by mood: happy→fine→restless→angry), does `talk_count++`, returns to menu. At the per-type limit (`get_talk_limit`, 2–5 lines, from `customers.table`) the customer **walks off angry** + rep loss `1.0 + daynumber/10` (`:645`).
@@ -29,7 +29,8 @@ Plan for the todo item **"Make talking to a customer sometimes calm them down or
 
 **Accessibility (load-bearing):** every rapport gain and every calm event MUST be spoken (e.g. "The mean customer's scowl softens a little."). Unspoken = invisible to the player.
 
-## Open sub-decisions to confirm before coding
-1. Exact numbers: rapport-per-talk, tip-chance scaling, calm chances, per-type talk limits.
-2. Whether chatter types also get a small **patience extension** (a Direction-C borrow) or stay tip/rep only — recommend tip/rep only, keep it clean.
-3. Precisely how "calm mean" meshes with the mean-customer redesign — resolve when planning [[project_plan_mean_customer_consequences]].
+## Decisions & sub-decisions
+- **Reward type — DECIDED 2026-08-22: Option 2 (tip/rep + patience extension for chatters).** Chatting builds rapport → tip-chance bonus at serve, AND chatting a chatter type EXTENDS their patience (they wait longer while you go make their drink).
+- **Prerequisite fix SHIPPED 2026-08-22 (v3.6):** patience now PAUSES while the serve menu / talk dialogs are open (mirrors the NPC-sound pause in `open_serve_menu`; helpers `pause_waiting_patience`/`resume_waiting_patience`), and only runs while you're away (actions station, market). This means talking no longer secretly drains patience, so the Option-2 extension is a pure bonus. (Was a standalone fairness bug — its own changelog entry.)
+- **Calm mechanic — DEFERRED to [[project_plan_mean_customer_consequences]].** For the talk feature itself, prickly types (mean/critic) simply get no rapport; the calm chance (trigger + calmed-behavior effect) ships WITH the mean feature, since the effect needs the mean redesign. Talk + mean still land in the same version.
+- **Numbers & groupings — DECIDED 2026-08-22** (all magnitudes in a new `[talk]` config section, in seconds for the patience values; groupings in code, documented). Chatters = **elderly, nice, returning**: tip **+5/chat, cap +15**; patience **+5s/chat, cap +20s**. Mild = **normal, desperate, charitable, child, group**: tip **+5/chat, cap +10**; no patience. (Caps revised down 2026-08-22.) Prickly = **mean, critic**: nothing (calm arrives with mean). **Thief** excluded. Rapport tip bonus applies only in the good-drink branch (both serve and serve-all); patience extension raises the customer's `patience` threshold. Tip-chance only (no separate rep gain). Every rapport/patience gain must be spoken.

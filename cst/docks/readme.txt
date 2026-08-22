@@ -387,6 +387,13 @@ Format: type=multiplier
 
 A value of 1.0 means that type pays the normal price. Above 1.0 they pay more, for example desperate is 1.5 and pays 50 percent more. Below 1.0 they pay less, for example child is 0.6 and pays 40 percent less. A missing type, or a value of 0 or less, falls back to 1.0.
 
+[talk]
+Flat key=value settings controlling the reward for talking to customers.
+
+chatter_tip_per and chatter_tip_cap = how much each chat raises the tip chance, and the total cap, for the friendly chatter types (elderly, nice, and returning).
+mild_tip_per and mild_tip_cap = the same, but for all other buying types, who reward chatting less.
+chatter_patience_per and chatter_patience_cap = how many extra seconds each chat adds to a chatter's patience, and the total cap. Only chatter types gain patience from talking. Set the per values to 0 to turn a reward off. The tip bonus only pays out when you also serve that customer a good drink, and chatting past a type's line limit still makes them leave angry.
+
 [speeches]
 Dialogue lines for each customer type.
 
