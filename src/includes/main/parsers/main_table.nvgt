@@ -4,6 +4,7 @@ dictionary main_time;
 dictionary main_pricing;
 dictionary main_spoilage;
 dictionary main_storage;
+dictionary main_events;
 
 void load_main_table_newgame()
 {
@@ -87,6 +88,19 @@ double storage_get(string key, double fallback)
 if(!main_storage.exists(key)) return fallback;
 string v;
 main_storage.get(key, v);
+return string_to_number(v);
+}
+
+void load_main_table_events()
+{
+load_section_dict("data/config/tables/main.table", "[events]", main_events);
+}
+
+double events_get(string key, double fallback)
+{
+if(!main_events.exists(key)) return fallback;
+string v;
+main_events.get(key, v);
 return string_to_number(v);
 }
 

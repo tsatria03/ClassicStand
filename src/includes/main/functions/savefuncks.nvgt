@@ -57,6 +57,14 @@ sugars = sd.read_double("sugars");
 {
 waters = sd.read_double("waters");
 }
+    if (sd.d.exists("strawberries"))
+{
+strawberries = sd.read_double("strawberries");
+}
+    if (sd.d.exists("blueberries"))
+{
+blueberries = sd.read_double("blueberries");
+}
     if (sd.d.exists("cupcost"))
 {
 cupcost = sd.read_double("cupcost");
@@ -80,6 +88,14 @@ sugarcost = sd.read_double("sugarcost");
     if (sd.d.exists("watercost"))
 {
 watercost = sd.read_double("watercost");
+}
+    if (sd.d.exists("strawberrycost"))
+{
+strawberrycost = sd.read_double("strawberrycost");
+}
+    if (sd.d.exists("blueberrycost"))
+{
+blueberrycost = sd.read_double("blueberrycost");
 }
     if (sd.d.exists("clocktime"))
 {
@@ -153,6 +169,10 @@ if (sd.d.exists("last_ices_per_cup"))
 last_ices_per_cup = sd.read_double("last_ices_per_cup");
 if (sd.d.exists("last_salts_per_cup"))
 last_salts_per_cup = sd.read_double("last_salts_per_cup");
+if (sd.d.exists("last_strawberries_per_cup"))
+last_strawberries_per_cup = sd.read_double("last_strawberries_per_cup");
+if (sd.d.exists("last_blueberries_per_cup"))
+last_blueberries_per_cup = sd.read_double("last_blueberries_per_cup");
 if (sd.d.exists("poster_basic"))
 poster_basic = sd.read_int("poster_basic");
 if (sd.d.exists("poster_colorful"))
@@ -181,6 +201,8 @@ cup_sugars.resize(0);
 cup_waters.resize(0);
 cup_ices.resize(0);
 cup_salts.resize(0);
+cup_strawberries.resize(0);
+cup_blueberries.resize(0);
 string csl = sd.read_string("cup_lemons");
 if(csl != "")
 {
@@ -189,6 +211,8 @@ string[] arr_sug = string_split(sd.read_string("cup_sugars"), ",", true);
 string[] arr_wat = string_split(sd.read_string("cup_waters"), ",", true);
 string[] arr_ice = string_split(sd.read_string("cup_ices"), ",", true);
 string[] arr_sal = string_split(sd.read_string("cup_salts"), ",", true);
+string[] arr_straw = string_split(sd.read_string("cup_strawberries"), ",", true);
+string[] arr_blue = string_split(sd.read_string("cup_blueberries"), ",", true);
 for(uint i=0; i<arr_lem.length(); i++)
 {
 cup_lemons.insert_last(string_to_number(arr_lem[i]));
@@ -196,6 +220,8 @@ cup_sugars.insert_last(string_to_number(arr_sug[i]));
 cup_waters.insert_last(string_to_number(arr_wat[i]));
 cup_ices.insert_last(string_to_number(arr_ice[i]));
 cup_salts.insert_last(string_to_number(arr_sal[i]));
+cup_strawberries.insert_last(i < arr_straw.length() ? string_to_number(arr_straw[i]) : 0);
+cup_blueberries.insert_last(i < arr_blue.length() ? string_to_number(arr_blue[i]) : 0);
 }
 }
 }
@@ -230,12 +256,16 @@ sd.add("soldcups", soldcups);
     sd.add("salts", salts);
     sd.add("sugars", sugars);
     sd.add("waters", waters);
+    sd.add("strawberries", strawberries);
+    sd.add("blueberries", blueberries);
     sd.add("cupcost", cupcost);
     sd.add("icecost", icecost);
     sd.add("lemoncost", lemoncost);
     sd.add("saltcost", saltcost);
     sd.add("sugarcost", sugarcost);
     sd.add("watercost", watercost);
+    sd.add("strawberrycost", strawberrycost);
+    sd.add("blueberrycost", blueberrycost);
     sd.add("clocktime", clocktime);
 sd.add("current_day_index", current_day_index);
 sd.add("current_month_index", current_month_index);
@@ -266,6 +296,8 @@ sd.add("last_sugars_per_cup", last_sugars_per_cup);
 sd.add("last_waters_per_cup", last_waters_per_cup);
 sd.add("last_ices_per_cup", last_ices_per_cup);
 sd.add("last_salts_per_cup", last_salts_per_cup);
+sd.add("last_strawberries_per_cup", last_strawberries_per_cup);
+sd.add("last_blueberries_per_cup", last_blueberries_per_cup);
 sd.add("poster_basic", poster_basic);
 sd.add("poster_colorful", poster_colorful);
 sd.add("poster_premium", poster_premium);
@@ -277,21 +309,25 @@ if(i > 0) poster_tiles_str += ";";
 poster_tiles_str += poster_tiles[i];
 }
 sd.add("poster_tiles", poster_tiles_str);
-string cl="", cs="", cw="", ci="", csa="";
+string cl="", cs="", cw="", ci="", csa="", cst="", cbl="";
 for(uint i=0; i<cup_lemons.length(); i++)
 {
-if(i > 0) { cl+=","; cs+=","; cw+=","; ci+=","; csa+=","; }
+if(i > 0) { cl+=","; cs+=","; cw+=","; ci+=","; csa+=","; cst+=","; cbl+=","; }
 cl += "" + cup_lemons[i];
 cs += "" + cup_sugars[i];
 cw += "" + cup_waters[i];
 ci += "" + cup_ices[i];
 csa += "" + cup_salts[i];
+cst += "" + (i < cup_strawberries.length() ? cup_strawberries[i] : 0);
+cbl += "" + (i < cup_blueberries.length() ? cup_blueberries[i] : 0);
 }
 sd.add("cup_lemons", cl);
 sd.add("cup_sugars", cs);
 sd.add("cup_waters", cw);
 sd.add("cup_ices", ci);
 sd.add("cup_salts", csa);
+sd.add("cup_strawberries", cst);
+sd.add("cup_blueberries", cbl);
 int napkin_ct = item_exists("napkin");
 if(napkin_ct < 0) napkin_ct = 0;
 int used_napkin_ct = item_exists("used_napkin");

@@ -233,6 +233,20 @@ if(key_pressed(KEY_M))
     double celsius = round(double(temperature - 32) * 5.0 / 9.0, 0);
 speak("Temperature: " + temperature + " degrees Fahrenheit, " + celsius + " degrees Celsius.");
 }
+if(key_pressed(KEY_K))
+{
+stand_closed = !stand_closed;
+if(stand_closed)
+{
+pause_waiting_patience();
+speak("You've closed the stand.");
+}
+else
+{
+resume_waiting_patience();
+speak("You've reopened the stand.");
+}
+}
 if(key_pressed(KEY_C))
 {
 speak("Cash: " + convert_to_currency(cash));

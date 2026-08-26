@@ -86,65 +86,71 @@ ripple_rep=2
 ; Required header — removing or renaming this will break the file.
 
 normal=3
-1:happy:Just stopping by for a refreshing drink. Looks like a great stand!
-2:fine:Taking my time today. No rush, no rush.
-3:restless:I'm starting to get a little thirsty though, not gonna lie!
-4:angry:I've had enough chatting. I'm going somewhere else!
+1:mood:I'm doing all right, just out for a walk in this weather.
+2:day:Pretty normal day so far, nothing special to report.
+3:opinion:Your stand looks nice, I've walked by it a few times now.
+4:feedback:Maybe a bit more shade over the counter would be nice on a hot day.
+5:walkoff:I've had enough chatting. I'm going somewhere else!
 
 nice=4
-1:happy:What a lovely stand you have! You must work very hard at this.
-2:happy:I do hope business is going well for you today!
-3:happy:You know, I've been meaning to tell you, this really is a wonderful spot.
-4:restless:Ha, I do enjoy a good chat, but I'm getting a little thirsty now!
-5:rushed:I really wanted to stay and chat, but I simply must have that lemonade!
+1:mood:Oh, I'm having a wonderful day, thank you so much for asking!
+2:day:Just lovely so far! Chatting with you is one of the highlights, honestly.
+3:opinion:I think your stand is absolutely charming, you should be proud of it.
+4:feedback:Honestly? I can't think of a single thing to improve. It's perfect as is!
+5:walkoff:I really wanted to stay and chat, but I simply must have that lemonade!
 
 mean=2
-1:irritated:What? Just give me my lemonade already.
-2:angry:I said give me my lemonade! Stop wasting my time!
-3:angry:That's it! I'm done waiting. This is absolutely ridiculous!
+1:mood:How do you think I'm doing? I'm standing in line, that's how.
+2:day:My day's been fine until I had to wait around here.
+3:opinion:It's a lemonade stand. What is there to like?
+4:feedback:You could start by being faster.
+5:walkoff:That's it! I'm done waiting. This is absolutely ridiculous!
 
 desperate=2
-1:panicked:Please, I'm absolutely parched! Can we hurry this up?
-2:panicked:I am literally dying of thirst here! Just serve me!
-3:angry:I can't take it anymore! I'm finding water somewhere else!
+1:mood:I'm dying of thirst, that's how I'm doing!
+2:day:My day has been one long search for something to drink!
+3:opinion:Looks great, but can we skip to the part where I get lemonade?
+4:feedback:Faster service, please, before I collapse!
+5:walkoff:I can't take it anymore! I'm finding water somewhere else!
 
 charitable=4
-1:kind:There's a family down the street who hasn't had much today. I like to help where I can.
-2:kind:Kindness costs nothing, as they say. I hope you have a wonderful day.
-3:concerned:I should get moving soon. The sooner I get that cup, the sooner someone gets helped.
-4:restless:I appreciate the chat, but someone is waiting on me. Shall we wrap this up?
-5:urgent:I really must go. That family can't wait any longer!
+1:mood:I'm well, thank you. Trying to do a little good today.
+2:day:Busy day, there are folks down the street who could use a hand.
+3:opinion:It's a sweet little stand, and I love supporting local kids like you.
+4:feedback:Maybe consider a pay-it-forward cup for someone who can't afford one.
+5:walkoff:I really must go. That family can't wait any longer!
 
 group=4
-1:excited:We've heard great things about this place! We're all pretty excited.
-2:eager:There are %group_size% of us, so we're counting on you to come through!
-3:restless:We're getting a little restless over here. Ready when you are!
-4:impatient:Okay, we've been waiting long enough. Either serve us or we're finding somewhere else!
-5:angry:We've had enough chatting. We're going somewhere else!
+1:mood:We're doing great, thanks for asking! All %group_size% of us.
+2:day:Been a fun day out, and now we're ready for a treat.
+3:opinion:We've heard great things about this place from friends.
+4:feedback:Maybe a bigger line area, there are %group_size% of us waiting here!
+5:walkoff:We've had enough chatting. We're going somewhere else!
 
 returning=3
-1:happy:I came back just for your lemonade. It was honestly the best I've had in ages.
-2:cheerful:I told a few friends about your stand. Hopefully they stop by soon!
-3:restless:I'm getting thirsty just thinking about it. Ready when you are!
-4:angry:I came back for lemonade, not a conversation. I'm leaving!
+1:mood:I'm doing well, and even better now that I'm back here.
+2:day:Good day so far, I've been looking forward to this stop.
+3:opinion:I already love it, that's why I keep coming back.
+4:feedback:Maybe a loyalty discount for regulars like me?
+5:walkoff:I came back for lemonade, not a conversation. I'm leaving!
 
 critic=4
-1:neutral:I review establishments across town. I try to keep an open mind before forming an opinion.
-2:neutral:Presentation matters, but taste is everything in this business.
-3:impatient:I've seen many stands. Yours has a certain charm. Now, shall we get to it?
-4:impatient:My time is valuable. I'd like that cup now, please.
-5:stern:I'm going to have to mention the wait time in my review. Please, the cup.
+1:mood:I'm well. I try to stay objective no matter my mood.
+2:day:I've reviewed two other stands today. Yours is next.
+3:opinion:Charming presentation, though I reserve judgment until I taste the product.
+4:feedback:Consistency. That's what separates a good stand from a forgettable one.
+5:walkoff:I'm going to have to mention the wait time in my review. Please, the cup.
 
-elderly=5
-1:nostalgic:Oh what a treat! I used to run a little stand myself when I was young, you know.
-2:nostalgic:Back in my day we made lemonade fresh every morning. The smell was wonderful.
-3:warm:You remind me of my grandchildren. So full of energy and ambition!
-4:restless:I could talk all day, dear, I really could. But my throat is getting a bit dry!
-5:cheerful:Oh you are a sweetheart for chatting with an old soul like me!
-6:weary:Oh dear, I really must be going now. My feet aren't what they used to be.
+elderly=4
+1:mood:Oh, I'm doing just fine for an old soul like me, thank you for asking, dear.
+2:day:Lovely day for a walk down memory lane, if you ask me.
+3:opinion:This reminds me of the stand I used to run, right down to the smell of fresh lemons.
+4:feedback:Perhaps a little chair for us older folks to rest while we wait?
+5:walkoff:Oh dear, I really must be going now. My feet aren't what they used to be.
 
 child=3
-1:curious:Do you have any flavors? I like strawberry but lemon is okay too I guess.
-2:polite:My mom says I have to use my manners. So, please can I have a lemonade?
-3:impatient:I'm sooooo thirsty. Can we please go faster?
-4:angry:UGH! I'm telling my mom! I'm leaving!
+1:mood:I'm good! Well, kinda thirsty, but good!
+2:day:It was fun! I rode my bike here!
+3:opinion:It's cool! Do you have any flavors? I like strawberry but lemon is okay too I guess.
+4:feedback:You should totally have more flavors, like strawberry!
+5:walkoff:UGH! I'm telling my mom! I'm leaving!

@@ -6,3 +6,5 @@ essentials:sugar:Sugar packets:sugar:5:level*day:Buy packets of sugar to sweeten
 essentials:water:Water:water:6:level*day:Buy liters of water for your pitcher. You currently have %stock% liter of water.
 extras:ice:Bags of ice:ice:2:level*day:Buy bags of ice to chill your lemonade. Optional ingredient. You currently have %stock% bag of ice.
 extras:salt:Salt packets:salt:4:level*day:Buy packets of salt for a subtle twist. Optional ingredient. You currently have %stock% packet of salt.
+extras:strawberry:Strawberry syrup:strawberry:5:level*day:Buy bottles of strawberry syrup to flavor your lemonade. Optional ingredient. Does not spoil overnight. You currently have %stock% bottle of strawberry syrup.
+extras:blueberry:Blueberry syrup:blueberry:5:level*day:Buy bottles of blueberry syrup to flavor your lemonade. Optional ingredient. Does not spoil overnight. You currently have %stock% bottle of blueberry syrup.

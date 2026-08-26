@@ -482,6 +482,8 @@ price_per_cup += last_sugars_per_cup * sugarcost * scale * 0.1;
 price_per_cup += last_waters_per_cup * watercost * scale * 0.05;
 price_per_cup += last_ices_per_cup   * icecost   * scale * 0.05;
 price_per_cup += last_salts_per_cup  * saltcost  * scale * 0.03;
+price_per_cup += last_strawberries_per_cup * strawberrycost * scale * 0.05;
+price_per_cup += last_blueberries_per_cup  * blueberrycost  * scale * 0.05;
 if(price_per_cup < 25) price_per_cup = 25;
 price_per_cup = floor(price_per_cup);
 }
@@ -597,6 +599,8 @@ lemoncost = get_ingredient_cost("lemons");
 saltcost  = get_ingredient_cost("salt");
 sugarcost = get_ingredient_cost("sugar");
 watercost = get_ingredient_cost("water");
+strawberrycost = get_ingredient_cost("strawberry");
+blueberrycost  = get_ingredient_cost("blueberry");
 poster_basic_cost    = int(get_poster_cost("basic"));
 poster_colorful_cost = int(get_poster_cost("colorful"));
 poster_premium_cost  = int(get_poster_cost("premium"));
@@ -625,7 +629,7 @@ void generate_daily_summary()
     level += 1;
     if(level <= maxlevel)
     {
-    trigger_event(60);
+    trigger_event(int(clamp(events_get("frequency", 60), 0, 100)));
     destroy_all_customers();
     destroy_all_passers();
     spawn_customer_wave();
@@ -646,6 +650,8 @@ report += "Ripe lemons: " + lemons + "--";
 report += "Packets of salt: " + salts + "--";
 report += "Packets of sugar: " + sugars + "--";
 report += "Liters of water: " + waters + "--";
+report += "Bottles of strawberry syrup: " + strawberries + "--";
+report += "Bottles of blueberry syrup: " + blueberries + "--";
 if(pitcherstat > 0)
     report += "You also had " + ceil(pitcherstat) + " liters of lemonade in your pitcher.";
 else
@@ -729,6 +735,8 @@ else if(target == "lemons") p.play_stationary("sounds/misc/buyfruit" + random(1,
 else if(target == "salt") p.play_stationary("sounds/misc/buypack" + random(1, 2) + ".ogg", false);
 else if(target == "sugar") p.play_stationary("sounds/misc/buypack" + random(1, 2) + ".ogg", false);
 else if(target == "water") p.play_stationary("sounds/misc/buywater" + random(1, 2) + ".ogg", false);
+else if(target == "strawberry") p.play_stationary("sounds/misc/buypack" + random(1, 2) + ".ogg", false);
+else if(target == "blueberry") p.play_stationary("sounds/misc/buypack" + random(1, 2) + ".ogg", false);
 }
 
 void load_config()
@@ -745,6 +753,7 @@ load_main_table_time();
 load_main_table_pricing();
 load_main_table_spoilage();
 load_main_table_storage();
+load_main_table_events();
 load_main_table_items();
 load_customer_table();
 load_passer_table();

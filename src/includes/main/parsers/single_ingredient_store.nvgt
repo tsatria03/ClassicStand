@@ -87,6 +87,8 @@ if(target == "lemons") return lemons;
 if(target == "salt") return salts;
 if(target == "sugar") return sugars;
 if(target == "water") return waters;
+if(target == "strawberry") return strawberries;
+if(target == "blueberry") return blueberries;
 return 0;
 }
 
@@ -98,4 +100,6 @@ else if(target == "lemons") lemons += qty;
 else if(target == "salt") salts += qty;
 else if(target == "sugar") sugars += qty;
 else if(target == "water") waters += qty;
+else if(target == "strawberry") strawberries += qty;
+else if(target == "blueberry") blueberries += qty;
 }

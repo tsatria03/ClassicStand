@@ -39,6 +39,11 @@ icy_hot=0.5
 icy_cold=0.15
 salt_tip_bonus=15
 ice_tip_bonus=15
+flavor_good_min=0.1
+flavor_good_max=0.4
+flavor_strong=0.6
+extreme_flavor_strong=1.2
+flavor_tip_bonus=15
 
 [time]
 
@@ -79,6 +84,12 @@ tier2_cost=2000
 tier3_cost=4000
 tier4_cost=6000
 
+[events]
+
+; Required header — removing or renaming this will break the file.
+
+frequency=60
+
 [items]
 
 ; Required header — removing or renaming this will break the file.
@@ -89,6 +100,8 @@ packet of sugar:Packet of sugar:false:true:none
 liter of water:Liter of water:false:true:none
 bag of ice:Bag of ice:false:true:none
 packet of salt:Packet of salt:false:true:none
+bottle of strawberry syrup:Bottle of strawberry syrup:false:true:none
+bottle of blueberry syrup:Bottle of blueberry syrup:false:true:none
 filled cup:Filled cup:true:false:inspect_cup
 napkin:Napkin:true:false:clean_spill
 used_napkin:Used napkin:true:false:toss

@@ -191,6 +191,8 @@ cup_sugars.insert_last(last_sugars_per_cup);
 cup_waters.insert_last(last_waters_per_cup);
 cup_ices.insert_last(last_ices_per_cup);
 cup_salts.insert_last(last_salts_per_cup);
+cup_strawberries.insert_last(last_strawberries_per_cup);
+cup_blueberries.insert_last(last_blueberries_per_cup);
 }
 }
 if(cup_lemons.length() == 0)
@@ -203,10 +205,14 @@ for(uint i = 0; i < cup_lemons.length(); i++)
 {
 bool has_ice = cup_ices[i] > 0;
 bool has_salt = cup_salts[i] > 0;
-string water_suffix = (has_ice || has_salt) ? ", " : ", and ";
+bool has_straw = i < cup_strawberries.length() && cup_strawberries[i] > 0;
+bool has_blue = i < cup_blueberries.length() && cup_blueberries[i] > 0;
+string water_suffix = (has_ice || has_salt || has_straw || has_blue) ? ", " : ", and ";
 string desc = "Cup " + (i + 1) + ": contains " + round(cup_lemons[i], 2) + " lemon" + (cup_lemons[i] == 1 ? "" : "s") + ", " + round(cup_sugars[i], 2) + " packet" + (cup_sugars[i] == 1 ? "" : "s") + " of sugar" + water_suffix + round(cup_waters[i], 2) + " liter" + (cup_waters[i] == 1 ? "" : "s") + " of water";
-if(has_ice) desc += (has_salt ? ", " : ", and ") + round(cup_ices[i], 2) + " bag" + (cup_ices[i] == 1 ? "" : "s") + " of ice";
-if(has_salt) desc += ", and " + round(cup_salts[i], 2) + " packet" + (cup_salts[i] == 1 ? "" : "s") + " of salt";
+if(has_ice) desc += (has_salt || has_straw || has_blue ? ", " : ", and ") + round(cup_ices[i], 2) + " bag" + (cup_ices[i] == 1 ? "" : "s") + " of ice";
+if(has_salt) desc += (has_straw || has_blue ? ", " : ", and ") + round(cup_salts[i], 2) + " packet" + (cup_salts[i] == 1 ? "" : "s") + " of salt";
+if(has_straw) desc += (has_blue ? ", " : ", and ") + round(cup_strawberries[i], 2) + " bottle" + (cup_strawberries[i] == 1 ? "" : "s") + " of strawberry syrup";
+if(has_blue) desc += ", and " + round(cup_blueberries[i], 2) + " bottle" + (cup_blueberries[i] == 1 ? "" : "s") + " of blueberry syrup";
 m.add_item(desc, "cup" + (i + 1));
 }
 m.add_item("Back", "back");

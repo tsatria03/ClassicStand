@@ -1,4 +1,6 @@
 customer@[] customers(0);
+string[] talk_topic_keys = {"mood", "day", "opinion", "feedback"};
+string[] talk_topic_questions = {"How are you doing?", "How's your day going?", "How do you like the stand?", "What do you think could be better?"};
 class customer : npc
 {
 int get_cx() { return nx; }
@@ -12,6 +14,7 @@ int group_size;
 int talk_count;
 int talk_patience_added;
 bool calmed;
+string[] asked_topics;
 string stolen_item;
 int stolen_amount;
 timer patiencetimer;
@@ -118,6 +121,7 @@ if(nx == targetx && ny == targety)
 waiting = true;
 wave_started = true;
 patiencetimer.restart();
+if(stand_closed && type != "thief") patiencetimer.pause();
 custpool.play_extended_2d("sounds/misc/customer.ogg", me.x, me.y, nx, ny, 0, 0, 0, 0, false, 0, 0, 0, pitch, false);
 if(type == "thief")
 {
@@ -358,6 +362,8 @@ double this_sug = cup_sugars.length() > 0 ? cup_sugars[0] : last_sugars_per_cup;
 double this_wat = cup_waters.length() > 0 ? cup_waters[0] : last_waters_per_cup;
 double this_ice = cup_ices.length() > 0 ? cup_ices[0] : last_ices_per_cup;
 double this_sal = cup_salts.length() > 0 ? cup_salts[0] : last_salts_per_cup;
+double this_straw = cup_strawberries.length() > 0 ? cup_strawberries[0] : last_strawberries_per_cup;
+double this_blue = cup_blueberries.length() > 0 ? cup_blueberries[0] : last_blueberries_per_cup;
 for(int ci = 0; ci < cups_needed; ci++)
 {
 if(cup_lemons.length() > 0) cup_lemons.remove_at(0);
@@ -365,8 +371,10 @@ if(cup_sugars.length() > 0) cup_sugars.remove_at(0);
 if(cup_waters.length() > 0) cup_waters.remove_at(0);
 if(cup_ices.length() > 0)   cup_ices.remove_at(0);
 if(cup_salts.length() > 0)  cup_salts.remove_at(0);
+if(cup_strawberries.length() > 0) cup_strawberries.remove_at(0);
+if(cup_blueberries.length() > 0)  cup_blueberries.remove_at(0);
 }
-string feedback = get_customer_feedback(this_lem, this_sug, this_wat, this_ice, this_sal);
+string feedback = get_customer_feedback(this_lem, this_sug, this_wat, this_ice, this_sal, this_straw + this_blue);
 bool bad = (feedback != "Mmm, that's delicious! Perfectly balanced. Just what I needed!");
 if(ctype == "returning" || ctype == "charitable") bad = false;
 if(ctype == "mean" and !customers[idx].calmed) bad = true;
@@ -463,6 +471,7 @@ else if(ctype == "child") tip_chance = int(tip_chance * 0.3);
 string[] flavor_notes;
 if(salt_in_good_band(this_sal)) { tip_chance = min(99, tip_chance + int(threshold_get("salt_tip_bonus", 15))); flavor_notes.insert_last("That subtle hint of salt really brings the flavor to life!"); }
 if(ice_in_good_band_hot(this_ice)) { tip_chance = min(99, tip_chance + int(threshold_get("ice_tip_bonus", 15))); flavor_notes.insert_last("And it is wonderfully ice cold, so refreshing on a hot day like this!"); }
+if(flavor_in_good_band(this_straw + this_blue)) { tip_chance = min(99, tip_chance + int(threshold_get("flavor_tip_bonus", 15))); flavor_notes.insert_last(ctype == "child" ? "The fruity flavor is a huge hit with the kid!" : "The fruity flavor really makes this stand out!"); }
 int talk_bonus = talk_tip_bonus(ctype, customers[idx].talk_count);
 if(talk_bonus > 0) { tip_chance = min(99, tip_chance + talk_bonus); flavor_notes.insert_last("Your friendly chat earlier clearly left them in a generous mood."); }
 if(random(0, 99) < tip_chance)
@@ -511,7 +520,11 @@ bool ice_in_good_band_hot(double ice)
 if(temperature <= int(wave_get("hot_temp", 85))) return false;
 return ice >= threshold_get("ice_good_min", 0.15) && ice <= threshold_get("ice_good_max", 0.4);
 }
-string get_customer_feedback(double lem, double sug, double wat, double ice, double sal)
+bool flavor_in_good_band(double flavor)
+{
+return flavor >= threshold_get("flavor_good_min", 0.1) && flavor <= threshold_get("flavor_good_max", 0.4);
+}
+string get_customer_feedback(double lem, double sug, double wat, double ice, double sal, double flavor)
 {
 double total = lem + sug + wat;
 if(total <= 0) return "EXTREME:This doesn't taste like anything! Did you even put anything in this?!";
@@ -522,6 +535,7 @@ bool too_sour      = lemon_ratio > threshold_get("sour", 0.35);
 bool too_sweet     = sugar_ratio > threshold_get("sweet", 0.35);
 bool too_watery    = water_ratio > threshold_get("watery", 0.5);
 bool too_salty     = sal > threshold_get("salty", 0.3);
+bool too_fruity    = flavor > threshold_get("flavor_strong", 0.6);
 double icy_thresh = threshold_get("icy", 0.3);
 if(temperature > int(wave_get("hot_temp", 85))) icy_thresh = threshold_get("icy_hot", 0.5);
 else if(temperature < int(wave_get("cold_temp", 45))) icy_thresh = threshold_get("icy_cold", 0.15);
@@ -531,18 +545,21 @@ bool extreme_sweet = sugar_ratio > threshold_get("extreme_sweet", 0.6);
 bool extreme_watery= water_ratio > threshold_get("extreme_watery", 0.75);
 bool extreme_salty = sal > threshold_get("extreme_salty", 1.0);
 bool extreme_icy   = ice > threshold_get("extreme_icy", 1.0);
+bool extreme_fruity= flavor > threshold_get("extreme_flavor_strong", 1.2);
 if(extreme_sour && extreme_sweet) return "EXTREME:This is unbearably sour AND sickeningly sweet at the same time! What is this?!";
 if(extreme_sour)   return "EXTREME:This is pure lemon juice! My face is inside out! That is disgusting!";
 if(extreme_sweet)  return "EXTREME:This is liquid sugar! I can't even drink this! Did you add any lemon at all?!";
 if(extreme_watery) return "EXTREME:This is just water! I paid for lemonade, not tap water!";
 if(extreme_salty)  return "EXTREME:This tastes like the ocean! Are you trying to poison me?!";
 if(extreme_icy)    return "EXTREME:This is basically a block of ice! I can't even drink this!";
+if(extreme_fruity) return "EXTREME:This tastes like straight syrup! Where did the lemonade go?!";
 if(too_sour && too_sweet) return "Whoa, this has too much lemon and too much sugar at the same time!";
 if(too_sour)   return "Ooh, that's quite sour, there's too much lemon and not enough sugar to balance it!";
 if(too_sweet)  return "That's very sweet, there's too much sugar and not enough lemon to balance it!";
 if(too_watery) return "This tastes watered down, there's too much water and not enough lemon and sugar!";
 if(too_salty)  return "Whoa, there's way too much salt in this!";
 if(too_icy)    return "Brrr, there's way too much ice in this one!";
+if(too_fruity) return "Whoa, the fruity flavor is way too strong, I can barely taste the lemonade!";
 return "Mmm, that's delicious! Perfectly balanced. Just what I needed!";
 }
 void set_counter_wet()
@@ -574,17 +591,14 @@ clearmap();
 destroymap();
 mainmenu();
 }
-string get_customer_talk(uint idx)
+string get_customer_talk_topic(uint idx, string topic)
 {
 string t = customers[idx].type;
-int tc = customers[idx].talk_count;
 int si = get_customer_speeches_index(t);
 if(si < 0) return "...";
-int line_num = tc + 1;
-if(line_num > customer_speeches[si].count) line_num = customer_speeches[si].count;
 for(uint i = 0; i < customer_speeches[si].lines.length(); i++)
 {
-if(customer_speeches[si].lines[i].number == line_num)
+if(customer_speeches[si].lines[i].topic == topic)
 {
 string text = customer_speeches[si].lines[i].text;
 if(t == "group")
@@ -597,6 +611,12 @@ return text;
 }
 }
 return "...";
+}
+bool topic_already_asked(int idx, string topic)
+{
+for(uint i = 0; i < customers[idx].asked_topics.length(); i++)
+if(customers[idx].asked_topics[i] == topic) return true;
+return false;
 }
 bool is_chatter(string t)
 {
@@ -641,21 +661,20 @@ open_serve_menu();
 return;
 }
 setupmenu();
-string talk_label = "Talk to this customer";
-int si = get_customer_speeches_index(customers[idx].type);
-if(si >= 0 && customers[idx].talk_count <= customer_speeches[si].count)
+int talk_limit = get_talk_limit(customers[idx].type);
+bool talk_at_limit = customers[idx].talk_count >= talk_limit;
+if(!talk_at_limit)
 {
-int next_line = customers[idx].talk_count + 1;
-for(uint li = 0; li < customer_speeches[si].lines.length(); li++)
+for(uint ti = 0; ti < talk_topic_keys.length(); ti++)
 {
-if(customer_speeches[si].lines[li].number == next_line)
-{
-talk_label += ". Current mood: " + customer_speeches[si].lines[li].mood;
-break;
+if(topic_already_asked(idx, talk_topic_keys[ti])) continue;
+m.add_item(talk_topic_questions[ti], talk_topic_keys[ti]);
 }
 }
+else
+{
+m.add_item("Keep chatting", "keep_chatting");
 }
-m.add_item(talk_label, "talk");
 m.add_item("Serve this customer", "serve");
 m.add_item("Back", "back");
 string tlabel = customers[idx].type == "normal" ? "customer" : customers[idx].type + " customer";
@@ -686,18 +705,14 @@ return;
 serve_customer(idx);
 return;
 }
-if(choice == "talk")
-{
-int limit = get_talk_limit(customers[idx].type);
-if(customers[idx].talk_count >= limit)
+if(choice == "keep_chatting")
 {
 string angry = "I've had enough chatting. I'm going somewhere else!";
 int wsi = get_customer_speeches_index(customers[idx].type);
 if(wsi >= 0)
 {
-int walkoff_num = customer_speeches[wsi].count + 1;
 for(uint wi = 0; wi < customer_speeches[wsi].lines.length(); wi++)
-if(customer_speeches[wsi].lines[wi].number == walkoff_num) { angry = customer_speeches[wsi].lines[wi].text; break; }
+if(customer_speeches[wsi].lines[wi].topic == "walkoff") { angry = customer_speeches[wsi].lines[wi].text; break; }
 }
 dlg(angry);
 double rep_loss = 1.0 + (daynumber / 10.0);
@@ -712,7 +727,13 @@ speak("The customer has left.");
 open_serve_menu();
 return;
 }
-string line = get_customer_talk(idx);
+bool is_topic_choice = false;
+for(uint ti = 0; ti < talk_topic_keys.length(); ti++)
+if(choice == talk_topic_keys[ti]) { is_topic_choice = true; break; }
+if(is_topic_choice)
+{
+string line = get_customer_talk_topic(idx, choice);
+customers[idx].asked_topics.insert_last(choice);
 customers[idx].talk_count++;
 string wait_note = "";
 if(is_chatter(customers[idx].type))
@@ -879,6 +900,8 @@ double this_sug = cup_sugars.length() > 0 ? cup_sugars[0] : last_sugars_per_cup;
 double this_wat = cup_waters.length() > 0 ? cup_waters[0] : last_waters_per_cup;
 double this_ice = cup_ices.length() > 0 ? cup_ices[0] : last_ices_per_cup;
 double this_sal = cup_salts.length() > 0 ? cup_salts[0] : last_salts_per_cup;
+double this_straw = cup_strawberries.length() > 0 ? cup_strawberries[0] : last_strawberries_per_cup;
+double this_blue = cup_blueberries.length() > 0 ? cup_blueberries[0] : last_blueberries_per_cup;
 for(int c = 0; c < cups_needed_all; c++)
 {
 if(cup_lemons.length() > 0) cup_lemons.remove_at(0);
@@ -886,8 +909,10 @@ if(cup_sugars.length() > 0) cup_sugars.remove_at(0);
 if(cup_waters.length() > 0) cup_waters.remove_at(0);
 if(cup_ices.length() > 0)   cup_ices.remove_at(0);
 if(cup_salts.length() > 0)  cup_salts.remove_at(0);
+if(cup_strawberries.length() > 0) cup_strawberries.remove_at(0);
+if(cup_blueberries.length() > 0)  cup_blueberries.remove_at(0);
 }
-string feedback_all = get_customer_feedback(this_lem, this_sug, this_wat, this_ice, this_sal);
+string feedback_all = get_customer_feedback(this_lem, this_sug, this_wat, this_ice, this_sal, this_straw + this_blue);
 bool extreme_all = string_starts_with(feedback_all, "EXTREME:");
 if(extreme_all) feedback_all = feedback_all.substr(8);
 bool bad = (feedback_all != "Mmm, that's delicious! Perfectly balanced. Just what I needed!");
@@ -931,6 +956,7 @@ else if(ctype_all == "mean" and !customers[idx].calmed) tip_chance = 0;
 else if(ctype_all == "child") tip_chance = int(tip_chance * 0.3);
 if(salt_in_good_band(this_sal)) tip_chance = min(99, tip_chance + int(threshold_get("salt_tip_bonus", 15)));
 if(ice_in_good_band_hot(this_ice)) tip_chance = min(99, tip_chance + int(threshold_get("ice_tip_bonus", 15)));
+if(flavor_in_good_band(this_straw + this_blue)) tip_chance = min(99, tip_chance + int(threshold_get("flavor_tip_bonus", 15)));
 tip_chance = min(99, tip_chance + talk_tip_bonus(ctype_all, customers[idx].talk_count));
 if(random(0, 99) < tip_chance)
 {
@@ -1006,6 +1032,11 @@ void check_customer_interaction()
 if(int(me.x) != 14 || int(me.y) != 25) return;
 if(shift_is_down()) return;
 if(!key_pressed(KEY_RETURN)) return;
+if(stand_closed)
+{
+speak("The stand is closed.");
+return;
+}
 bool any_waiting = false;
 for(uint i=0; i<customers.length(); i++)
 if(customers[i].waiting and !customers[i].leaving)

@@ -322,6 +322,8 @@ double sug_sug = min(sugars, cupcount);
 double sug_wat = min(waters, cupcount);
 double sug_ice = ices > 0 ? min(ices, cupcount * 0.25) : 0;
 double sug_sal = salts > 0 ? min(salts, cupcount * 0.25) : 0;
+double sug_straw = strawberries > 0 ? min(strawberries, cupcount * 0.25) : 0;
+double sug_blue = blueberries > 0 ? min(blueberries, cupcount * 0.25) : 0;
 string lem_in = vd.input_box("", "How many lemons would you like to add? You have " + lemons + ". Suggested amount is " + int(sug_lem) + ". Press enter to use the suggested amount.", string(int(sug_lem)));
 if(lem_in == "") { actsmenu(); return; }
 double use_lemons = string_to_number(lem_in);
@@ -399,17 +401,59 @@ if(mres == -1 || m.get_item_id(mres) == "no") use_salts = sug_sal;
 }
 }
 }
+double use_straws = 0;
+if(strawberries > 0)
+{
+string straw_in = vd.input_box("", "How many bottles of strawberry syrup would you like to add? You have " + strawberries + ". Suggested amount is " + int(sug_straw) + ". Press enter to use the suggested amount, or escape to skip.", string(int(sug_straw)));
+if(straw_in != "")
+{
+use_straws = string_to_number(straw_in);
+if(use_straws > strawberries) { dlg("Error. Invalid strawberry syrup amount."); actsmenu(); return; }
+if(use_straws != sug_straw && use_straws > 0)
+{
+setupmenu();
+m.add_item("Yes, use " + use_straws + " bottle" + (use_straws == 1 ? "" : "s") + " of strawberry syrup", "yes");
+m.add_item("No, use the suggested amount of " + int(sug_straw), "no");
+m.intro_text = use_straws > sug_straw ? "That's more strawberry syrup than suggested. Your lemonade may turn out too fruity. Are you sure?" : "That's less strawberry syrup than suggested. Are you sure?";
+int mres = m.run();
+if(mres == -1 || m.get_item_id(mres) == "no") use_straws = sug_straw;
+}
+}
+}
+double use_blues = 0;
+if(blueberries > 0)
+{
+string blue_in = vd.input_box("", "How many bottles of blueberry syrup would you like to add? You have " + blueberries + ". Suggested amount is " + int(sug_blue) + ". Press enter to use the suggested amount, or escape to skip.", string(int(sug_blue)));
+if(blue_in != "")
+{
+use_blues = string_to_number(blue_in);
+if(use_blues > blueberries) { dlg("Error. Invalid blueberry syrup amount."); actsmenu(); return; }
+if(use_blues != sug_blue && use_blues > 0)
+{
+setupmenu();
+m.add_item("Yes, use " + use_blues + " bottle" + (use_blues == 1 ? "" : "s") + " of blueberry syrup", "yes");
+m.add_item("No, use the suggested amount of " + int(sug_blue), "no");
+m.intro_text = use_blues > sug_blue ? "That's more blueberry syrup than suggested. Your lemonade may turn out too fruity. Are you sure?" : "That's less blueberry syrup than suggested. Are you sure?";
+int mres = m.run();
+if(mres == -1 || m.get_item_id(mres) == "no") use_blues = sug_blue;
+}
+}
+}
 cups   -= cupcount;
 lemons -= use_lemons;
 sugars -= use_sugars;
 waters -= use_waters;
 ices   -= use_ices;
 salts  -= use_salts;
+strawberries -= use_straws;
+blueberries  -= use_blues;
 last_lemons_per_cup = use_lemons / cupcount;
 last_sugars_per_cup = use_sugars / cupcount;
 last_waters_per_cup = use_waters / cupcount;
 last_ices_per_cup   = use_ices   / cupcount;
 last_salts_per_cup  = use_salts  / cupcount;
+last_strawberries_per_cup = use_straws / cupcount;
+last_blueberries_per_cup  = use_blues  / cupcount;
 calculate_cup_price();
 pitcher = 1;
 pitcherstat += cupcount * 0.25;
@@ -474,6 +518,10 @@ vary = random_float(0.85, 1.15);
 cup_ices.insert_last(max(0, last_ices_per_cup * vary));
 vary = random_float(0.85, 1.15);
 cup_salts.insert_last(max(0, last_salts_per_cup * vary));
+vary = random_float(0.85, 1.15);
+cup_strawberries.insert_last(max(0, last_strawberries_per_cup * vary));
+vary = random_float(0.85, 1.15);
+cup_blueberries.insert_last(max(0, last_blueberries_per_cup * vary));
 }
 speak("Pouring... Please wait.");
 dlgplay("sounds/misc/pourcup"+random(1,4)+".ogg");

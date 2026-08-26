@@ -22,7 +22,7 @@ customer_movement[] customer_movements;
 class customer_speech_line
 {
 int number;
-string mood;
+string topic;
 string text;
 }
 class customer_speech_set
@@ -186,7 +186,7 @@ string[] p = parse_delimited_line(line, 2);
 if(p.length() < 3) continue;
 customer_speech_line sl;
 sl.number = string_to_int(p[0].trim_whitespace());
-sl.mood   = p[1].trim_whitespace();
+sl.topic  = p[1].trim_whitespace();
 sl.text   = p[2].trim_whitespace();
 customer_speeches[current_idx].lines.insert_last(sl);
 }

@@ -17,6 +17,9 @@ There are several stations on the map, each activated by pressing enter when you
 The actions station is located at your lemonade stand. Make and pour lemonade here.
 The pricing station is also at your lemonade stand. Set your base price and each customer group's price here.
 The customer service counter is also located at your lemonade stand. Serve waiting customers here.
+
+You can close your stand at any time by pressing K, from anywhere on the map. While closed, customers who are already waiting hold their place and stop losing patience, so you can go restock or run other errands without losing them. New customers still show up and get in line, but they wait patiently too until you press K again to reopen. You cannot serve anyone at the counter while the stand is closed.
+
 The ingredients station is inside the market to the east. Buy ingredients here.
 The poster shop is also in the market. Buy posters to hang around the neighborhood here.
 The cleaning station is also in the market. Buy napkins to clean up spills here.
@@ -24,7 +27,9 @@ The preservation shop is also in the market. Buy storage upgrades to slow overni
 
 Making lemonade:
 
-When you make lemonade at the actions station, you will be asked how many cups to make, followed by how much of each ingredient to add. Each prompt prefills a suggested balanced amount based on how many cups you are making, targeting one of each main ingredient per cup and a small amount of ice and salt. If you enter an amount that differs from the suggestion, a confirmation menu will warn you of the likely result and let you revert or proceed. Getting the balance right matters because customers will react based on how the drink tastes.
+When you make lemonade at the actions station, you will be asked how many cups to make, followed by how much of each ingredient to add. Each prompt prefills a suggested balanced amount based on how many cups you are making, targeting one of each main ingredient per cup and a small amount of ice, salt, and any flavor syrup you have on hand. If you enter an amount that differs from the suggestion, a confirmation menu will warn you of the likely result and let you revert or proceed. Getting the balance right matters because customers will react based on how the drink tastes.
+
+You can buy bottles of strawberry or blueberry syrup at the ingredients station to give your lemonade a fruity flavor. Like salt and ice, syrup is optional and skippable when making lemonade. A modest amount of either flavor, or a mix of both, makes for a more interesting drink and can earn an extra tip, especially from kids who love a fruity cup. Add too much, though, and the fruit flavor overpowers the lemonade itself. Unlike the other ingredients, syrup is bottled and does not spoil overnight.
 
 Pouring lemonade into a serving cup uses one of your empty cups. When a customer is served they hand the empty cup back, so cups cycle back and forth and only run low from spills or theft, meaning you will need to restock empty cups now and then.
 
@@ -60,7 +65,7 @@ Thief: Attempts to steal ingredients when they reach your stand. Chase them by s
 
 Talking to customers:
 
-Select a customer from the serve menu and choose talk to chat with them. Each type has unique things to say. Talking now builds rapport: chatting raises the chance a customer leaves a tip when you serve them a good drink, and friendly types like the elderly, nice, and returning customers also become willing to wait longer. Talking to a mean customer has a chance to calm them down. As before, talking too many times will exhaust a customer's patience and they will leave with a small reputation penalty, so there is a limit to how much rapport you can build.
+Select a customer from the serve menu to see a short list of questions you can ask them: how they're doing, how their day is going, how they like the stand, and what they think could be better. Each type answers every question in its own voice, and once you've asked a question of a given customer you won't be offered it again. Asking a question builds rapport just like before: it raises the chance that customer leaves a tip when you serve them a good drink, and friendly types like the elderly, nice, and returning customers also become willing to wait longer. Talking to a mean customer still has a chance to calm them down. Each type only has patience for so many questions; once you reach their limit the menu offers a single "Keep chatting" option instead, which risks the same thing pestering always did, exhausting their patience and sending them off with a small reputation penalty.
 
 Customer reactions:
 
@@ -102,6 +107,7 @@ S: Speak your sold cup count.
 O: Speak your poster inventory and placement count.
 P: Speak your passerby count.
 N: Skip to the next time period when the wave is over.
+K: Close or reopen your stand.
 Q: Speak your current location.
 Z: Toggle zone announcements on or off.
 X: Speak your exact coordinates and surface.
@@ -409,7 +415,7 @@ Flat key=value settings controlling the reward for talking to customers.
 
 chatter_tip and chatter_tip_cap = how much each chat raises the tip chance, and the total cap, for the friendly chatter types (elderly, nice, and returning).
 mild_tip and mild_tip_cap = the same, but for all other buying types, who reward chatting less.
-chatter_patience and chatter_patience_cap = how many extra seconds each chat adds to a chatter's patience, and the total cap. Only chatter types gain patience from talking. Set the per values to 0 to turn a reward off. The tip bonus only pays out when you also serve that customer a good drink, and chatting past a type's line limit still makes them leave angry.
+chatter_patience and chatter_patience_cap = how many extra seconds each chat adds to a chatter's patience, and the total cap. Only chatter types gain patience from talking. Set the per values to 0 to turn a reward off. The tip bonus only pays out when you also serve that customer a good drink, and choosing to keep chatting once a type has run out of patience for questions still makes them leave angry.
 
 [mean]
 Flat key=value settings controlling mean customer behavior.
@@ -423,12 +429,11 @@ ripple_rep = the immediate reputation dip when a mean customer badmouths your st
 [speeches]
 Dialogue lines for each customer type.
 
-Each type block starts with type=count, where count is the number of regular talk lines.
+Each type block starts with type=count, where count is how many questions in a row that type will patiently answer before it takes a chance to keep chatting further.
 
-Each line follows the format: line_number:mood:text
+Each line follows the format: line_number:topic:text
 
-The line numbered one above the count is the walkoff line, spoken when the player has talked to the customer too many times.
-Mood tags describe the customer's emotional state on that line. They are displayed alongside the customer's name in the talk menu so you can gauge how they are feeling before interacting. They do not affect gameplay mechanics.
+The topic must be one of mood, day, opinion, feedback, or walkoff. The first four are the fixed questions the player can choose from in the talk menu (how are you doing, how's your day, how do you like the stand, what could be better) and every type needs exactly one line for each. The walkoff line is spoken when the player chooses to keep chatting after the customer has run out of patience for questions, and only one line needs that topic. The line_number is not otherwise used by the game; keep the entries in a readable order.
 
 Use %group_size% in group customer lines as a placeholder for the number of people in the group.
 
@@ -464,6 +469,9 @@ salt_good_min and salt_good_max = the good range of salt per cup that rewards an
 ice_good_min and ice_good_max = the good range of ice per cup that rewards an already good drink, but only on a hot day.
 icy_hot and icy_cold = the too icy threshold used on hot and cold days, replacing the normal icy threshold based on the weather.
 salt_tip_bonus and ice_tip_bonus = how much each adds to the tip chance when the drink falls in the good range.
+flavor_good_min and flavor_good_max = the good range of combined strawberry and blueberry syrup per cup that rewards an already good drink with a tip bonus.
+flavor_strong and extreme_flavor_strong = combined syrup amount thresholds for mild and extreme too-fruity complaints.
+flavor_tip_bonus = how much syrup in the good range adds to the tip chance.
 
 [time]
 Flat key=value setting controlling the length of a day.
@@ -485,6 +493,11 @@ Flat key=value settings for the preservation upgrades sold at the preservation s
 
 tier1_reduction through tier4_reduction = how much each owned upgrade tier reduces that ingredient's overnight spoilage, as a fraction. For example 0.8 means the tier removes 80 percent of the nightly loss.
 tier1_cost through tier4_cost = the cost in cents to buy each tier. The four upgrades, icebox, pantry, sealed jars, and covered jugs, all use the same tier reductions and costs.
+
+[events]
+Flat key=value setting controlling how often random events happen.
+
+frequency = the percent chance, from 0 to 100, that a random event is rolled at the start of each time period. This is separate from each individual event's own chance field in main.event, which further filters whether the specific event picked actually fires.
 
 [items]
 Defines every item in the game.
